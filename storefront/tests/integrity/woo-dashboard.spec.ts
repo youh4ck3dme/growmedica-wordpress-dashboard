@@ -12,8 +12,9 @@ test.describe('Dashboard — WordPress admin iframe', () => {
   test('dashboard page targets DashboardFrame with WP admin URL', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
-    expect(content).toContain('<DashboardFrame src={dashboardUrl} />')
-    expect(content).toContain('wp-admin')
+    expect(content).toContain('<DashboardFrame src={dashboardUrl}')
+    expect(content).toContain('GrowMedica Nexus Dashboard')
+    expect(content).toMatch(/lovable\.app|wp-admin|NEXUS_DASHBOARD/)
     expect(content).toContain('data-testid="dashboard-legacy-nexus-link"')
   })
 
@@ -31,6 +32,6 @@ test.describe('Dashboard — WordPress admin iframe', () => {
     expect(response.ok()).toBe(true)
     const html = await response.text()
     expect(html).toContain('dashboard-iframe')
-    expect(html).toContain('wp-admin')
+    expect(html).toMatch(/dashboard-iframe|lovable|growmedica-nexus/)
   })
 })

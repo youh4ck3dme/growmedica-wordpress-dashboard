@@ -1,7 +1,6 @@
 import DashboardFrame from '@/components/dashboard/DashboardFrame'
-import { getDashboardUrl } from '@/lib/dashboard'
+import { LEGACY_NEXUS_ADMIN_URL, NEXUS_DASHBOARD_IFRAME_URL, getDashboardUrl } from '@/lib/dashboard'
 
-const LEGACY_NEXUS_ADMIN_URL = 'https://growmedica-nexus.lovable.app/admin/prihlasenie'
 const isDev = process.env.NODE_ENV === 'development'
 
 function LegacyNexusLink({ className = '' }: { className?: string }) {
@@ -13,7 +12,7 @@ function LegacyNexusLink({ className = '' }: { className?: string }) {
       className={`btn btn-secondary text-xs ${className}`.trim()}
       data-testid="dashboard-legacy-nexus-link"
     >
-      Legacy Nexus admin
+      Nexus admin (nový tab)
     </a>
   )
 }
@@ -29,14 +28,19 @@ export default function DashboardPage() {
       >
         <h1 className="text-xl font-semibold text-(--color-text)">Dashboard nie je nakonfigurovaný</h1>
         <p className="max-w-md text-sm text-(--color-text-muted)">
-          Nastavte premennú{' '}
+          Nastavte{' '}
           <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
             NEXT_PUBLIC_DASHBOARD_URL
           </code>{' '}
-          na WordPress admin URL, napr.{' '}
+          na Lovable Nexus admin, napr.{' '}
           <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
-            https://cms.growmedica.cz/wp-admin
+            {NEXUS_DASHBOARD_IFRAME_URL}
           </code>
+          . WordPress CMS beží na{' '}
+          <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
+            cms.growmedica.cz/wp-admin
+          </code>{' '}
+          (nie v iframe).
         </p>
         <LegacyNexusLink className="mt-2" />
       </div>
@@ -53,10 +57,10 @@ export default function DashboardPage() {
           className="fixed bottom-4 right-4 z-50 rounded-full border border-(--color-border) bg-(--color-surface)/95 px-4 py-2 text-xs font-medium text-(--color-text-muted) shadow-sm backdrop-blur hover:text-(--color-text)"
           data-testid="dashboard-dev-direct-link"
         >
-          Dev: WP admin priamo
+          Dev: Nexus admin priamo
         </a>
       )}
-      <DashboardFrame src={dashboardUrl} />
+      <DashboardFrame src={dashboardUrl} title="GrowMedica Nexus Dashboard" />
     </>
   )
 }

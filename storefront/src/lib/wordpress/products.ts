@@ -1,4 +1,4 @@
-import { wooFetch, wooFetchPaginated } from './client'
+import { clampWooPerPage, wooFetch, wooFetchPaginated } from './client'
 import { wooProductToListItem, wooProductToProduct } from './adapter'
 import { isWooMockMode, getMockWooProducts, getMockWooProductBySlug } from './mock'
 import { getWooCategoryBySlug } from './categories'
@@ -18,12 +18,13 @@ interface GetWooProductsOptions {
 export async function getWooProducts(options: GetWooProductsOptions = {}) {
   const {
     page = 1,
-    perPage = 24,
+    perPage: perPageInput = WOO_PRODUCTS_PAGE_SIZE,
     search,
     category,
     orderby = 'popularity',
     order = 'desc',
   } = options
+  const perPage = resolvePerPage(perPageInput)
 
   if (isWooMockMode()) {
     const result = getMockWooProducts({ page, perPage, search, category })
@@ -119,7 +120,7 @@ export async function getWooFeaturedProducts(first = 8): Promise<ProductListItem
   const result = await wooFetchPaginated<WooProduct>({
     path: '/products',
     params: {
-      per_page: first,
+      per_page: resolvePerPage(first),
       featured: true,
       status: 'publish',
       orderby: 'popularity',
@@ -133,10 +134,14 @@ export async function getWooFeaturedProducts(first = 8): Promise<ProductListItem
 
 export const WOO_PRODUCTS_PAGE_SIZE = 48
 
+function resolvePerPage(value?: number): number {
+  return clampWooPerPage(value, WOO_PRODUCTS_PAGE_SIZE)
+}
+
 export async function getWooProductsAccumulated(
   options: GetWooProductsOptions & { pages?: number | 'all' } = {},
 ) {
-  const pageSize = options.perPage ?? WOO_PRODUCTS_PAGE_SIZE
+  const pageSize = resolvePerPage(options.perPage)
   const pages = options.pages === 'all' ? Number.POSITIVE_INFINITY : Math.max(1, options.pages ?? 1)
 
   const mergedEdges: Array<{ node: ProductListItem }> = []

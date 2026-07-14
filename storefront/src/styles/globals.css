@@ -570,6 +570,7 @@
 
   .collection-card-banner-overlay {
     z-index: 1;
+    background-image: linear-gradient(to top, rgb(0 0 0 / 0.35), rgb(0 0 0 / 0.05), transparent);
   }
 
   .sticky-atc-bar {
@@ -2966,6 +2967,11 @@
 
   .assistant-footer-trigger:hover {
     background: rgba(255, 255, 255, 0.14);
+  }
+
+  .mobile-nav-footer {
+    position: relative;
+    z-index: 1;
   }
 
   .assistant-mobile-trigger {

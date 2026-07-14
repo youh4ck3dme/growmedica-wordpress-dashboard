@@ -7,6 +7,15 @@
 
 import { validateWordPressEnv } from './env'
 
+/** WooCommerce REST API hard limit for `per_page`. */
+export const WOO_MAX_PER_PAGE = 100
+
+export function clampWooPerPage(value: number | undefined, fallback = 24): number {
+  const n = Number(value ?? fallback)
+  if (!Number.isFinite(n)) return fallback
+  return Math.min(WOO_MAX_PER_PAGE, Math.max(1, Math.floor(n)))
+}
+
 interface WooFetchOptions {
   path: string
   params?: Record<string, string | number | boolean | undefined>
@@ -96,7 +105,8 @@ export async function wooFetchPaginated<T>({
   perPage: number
 }> {
   const page = Number(params?.page ?? 1)
-  const perPage = Number(params?.per_page ?? 24)
+  const perPage = clampWooPerPage(params?.per_page as number | undefined)
+  const requestParams = { ...params, page, per_page: perPage }
 
   const response = await fetch(
     buildWooUrl(
@@ -104,7 +114,7 @@ export async function wooFetchPaginated<T>({
       validateWordPressEnv().WOO_CONSUMER_KEY,
       validateWordPressEnv().WOO_CONSUMER_SECRET,
       path,
-      params,
+      requestParams,
     ).toString(),
     {
       method: 'GET',

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Set NEXT_PUBLIC_SITE_URL on Vercel for growmedicanextjs (Production + Preview).
+# Set NEXT_PUBLIC_SITE_URL on Vercel for growmedica-wordpress-dashboard (Production + Preview).
 # Usage: bash scripts/set-vercel-site-url.sh [url]
 # Default: https://growmedica.cz
 
@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STOREFRONT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 SITE_URL="${1:-https://growmedica.cz}"
 SCOPE="${VERCEL_SCOPE:-h4ck3d}"
-PROJECT="${VERCEL_PROJECT:-growmedicanextjs}"
+PROJECT="${VERCEL_PROJECT:-growmedica-wordpress-dashboard}"
 
 if [[ ! "$SITE_URL" =~ ^https:// ]]; then
   echo "Error: SITE_URL must start with https:// (got: $SITE_URL)" >&2

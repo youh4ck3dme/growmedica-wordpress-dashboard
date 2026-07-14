@@ -2,6 +2,8 @@
 
 Last updated: 2026-07-14
 
+> **UI/UX FREEZE:** Diagnostika a testy nemenia storefront UI. Vývoj: [DEVELOPMENT.md](./DEVELOPMENT.md)
+
 ## Current storefront status
 
 | Area | Status |

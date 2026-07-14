@@ -1,5 +1,9 @@
 # UI/UX DESIGN SYSTEM — Grow Medical
 
+> **⛔ UI/UX FREEZE (od 14.7.2026):** Tento dokument je **referenčný štandard**, nie backlog redesignu.  
+> Storefront UI je uzamknutý — žiadne zmeny layoutu, komponentov, farieb, spacingu ani animácií.  
+> Ďalší vývoj: backend, integrácia, dashboard. Pozri [docs/DEVELOPMENT.md](./docs/DEVELOPMENT.md).
+
 ## Filozofia
 
 **Premium clean medical commerce.**  

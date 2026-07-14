@@ -55,7 +55,8 @@ export async function getProductsAccumulated(
 ) {
   if (isWordPressCms()) {
     return wooProducts.getWooProductsAccumulated({
-      perPage: options.first,
+      // Shopify `first: 250` → Woo paginates in batches of ≤100 per request
+      perPage: options.perPage ?? options.first,
       pages: options.pages,
       search: options.search ?? options.query,
       category: options.category,

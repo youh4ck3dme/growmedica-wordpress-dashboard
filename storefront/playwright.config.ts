@@ -21,11 +21,11 @@ const shopifyTestEnv: Record<string, string> = {
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY ?? 'mock-mistral-api-key',
   MISTRAL_MODEL: process.env.MISTRAL_MODEL ?? 'mistral-large-latest',
   NEXT_PUBLIC_DEFAULT_LOCALE: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'sk',
-  NEXT_PUBLIC_DASHBOARD_MODE: process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'hybrid',
+  NEXT_PUBLIC_DASHBOARD_MODE: process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'iframe',
   DASHBOARD_AGENT_SECRET:
     process.env.DASHBOARD_AGENT_SECRET ?? 'mock-dashboard-agent-secret-123456',
   NEXT_PUBLIC_DASHBOARD_URL:
-    process.env.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://cms.growmedica.cz/wp-admin',
+    process.env.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://growmedica-nexus.lovable.app/admin',
 };
 
 if (isNoorDemoTest) {
@@ -39,7 +39,7 @@ if (dashboardTestUrl) {
   wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL = dashboardTestUrl;
 } else {
   wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL =
-    wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://cms.growmedica.cz/wp-admin';
+    wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://growmedica-nexus.lovable.app/admin';
 }
 
 const playwrightEnv = isWooTest ? wooTestEnv : shopifyTestEnv;
@@ -60,11 +60,11 @@ export default defineConfig({
         env: playwrightEnv,
       }
     : {
-        command: `node scripts/ensure-dev-port.mjs ${playwrightDevPort} && next dev --port ${playwrightDevPort}`,
+        command: `node scripts/ensure-dev-port.mjs ${playwrightDevPort} && node scripts/playwright-dev.mjs ${playwrightDevPort}`,
         url: playwrightDevUrl,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
-        env: playwrightEnv,
+        env: { ...process.env, ...playwrightEnv },
       },
   use: {
     baseURL: isPwaProductionTest
@@ -78,7 +78,7 @@ export default defineConfig({
       name: 'integrity',
       testMatch: /integrity\/.*\.spec\.ts/,
       testIgnore: isWooTest
-        ? ['**/pwa.spec.ts']
+        ? ['**/pwa.spec.ts', '**/revalidation.spec.ts']
         : ['**/pwa.spec.ts', '**/woo-*.spec.ts'],
       use: { ...devices['Desktop Chrome'] },
     },

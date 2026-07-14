@@ -1,26 +1,26 @@
 # Import Report — Categories
 
-- Created: 14
-- Skipped: 0
+- Created: 0
+- Skipped: 14
 - Errors: 0
 
-- proteiny: created (id 16)
-- aminokyseliny: created (id 17)
-- sportova-vyziva: created (id 18)
-- regeneracia: created (id 19)
-- zdrave-potraviny: created (id 20)
-- vitaminy-mineraly: created (id 21)
-- klby-pohyb: created (id 22)
-- imunita: created (id 23)
-- travenie: created (id 24)
-- srdce-cievy: created (id 25)
-- spanok-stres: created (id 26)
-- krasa-pokozka: created (id 27)
-- detox-pecen: created (id 28)
-- specialna-vyziva: created (id 29)
+- proteiny: exists (id 16)
+- aminokyseliny: exists (id 17)
+- sportova-vyziva: exists (id 18)
+- regeneracia: exists (id 19)
+- zdrave-potraviny: exists (id 20)
+- vitaminy-mineraly: exists (id 21)
+- klby-pohyb: exists (id 22)
+- imunita: exists (id 23)
+- travenie: exists (id 24)
+- srdce-cievy: exists (id 25)
+- spanok-stres: exists (id 26)
+- krasa-pokozka: exists (id 27)
+- detox-pecen: exists (id 28)
+- specialna-vyziva: exists (id 29)
 
 ## Products
 
-- Created: 15
-- Skipped: 0
+- Created: 0
+- Skipped: 15
 - Errors: 0

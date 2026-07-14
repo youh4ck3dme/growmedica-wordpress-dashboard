@@ -1,4 +1,3 @@
-'use声明 client' // Wait, standard next.js directive is 'use client'
 'use client'
 
 import Link from 'next/link'

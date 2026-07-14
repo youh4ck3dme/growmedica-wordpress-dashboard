@@ -2,6 +2,9 @@
 
 Headless **Next.js storefront + WordPress/WooCommerce CMS** pre GrowMedica (produkčná doména: **growmedica.cz**).
 
+> **⛔ UI/UX FREEZE:** Storefront UI je uzamknutý. Ďalší vývoj = backend, integrácia, dashboard logika, testy.  
+> Detail: [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) · [TODO.md](../TODO.md)
+
 ## Stav
 
 | Oblasť | Stav |
@@ -107,6 +110,8 @@ growmedica-wordpress-dashboard/
 
 ## Dokumentácia
 
+- **[Development Guide](./storefront/docs/DEVELOPMENT.md)** — pravidlá vývoja, UI freeze, architektúra
+- [TODO](../TODO.md) — aktuálne úlohy a fázy
 - [i18n SK/EN/DE](./storefront/docs/I18N.md)
 - [WordPress Setup](./WORDPRESS_SETUP.md)
 - [Woo Cart BFF](./storefront/docs/WOO_CART.md)

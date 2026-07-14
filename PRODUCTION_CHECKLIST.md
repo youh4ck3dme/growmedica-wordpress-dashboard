@@ -1,5 +1,8 @@
 # Production cutover checklist — GrowMedica WordPress
 
+**Aktualizované:** 14. júl 2026  
+**UI/UX:** Storefront UI sa pri cutoveri nemení — len infra, env a dáta.
+
 ## Vercel env (`growmedica-wordpress-dashboard`)
 
 | Premenná | Hodnota |
@@ -16,8 +19,12 @@
 
 ## DNS
 
-- [ ] `growmedica.cz` + `www.growmedica.cz` → Vercel (www redirect na apex)
+- [x] Domény pridané na Vercel projekt `growmedica-wordpress-dashboard` (`growmedica.cz`, `www.growmedica.cz`)
+- [ ] **WebSupport DNS** — zmeniť A `@` z `37.9.175.131` na `76.76.21.21` + CNAME `www` → `cname.vercel-dns.com`
+- [ ] Overiť SSL po propagácii: `curl -I https://growmedica.cz`
 - [ ] `cms.growmedica.cz` → WordPress hosting (SSL)
+
+Skript: `cd storefront && ./scripts/setup-growmedica-cz-domain.sh --deploy`
 
 ## WordPress hosting
 
@@ -50,3 +57,9 @@ PREVIEW_URL=https://<preview-url> node scripts/production-smoke.mjs
 ## Rollback
 
 Nastavte `CMS_PROVIDER=shopify` a Shopify env na Vercel. Shopify vrstva zostáva v `src/lib/shopify/` ako legacy fallback.
+
+## Súvisiace dokumenty
+
+- [TODO.md](../TODO.md) — fázy vývoja
+- [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) — vývojársky návod + UI freeze
+- [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md) — lokálny WP

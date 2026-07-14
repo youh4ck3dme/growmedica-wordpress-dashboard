@@ -12,7 +12,8 @@ STOREFRONT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 CMS_PROVIDER="${CMS_PROVIDER:-wordpress}"
 WORDPRESS_BASE_URL="${WORDPRESS_BASE_URL:-https://cms.growmedica.cz}"
 NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://growmedica.cz}"
-NEXT_PUBLIC_DASHBOARD_URL="${NEXT_PUBLIC_DASHBOARD_URL:-https://cms.growmedica.cz/wp-admin}"
+NEXT_PUBLIC_DASHBOARD_URL="${NEXT_PUBLIC_DASHBOARD_URL:-https://growmedica-nexus.lovable.app/admin}"
+NEXT_PUBLIC_DASHBOARD_MODE="${NEXT_PUBLIC_DASHBOARD_MODE:-iframe}"
 WORDPRESS_REVALIDATION_SECRET="${WORDPRESS_REVALIDATION_SECRET:-$(openssl rand -hex 24)}"
 MISTRAL_MODEL="${MISTRAL_MODEL:-mistral-large-latest}"
 SHOPIFY_STORE_DOMAIN="${SHOPIFY_STORE_DOMAIN:-growmedica.myshopify.com}"
@@ -23,6 +24,8 @@ WOO_MOCK_MODE="${WOO_MOCK_MODE:-1}"
 MISTRAL_MOCK_MODE="${MISTRAL_MOCK_MODE:-1}"
 
 ENVIRONMENTS=(production preview development)
+VERCEL_SCOPE="${VERCEL_SCOPE:-h4ck3d}"
+VERCEL_PROJECT="${VERCEL_PROJECT:-growmedica-wordpress-dashboard}"
 
 cd "$STOREFRONT_DIR"
 
@@ -32,10 +35,10 @@ if ! command -v vercel >/dev/null 2>&1; then
 fi
 
 if [[ ! -f .vercel/project.json ]]; then
-  vercel link --yes --project growmedica-wordpress-dashboard
+  vercel link --yes --project "$VERCEL_PROJECT" --scope "$VERCEL_SCOPE"
 fi
 
-vercel_args=(--non-interactive)
+vercel_args=(--scope "$VERCEL_SCOPE" --non-interactive)
 
 remove_env_var() {
   local name=$1
@@ -53,11 +56,13 @@ upsert_env_var() {
 }
 
 echo "=== GrowMedica WordPress — Vercel env ==="
-echo "Project: growmedica-wordpress-dashboard"
+echo "Project: ${VERCEL_SCOPE}/${VERCEL_PROJECT}"
 echo "WORDPRESS_REVALIDATION_SECRET: (generated, ${#WORDPRESS_REVALIDATION_SECRET} chars)"
 echo ""
 
 NEXT_PUBLIC_DEFAULT_LOCALE="${NEXT_PUBLIC_DEFAULT_LOCALE:-sk}"
+NEXT_PUBLIC_DASHBOARD_MODE="${NEXT_PUBLIC_DASHBOARD_MODE:-iframe}"
+DASHBOARD_AGENT_SECRET="${DASHBOARD_AGENT_SECRET:-$(openssl rand -hex 24)}"
 
 PUBLIC_VARS=(
   "CMS_PROVIDER|$CMS_PROVIDER"
@@ -65,6 +70,7 @@ PUBLIC_VARS=(
   "NEXT_PUBLIC_SITE_URL|$NEXT_PUBLIC_SITE_URL"
   "NEXT_PUBLIC_DEFAULT_LOCALE|$NEXT_PUBLIC_DEFAULT_LOCALE"
   "NEXT_PUBLIC_DASHBOARD_URL|$NEXT_PUBLIC_DASHBOARD_URL"
+  "NEXT_PUBLIC_DASHBOARD_MODE|$NEXT_PUBLIC_DASHBOARD_MODE"
   "MISTRAL_MODEL|$MISTRAL_MODEL"
   "SHOPIFY_STORE_DOMAIN|$SHOPIFY_STORE_DOMAIN"
   "SHOPIFY_API_VERSION|$SHOPIFY_API_VERSION"
@@ -72,6 +78,7 @@ PUBLIC_VARS=(
 
 SECRET_VARS=(
   "WORDPRESS_REVALIDATION_SECRET|$WORDPRESS_REVALIDATION_SECRET"
+  "DASHBOARD_AGENT_SECRET|$DASHBOARD_AGENT_SECRET"
 )
 
 if [[ -n "${WOO_CONSUMER_KEY:-}" ]]; then

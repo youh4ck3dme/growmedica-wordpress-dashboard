@@ -3,7 +3,14 @@ import { acceptCookies } from '../helpers/cookies';
 import { BRAND_COPY } from '../fixtures/brand';
 
 
-test.beforeEach(async ({ context }) => {
+test.beforeEach(async ({ context, baseURL }) => {
+  await context.addCookies([
+    {
+      name: 'growmedica_locale',
+      value: 'sk',
+      url: baseURL ?? 'http://127.0.0.1:5557',
+    },
+  ]);
   await context.addInitScript(() => {
     window.localStorage.setItem('gm_cookie_consent', 'accepted');
   });
@@ -62,7 +69,7 @@ test.describe('1. Domovská stránka (Homepage)', () => {
 
   test('7. Mal by obsahovať sekciu "Prečo GrowMedica" so SEO popisom', async ({ page }) => {
     await page.goto('/');
-    const aboutSection = page.locator('section[aria-label="O GrowMedica.cz"]');
+    const aboutSection = page.locator('section.why-growmedica');
     await expect(aboutSection).toBeVisible();
     await expect(aboutSection.locator('.why-growmedica__label')).toContainText(BRAND_COPY.aboutLabel);
     await expect(aboutSection.locator('h2')).toContainText(BRAND_COPY.aboutHeading);
@@ -105,8 +112,14 @@ test.describe('2. Navigácia a Statické Podstránky', () => {
     await expect(page.locator('h1')).toContainText(BRAND_COPY.bundlesHeading);
     await expect(page.locator('nav[aria-label="Breadcrumb"]')).toContainText(BRAND_COPY.bundlesHeading);
     await expect(page.locator('.bundle-grid .bundle-card')).toHaveCount(63);
-    await expect(page.locator('[data-has-shopify-product="true"]').first()).toBeVisible();
-    await expect(page.getByTestId('bundle-add-to-cart').first()).toBeVisible();
+    const isWooCms =
+      process.env.CMS_PROVIDER === 'wordpress' || process.env.WOO_MOCK_MODE === '1';
+    if (isWooCms) {
+      await expect(page.getByTestId('bundle-card').first()).toBeVisible();
+    } else {
+      await expect(page.locator('[data-has-shopify-product="true"]').first()).toBeVisible();
+      await expect(page.getByTestId('bundle-add-to-cart').first()).toBeVisible();
+    }
   });
 
   test('11. Mal by úspešne načítať podstránku "Veľkoobchod"', async ({ page }) => {
@@ -174,7 +187,7 @@ test.describe('3. Produkty a Kolekcie', () => {
     await page.goto('/produkty');
     const heading = page.locator('h1');
     await expect(heading).toBeVisible();
-    await expect(heading).toContainText('Všetky produkty');
+    await expect(heading).toContainText('Katalóg produktov');
     
     const productCard = page.locator('article.product-card').first();
     await expect(productCard).toBeVisible({ timeout: 10000 });

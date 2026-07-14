@@ -59,7 +59,8 @@ test.describe('Dashboard route — smoke', () => {
   test('renders iframe when NEXT_PUBLIC_DASHBOARD_URL is set', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
-    expect(content).toContain('<DashboardFrame src={dashboardUrl} />')
+    expect(content).toContain('<DashboardFrame src={dashboardUrl}')
+    expect(content).toContain('GrowMedica Nexus Dashboard')
   })
 
   test('contains meta title and robot policies', () => {

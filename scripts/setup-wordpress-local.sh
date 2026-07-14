@@ -150,8 +150,8 @@ WOO_CONSUMER_KEY=${CONSUMER_KEY}
 WOO_CONSUMER_SECRET=${CONSUMER_SECRET}
 WORDPRESS_REVALIDATION_SECRET=local-wordpress-revalidation-secret-16
 NEXT_PUBLIC_SITE_URL=http://localhost:5555
-NEXT_PUBLIC_DASHBOARD_URL=${SITE_URL}/wp-admin
-NEXT_PUBLIC_DASHBOARD_MODE=hybrid
+NEXT_PUBLIC_DASHBOARD_URL=https://growmedica-nexus.lovable.app/admin
+NEXT_PUBLIC_DASHBOARD_MODE=iframe
 DASHBOARD_AGENT_SECRET=local-dashboard-agent-secret-min-16-chars
 MISTRAL_MOCK_MODE=1
 MISTRAL_API_KEY=mock-mistral-api-key
@@ -164,9 +164,21 @@ cat > "$ROUTER" <<'PHP'
 <?php
 $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/');
 $file = __DIR__ . $uri;
+
 if ($uri !== '/' && is_file($file)) {
     return false;
 }
+
+if ($uri !== '/' && is_dir($file)) {
+    $index = rtrim($file, DIRECTORY_SEPARATOR) . '/index.php';
+    if (is_file($index)) {
+        $_SERVER['SCRIPT_NAME'] = substr($index, strlen(__DIR__));
+        $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
+        require $index;
+        return true;
+    }
+}
+
 require __DIR__ . '/index.php';
 PHP
 

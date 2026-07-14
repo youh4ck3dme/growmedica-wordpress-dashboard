@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test'
 import * as fs from 'fs'
 import * as path from 'path'
+import { wooTestEnv } from '../helpers/woo-env'
+
+const revalidationSecret = wooTestEnv.WORDPRESS_REVALIDATION_SECRET
 
 test.describe('WordPress WooCommerce ISR revalidation', () => {
   test('revalidates woo-product tag via query secret', async ({ request }) => {
@@ -11,7 +14,7 @@ test.describe('WordPress WooCommerce ISR revalidation', () => {
     expect(content).toContain("searchParams.get('tag')")
 
     const response = await request.post(
-      '/api/revalidate?secret=mock-revalidation-secret-123456&tag=woo-product-imunita-mock-1',
+      `/api/revalidate?secret=${revalidationSecret}&tag=woo-product-imunita-mock-1`,
     )
     expect(response.ok()).toBe(true)
     const body = (await response.json()) as {
@@ -27,7 +30,7 @@ test.describe('WordPress WooCommerce ISR revalidation', () => {
 
   test('revalidates woo-category tag via query secret', async ({ request }) => {
     const response = await request.post(
-      '/api/revalidate?secret=mock-revalidation-secret-123456&tag=woo-category-imunita',
+      `/api/revalidate?secret=${revalidationSecret}&tag=woo-category-imunita`,
     )
     expect(response.ok()).toBe(true)
     const body = (await response.json()) as { tags?: string[] }
@@ -37,7 +40,7 @@ test.describe('WordPress WooCommerce ISR revalidation', () => {
 
   test('rejects invalid woo tag', async ({ request }) => {
     const response = await request.post(
-      '/api/revalidate?secret=mock-revalidation-secret-123456&tag=invalid-tag',
+      `/api/revalidate?secret=${revalidationSecret}&tag=invalid-tag`,
     )
     expect(response.ok()).toBe(true)
     const body = (await response.json()) as { tags?: string[] }

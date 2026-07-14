@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
+const IFRAME_LOAD_TIMEOUT_MS = 15_000
 
 type DashboardFrameProps = {
   src: string
@@ -14,6 +16,16 @@ export default function DashboardFrame({
   const [loadError, setLoadError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setIsLoading((loading) => {
+        if (loading) setLoadError(true)
+        return false
+      })
+    }, IFRAME_LOAD_TIMEOUT_MS)
+    return () => window.clearTimeout(timer)
+  }, [src])
+
   if (loadError) {
     return (
       <div
@@ -24,8 +36,8 @@ export default function DashboardFrame({
           WordPress admin sa nepodarilo načítať
         </p>
         <p className="max-w-md text-sm text-(--color-text-muted)">
-          Skontrolujte, či je <code className="text-xs">cms.growmedica.cz</code> dostupný a
-          povolí embed zo storefront domény (CSP <code className="text-xs">frame-ancestors</code>).
+          Skontrolujte, či je Nexus admin dostupný a povolí embed zo storefront domény
+          (CSP <code className="text-xs">frame-ancestors</code> na Lovable/Vercel).
           Ak iframe auth nefunguje, prihláste sa priamo cez odkaz nižšie (Application Passwords / JWT).
         </p>
         <a

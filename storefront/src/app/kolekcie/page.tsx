@@ -81,7 +81,7 @@ export default async function KolekciePage() {
                           className="collection-card-banner-image object-cover object-right transition-transform duration-300 group-hover:scale-105"
                         />
                         <div
-                          className="collection-card-banner-overlay absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent"
+                          className="collection-card-banner-overlay absolute inset-0"
                           aria-hidden="true"
                         />
                       </>

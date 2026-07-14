@@ -43,14 +43,14 @@ export default function MobileNav({
   return (
     <>
       <div
-        className="fixed inset-0 z-[90] bg-[#101615]/40 backdrop-blur-sm"
+        className="fixed inset-0 z-90 bg-[#101615]/40 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
 
       <nav
         id="mobile-nav"
-        className="fixed inset-y-0 left-0 z-[100] flex w-72 flex-col bg-(--color-surface) shadow-xl"
+        className="fixed inset-y-0 left-0 z-100 flex w-72 flex-col bg-(--color-surface) shadow-xl"
         aria-label={t('aria.mobileNav')}
         role="dialog"
         aria-modal="true"
@@ -130,7 +130,7 @@ export default function MobileNav({
           )}
         </div>
 
-        <div className="relative z-[1] shrink-0 border-t border-(--color-border) p-4 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-3">
+        <div className="mobile-nav-footer shrink-0 border-t border-(--color-border) p-4 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-3">
           <button
             type="button"
             className="assistant-mobile-trigger"

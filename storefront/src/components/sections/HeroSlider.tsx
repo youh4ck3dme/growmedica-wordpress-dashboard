@@ -88,7 +88,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
       className="theme-transition noor-reveal noor-hero-section hero-slider relative overflow-hidden bg-(--color-surface)"
       aria-labelledby="hero-heading"
     >
-      <div className="hero-slider__stage relative w-full min-h-[28rem] sm:min-h-[32rem] lg:min-h-[36rem]">
+      <div className="hero-slider__stage relative w-full min-h-112 sm:min-h-128 lg:min-h-144">
         {useHeroVideo ? (
           <div className="absolute inset-0">
             <video

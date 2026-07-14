@@ -2,35 +2,74 @@
 
 ## Cursor Cloud specific instructions
 
+### ⛔ UI/UX FREEZE (kritické)
+
+Storefront UI sa **nikde nemení**. Pri každom tasku:
+
+- **NEUPRAVUJ** `src/components/**`, layout JSX v `src/app/**`, design tokeny v `globals.css`
+- **UPRAVUJ** len `src/lib/**`, `src/app/api/**`, `wordpress/mu-plugins/**`, testy, env skripty
+- i18n: len `src/lib/i18n/locales/*.json` (preklady), nie komponenty
+- Tailwind údržba: canonical triedy alebo presun do existujúcich CSS tried — bez zmeny vzhľadu
+
+Referencia: [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) · [storefront/UI_UX_DESIGN_SYSTEM.md](./storefront/UI_UX_DESIGN_SYSTEM.md)
+
 ### Project layout
-- The application is a single Next.js 15 / React 19 storefront living in `storefront/` (GrowMedica, Slovak health-supplements e-commerce). The repo root only holds docs (`reports/`, `README.md`) and a legacy `.env.local.example` for an unrelated PHP/Docker stack — ignore that root example for the storefront.
-- Package manager is **Yarn 1** (see `storefront/yarn.lock`). Node 22 is fine. Run all app commands from `storefront/`.
+
+- Aplikácia je Next.js 15 / React 19 storefront v `storefront/` (GrowMedica, SK e-commerce).
+- Package manager: **Yarn 1** (`storefront/yarn.lock`). Node 22. Všetky príkazy z `storefront/`.
+- WordPress mu-plugins: `wordpress/mu-plugins/`
+- Hlavný TODO: [../TODO.md](../TODO.md)
 
 ### Local env (required to run `yarn dev` / `yarn build`)
-`src/lib/env.ts` validates Shopify env vars at import, so the app will not boot without them. There are no real credentials in this environment, so run everything in **mock mode**. The dev `.env.local` is gitignored and will not arrive via a PR — if `storefront/.env.local` is missing, recreate it with these mock values (no real secrets needed):
+
+`src/lib/env.ts` validuje env pri importe. Pre lokálny vývoj používaj **mock režim**:
 
 ```
+CMS_PROVIDER=wordpress
+WOO_MOCK_MODE=1
+WOO_CONSUMER_KEY=ck_mock
+WOO_CONSUMER_SECRET=cs_mock
+WORDPRESS_BASE_URL=http://localhost:8080
+WORDPRESS_REVALIDATION_SECRET=mock-revalidation-secret-123456
 SHOPIFY_MOCK_MODE=1
 SHOPIFY_STORE_DOMAIN=mock-store.myshopify.com
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=mock-storefront-token
 SHOPIFY_REVALIDATION_SECRET=mock-revalidation-secret-123456
 SHOPIFY_API_VERSION=2025-01
 NEXT_PUBLIC_SITE_URL=http://localhost:5555
+NEXT_PUBLIC_DASHBOARD_URL=http://localhost:8080/wp-admin
+NEXT_PUBLIC_DASHBOARD_MODE=hybrid
+DASHBOARD_AGENT_SECRET=local-dashboard-agent-secret-min-16-chars
 MISTRAL_MOCK_MODE=1
 MISTRAL_API_KEY=mock-mistral-api-key
 MISTRAL_MODEL=mistral-large-latest
 ```
 
-In mock mode `src/lib/shopify/mock.ts` serves deterministic products/collections/cart, so no network/Shopify access is required. Real Shopify/Mistral credentials are only needed for production data or the optional `scripts/*.mjs` Shopify Admin helpers.
+V mock režime `src/lib/wordpress/mock.ts` a `src/lib/shopify/mock.ts` servujú deterministické dáta — bez siete.
 
 ### Commands (run in `storefront/`)
-Standard scripts are in `storefront/package.json`; the common ones:
-- `yarn dev` — dev server on port **5555** (Turbopack).
-- `yarn lint` / `yarn type-check` — ESLint (warnings only) / `tsc --noEmit`.
-- `yarn build` — production build (works fully in mock mode).
-- `yarn test:integrity` — Playwright integrity suite; it boots its own dev server on port 5557 and injects mock env, so it does NOT need `.env.local`.
+
+- `yarn dev` — dev server na porte **5555** (Turbopack)
+- `yarn lint` / `yarn type-check` — ESLint / `tsc --noEmit`
+- `yarn build` — production build (funguje v mock režime)
+- `yarn test:integrity` — Playwright Shopify mock (~137+ passed)
+- `yarn test:woo:integrity` — Playwright WordPress mock
+- `yarn test:dashboard-agent` — Mistral Agent mock
+- `yarn test:i18n` — lokalizácia SK/EN/DE
+- `yarn diagnostic` — rýchla health check
 
 ### Gotchas
-- `yarn test:integrity` includes `tests/integrity/database-schema.spec.ts`, which reads `../../../wpbox/schema/*.yaml` and `../../../wpbox/database/*.yaml`. That `wpbox/` directory is NOT part of this standalone repo — the 3 CPT tests are **skipped** (not failed) when `wpbox/` is absent. Expect **137 passed, 0 failed** in a normal storefront checkout.
-- Cart state is server-side: `/api/cart/add` stores the mock cart in-memory and sets an httpOnly `growmedical_cart_id` cookie. The `/kosik` page reads the cart from that cookie on a full server render, so to verify the cart in a browser, add an item then do a full navigation/reload of `/kosik` (the header badge updates client-side and may lag until reload).
-- Playwright Chromium browsers are already available in this environment; `yarn test:integrity` runs without an extra browser install step.
+
+- `yarn test:integrity` obsahuje `database-schema.spec.ts`, ktorý číta `../../../wpbox/schema/*.yaml`. Adresár `wpbox/` nie je v tomto repozitári — 3 CPT testy sa **preskočia** (nie fail). Očakávaj **137 passed, 0 failed**.
+- Cart je server-side: `/api/cart/add` + httpOnly cookie `growmedical_cart_id`. Pre overenie košíka v prehliadači: pridaj položku → full reload `/kosik`.
+- `/dashboard` nemá shop chrome (middleware `x-dashboard-route: 1`). Testy: `yarn test:dashboard-agent`.
+- Playwright Chromium je dostupný; `yarn test:integrity` nepotrebuje extra browser install.
+
+### Ďalší vývoj (priorita)
+
+1. WP produkcia (`cms.growmedica.cz`) — DNS, hosting, live Woo env na Vercel
+2. Dashboard Agent tools — rozšírenie `src/lib/dashboard-agent/tools.ts`
+3. ISR webhooks — `wordpress/mu-plugins/growmedica-revalidate.php`
+4. Import katalógu — `yarn import:categories` + `yarn import:products`
+
+**Bez UI zmien.** Pozri [../TODO.md](../TODO.md).

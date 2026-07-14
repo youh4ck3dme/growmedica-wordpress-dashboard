@@ -1,5 +1,8 @@
 # Dashboard deploy (iframe bridge + Agentic AI)
 
+> **UI/UX:** Storefront `/dashboard` shell je hotový — ďalší vývoj = Agent tools, WP iframe auth, env.  
+> Vývoj: [DEVELOPMENT.md](./DEVELOPMENT.md) · [DASHBOARD_AGENT.md](./DASHBOARD_AGENT.md)
+
 Externý admin dashboard beží na samostatnom hostingu alebo natívne v storefronte. Storefront na `/dashboard` podporuje **hybrid** režim: Mistral AI Command Bar + voliteľný WordPress admin iframe.
 
 **Cieľ (WordPress):** `https://cms.growmedica.cz/wp-admin` alebo custom WooCommerce admin plugin route.
