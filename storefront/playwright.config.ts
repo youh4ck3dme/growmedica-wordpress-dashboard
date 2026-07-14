@@ -20,6 +20,11 @@ const shopifyTestEnv: Record<string, string> = {
   MISTRAL_MOCK_MODE: process.env.MISTRAL_MOCK_MODE ?? '1',
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY ?? 'mock-mistral-api-key',
   MISTRAL_MODEL: process.env.MISTRAL_MODEL ?? 'mistral-large-latest',
+  NEXT_PUBLIC_DASHBOARD_MODE: process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'hybrid',
+  DASHBOARD_AGENT_SECRET:
+    process.env.DASHBOARD_AGENT_SECRET ?? 'mock-dashboard-agent-secret-123456',
+  NEXT_PUBLIC_DASHBOARD_URL:
+    process.env.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://cms.growmedica.sk/wp-admin',
 };
 
 if (isNoorDemoTest) {
