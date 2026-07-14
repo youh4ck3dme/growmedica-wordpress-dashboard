@@ -64,7 +64,7 @@ export default defineConfig({
         url: playwrightDevUrl,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
-        env: { ...process.env, ...playwrightEnv },
+        env: playwrightEnv,
       },
   use: {
     baseURL: isPwaProductionTest
