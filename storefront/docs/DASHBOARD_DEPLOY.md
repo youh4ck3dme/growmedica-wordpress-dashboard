@@ -1,6 +1,6 @@
-# Dashboard deploy (iframe bridge)
+# Dashboard deploy (iframe bridge + Agentic AI)
 
-Externý admin dashboard beží na samostatnom hostingu. Storefront ho vkladá na `/dashboard` cez full-screen iframe — bez merge admin kódu do Next.js projektu.
+Externý admin dashboard beží na samostatnom hostingu alebo natívne v storefronte. Storefront na `/dashboard` podporuje **hybrid** režim: Mistral AI Command Bar + voliteľný WordPress admin iframe.
 
 **Cieľ (WordPress):** `https://cms.growmedica.sk/wp-admin` alebo custom WooCommerce admin plugin route.
 
@@ -8,12 +8,14 @@ Externý admin dashboard beží na samostatnom hostingu. Storefront ho vkladá n
 
 Vzor je analogický k NOOR demo ([`NOOR_DEMO_DEPLOY.md`](./NOOR_DEMO_DEPLOY.md)): samostatný deploy, prepojenie cez env.
 
+**Agentic AI:** Pozri [`DASHBOARD_AGENT.md`](./DASHBOARD_AGENT.md) — Mistral Command Bar, tool-calling nad `catalog/*`, audit log.
+
 ## Architektúra
 
 | | Storefront (tento projekt) | WordPress CMS |
 |---|---|---|
 | **Stack** | Next.js 15 App Router v `storefront/` | WordPress 6.7 + WooCommerce |
-| **Admin** | `/dashboard` (iframe bridge) | `/wp-admin` |
+| **Admin** | `/dashboard` (AI Command Bar + iframe bridge) | `/wp-admin` |
 | **Produkcia** | `https://growmedica.sk/dashboard` | `https://cms.growmedica.sk/wp-admin` |
 
 Používateľ naviguje na `https://growmedica.sk/dashboard`. URL v prehliadači zostáva `/dashboard`; navigácia v dashboarde prebieha vnútri iframe.
@@ -25,8 +27,10 @@ Používateľ naviguje na `https://growmedica.sk/dashboard`. URL v prehliadači 
 | Premenná | Príklad | Účel |
 |---|---|---|
 | `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.sk/wp-admin` | `src` atribút iframe na `/dashboard` |
+| `NEXT_PUBLIC_DASHBOARD_MODE` | `hybrid` | `agentic` \| `iframe` \| `hybrid` (default) |
+| `DASHBOARD_AGENT_SECRET` | `min-16-chars-secret` | Auth header pre `/api/dashboard/*` |
 
-Ak premenná chýba, `/dashboard` zobrazí fallback s odkazom na legacy Nexus.
+Ak `NEXT_PUBLIC_DASHBOARD_URL` chýba v režime `iframe`, `/dashboard` zobrazí fallback. V režime `agentic` alebo `hybrid` AI tab funguje bez WP URL.
 
 ### Lokálny vývoj
 
@@ -57,7 +61,7 @@ Storefront CSP (`next.config.ts`): `frame-src 'self' https://cms.growmedica.sk` 
 |---|---|
 | `src/middleware.ts` | Nastaví **request** header `x-dashboard-route: 1` pre `/dashboard` (nie response header) |
 | `src/app/layout.tsx` | Číta `headers()` v Server Component; bez shop chrome keď `x-dashboard-route === '1'` |
-| `src/app/dashboard/page.tsx` | Iframe bridge alebo fallback |
+| `src/app/dashboard/page.tsx` | DashboardShell (AI + iframe tabs) alebo fallback |
 | `src/app/dashboard/layout.tsx` | `noindex`, full-height wrapper |
 | `next.config.ts` | Route-specific CSP `frame-src` pre `/dashboard` |
 | `src/app/robots.ts` | `disallow: /dashboard` |

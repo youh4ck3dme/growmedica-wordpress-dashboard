@@ -46,20 +46,21 @@ test.describe('Dashboard route — smoke', () => {
     expect(disallowList).toContain('/dashboard')
   })
 
-  test('shows fallback when NEXT_PUBLIC_DASHBOARD_URL is missing', () => {
+  test('shows fallback when iframe mode and URL missing', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
 
     expect(content).toContain('Dashboard nie je nakonfigurovaný')
     expect(content).toContain('data-testid="dashboard-unconfigured"')
-    expect(content).toContain('data-testid="dashboard-legacy-nexus-link"')
+    expect(content).toContain('NEXT_PUBLIC_DASHBOARD_MODE=agentic')
     expect(content).toContain('wp-admin')
   })
 
-  test('renders iframe when NEXT_PUBLIC_DASHBOARD_URL is set', () => {
+  test('renders DashboardShell with mode support', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
-    expect(content).toContain('<DashboardFrame src={dashboardUrl} />')
+    expect(content).toContain('<DashboardShell')
+    expect(content).toContain('getDashboardMode')
   })
 
   test('contains meta title and robot policies', () => {

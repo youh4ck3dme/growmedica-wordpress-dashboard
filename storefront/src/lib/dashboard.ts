@@ -1,3 +1,14 @@
+export type DashboardMode = 'agentic' | 'iframe' | 'hybrid'
+
+export const LEGACY_NEXUS_ADMIN_URL = 'https://growmedica-nexus.lovable.app/admin/prihlasenie'
+
+/** agentic | iframe | hybrid (default: hybrid) */
+export function getDashboardMode(): DashboardMode {
+  const raw = process.env.NEXT_PUBLIC_DASHBOARD_MODE?.trim().toLowerCase()
+  if (raw === 'agentic' || raw === 'iframe' || raw === 'hybrid') return raw
+  return 'hybrid'
+}
+
 /** Public iframe target for WordPress admin (validated URL or undefined). */
 export function getDashboardUrl(): string | undefined {
   const raw = process.env.NEXT_PUBLIC_DASHBOARD_URL?.trim()
