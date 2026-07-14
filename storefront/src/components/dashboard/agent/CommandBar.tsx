@@ -2,13 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import { Loader2, Send } from 'lucide-react'
-
-const QUICK_ACTIONS = [
-  'Zobraz produkty',
-  'Export CSV katalógu',
-  'Stav integrácie',
-  'Hromadná zmena cien o 5%',
-] as const
+import { useLocale } from '@/components/i18n/LocaleProvider'
 
 type CommandBarProps = {
   disabled?: boolean
@@ -16,7 +10,15 @@ type CommandBarProps = {
 }
 
 export default function CommandBar({ disabled = false, onSubmit }: CommandBarProps) {
+  const { t } = useLocale()
   const [command, setCommand] = useState('')
+
+  const quickActions = [
+    { label: t('dashboard.quick.listProducts'), command: 'Zobraz produkty' },
+    { label: t('dashboard.quick.exportCsv'), command: 'Export CSV katalógu' },
+    { label: t('dashboard.quick.integrationStatus'), command: 'Stav integrácie' },
+    { label: t('dashboard.quick.catalogSummary'), command: 'Súhrn katalógu' },
+  ]
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
@@ -29,16 +31,16 @@ export default function CommandBar({ disabled = false, onSubmit }: CommandBarPro
   return (
     <div className="space-y-3" data-testid="dashboard-command-bar">
       <div className="flex flex-wrap gap-2">
-        {QUICK_ACTIONS.map((action) => (
+        {quickActions.map((action) => (
           <button
-            key={action}
+            key={action.command}
             type="button"
             disabled={disabled}
-            onClick={() => void onSubmit(action)}
+            onClick={() => void onSubmit(action.command)}
             className="rounded-full border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-medium text-(--color-text-muted) transition hover:border-(--color-primary) hover:text-(--color-text) disabled:opacity-50"
-            data-testid={`dashboard-quick-action-${action.replace(/\s+/g, '-').toLowerCase()}`}
+            data-testid={`dashboard-quick-action-${action.command.replace(/\s+/g, '-').toLowerCase()}`}
           >
-            {action}
+            {action.label}
           </button>
         ))}
       </div>
@@ -48,7 +50,7 @@ export default function CommandBar({ disabled = false, onSubmit }: CommandBarPro
           type="text"
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Zadajte príkaz pre AI agenta…"
+          placeholder={t('dashboard.command.placeholder')}
           disabled={disabled}
           className="flex-1 rounded-lg border border-(--color-border) bg-(--color-surface) px-4 py-2.5 text-sm text-(--color-text) placeholder:text-(--color-text-muted) focus:border-(--color-primary) focus:outline-none disabled:opacity-50"
           data-testid="dashboard-command-input"
@@ -60,7 +62,7 @@ export default function CommandBar({ disabled = false, onSubmit }: CommandBarPro
           data-testid="dashboard-command-submit"
         >
           {disabled ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-          Spustiť
+          {t('dashboard.command.submit')}
         </button>
       </form>
     </div>

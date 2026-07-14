@@ -10,7 +10,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STOREFRONT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 VERCEL_SCOPE="${VERCEL_SCOPE:-h4ck3d}"
-VERCEL_PROJECT="${VERCEL_PROJECT:-growmedicanextjs}"
+VERCEL_PROJECT="${VERCEL_PROJECT:-growmedica-wordpress-dashboard}"
 ENVIRONMENTS=(production development)
 
 MISTRAL_API_KEY="${MISTRAL_API_KEY:-}"

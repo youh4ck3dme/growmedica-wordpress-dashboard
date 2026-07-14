@@ -2,15 +2,17 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { RefreshCw } from 'lucide-react'
-import { DASHBOARD_AGENT_SECRET_HEADER } from '@/lib/dashboard-agent/auth'
+import { useLocale } from '@/components/i18n/LocaleProvider'
+import { dashboardFetch } from '@/lib/dashboard-agent/clientAuth'
 import type { AuditEntry } from '@/lib/dashboard-agent/types'
 
 type AuditLogPanelProps = {
-  agentSecret: string
+  sessionReady: boolean
   refreshKey?: number
 }
 
-export default function AuditLogPanel({ agentSecret, refreshKey = 0 }: AuditLogPanelProps) {
+export default function AuditLogPanel({ sessionReady, refreshKey = 0 }: AuditLogPanelProps) {
+  const { t } = useLocale()
   const [entries, setEntries] = useState<AuditEntry[]>([])
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
@@ -19,27 +21,25 @@ export default function AuditLogPanel({ agentSecret, refreshKey = 0 }: AuditLogP
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch('/api/dashboard/audit?limit=20', {
-        headers: { [DASHBOARD_AGENT_SECRET_HEADER]: agentSecret },
-      })
+      const response = await dashboardFetch('/api/dashboard/audit?limit=20')
       const payload = await response.json()
-      if (!response.ok) throw new Error(payload.error ?? 'Audit log nedostupný')
+      if (!response.ok) throw new Error(payload.error ?? t('dashboard.error.auditUnavailable'))
       setEntries(payload.entries ?? [])
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Chyba audit logu')
+      setError(err instanceof Error ? err.message : t('dashboard.error.auditLoad'))
     } finally {
       setLoading(false)
     }
-  }, [agentSecret])
+  }, [t])
 
   useEffect(() => {
-    if (agentSecret) void load()
-  }, [agentSecret, refreshKey, load])
+    if (sessionReady) void load()
+  }, [sessionReady, refreshKey, load])
 
   return (
     <div className="rounded-lg border border-(--color-border) bg-(--color-surface)" data-testid="dashboard-audit-panel">
       <div className="flex items-center justify-between border-b border-(--color-border) px-4 py-2">
-        <h2 className="text-sm font-semibold text-(--color-text)">Audit log</h2>
+        <h2 className="text-sm font-semibold text-(--color-text)">{t('dashboard.audit.title')}</h2>
         <button
           type="button"
           onClick={() => void load()}
@@ -47,11 +47,11 @@ export default function AuditLogPanel({ agentSecret, refreshKey = 0 }: AuditLogP
           data-testid="dashboard-audit-refresh"
         >
           <RefreshCw className="h-3.5 w-3.5" />
-          Obnoviť
+          {t('dashboard.audit.refresh')}
         </button>
       </div>
 
-      {loading && <p className="px-4 py-3 text-xs text-(--color-text-muted)">Načítavam…</p>}
+      {loading && <p className="px-4 py-3 text-xs text-(--color-text-muted)">{t('dashboard.audit.loading')}</p>}
       {error && <p className="px-4 py-3 text-xs text-red-600">{error}</p>}
 
       {!loading && !error && (
@@ -59,17 +59,17 @@ export default function AuditLogPanel({ agentSecret, refreshKey = 0 }: AuditLogP
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-(--color-border) text-(--color-text-muted)">
-                <th className="px-4 py-2 font-medium">Čas</th>
-                <th className="px-4 py-2 font-medium">Nástroj</th>
-                <th className="px-4 py-2 font-medium">Stav</th>
-                <th className="px-4 py-2 font-medium">Súhrn</th>
+                <th className="px-4 py-2 font-medium">{t('dashboard.audit.time')}</th>
+                <th className="px-4 py-2 font-medium">{t('dashboard.audit.tool')}</th>
+                <th className="px-4 py-2 font-medium">{t('dashboard.audit.status')}</th>
+                <th className="px-4 py-2 font-medium">{t('dashboard.audit.summary')}</th>
               </tr>
             </thead>
             <tbody>
               {entries.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="px-4 py-3 text-(--color-text-muted)">
-                    Zatiaľ žiadne záznamy.
+                    {t('dashboard.audit.empty')}
                   </td>
                 </tr>
               ) : (
