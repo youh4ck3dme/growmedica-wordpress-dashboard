@@ -1,12 +1,27 @@
-import DashboardShell from '@/components/dashboard/agent/DashboardShell'
-import { getDashboardMode, getDashboardUrl } from '@/lib/dashboard'
+import DashboardFrame from '@/components/dashboard/DashboardFrame'
+import { getDashboardUrl } from '@/lib/dashboard'
+
+const LEGACY_NEXUS_ADMIN_URL = 'https://growmedica-nexus.lovable.app/admin/prihlasenie'
+const isDev = process.env.NODE_ENV === 'development'
+
+function LegacyNexusLink({ className = '' }: { className?: string }) {
+  return (
+    <a
+      href={LEGACY_NEXUS_ADMIN_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`btn btn-secondary text-xs ${className}`.trim()}
+      data-testid="dashboard-legacy-nexus-link"
+    >
+      Legacy Nexus admin
+    </a>
+  )
+}
 
 export default function DashboardPage() {
-  const mode = getDashboardMode()
   const dashboardUrl = getDashboardUrl()
-  const agentSecret = process.env.DASHBOARD_AGENT_SECRET?.trim() ?? ''
 
-  if (mode === 'iframe' && !dashboardUrl) {
+  if (!dashboardUrl) {
     return (
       <div
         className="flex h-dvh w-full flex-col items-center justify-center gap-3 bg-(--color-surface) px-6 text-center"
@@ -20,17 +35,28 @@ export default function DashboardPage() {
           </code>{' '}
           na WordPress admin URL, napr.{' '}
           <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
-            https://cms.growmedica.sk/wp-admin
+            https://cms.growmedica.cz/wp-admin
           </code>
-          , alebo prepnite na{' '}
-          <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
-            NEXT_PUBLIC_DASHBOARD_MODE=agentic
-          </code>
-          .
         </p>
+        <LegacyNexusLink className="mt-2" />
       </div>
     )
   }
 
-  return <DashboardShell mode={mode} dashboardUrl={dashboardUrl} agentSecret={agentSecret} />
+  return (
+    <>
+      {isDev && (
+        <a
+          href={dashboardUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-4 right-4 z-50 rounded-full border border-(--color-border) bg-(--color-surface)/95 px-4 py-2 text-xs font-medium text-(--color-text-muted) shadow-sm backdrop-blur hover:text-(--color-text)"
+          data-testid="dashboard-dev-direct-link"
+        >
+          Dev: WP admin priamo
+        </a>
+      )}
+      <DashboardFrame src={dashboardUrl} />
+    </>
+  )
 }

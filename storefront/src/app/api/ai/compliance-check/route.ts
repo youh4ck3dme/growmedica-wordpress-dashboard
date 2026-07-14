@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     const { text } = complianceCheckInputSchema.parse(body)
 
     const prompt = `
-Si compliance asistent pre e-shop so zdravotnými doplnkami GrowMedica.sk (SK trh, nariadenie 1924/2006).
+Si compliance asistent pre e-shop so zdravotnými doplnkami GrowMedica.cz (SK trh, nariadenie 1924/2006).
 ${COMPLIANCE_PROMPT_SCHEMA}
 
 Text na kontrolu: ${JSON.stringify(text)}

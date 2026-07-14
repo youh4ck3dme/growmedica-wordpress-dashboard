@@ -10,15 +10,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STOREFRONT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 CMS_PROVIDER="${CMS_PROVIDER:-wordpress}"
-WORDPRESS_BASE_URL="${WORDPRESS_BASE_URL:-https://cms.growmedica.sk}"
-NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://growmedica.sk}"
-NEXT_PUBLIC_DASHBOARD_URL="${NEXT_PUBLIC_DASHBOARD_URL:-https://cms.growmedica.sk/wp-admin}"
+WORDPRESS_BASE_URL="${WORDPRESS_BASE_URL:-https://cms.growmedica.cz}"
+NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://growmedica.cz}"
+NEXT_PUBLIC_DASHBOARD_URL="${NEXT_PUBLIC_DASHBOARD_URL:-https://cms.growmedica.cz/wp-admin}"
 WORDPRESS_REVALIDATION_SECRET="${WORDPRESS_REVALIDATION_SECRET:-$(openssl rand -hex 24)}"
 MISTRAL_MODEL="${MISTRAL_MODEL:-mistral-large-latest}"
 SHOPIFY_STORE_DOMAIN="${SHOPIFY_STORE_DOMAIN:-growmedica.myshopify.com}"
 SHOPIFY_API_VERSION="${SHOPIFY_API_VERSION:-2025-01}"
 
-# Until WooCommerce API keys exist on cms.growmedica.sk, mock mode keeps catalog live on Vercel.
+# Until WooCommerce API keys exist on cms.growmedica.cz, mock mode keeps catalog live on Vercel.
 WOO_MOCK_MODE="${WOO_MOCK_MODE:-1}"
 MISTRAL_MOCK_MODE="${MISTRAL_MOCK_MODE:-1}"
 
@@ -57,10 +57,13 @@ echo "Project: growmedica-wordpress-dashboard"
 echo "WORDPRESS_REVALIDATION_SECRET: (generated, ${#WORDPRESS_REVALIDATION_SECRET} chars)"
 echo ""
 
+NEXT_PUBLIC_DEFAULT_LOCALE="${NEXT_PUBLIC_DEFAULT_LOCALE:-sk}"
+
 PUBLIC_VARS=(
   "CMS_PROVIDER|$CMS_PROVIDER"
   "WORDPRESS_BASE_URL|$WORDPRESS_BASE_URL"
   "NEXT_PUBLIC_SITE_URL|$NEXT_PUBLIC_SITE_URL"
+  "NEXT_PUBLIC_DEFAULT_LOCALE|$NEXT_PUBLIC_DEFAULT_LOCALE"
   "NEXT_PUBLIC_DASHBOARD_URL|$NEXT_PUBLIC_DASHBOARD_URL"
   "MISTRAL_MODEL|$MISTRAL_MODEL"
   "SHOPIFY_STORE_DOMAIN|$SHOPIFY_STORE_DOMAIN"
@@ -130,5 +133,5 @@ echo "=== Hotovo ==="
 vercel env ls production "${vercel_args[@]}" 2>&1 | head -30
 echo ""
 echo "Ďalší krok: vercel --prod"
-echo "Po vytvorení Woo API keys na cms.growmedica.sk:"
+echo "Po vytvorení Woo API keys na cms.growmedica.cz:"
 echo "  WOO_CONSUMER_KEY=ck_... WOO_CONSUMER_SECRET=cs_... WOO_MOCK_MODE=0 ./scripts/set-wordpress-vercel-env.sh"

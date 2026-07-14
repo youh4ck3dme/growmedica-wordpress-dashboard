@@ -25,10 +25,10 @@ export default function Kontakt() {
                   <div>
                     <strong className="block text-lg mb-1 text-(--color-text)">E-mail:</strong>
                     <a
-                      href="mailto:info@growmedica.sk"
+                      href="mailto:info@growmedica.cz"
                       className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
                     >
-                      info@growmedica.sk
+                      info@growmedica.cz
                     </a>
                     <p className="text-sm text-gray-400 mt-1">Odpovedáme väčšinou do 24 hodín.</p>
                   </div>

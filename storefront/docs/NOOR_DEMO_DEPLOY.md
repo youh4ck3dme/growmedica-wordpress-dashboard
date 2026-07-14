@@ -9,7 +9,7 @@ Izolovaný NOOR skin pre GrowMedica — samostatný Vercel projekt a branch, bez
 | **Vercel project** | `growmedicanextjs` | `growmedica-noor-demo` |
 | **Git branch** | `main` | `feat/noor-production-demo` |
 | **Production URL** | https://growmedicanextjs.vercel.app | https://growmedica-noor-demo.vercel.app |
-| **Custom domain (demo)** | — | `noor.nexify-studio.tech`, `noor.growmedica.sk` (DNS) |
+| **Custom domain (demo)** | — | `noor.nexify-studio.tech`, `noor.growmedica.cz` (DNS) |
 | **Root directory (Vercel)** | `storefront` | `storefront` |
 
 Deploy z **koreňa repozitára** (nie zo `storefront/`), inak Vercel hľadá `storefront/storefront`.

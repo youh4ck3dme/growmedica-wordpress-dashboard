@@ -14,8 +14,8 @@ add_action('rest_api_init', function () {
         $allowed = [
             'http://localhost:5555',
             'http://127.0.0.1:5555',
-            'https://growmedica.sk',
-            'https://www.growmedica.sk',
+            'https://growmedica.cz',
+            'https://www.growmedica.cz',
         ];
         $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
         if (in_array($origin, $allowed, true) || str_ends_with($origin, '.vercel.app')) {

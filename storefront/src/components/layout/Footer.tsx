@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import Logo from '@/components/ui/Logo'
 import { FooterAssistantTrigger } from '@/components/ai/FooterAssistantTrigger'
-import { BRAND_COPY } from '@/lib/brand'
 import { getNavCollectionItems } from '@/lib/catalog/nav'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { getFooterInfoLinks, t } from '@/lib/i18n/translate'
 
 const SOCIAL_LINKS = [
   {
@@ -30,35 +31,28 @@ const SOCIAL_LINKS = [
   },
 ] as const
 
-const INFO_LINKS = [
-  { href: '/obchodne-podmienky', label: 'Obchodné podmienky' },
-  { href: '/reklamacny-poriadok', label: 'Reklamačný poriadok' },
-  { href: '/kontakt', label: 'Kontakt' },
-  { href: '/ochrana-osobnych-udajov', label: 'Ochrana osobných údajov' },
-  { href: '/doprava-a-platba', label: 'Doprava a platba' },
-  { href: '/faq', label: 'Často kladené otázky' },
-  { href: '/velkoobchod', label: 'Kontakt a Veľkoobchodná spolupráca' },
-]
-
 export default async function Footer() {
+  const locale = await getRequestLocale()
+  const infoLinks = getFooterInfoLinks(locale)
+
   let menuLinks: Array<{ href: string; label: string }> = []
   try {
     const collections = await getNavCollectionItems()
     menuLinks = [
-      { href: '/balicky', label: 'BALÍČKY ZDRAVIA' },
+      { href: '/balicky', label: t('footer.bundles', locale) },
       ...collections.map((item) => ({
         href: item.href,
         label: item.menuLabel,
       })),
-      { href: '/blog', label: 'BLOG' },
+      { href: '/blog', label: t('footer.blog', locale) },
     ]
   } catch {
-    menuLinks = [{ href: '/balicky', label: 'BALÍČKY ZDRAVIA' }]
+    menuLinks = [{ href: '/balicky', label: t('footer.bundles', locale) }]
   }
 
   const footerSections: Record<string, Array<{ href: string; label: string }>> = {
-    Menu: menuLinks,
-    Informácie: INFO_LINKS,
+    [t('footer.menu', locale)]: menuLinks,
+    [t('footer.info', locale)]: infoLinks,
   }
 
   return (
@@ -66,11 +60,11 @@ export default async function Footer() {
       <Container>
         <div className="py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="footer-brand col-span-2 md:col-span-1">
-            <Link href="/" className="footer-brand-logo site-logo-mark" aria-label="GrowMedica.sk — domov">
+            <Link href="/" className="footer-brand-logo site-logo-mark" aria-label={t('aria.home', locale)}>
               <Logo variant="dark" iconSize={36} />
             </Link>
-            <p className="footer-brand-tagline">{BRAND_COPY.tagline}</p>
-            <p className="footer-brand-description">{BRAND_COPY.footerBlurb}</p>
+            <p className="footer-brand-tagline">{t('footer.tagline', locale)}</p>
+            <p className="footer-brand-description">{t('footer.blurb', locale)}</p>
             <div className="footer-brand-social">
               {SOCIAL_LINKS.map(({ label, href, icon }) => (
                 <a
@@ -88,7 +82,7 @@ export default async function Footer() {
           </div>
 
           {Object.entries(footerSections).map(([title, links]) => (
-            <nav key={title} aria-label={`${title} navigácia`}>
+            <nav key={title} aria-label={`${title} navigation`}>
               <h3
                 className="text-xs font-bold uppercase tracking-widest mb-4 text-white"
                 style={{ fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.1em' }}
@@ -116,16 +110,18 @@ export default async function Footer() {
               className="text-xs font-bold uppercase tracking-widest mb-4 text-white"
               style={{ fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.1em' }}
             >
-              Kontakt
+              {t('footer.contact', locale)}
             </h3>
             <ul className="space-y-2.5 text-sm" style={{ color: 'var(--color-footer-text)' }}>
               <li>
-                <a href="mailto:info@growmedica.sk" className="hover:text-white transition-colors">
-                  info@growmedica.sk
+                <a href="mailto:info@growmedica.cz" className="hover:text-white transition-colors">
+                  info@growmedica.cz
                 </a>
               </li>
               <li className="leading-relaxed mt-2 pt-2 border-t border-white/10">
-                <span className="block font-medium text-white mb-0.5">Sídlo spoločnosti:</span>
+                <span className="block font-medium text-white mb-0.5">
+                  {t('footer.companyAddressLabel', locale)}
+                </span>
                 GrowMedica s.r.o.<br />
                 BELLOVA 6, KOŠICE, 040 01
               </li>
@@ -135,7 +131,7 @@ export default async function Footer() {
                   className="inline-block px-4 py-2 mt-2 border border-white/30 rounded-lg text-white text-xs font-semibold hover:bg-white/10 transition-colors uppercase tracking-wider"
                   style={{ fontFamily: 'Montserrat, sans-serif' }}
                 >
-                  Kontaktovať nás
+                  {t('footer.contactUs', locale)}
                 </Link>
               </li>
               <li>
@@ -149,7 +145,9 @@ export default async function Footer() {
           className="py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
           style={{ borderTop: '1px solid var(--color-footer-border)', color: 'var(--color-footer-text)' }}
         >
-          <p>© {new Date().getFullYear()} GrowMedica s.r.o. Všetky práva vyhradené.</p>
+          <p>
+            © {new Date().getFullYear()} GrowMedica s.r.o. {t('footer.copyright', locale)}
+          </p>
           <div className="flex items-center gap-3 text-white/90">
             {['VISA', 'MC', 'GPAY', 'APAY', 'DPD', 'Packeta'].map((method) => (
               <span

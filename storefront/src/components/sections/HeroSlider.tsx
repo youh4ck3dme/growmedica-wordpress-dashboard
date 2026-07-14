@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, m, useReducedMotion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Container } from '@/components/ui/Container'
-import { BRAND_COPY } from '@/lib/brand'
+import { useT } from '@/components/i18n/LocaleProvider'
 import {
   HERO_IMAGE_SIZES,
   HERO_LCP_QUALITY,
@@ -40,6 +40,7 @@ const FALLBACK_SLIDES: HeroSlide[] = [
 ]
 
 export function HeroSlider({ slides }: HeroSliderProps) {
+  const t = useT()
   const useHeroVideo = true
   const items = slides.length > 0 ? slides : FALLBACK_SLIDES
   const [index, setIndex] = useState(0)
@@ -149,23 +150,23 @@ export function HeroSlider({ slides }: HeroSliderProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : 0.15 }}
           >
-            <p className="section-label hero-slider__eyebrow">{BRAND_COPY.heroEyebrow}</p>
+            <p className="section-label hero-slider__eyebrow">{t('hero.eyebrow')}</p>
             <h1
               id="hero-heading"
               className="noor-display-heading hero-slider__title font-extrabold leading-tight text-balance text-(--color-text)"
             >
-              {BRAND_COPY.heroTitle}
+              {t('hero.title')}
             </h1>
             <p className="hero-slider__subtitle leading-relaxed text-(--color-text-muted)">
-              <span className="sm:hidden">{BRAND_COPY.heroSubtitleShort}</span>
-              <span className="hidden sm:inline">{BRAND_COPY.heroSubtitle}</span>
+              <span className="sm:hidden">{t('hero.subtitleShort')}</span>
+              <span className="hidden sm:inline">{t('hero.subtitle')}</span>
             </p>
             <Link
               href="/produkty"
               id="hero-cta-primary"
               className="btn btn-primary hero-slider__cta noor-pill-cta w-full sm:w-auto"
             >
-              {BRAND_COPY.heroCta}
+              {t('hero.cta')}
             </Link>
           </m.div>
         </Container>

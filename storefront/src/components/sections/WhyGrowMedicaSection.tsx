@@ -1,6 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
-import { BRAND_COPY } from '@/lib/brand'
+import { useLocale } from '@/components/i18n/LocaleProvider'
+import { getAboutHealthLines, t } from '@/lib/i18n/translate'
 
 function CheckIcon() {
   return (
@@ -17,20 +20,20 @@ function CheckIcon() {
 }
 
 export function WhyGrowMedicaSection() {
+  const { locale } = useLocale()
+  const healthLines = getAboutHealthLines(locale)
+
   return (
-    <section
-      className="why-growmedica noor-reveal theme-transition"
-      aria-label="O GrowMedica.sk"
-    >
+    <section className="why-growmedica noor-reveal theme-transition" aria-label={t('about.aria', locale)}>
       <Container>
         <div className="why-growmedica__glass liquid-glass liquid-glass--heavy">
-          <p className="why-growmedica__label">{BRAND_COPY.aboutLabel}</p>
-          <h2 className="why-gm-display why-growmedica__heading">{BRAND_COPY.aboutHeading}</h2>
-          <p className="why-gm-display why-growmedica__slogan">{BRAND_COPY.aboutSlogan}</p>
-          <p className="why-growmedica__body">{BRAND_COPY.aboutBody}</p>
+          <p className="why-growmedica__label">{t('about.label', locale)}</p>
+          <h2 className="why-gm-display why-growmedica__heading">{t('about.heading', locale)}</h2>
+          <p className="why-gm-display why-growmedica__slogan">{t('about.slogan', locale)}</p>
+          <p className="why-growmedica__body">{t('about.body', locale)}</p>
 
-          <ul className="why-growmedica__health-grid" aria-label="Prečo si vybrať GrowMedica">
-            {BRAND_COPY.aboutHealthLines.map((line) => (
+          <ul className="why-growmedica__health-grid" aria-label={t('about.whyAria', locale)}>
+            {healthLines.map((line) => (
               <li key={line} className="why-growmedica__health-line">
                 <CheckIcon />
                 {line}
@@ -40,10 +43,10 @@ export function WhyGrowMedicaSection() {
 
           <div className="why-growmedica__actions">
             <Link href="/balicky" className="btn btn-primary">
-              {BRAND_COPY.bundlesCta}
+              {t('about.bundlesCta', locale)}
             </Link>
             <Link href="/o-nas" className="btn btn-ghost">
-              Viac o nás
+              {t('about.moreAbout', locale)}
             </Link>
           </div>
         </div>

@@ -24,7 +24,7 @@ export default function DashboardFrame({
           WordPress admin sa nepodarilo načítať
         </p>
         <p className="max-w-md text-sm text-(--color-text-muted)">
-          Skontrolujte, či je <code className="text-xs">cms.growmedica.sk</code> dostupný a
+          Skontrolujte, či je <code className="text-xs">cms.growmedica.cz</code> dostupný a
           povolí embed zo storefront domény (CSP <code className="text-xs">frame-ancestors</code>).
           Ak iframe auth nefunguje, prihláste sa priamo cez odkaz nižšie (Application Passwords / JWT).
         </p>

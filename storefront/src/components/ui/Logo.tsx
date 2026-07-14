@@ -65,7 +65,11 @@ export default function Logo({
       >
         <span className="storefront-logo__grow">Grow</span>
         <span className="storefront-logo__accent">Medica</span>
-        <span className="storefront-logo__tld">.sk</span>
+        <span className="storefront-logo__tld">
+          {BRAND_COPY.siteName.includes('.')
+            ? BRAND_COPY.siteName.slice(BRAND_COPY.siteName.indexOf('.'))
+            : '.cz'}
+        </span>
       </span>
     </div>
   )

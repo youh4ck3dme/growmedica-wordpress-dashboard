@@ -3,7 +3,7 @@
  * Production smoke: WooCommerce API curl + storefront HTTP checks.
  *
  * Usage:
- *   PREVIEW_URL=https://growmedica.sk node scripts/production-smoke.mjs
+ *   PREVIEW_URL=https://growmedica.cz node scripts/production-smoke.mjs
  */
 
 import { spawnSync } from 'node:child_process'

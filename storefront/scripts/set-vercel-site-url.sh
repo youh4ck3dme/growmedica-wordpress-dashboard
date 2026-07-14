@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Set NEXT_PUBLIC_SITE_URL on Vercel for growmedicanextjs (Production + Preview).
 # Usage: bash scripts/set-vercel-site-url.sh [url]
-# Default: https://growmedica.nexify-studio.tech
+# Default: https://growmedica.cz
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STOREFRONT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-SITE_URL="${1:-https://growmedica.nexify-studio.tech}"
+SITE_URL="${1:-https://growmedica.cz}"
 SCOPE="${VERCEL_SCOPE:-h4ck3d}"
 PROJECT="${VERCEL_PROJECT:-growmedicanextjs}"
 

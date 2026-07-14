@@ -9,8 +9,7 @@ test.describe('Primary navigation', () => {
     expect(fs.existsSync(headerPath)).toBe(true)
     const content = fs.readFileSync(headerPath, 'utf8')
     
-    // Header should import and use PRIMARY_NAV_LINKS
-    expect(content).toContain('PRIMARY_NAV_LINKS')
+    expect(content).toContain('getPrimaryNavLinks')
   })
 
   test('mobile drawer lists primary links before categories', async () => {

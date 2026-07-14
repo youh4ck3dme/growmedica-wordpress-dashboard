@@ -1,12 +1,13 @@
 # GrowMedica WordPress Dashboard
 
-Headless **Next.js storefront + WordPress/WooCommerce CMS** pre GrowMedica.sk.
+Headless **Next.js storefront + WordPress/WooCommerce CMS** pre GrowMedica (produkčná doména: **growmedica.cz**).
 
 ## Stav
 
 | Oblasť | Stav |
 |---|---|
 | Storefront UI (Next.js 15, PWA, AI) | ✅ |
+| Geo-lokalizácia UI (SK / EN / DE) | ✅ |
 | WordPress/WooCommerce integrácia | ✅ `CMS_PROVIDER=wordpress` |
 | Unified catalog provider | ✅ `src/lib/catalog/` |
 | Košík + checkout BFF | ✅ WooCommerce session |
@@ -17,8 +18,13 @@ Headless **Next.js storefront + WordPress/WooCommerce CMS** pre GrowMedica.sk.
 
 ## Quick Start
 
+Všetky `yarn` príkazy spúšťaj z priečinka **`storefront/`** (tam je `package.json`):
+
 ```bash
+cd /cesta/k/projektu/growmedica-wordpress-dashboard/storefront
+# alebo ak si už v growmedica-wordpress-dashboard/:
 cd storefront
+
 yarn install
 cp .env.example .env.local
 yarn dev
@@ -29,13 +35,30 @@ yarn dev
 
 ```bash
 CMS_PROVIDER=wordpress
-WORDPRESS_BASE_URL=https://cms.growmedica.sk
+WORDPRESS_BASE_URL=https://cms.growmedica.cz
 WOO_CONSUMER_KEY=ck_...
 WOO_CONSUMER_SECRET=cs_...
 WORDPRESS_REVALIDATION_SECRET=...
-NEXT_PUBLIC_DASHBOARD_URL=https://cms.growmedica.sk/wp-admin
-NEXT_PUBLIC_SITE_URL=https://growmedica.sk
+NEXT_PUBLIC_DASHBOARD_URL=https://cms.growmedica.cz/wp-admin
+NEXT_PUBLIC_SITE_URL=https://growmedica.cz
+NEXT_PUBLIC_DEFAULT_LOCALE=sk
 ```
+
+### i18n (SK / EN / DE)
+
+UI texty sa prekladajú podľa geo / cookie / `Accept-Language`. URL slugy (`/produkty`, `/kolekcie`) sa nemenia.
+
+| Priorita | Zdroj |
+|----------|--------|
+| 1 | `?lang=sk\|en\|de` (nastaví cookie, redirect) |
+| 2 | Cookie `growmedica_locale` (30 dní) |
+| 3 | `x-vercel-ip-country` (SK/CZ→sk, DE/AT/CH→de, ostatné→en) |
+| 4 | `Accept-Language` |
+| 5 | `NEXT_PUBLIC_DEFAULT_LOCALE` (fallback: `sk`, keď chýba geo aj Accept-Language) |
+
+Prepínač SK / EN / DE je v headeri. Dashboard (`/dashboard`) zostáva slovensky.
+
+Detailná dokumentácia: [storefront/docs/I18N.md](./storefront/docs/I18N.md)
 
 ### Lokálny WordPress (Docker)
 
@@ -56,9 +79,13 @@ SHOPIFY_STOREFRONT_ACCESS_TOKEN=...
 
 ## Testy
 
+Z priečinka `storefront/`:
+
 ```bash
+cd storefront
 yarn type-check
-yarn test:integrity          # Shopify mock (default)
+yarn test:integrity          # Shopify mock (default) — 149+ testov
+yarn test:i18n               # len i18n testy
 yarn test:woo:integrity      # WordPress mock
 yarn build
 yarn production:smoke        # curl + HTTP smoke
@@ -80,6 +107,7 @@ growmedica-wordpress-dashboard/
 
 ## Dokumentácia
 
+- [i18n SK/EN/DE](./storefront/docs/I18N.md)
 - [WordPress Setup](./WORDPRESS_SETUP.md)
 - [Woo Cart BFF](./storefront/docs/WOO_CART.md)
 - [Dashboard Deploy](./storefront/docs/DASHBOARD_DEPLOY.md)

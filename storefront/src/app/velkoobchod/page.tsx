@@ -36,8 +36,8 @@ export default function Velkoobchod() {
                 <h2 className="text-xl font-bold text-(--color-text) mb-3">Kontakt pre veľkoobchod</h2>
                 <p>
                   E-mail:{' '}
-                  <a href="mailto:velkoobchod@growmedica.sk" className="text-(--color-primary) font-bold">
-                    velkoobchod@growmedica.sk
+                  <a href="mailto:velkoobchod@growmedica.cz" className="text-(--color-primary) font-bold">
+                    velkoobchod@growmedica.cz
                   </a>
                   <br />
                   Telefón: +421 900 000 001

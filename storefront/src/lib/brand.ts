@@ -1,4 +1,4 @@
-/** GrowMedica.sk — single source of truth for brand copy and tokens */
+/** GrowMedica.cz — single source of truth for brand copy and tokens */
 
 export const BRAND_COLORS = {
   primary: '#166534',
@@ -42,16 +42,16 @@ export const BRAND_COPY = {
   heroCta: 'Preskúmať produkty',
   featuredHeading: 'Najpredávanejšie produkty',
   valueProps: ['DÔVERYHODNOSŤ', 'KVALITA', 'RAST', 'PODPORA'] as const,
-  logoParts: ['Grow', 'Medica', '.sk'] as const,
+  logoParts: ['Grow', 'Medica', '.cz'] as const,
   themeColor: '#35C79A',
-  siteName: 'GrowMedica.sk',
-  siteTitle: 'GrowMedica.sk — biomedicínske supplementy',
+  siteName: 'GrowMedica.cz',
+  siteTitle: 'GrowMedica.cz — biomedicínske supplementy',
   siteDescription:
-    'GrowMedica.sk — overené biomedicínske doplnky stravy pre zdravie a vitalitu. Rýchle doručenie a odborné poradenstvo.',
+    'GrowMedica.cz — overené biomedicínske doplnky stravy pre zdravie a vitalitu. Rýchle doručenie a odborné poradenstvo.',
   aboutLabel: 'Prečo GrowMedica',
   aboutHeading: 'Rast, príroda a lekárska presnosť v jednom e-shope',
   aboutBody:
-    'GrowMedica.sk spája lekársku presnosť s prírodnou rovnováhou — overené produkty, dôveryhodný nákup a rastúca komunita spokojných zákazníkov.',
+    'GrowMedica.cz spája lekársku presnosť s prírodnou rovnováhou — overené produkty, dôveryhodný nákup a rastúca komunita spokojných zákazníkov.',
   aboutSlogan: 'Zdravie, ktoré rastie s vami.',
   aboutHealthLines: [
     'Overené zloženie — bez zbytočných prídavných látok',
@@ -64,26 +64,26 @@ export const BRAND_COPY = {
   bundlesSubheading: 'Overené kombinácie produktov za zvýhodnené ceny',
   bundlesCta: 'Preskúmať balíčky',
   bundlesViewAll: 'Všetky balíčky',
-  companyName: 'GrowMedica.sk',
-  aboutPageTitle: 'O spoločnosti GrowMedica.sk',
+  companyName: 'GrowMedica.cz',
+  aboutPageTitle: 'O spoločnosti GrowMedica.cz',
   aboutPageIntro:
     'Sme tím, ktorý verí v silu prirodzených biomedicínskych supplementov podložených skutočnou vedou a rastúcou komunitou v strednej Európe.',
   trustStripStats: ['460+ produktov', 'Stredná Európa', 'Biomedicínske supplementy'] as const,
   pageDescriptions: {
     about:
-      'Zistite viac o poslaní, hodnotách a prístupe GrowMedica.sk k prirodzeným biomedicínskym supplementom.',
+      'Zistite viac o poslaní, hodnotách a prístupe GrowMedica.cz k prirodzeným biomedicínskym supplementom.',
     blog:
-      'Články o zdraví, výžive a prírodných riešeniach od tímu GrowMedica.sk.',
+      'Články o zdraví, výžive a prírodných riešeniach od tímu GrowMedica.cz.',
     products:
-      'Preskúmajte celý sortiment prirodzených biomedicínskych supplementov GrowMedica.sk.',
-    search: 'Vyhľadajte biomedicínske supplementy v GrowMedica.sk.',
+      'Preskúmajte celý sortiment prirodzených biomedicínskych supplementov GrowMedica.cz.',
+    search: 'Vyhľadajte biomedicínske supplementy v GrowMedica.cz.',
     collections:
       'Prehliadajte kategórie produktov. Vyberte si biomedicínske supplementy podľa vašich potrieb.',
     bundles:
-      'Balíčky zdravia GrowMedica.sk — overené kombinácie doplnkov pre imunitu, spánok, šport, krásu a ďalšie ciele za zvýhodnené ceny.',
+      'Balíčky zdravia GrowMedica.cz — overené kombinácie doplnkov pre imunitu, spánok, šport, krásu a ďalšie ciele za zvýhodnené ceny.',
     cart: 'Nákupný košík s vybranými biomedicínskymi supplementmi.',
     contact:
-      'Kontaktujte nás — GrowMedica s.r.o., BELLOVA 6, KOŠICE. E-mail: info@growmedica.sk',
+      'Kontaktujte nás — GrowMedica s.r.o., BELLOVA 6, KOŠICE. E-mail: info@growmedica.cz',
   },
 } as const
 

@@ -20,7 +20,7 @@ test.describe('Dashboard route — smoke', () => {
     expect(existsSync(MIDDLEWARE_PATH)).toBe(true)
     const middlewareContent = readFileSync(MIDDLEWARE_PATH, 'utf8')
     expect(middlewareContent).toContain('requestHeaders.set(DASHBOARD_ROUTE_HEADER, \'1\')')
-    expect(middlewareContent).toContain("matcher: ['/dashboard'")
+    expect(middlewareContent).toContain("'/dashboard/:path*'")
 
     expect(existsSync(ROOT_LAYOUT_PATH)).toBe(true)
     const rootLayoutContent = readFileSync(ROOT_LAYOUT_PATH, 'utf8')
@@ -46,21 +46,20 @@ test.describe('Dashboard route — smoke', () => {
     expect(disallowList).toContain('/dashboard')
   })
 
-  test('shows fallback when iframe mode and URL missing', () => {
+  test('shows fallback when NEXT_PUBLIC_DASHBOARD_URL is missing', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
 
     expect(content).toContain('Dashboard nie je nakonfigurovaný')
     expect(content).toContain('data-testid="dashboard-unconfigured"')
-    expect(content).toContain('NEXT_PUBLIC_DASHBOARD_MODE=agentic')
+    expect(content).toContain('data-testid="dashboard-legacy-nexus-link"')
     expect(content).toContain('wp-admin')
   })
 
-  test('renders DashboardShell with mode support', () => {
+  test('renders iframe when NEXT_PUBLIC_DASHBOARD_URL is set', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
-    expect(content).toContain('<DashboardShell')
-    expect(content).toContain('getDashboardMode')
+    expect(content).toContain('<DashboardFrame src={dashboardUrl} />')
   })
 
   test('contains meta title and robot policies', () => {

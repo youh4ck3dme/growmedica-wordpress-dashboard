@@ -66,10 +66,6 @@ test.describe('Database schema & CPT integrity tests', () => {
 })
 
 const DASHBOARD_PAGE_PATH = path.join(REPO_ROOT, 'storefront/src/app/dashboard/page.tsx')
-const DASHBOARD_SHELL_PATH = path.join(
-  REPO_ROOT,
-  'storefront/src/components/dashboard/agent/DashboardShell.tsx',
-)
 const DASHBOARD_FRAME_PATH = path.join(
   REPO_ROOT,
   'storefront/src/components/dashboard/DashboardFrame.tsx',
@@ -79,18 +75,11 @@ test.describe('Dashboard code & component integrity tests', () => {
   test('dashboard page.tsx is properly structured', () => {
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
 
-    expect(content).toContain("import DashboardShell from '@/components/dashboard/agent/DashboardShell'")
-    expect(content).toContain("import { getDashboardMode, getDashboardUrl } from '@/lib/dashboard'")
+    expect(content).toContain("import DashboardFrame from '@/components/dashboard/DashboardFrame'")
+    expect(content).toContain("import { getDashboardUrl } from '@/lib/dashboard'")
     expect(content).toContain('data-testid="dashboard-unconfigured"')
-    expect(content).toContain('NEXT_PUBLIC_DASHBOARD_MODE=agentic')
+    expect(content).toContain('data-testid="dashboard-legacy-nexus-link"')
     expect(content).toContain('wp-admin')
-  })
-
-  test('DashboardShell supports iframe and agentic modes', () => {
-    const content = readFileSync(DASHBOARD_SHELL_PATH, 'utf8')
-    expect(content).toContain('data-testid="dashboard-shell"')
-    expect(content).toContain('DashboardFrame')
-    expect(content).toContain('AgentPanel')
   })
 
   test('DashboardFrame component renders iframe and handles load errors', () => {

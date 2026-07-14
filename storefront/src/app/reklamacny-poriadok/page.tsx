@@ -20,7 +20,7 @@ export default function ReklamacnyPoriadok() {
               <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">Postup pri reklamácii</h2>
               <p>
                 V prípade, že ste s tovarom nespokojní, alebo bol poškodený pri preprave, kontaktujte nás na
-                info@growmedica.sk.
+                info@growmedica.cz.
               </p>
               <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">Vrátenie tovaru (Odstúpenie od zmluvy)</h2>
               <p>Zákazník má právo na vrátenie nepoškodeného tovaru do 14 dní bez udania dôvodu...</p>

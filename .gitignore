@@ -37,3 +37,8 @@ storefront/docs/SHOPIFY_WEBHOOK_SETUP.md
 storefront/docs/SHOPIFY_WEBHOOK_SETUP.local.md
 supa.md
 .pnpm-store/
+
+# Local WordPress (wp-cli install, not Docker volume)
+wordpress-data/
+wordpress-credentials.local.env
+wordpress-php-server.log

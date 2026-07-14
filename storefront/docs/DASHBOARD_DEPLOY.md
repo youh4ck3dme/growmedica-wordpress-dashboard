@@ -2,7 +2,7 @@
 
 Externý admin dashboard beží na samostatnom hostingu alebo natívne v storefronte. Storefront na `/dashboard` podporuje **hybrid** režim: Mistral AI Command Bar + voliteľný WordPress admin iframe.
 
-**Cieľ (WordPress):** `https://cms.growmedica.sk/wp-admin` alebo custom WooCommerce admin plugin route.
+**Cieľ (WordPress):** `https://cms.growmedica.cz/wp-admin` alebo custom WooCommerce admin plugin route.
 
 **Legacy (Shopify era):** growmedica-nexus na Lovable (`https://growmedica-nexus.lovable.app`).
 
@@ -16,9 +16,9 @@ Vzor je analogický k NOOR demo ([`NOOR_DEMO_DEPLOY.md`](./NOOR_DEMO_DEPLOY.md))
 |---|---|---|
 | **Stack** | Next.js 15 App Router v `storefront/` | WordPress 6.7 + WooCommerce |
 | **Admin** | `/dashboard` (AI Command Bar + iframe bridge) | `/wp-admin` |
-| **Produkcia** | `https://growmedica.sk/dashboard` | `https://cms.growmedica.sk/wp-admin` |
+| **Produkcia** | `https://growmedica.cz/dashboard` | `https://cms.growmedica.cz/wp-admin` |
 
-Používateľ naviguje na `https://growmedica.sk/dashboard`. URL v prehliadači zostáva `/dashboard`; navigácia v dashboarde prebieha vnútri iframe.
+Používateľ naviguje na `https://growmedica.cz/dashboard`. URL v prehliadači zostáva `/dashboard`; navigácia v dashboarde prebieha vnútri iframe.
 
 **Legacy:** growmedica-nexus (`https://growmedica-nexus.lovable.app/admin`) — len rollback fallback v `.env.example`.
 
@@ -26,7 +26,7 @@ Používateľ naviguje na `https://growmedica.sk/dashboard`. URL v prehliadači 
 
 | Premenná | Príklad | Účel |
 |---|---|---|
-| `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.sk/wp-admin` | `src` atribút iframe na `/dashboard` |
+| `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.cz/wp-admin` | `src` atribút iframe na `/dashboard` |
 | `NEXT_PUBLIC_DASHBOARD_MODE` | `hybrid` | `agentic` \| `iframe` \| `hybrid` (default) |
 | `DASHBOARD_AGENT_SECRET` | `min-16-chars-secret` | Auth header pre `/api/dashboard/*` |
 
@@ -48,12 +48,12 @@ Otvorte `http://localhost:5555/dashboard`.
 WordPress musí povoliť embed zo storefront originov. Do `wp-config.php` alebo security pluginu:
 
 ```
-frame-ancestors 'self' https://growmedica.sk https://*.vercel.app http://localhost:5555 http://127.0.0.1:5555;
+frame-ancestors 'self' https://growmedica.cz https://*.vercel.app http://localhost:5555 http://127.0.0.1:5555;
 ```
 
 Ak iframe auth nefunguje (cookies third-party), použite **Application Passwords** alebo tlačidlo „Otvoriť WordPress admin priamo“ v `DashboardFrame`.
 
-Storefront CSP (`next.config.ts`): `frame-src 'self' https://cms.growmedica.sk` pre `/dashboard`.
+Storefront CSP (`next.config.ts`): `frame-src 'self' https://cms.growmedica.cz` pre `/dashboard`.
 
 ## Storefront — implementácia (tento repozitár)
 
@@ -131,9 +131,9 @@ Pridajte všetky tieto domény:
 |---|---|
 | `growmedica-nexus.lovable.app` | Nexus admin (iframe `src` origin) |
 | `growmedicanextjs.vercel.app` | Storefront Vercel preview/production |
-| `growmedica.sk` | Storefront produkčná doména |
-| `grow.nexify-studio.tech` | Storefront staging / alternatívna doména |
-| `growmedica.nexify-studio.tech` | Storefront produkčná doména (katalóg `/produkty`) |
+| `growmedica.cz` | Storefront produkčná doména |
+| `grow.nexify-studio.tech` | Voliteľný staging (legacy) |
+| `growmedica.nexify-studio.tech` | Voliteľný staging (legacy) |
 
 Bez toho môže Firebase login v iframe zlyhať (fáza 1 obmedzenie — third-party cookies).
 
@@ -150,13 +150,13 @@ Implementované v nexus repozitári:
 Produkčná hodnota `ALLOWED_FRAME_ANCESTORS` (bez `'self'`, ten sa pridáva automaticky):
 
 ```
-https://growmedicanextjs.vercel.app https://growmedica.sk https://*.growmedica.sk https://grow.nexify-studio.tech https://growmedica.nexify-studio.tech https://*.vercel.app http://localhost:5555 http://127.0.0.1:5555 http://localhost:8080 http://127.0.0.1:8080
+https://growmedicanextjs.vercel.app https://growmedica.cz https://*.growmedica.cz https://grow.nexify-studio.tech https://growmedica.nexify-studio.tech https://*.vercel.app http://localhost:5555 http://127.0.0.1:5555 http://localhost:8080 http://127.0.0.1:8080
 ```
 
 Výsledná CSP hlavička (vrátane lokálneho storefrontu):
 
 ```
-frame-ancestors 'self' https://growmedicanextjs.vercel.app https://growmedica.sk https://*.growmedica.sk https://grow.nexify-studio.tech https://growmedica.nexify-studio.tech https://*.vercel.app http://localhost:5555 http://127.0.0.1:5555 http://localhost:8080 http://127.0.0.1:8080
+frame-ancestors 'self' https://growmedicanextjs.vercel.app https://growmedica.cz https://*.growmedica.cz https://grow.nexify-studio.tech https://growmedica.nexify-studio.tech https://*.vercel.app http://localhost:5555 http://127.0.0.1:5555 http://localhost:8080 http://127.0.0.1:8080
 ```
 
 Odporúčania:
@@ -212,7 +212,7 @@ Posledná kontrola (pred prvým Nexus deployom): `DEPLOYMENT_NOT_FOUND` — treb
 - **Auth cookies** — Supabase/Firebase session beží v kontexte Nexus origin (third-party cookie v iframe). Prihlásenie môže v Safari/Firefox zlyhať v iframe skôr než v priamom okne. Riešenie vo fáze 2 (same-origin proxy alebo shared auth).
 - **Firebase Authorized domains** — okrem Nexus hostu pridajte aj storefront domény; inak Firebase popup/redirect auth v iframe zlyhá.
 - **`FIREBASE_SERVICE_ACCOUNT_JSON`** — v tomto repozitári nie je potrebné (verify cez JWKS). Ak máte starší checklist s touto premennou, ignorujte ju.
-- **Deep linking** — `growmedica.sk/dashboard/admin/produkty` nebude fungovať; deep linky sú len vnútri iframe.
+- **Deep linking** — `growmedica.cz/dashboard/admin/produkty` nebude fungovať; deep linky sú len vnútri iframe.
 - **Serwist SW** — service worker sa registruje globálne, ale `/dashboard` nemá shop chrome a iframe route by nemala byť blokovaná. Po production deployi overte: DevTools → Application → Service Workers, potom načítajte `/dashboard` a skontrolujte, že iframe sa renderuje (SW neinterceptuje cross-origin iframe obsah).
 
 ## Testy

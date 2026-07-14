@@ -4,10 +4,30 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 if [[ -f .env.local ]]; then
-  set -a
-  # shellcheck disable=SC1091
-  source <(grep -v '^\s*#' .env.local | grep -v '^\s*$' | sed 's/^/export /')
-  set +a
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    line="${line%%$'\r'}"
+    [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+    [[ "$line" != *"="* ]] && continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    key="$(echo "$key" | xargs)"
+    export "$key=$value"
+  done < .env.local
+fi
+
+if [[ -f ../wordpress-credentials.local.env ]]; then
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    line="${line%%$'\r'}"
+    [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+    [[ "$line" != *"="* ]] && continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    key="$(echo "$key" | xargs)"
+    # Do not override storefront .env.local values
+    if [[ -z "${!key:-}" ]]; then
+      export "$key=$value"
+    fi
+  done < ../wordpress-credentials.local.env
 fi
 
 BASE_URL="${WORDPRESS_BASE_URL:-http://localhost:8080}"

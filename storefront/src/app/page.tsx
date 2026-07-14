@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
@@ -11,6 +10,10 @@ import { TrustBadges } from '@/components/sections/TrustBadges'
 import { ScrollRevealSection } from '@/components/sections/ScrollRevealSection'
 import { WhyGrowMedicaSection } from '@/components/sections/WhyGrowMedicaSection'
 import { BundleShowcase } from '@/components/sections/BundleShowcase'
+import { HomeMobileSearch } from '@/components/home/HomeMobileSearch'
+import { HomeCategoriesSection, HomeFeaturedSection } from '@/components/home/HomeSections'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { t } from '@/lib/i18n/translate'
 import { getNavCollectionItems } from '@/lib/catalog/nav'
 import { getFeaturedProducts } from '@/lib/catalog/products'
 import { getHomepageCategories } from '@/lib/category-map'
@@ -84,6 +87,7 @@ function preloadHeroLcpImage(slide: HeroSlide): void {
 }
 
 export default async function HomePage() {
+  const locale = await getRequestLocale()
   let featuredProducts: Awaited<ReturnType<typeof getFeaturedProducts>> = []
   let allCategories: Awaited<ReturnType<typeof getNavCollectionItems>> = []
   try {
@@ -117,99 +121,35 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* Search bar — mobile-first */}
-      <div className="theme-transition noor-reveal noor-mobile-search border-b border-(--color-border) bg-(--color-surface) py-3 lg:hidden">
-        <Container>
-          <Link href="/vyhladavanie" className="search-pill no-underline" aria-label="Vyhľadať produkty">
-            <svg className="h-5 w-5 shrink-0 text-(--color-primary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <span>Hľadať produkty...</span>
-          </Link>
-        </Container>
-      </div>
+      <HomeMobileSearch />
 
-      {/* Hero slider — no scroll-reveal wrapper; LCP image must paint immediately */}
       <HeroSlider slides={heroSlides} />
 
       <ScrollRevealSection>
         <TrustBadges />
       </ScrollRevealSection>
 
-      {/* Categories */}
-      <ScrollRevealSection
-        as="section"
-        className="theme-transition py-12 lg:py-16 bg-(--color-bg)"
-        aria-labelledby="categories-heading"
-      >
-        <Container>
-          <div className="mb-8">
-            <p className="section-label">Nakupujte podľa kategórie</p>
-            <h2 id="categories-heading" className="section-heading">
-              Čo hľadáte?
-            </h2>
-          </div>
-
+      <ScrollRevealSection as="div">
+        <HomeCategoriesSection>
           <CategoryGrid categories={categories} />
-
-          <div className="mt-6 text-center">
-            <Link
-              href="/kolekcie"
-              className="text-sm font-semibold text-(--color-primary) hover:text-(--color-primary-dark) transition-colors"
-              style={{ fontFamily: 'Montserrat, sans-serif' }}
-              aria-label="Zobraziť všetky kategórie"
-            >
-              Všetky kolekcie →
-            </Link>
-          </div>
-        </Container>
+        </HomeCategoriesSection>
       </ScrollRevealSection>
 
-      {/* AI supplement finder */}
       <div className="noor-reveal noor-glass theme-transition bg-(--color-surface) border-y border-(--color-border)">
         <Container>
           <SupplementFinder />
         </Container>
       </div>
 
-      <section
-        className="noor-reveal noor-featured-section theme-transition py-12 lg:py-16 bg-(--color-surface-2)"
-        aria-labelledby="featured-heading"
-      >
-        <Container>
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <p className="section-label">Obľúbené produkty</p>
-              <h2 id="featured-heading" className="section-heading noor-display-heading">
-                {BRAND_COPY.featuredHeading}
-              </h2>
-            </div>
-            <Link
-              href="/produkty"
-              className="text-sm font-semibold hidden sm:block transition-colors text-(--color-primary) hover:text-(--color-primary-dark)"
-              style={{ fontFamily: 'Montserrat, sans-serif' }}
-              aria-label="Zobraziť všetky obľúbené produkty"
-            >
-              Zobraziť všetky →
-            </Link>
-          </div>
+      <HomeFeaturedSection>
+        <ProductGrid
+          products={featuredProducts}
+          emptyTitle={t('empty.products.title', locale)}
+          emptyDescription={t('empty.products.description', locale)}
+          emptyAction={t('empty.products.action', locale)}
+        />
+      </HomeFeaturedSection>
 
-          <div className="noor-stagger noor-featured-rail">
-            <ProductGrid products={featuredProducts} />
-          </div>
-          <div className="noor-carousel-track mt-4 lg:hidden" aria-hidden="true">
-            <div className="noor-carousel-track__fill" />
-          </div>
-
-          <div className="mt-8 text-center sm:hidden">
-            <Link href="/produkty" className="btn btn-primary" aria-label="Zobraziť všetky produkty v katalógu">
-              Zobraziť všetky produkty
-            </Link>
-          </div>
-        </Container>
-      </section>
-
-      {/* About / SEO + balíčky */}
       <WhyGrowMedicaSection />
 
       <ScrollRevealSection

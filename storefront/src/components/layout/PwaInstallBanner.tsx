@@ -50,7 +50,7 @@ export default function PwaInstallBanner() {
     >
       <div className="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="font-semibold text-(--color-primary-dark)">Inštalujte GrowMedica.sk</p>
+          <p className="font-semibold text-(--color-primary-dark)">Inštalujte GrowMedica.cz</p>
           <p className="text-sm text-(--color-text-muted)">Rýchly prístup bez prehliadača</p>
         </div>
         <div className="flex shrink-0 gap-2">

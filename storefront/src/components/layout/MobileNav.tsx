@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import Logo from '@/components/ui/Logo'
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher'
+import { useLocale } from '@/components/i18n/LocaleProvider'
 import { openPharmacistAssistant } from '@/lib/ai/pharmacist-assistant-events'
 import { StorefrontThemeSwitcher } from '@/components/theme/StorefrontThemeSwitcher'
 import { ThemeSearch } from '@/components/ui/ThemeSearch'
@@ -23,6 +25,8 @@ export default function MobileNav({
   primaryLinks,
   categoryLinks,
 }: MobileNavProps) {
+  const { t } = useLocale()
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -47,7 +51,7 @@ export default function MobileNav({
       <nav
         id="mobile-nav"
         className="fixed inset-y-0 left-0 z-[100] flex w-72 flex-col bg-(--color-surface) shadow-xl"
-        aria-label="Mobilná navigácia"
+        aria-label={t('aria.mobileNav')}
         role="dialog"
         aria-modal="true"
       >
@@ -56,7 +60,7 @@ export default function MobileNav({
             href="/"
             onClick={onClose}
             className="site-logo-mark shrink-0"
-            aria-label="GrowMedica.sk — domov"
+            aria-label={t('aria.home')}
           >
             <Logo iconSize={28} />
           </Link>
@@ -64,7 +68,7 @@ export default function MobileNav({
           <button
             onClick={onClose}
             className="btn btn-ghost p-2"
-            aria-label="Zatvoriť menu"
+            aria-label={t('aria.closeMenu')}
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -74,10 +78,13 @@ export default function MobileNav({
 
         <div className="flex-1 overflow-y-auto p-4">
           <div className="mb-4">
+            <Suspense fallback={null}>
+              <LanguageSwitcher className="mb-4 w-full justify-center" />
+            </Suspense>
             <ThemeSearch
               variant="pill"
               pillClassName="search-pill w-full text-left"
-              aria-label="Vyhľadávanie produktov"
+              aria-label={t('aria.searchProducts')}
             />
           </div>
           <ul className="space-y-1" data-testid="mobile-nav-primary">
@@ -97,15 +104,12 @@ export default function MobileNav({
 
           {categoryLinks.length > 0 && (
             <>
-              <div
-                className="my-4 border-t border-(--color-border) pt-4"
-                role="presentation"
-              >
+              <div className="my-4 border-t border-(--color-border) pt-4" role="presentation">
                 <p
                   className="px-3 pb-2 text-xs font-semibold uppercase tracking-widest text-(--color-text-muted)"
                   style={{ fontFamily: 'Montserrat, sans-serif' }}
                 >
-                  Nakupovať podľa kategórie
+                  {t('aria.shopByCategory')}
                 </p>
               </div>
               <ul className="space-y-1" data-testid="mobile-nav-categories">
@@ -131,17 +135,17 @@ export default function MobileNav({
             type="button"
             className="assistant-mobile-trigger"
             data-testid="assistant-mobile-trigger"
-            aria-label="Poradiť sa s lekárnikom"
+            aria-label={t('assistant.mobileTrigger')}
             onClick={() => {
               openPharmacistAssistant()
               onClose()
             }}
           >
             <MessageCircle size={18} aria-hidden="true" />
-            Poradiť sa s lekárnikom
+            {t('assistant.mobileTrigger')}
           </button>
           {!shouldHideThemeSwitcher() && <StorefrontThemeSwitcher compact />}
-          <p className="text-xs text-(--color-text-light)">© {new Date().getFullYear()} GrowMedica.sk</p>
+          <p className="text-xs text-(--color-text-light)">© {new Date().getFullYear()} GrowMedica</p>
         </div>
       </nav>
     </>

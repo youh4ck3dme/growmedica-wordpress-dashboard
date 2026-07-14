@@ -21,7 +21,7 @@ WORDPRESS_REVALIDATION_SECRET=your-secret-min-16-chars
 ## WordPress env (docker-compose / hosting)
 
 ```bash
-GROWMEDICA_STOREFRONT_URL=https://growmedica.sk
+GROWMEDICA_STOREFRONT_URL=https://growmedica.cz
 GROWMEDICA_REVALIDATION_SECRET=your-secret-min-16-chars  # rovnaký ako WORDPRESS_REVALIDATION_SECRET
 ```
 

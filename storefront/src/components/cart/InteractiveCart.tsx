@@ -4,12 +4,14 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 import type { Cart } from '@/lib/shopify/types'
+import { useT } from '@/components/i18n/LocaleProvider'
 
 interface InteractiveCartProps {
   initialCart: Cart
 }
 
 export function InteractiveCart({ initialCart }: InteractiveCartProps) {
+  const t = useT()
   const [cart, setCart] = useState<Cart>(initialCart)
   const [updatingLineId, setUpdatingLineId] = useState<string | null>(null)
   
@@ -82,7 +84,7 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
 
       if (!res.ok) {
         const data = (await res.json()) as { error?: string }
-        throw new Error(data.error ?? 'Kód sa nepodarilo uplatniť.')
+        throw new Error(data.error ?? t('cart.discountFail'))
       }
 
       const data = (await res.json()) as { cart: Cart; count: number }
@@ -93,13 +95,13 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
         (dc) => dc.code.toUpperCase() === code.toUpperCase() && dc.applicable
       )
       if (isApplied) {
-        setDiscountSuccess('Zľavový kód bol úspešne uplatnený.')
+        setDiscountSuccess(t('cart.discountSuccess'))
         setDiscountInput('')
       } else {
-        setDiscountError('Zadaný zľavový kód nie je platný pre položky v košíku.')
+        setDiscountError(t('cart.discountInvalidMsg'))
       }
     } catch (err) {
-      setDiscountError(err instanceof Error ? err.message : 'Nastala chyba pri uplatnení kódu.')
+      setDiscountError(err instanceof Error ? err.message : t('cart.discountError'))
     } finally {
       setApplyingDiscount(false)
     }
@@ -117,15 +119,15 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
 
       if (!res.ok) {
         const data = (await res.json()) as { error?: string }
-        throw new Error(data.error ?? 'Zľavu sa nepodarilo odstrániť.')
+        throw new Error(data.error ?? t('cart.discountRemoveError'))
       }
 
       const data = (await res.json()) as { cart: Cart; count: number }
       setCart(data.cart)
       window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: data.count }))
-      setDiscountSuccess('Zľava bola odstránená.')
+      setDiscountSuccess(t('cart.discountRemoved'))
     } catch (err) {
-      setDiscountError(err instanceof Error ? err.message : 'Nastala chyba pri odstraňovaní zľavy.')
+      setDiscountError(err instanceof Error ? err.message : t('cart.discountRemoveError'))
     } finally {
       setApplyingDiscount(false)
     }
@@ -144,10 +146,10 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
         </div>
-        <h2 className="text-xl font-semibold text-(--color-text) mb-2">Košík je prázdny</h2>
-        <p className="text-(--color-text-muted) max-w-md mb-6">Pridajte produkty a pokračujte v nákupe.</p>
+        <h2 className="text-xl font-semibold text-(--color-text) mb-2">{t('empty.cart.title')}</h2>
+        <p className="text-(--color-text-muted) max-w-md mb-6">{t('empty.cart.description')}</p>
         <Link href="/produkty" className="btn btn-primary">
-          Pokračovať v nákupe
+          {t('empty.cart.action')}
         </Link>
       </div>
     )
@@ -177,7 +179,7 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-(--color-text-muted) text-xs">
-                    Obrázok nie je k dispozícii
+                    {t('cart.noImage')}
                   </div>
                 )}
               </div>
@@ -207,18 +209,18 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
                       onClick={() => handleUpdateQuantity(line.id, line.quantity, -1)}
                       disabled={line.quantity <= 1}
                       className="px-2.5 py-1 text-sm font-semibold hover:text-(--color-primary) disabled:opacity-30 disabled:hover:text-inherit transition-colors"
-                      aria-label="Znížiť množstvo"
+                      aria-label={t('cart.decreaseQty')}
                     >
                       –
                     </button>
-                    <span className="px-3 py-1 text-sm font-medium tabular-nums min-w-[2.5rem] text-center bg-white border-x border-(--color-border)">
+                    <span className="px-3 py-1 text-sm font-medium tabular-nums min-w-10 text-center bg-white border-x border-(--color-border)">
                       {line.quantity}
                     </span>
                     <button
                       type="button"
                       onClick={() => handleUpdateQuantity(line.id, line.quantity, 1)}
                       className="px-2.5 py-1 text-sm font-semibold hover:text-(--color-primary) transition-colors"
-                      aria-label="Zvýšiť množstvo"
+                      aria-label={t('cart.increaseQty')}
                     >
                       +
                     </button>
@@ -228,9 +230,9 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
                     type="button"
                     onClick={() => handleRemoveItem(line.id)}
                     className="text-xs text-(--color-error) hover:underline ml-3 font-medium"
-                    aria-label="Odstrániť položku z košíka"
+                    aria-label={t('cart.removeItem')}
                   >
-                    Odstrániť z košíka
+                    {t('cart.remove')}
                   </button>
                 </div>
               </div>
@@ -249,11 +251,11 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
       {/* Order summary */}
       <div className="lg:col-span-1">
         <div className="bg-white rounded-xl border border-(--color-border) p-6 sticky top-24">
-          <h2 className="font-semibold text-(--color-text) text-lg mb-4">Súhrn nákupu</h2>
+          <h2 className="font-semibold text-(--color-text) text-lg mb-4">{t('cart.summary')}</h2>
 
           <div className="space-y-2 mb-4">
             <div className="flex justify-between text-sm">
-              <span className="text-(--color-text-muted)">Medzisúčet</span>
+              <span className="text-(--color-text-muted)">{t('cart.subtotal')}</span>
               <span className="font-medium">
                 {cart.cost.subtotalAmount.amount} {cart.cost.subtotalAmount.currencyCode}
               </span>
@@ -261,7 +263,7 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
             
             {hasDiscount && (
               <div className="flex justify-between text-sm text-(--color-primary) font-semibold">
-                <span>Zľava</span>
+                <span>{t('cart.discount')}</span>
                 <span>
                   -{discountVal.toFixed(2)} {cart.cost.subtotalAmount.currencyCode}
                 </span>
@@ -269,8 +271,8 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
             )}
 
             <div className="flex justify-between text-sm">
-              <span className="text-(--color-text-muted)">Doprava</span>
-              <span className="text-(--color-success) font-medium">Vypočíta sa v pokladni</span>
+              <span className="text-(--color-text-muted)">{t('cart.shipping')}</span>
+              <span className="text-(--color-success) font-medium">{t('cart.shippingCalc')}</span>
             </div>
           </div>
 
@@ -282,7 +284,7 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
                 id="discount-input"
                 value={discountInput}
                 onChange={(e) => setDiscountInput(e.target.value)}
-                placeholder="Zľavový kód"
+                placeholder={t('cart.discountPlaceholder')}
                 disabled={applyingDiscount}
                 className="flex-1 px-3 py-2 border border-(--color-border) rounded-lg text-sm focus:outline-none focus:border-(--color-primary) disabled:opacity-50"
               />
@@ -292,7 +294,7 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
                 disabled={applyingDiscount || !discountInput.trim()}
                 className="btn btn-secondary btn-sm px-4"
               >
-                {applyingDiscount ? '...' : 'Použiť'}
+                {applyingDiscount ? '...' : t('cart.apply')}
               </button>
             </form>
             {discountError && (
@@ -314,8 +316,8 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
                     }`}
                   >
                     <span>🏷️ {dc.code}</span>
-                    {dc.applicable && <span className="text-[10px] opacity-75">(Aplikovaný)</span>}
-                    {!dc.applicable && <span className="text-[10px] opacity-75">(Neplatný)</span>}
+                    {dc.applicable && <span className="text-[10px] opacity-75">{t('cart.discountApplied')}</span>}
+                    {!dc.applicable && <span className="text-[10px] opacity-75">{t('cart.discountInvalid')}</span>}
                     <button
                       type="button"
                       onClick={() => handleRemoveDiscount(dc.code)}
@@ -334,7 +336,7 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
 
           <div className="border-t border-(--color-border) pt-4 mt-4 mb-6">
             <div className="flex justify-between font-bold text-(--color-text)">
-              <span>Celkom</span>
+              <span>{t('cart.total')}</span>
               <span id="cart-total-price">
                 {cart.cost.totalAmount.amount} {cart.cost.totalAmount.currencyCode}
               </span>
@@ -349,12 +351,12 @@ export function InteractiveCart({ initialCart }: InteractiveCartProps) {
               className="btn btn-primary btn-lg btn-full text-center"
               rel="noopener"
             >
-              Pokračovať do pokladne
+              {t('cart.checkout')}
             </a>
           )}
 
           <Link href="/produkty" className="btn btn-ghost btn-full mt-3 text-center">
-            Pokračovať v nákupe
+            {t('cart.continueShopping')}
           </Link>
         </div>
       </div>

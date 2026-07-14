@@ -7,7 +7,7 @@ test.describe('Collections — catalog navigation', () => {
     const pagePath = path.join(process.cwd(), 'src/app/kolekcie/page.tsx')
     expect(fs.existsSync(pagePath)).toBe(true)
     const content = fs.readFileSync(pagePath, 'utf8')
-    expect(content).toContain('Kolekcie produktov')
+    expect(content).toContain("t('collections.pageTitle', locale)")
     expect(content).toContain('getNavCollectionItems')
   })
 

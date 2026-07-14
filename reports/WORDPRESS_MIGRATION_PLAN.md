@@ -19,7 +19,7 @@ Tento repozitár vznikol z **`growmedica-nextjs-storefront`** (najnovší, najč
 ```
 ┌─────────────────────┐     REST API      ┌──────────────────────────┐
 │  Next.js Storefront │ ◄───────────────► │ WordPress + WooCommerce  │
-│  (Vercel)           │   /wp-json/wc/v3  │ (cms.growmedica.sk)      │
+│  (Vercel)           │   /wp-json/wc/v3  │ (cms.growmedica.cz)      │
 │  - PWA              │                   │ - Produkty, sklad        │
 │  - Mistral AI       │                   │ - Objednávky             │
 │  - /dashboard iframe│ ──iframe────────► │ - /wp-admin dashboard    │

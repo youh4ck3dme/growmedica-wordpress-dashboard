@@ -14,7 +14,7 @@ const productFitInputSchema = z.object({
 })
 
 const PRODUCT_FIT_PROMPT_SCHEMA = `
-Si GrowMedica AI produktový asistent pre e-shop so zdravotnými doplnkami GrowMedica.sk (SK trh).
+Si GrowMedica AI produktový asistent pre e-shop so zdravotnými doplnkami GrowMedica.cz (SK trh).
 
 ÚLOHA:
 Na základe konkrétneho produktu a používateľského cieľa vysvetli, či produkt dáva zmysel.

@@ -1,0 +1,204 @@
+#!/usr/bin/env bash
+# GrowMedica — lokálny WordPress + WooCommerce bez Docker (wp-cli + MySQL + PHP built-in server)
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+WP_PATH="$ROOT/wordpress-data"
+STOREFRONT="$ROOT/storefront"
+MU_PLUGINS="$ROOT/wordpress/mu-plugins"
+PORT="${WORDPRESS_PORT:-8080}"
+DB_NAME="growmedica"
+DB_USER="root"
+DB_PASS=""
+DB_HOST="localhost"
+ADMIN_USER="growmedica_admin"
+ADMIN_EMAIL="admin@growmedica.cz"
+ADMIN_PASS="${GROWMEDICA_WP_ADMIN_PASS:-GrowMedica2026!Local}"
+SITE_URL="http://localhost:${PORT}"
+CREDS_FILE="$ROOT/wordpress-credentials.local.env"
+
+log() { echo "→ $*"; }
+
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || { echo "❌ Missing: $1"; exit 1; }
+}
+
+require_cmd wp
+require_cmd mysql
+require_cmd php
+require_cmd curl
+
+log "Creating database ${DB_NAME}..."
+mysql -u "$DB_USER" ${DB_PASS:+-p"$DB_PASS"} -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+if [[ ! -f "$WP_PATH/wp-config.php" ]]; then
+  log "Downloading WordPress to wordpress-data/..."
+  mkdir -p "$WP_PATH"
+  wp core download --path="$WP_PATH" --locale=sk_SK --skip-content || wp core download --path="$WP_PATH"
+  wp config create \
+    --path="$WP_PATH" \
+    --dbname="$DB_NAME" \
+    --dbuser="$DB_USER" \
+    --dbpass="$DB_PASS" \
+    --dbhost="$DB_HOST" \
+    --dbprefix=gm_ \
+    --extra-php <<'PHP'
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+define('WP_DEBUG_DISPLAY', false);
+PHP
+  wp core install \
+    --path="$WP_PATH" \
+    --url="$SITE_URL" \
+    --title="GrowMedica CMS" \
+    --admin_user="$ADMIN_USER" \
+    --admin_password="$ADMIN_PASS" \
+    --admin_email="$ADMIN_EMAIL" \
+    --skip-email
+  log "WordPress installed."
+else
+  log "WordPress already installed at wordpress-data/ — skipping core install."
+fi
+
+log "Installing mu-plugins..."
+mkdir -p "$WP_PATH/wp-content/mu-plugins"
+cp -f "$MU_PLUGINS/"*.php "$WP_PATH/wp-content/mu-plugins/"
+
+log "Installing WooCommerce..."
+if ! wp plugin is-installed woocommerce --path="$WP_PATH" 2>/dev/null; then
+  wp plugin install woocommerce --activate --path="$WP_PATH"
+else
+  wp plugin activate woocommerce --path="$WP_PATH" 2>/dev/null || true
+fi
+
+log "WooCommerce baseline settings (EUR / SK)..."
+wp option update woocommerce_currency EUR --path="$WP_PATH"
+wp option update woocommerce_default_country SK --path="$WP_PATH"
+wp option update woocommerce_store_address "GrowMedica s.r.o." --path="$WP_PATH"
+wp option update woocommerce_store_city "Bratislava" --path="$WP_PATH"
+wp wc tool run install_pages --user="$ADMIN_USER" --path="$WP_PATH" 2>/dev/null || true
+wp rewrite structure '/produkt/%postname%/' --path="$WP_PATH"
+wp rewrite flush --path="$WP_PATH"
+
+log "Creating WooCommerce REST API keys..."
+read -r CONSUMER_KEY CONSUMER_SECRET <<EOF
+$(wp eval '
+if (!function_exists("wc_api_hash")) { echo "error error"; exit(1); }
+global $wpdb;
+$wpdb->query("DELETE FROM {$wpdb->prefix}woocommerce_api_keys");
+$consumer_key = "ck_" . bin2hex(random_bytes(16));
+$consumer_secret = "cs_" . bin2hex(random_bytes(16));
+$wpdb->insert($wpdb->prefix . "woocommerce_api_keys", array(
+  "user_id" => 1,
+  "description" => "GrowMedica Next.js storefront",
+  "permissions" => "read_write",
+  "consumer_key" => wc_api_hash($consumer_key),
+  "consumer_secret" => $consumer_secret,
+  "truncated_key" => substr($consumer_key, -7),
+));
+echo $consumer_key . " " . $consumer_secret;
+' --path="$WP_PATH" 2>/dev/null | tail -1 | awk '{print $1, $2}')
+EOF
+
+if [[ -z "$CONSUMER_KEY" || -z "$CONSUMER_SECRET" ]]; then
+  if [[ -f "$CREDS_FILE" ]]; then
+    # shellcheck disable=SC1090
+    source "$CREDS_FILE"
+    CONSUMER_KEY="${WOO_CONSUMER_KEY:-}"
+    CONSUMER_SECRET="${WOO_CONSUMER_SECRET:-}"
+  fi
+fi
+
+if [[ -z "$CONSUMER_KEY" || -z "$CONSUMER_SECRET" ]]; then
+  echo "❌ Failed to create WooCommerce API keys"
+  exit 1
+fi
+
+log "Creating Application Password for dashboard REST..."
+APP_PASS_JSON=$(wp user application-password create "$ADMIN_USER" "GrowMedica Dashboard" --porcelain --path="$WP_PATH" 2>/dev/null || true)
+APP_PASS="$APP_PASS_JSON"
+
+log "Creating demo customer..."
+wp wc customer create \
+  --user="$ADMIN_USER" \
+  --email="zakaznik.demo@growmedica.cz" \
+  --first_name="Demo" \
+  --last_name="Zákazník" \
+  --username="demo_zakaznik" \
+  --password="DemoZakaznik2026!" \
+  --path="$WP_PATH" 2>/dev/null || log "Demo customer may already exist — OK"
+
+log "Writing credentials to wordpress-credentials.local.env (gitignored)..."
+cat > "$CREDS_FILE" <<ENV
+# GrowMedica local WordPress — DO NOT COMMIT
+WORDPRESS_BASE_URL=${SITE_URL}
+WP_ADMIN_USER=${ADMIN_USER}
+WP_ADMIN_PASSWORD=${ADMIN_PASS}
+WP_ADMIN_EMAIL=${ADMIN_EMAIL}
+WOO_CONSUMER_KEY=${CONSUMER_KEY}
+WOO_CONSUMER_SECRET=${CONSUMER_SECRET}
+WORDPRESS_APPLICATION_PASSWORD=${APP_PASS}
+WORDPRESS_REVALIDATION_SECRET=local-wordpress-revalidation-secret-16
+ENV
+
+log "Updating storefront/.env.local..."
+cat > "$STOREFRONT/.env.local" <<ENV
+# Auto-generated by scripts/setup-wordpress-local.sh — $(date -u +%Y-%m-%dT%H:%M:%SZ)
+CMS_PROVIDER=wordpress
+WORDPRESS_BASE_URL=${SITE_URL}
+WOO_CONSUMER_KEY=${CONSUMER_KEY}
+WOO_CONSUMER_SECRET=${CONSUMER_SECRET}
+WORDPRESS_REVALIDATION_SECRET=local-wordpress-revalidation-secret-16
+NEXT_PUBLIC_SITE_URL=http://localhost:5555
+NEXT_PUBLIC_DASHBOARD_URL=${SITE_URL}/wp-admin
+NEXT_PUBLIC_DASHBOARD_MODE=hybrid
+DASHBOARD_AGENT_SECRET=local-dashboard-agent-secret-min-16-chars
+MISTRAL_MOCK_MODE=1
+MISTRAL_API_KEY=mock-mistral-api-key
+MISTRAL_MODEL=mistral-large-latest
+ENV
+
+log "Starting PHP server on ${SITE_URL}..."
+ROUTER="$WP_PATH/router.php"
+cat > "$ROUTER" <<'PHP'
+<?php
+$uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/');
+$file = __DIR__ . $uri;
+if ($uri !== '/' && is_file($file)) {
+    return false;
+}
+require __DIR__ . '/index.php';
+PHP
+
+pkill -f "php -S localhost:${PORT}" 2>/dev/null || true
+nohup php -S "localhost:${PORT}" -t "$WP_PATH" "$ROUTER" > "$ROOT/wordpress-php-server.log" 2>&1 &
+sleep 2
+
+log "Importing categories + products..."
+cd "$STOREFRONT"
+node scripts/import-woo-categories.mjs || log "Category import warning — check API"
+node scripts/import-woo-products.mjs || log "Product import warning — check API"
+
+log "Smoke test..."
+HTTP=$(curl -s -o /tmp/woo-smoke.json -w '%{http_code}' \
+  "${SITE_URL}/wp-json/wc/v3/products?per_page=1&consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_SECRET}")
+PRODUCT_COUNT=$(php -r 'echo count(json_decode(file_get_contents("/tmp/woo-smoke.json"), true) ?: []);' 2>/dev/null || echo "?")
+
+echo ""
+echo "════════════════════════════════════════════════════════"
+echo "✅ GrowMedica WordPress + WooCommerce — LOKÁLNE HOTOVÉ"
+echo "════════════════════════════════════════════════════════"
+echo "CMS:        ${SITE_URL}"
+echo "Admin:      ${SITE_URL}/wp-admin"
+echo "Admin user: ${ADMIN_USER}"
+echo "Admin pass: ${ADMIN_PASS}"
+echo "Woo key:    ${CONSUMER_KEY}"
+echo "Woo secret: ${CONSUMER_SECRET}"
+if [[ -n "$APP_PASS" ]]; then
+  echo "App pass:   ${APP_PASS}"
+fi
+echo "REST test:  HTTP ${HTTP} (${PRODUCT_COUNT} products in response)"
+echo "Credentials: ${CREDS_FILE}"
+echo "Storefront:  cd storefront && yarn dev → http://localhost:5555"
+echo "Dashboard:   http://localhost:5555/dashboard"
+echo "════════════════════════════════════════════════════════"

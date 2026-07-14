@@ -62,7 +62,7 @@ test.describe('1. Domovská stránka (Homepage)', () => {
 
   test('7. Mal by obsahovať sekciu "Prečo GrowMedica" so SEO popisom', async ({ page }) => {
     await page.goto('/');
-    const aboutSection = page.locator('section[aria-label="O GrowMedica.sk"]');
+    const aboutSection = page.locator('section[aria-label="O GrowMedica.cz"]');
     await expect(aboutSection).toBeVisible();
     await expect(aboutSection.locator('.why-growmedica__label')).toContainText(BRAND_COPY.aboutLabel);
     await expect(aboutSection.locator('h2')).toContainText(BRAND_COPY.aboutHeading);
@@ -149,7 +149,7 @@ test.describe('2. Navigácia a Statické Podstránky', () => {
     const heading = page.locator('h1');
     await expect(heading).toBeVisible();
     await expect(heading).toContainText('Kontakt');
-    await expect(page.locator('main').locator('text=info@growmedica.sk').first()).toBeVisible();
+    await expect(page.locator('main').locator('text=info@growmedica.cz').first()).toBeVisible();
   });
 
   test('17. Mal by odoslať kontaktný formulár a zobraziť potvrdzujúcu hlášku (alert)', async ({ page }) => {

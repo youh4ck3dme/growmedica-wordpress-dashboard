@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const { products, categories } = await getRecommendContext({ limit: 60 })
 
     const prompt = `
-Si pomocník pre e-shop so zdravotnými doplnkami GrowMedica.sk (SK trh).
+Si pomocník pre e-shop so zdravotnými doplnkami GrowMedica.cz (SK trh).
 ${RECOMMEND_PROMPT_SCHEMA}
 
 Dostupné produkty: ${JSON.stringify(products)}

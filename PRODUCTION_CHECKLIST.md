@@ -5,25 +5,26 @@
 | Premenná | Hodnota |
 |----------|---------|
 | `CMS_PROVIDER` | `wordpress` |
-| `WORDPRESS_BASE_URL` | `https://cms.growmedica.sk` |
+| `WORDPRESS_BASE_URL` | `https://cms.growmedica.cz` |
 | `WOO_CONSUMER_KEY` | `ck_...` (server-only) |
 | `WOO_CONSUMER_SECRET` | `cs_...` (server-only) |
 | `WORDPRESS_REVALIDATION_SECRET` | min. 16 znakov |
-| `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.sk/wp-admin` |
-| `NEXT_PUBLIC_SITE_URL` | `https://growmedica.sk` |
+| `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.cz/wp-admin` |
+| `NEXT_PUBLIC_SITE_URL` | `https://growmedica.cz` |
+| `NEXT_PUBLIC_DEFAULT_LOCALE` | `sk` (fallback; primárne geo podľa IP) |
 | `MISTRAL_API_KEY` | produkčný kľúč |
 
 ## DNS
 
-- [ ] `growmedica.sk` → Vercel
-- [ ] `cms.growmedica.sk` → WordPress hosting (SSL)
+- [ ] `growmedica.cz` + `www.growmedica.cz` → Vercel (www redirect na apex)
+- [ ] `cms.growmedica.cz` → WordPress hosting (SSL)
 
 ## WordPress hosting
 
 - [ ] WooCommerce REST API keys (Read/Write)
 - [ ] Permalinky: `/produkt/%postname%/`
 - [ ] Mu-plugins: `growmedica-cors.php`, `growmedica-revalidate.php`
-- [ ] `GROWMEDICA_STOREFRONT_URL=https://growmedica.sk`
+- [ ] `GROWMEDICA_STOREFRONT_URL=https://growmedica.cz`
 - [ ] `GROWMEDICA_REVALIDATION_SECRET` = rovnaký ako `WORDPRESS_REVALIDATION_SECRET`
 - [ ] CSP `frame-ancestors` pre wp-admin embed
 

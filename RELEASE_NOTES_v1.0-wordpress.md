@@ -17,7 +17,7 @@
 ## Breaking changes
 
 - Produkčný default: `CMS_PROVIDER=wordpress`
-- `NEXT_PUBLIC_DASHBOARD_URL` → `https://cms.growmedica.sk/wp-admin`
+- `NEXT_PUBLIC_DASHBOARD_URL` → `https://cms.growmedica.cz/wp-admin`
 - growmedica-nexus označený ako legacy fallback
 
 ## Migration

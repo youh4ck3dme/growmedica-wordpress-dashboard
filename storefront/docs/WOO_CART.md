@@ -9,7 +9,7 @@ Browser → POST /api/cart/add → catalog/cart.ts → wordpress/cart.ts (in-mem
                                               ↓
                                     Cookie: growmedical_cart_id
                                               ↓
-Checkout → redirect na cms.growmedica.sk/checkout/?add-to-cart=ID&quantity=N
+Checkout → redirect na cms.growmedica.cz/checkout/?add-to-cart=ID&quantity=N
 ```
 
 ## API routes
@@ -49,7 +49,7 @@ WORDPRESS_REVALIDATION_SECRET=mock-revalidation-secret-123456
 
 ## Produkcia
 
-1. Nastav `WORDPRESS_BASE_URL=https://cms.growmedica.sk`
+1. Nastav `WORDPRESS_BASE_URL=https://cms.growmedica.cz`
 2. WooCommerce Store API CORS — mu-plugin `wordpress/mu-plugins/growmedica-cors.php`
 3. Session cart je in-memory (dev); pre produkciu zváž Redis/DB session store
 

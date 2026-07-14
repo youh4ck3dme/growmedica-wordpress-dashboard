@@ -27,7 +27,7 @@ export default function GDPR() {
               <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">3. Vaše práva</h2>
               <p>
                 Máte právo na výmaz, zmenu alebo informácie o tom, aké údaje o vás vedieme. Stačí nás kontaktovať
-                na info@growmedica.sk.
+                na info@growmedica.cz.
               </p>
             </div>
           </div>

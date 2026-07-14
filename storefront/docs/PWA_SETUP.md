@@ -1,4 +1,4 @@
-# PWA Setup Guide — GrowMedica.sk
+# PWA Setup Guide — GrowMedica.cz
 
 ## Overview
 
@@ -123,7 +123,7 @@ curl -I https://growmedicanextjs.vercel.app/offline
 ```json
 {
   "id": "/",
-  "name": "GrowMedica.sk",
+  "name": "GrowMedica.cz",
   "short_name": "GrowMedica",
   "description": "Premium zdravotné produkty",
   "start_url": "/",
@@ -154,7 +154,7 @@ curl -I https://growmedicanextjs.vercel.app/offline
 **Component**: `src/components/layout/PwaInstallBanner.tsx`
 
 - Listens for `beforeinstallprompt` event (Chrome, Edge, Android)
-- Shows banner: "Inštalujte GrowMedica.sk"
+- Shows banner: "Inštalujte GrowMedica.cz"
 - User can click "Inštalovať" to add app to home screen
 - Banner dismissed after interaction (stored in localStorage)
 - Safari iOS: No prompt (users install via "Share" → "Add to Home Screen")

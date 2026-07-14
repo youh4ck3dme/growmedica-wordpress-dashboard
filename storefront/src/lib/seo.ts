@@ -3,12 +3,28 @@
  */
 
 import type { Metadata } from 'next'
+import { DEFAULT_LOCALE, HREFLANG_MAP, OG_LOCALE_MAP } from '@/lib/i18n/config'
 import { BRAND_COPY } from './brand'
 import type { Product, Collection } from './shopify/types'
 
 const SITE_NAME = BRAND_COPY.siteName
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.nexify-studio.tech'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.cz'
 const SITE_DESCRIPTION = BRAND_COPY.siteDescription
+
+export function buildLocaleAlternates(pathname = '/'): Metadata['alternates'] {
+  const path = pathname.startsWith('/') ? pathname : `/${pathname}`
+  const canonical = `${SITE_URL}${path === '/' ? '' : path}` || SITE_URL
+
+  return {
+    canonical,
+    languages: {
+      [HREFLANG_MAP.sk]: `${SITE_URL}${path}?lang=sk`,
+      [HREFLANG_MAP.en]: `${SITE_URL}${path}?lang=en`,
+      [HREFLANG_MAP.de]: `${SITE_URL}${path}?lang=de`,
+      'x-default': `${SITE_URL}${path}?lang=${DEFAULT_LOCALE}`,
+    },
+  }
+}
 
 export const DEFAULT_METADATA: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -20,7 +36,7 @@ export const DEFAULT_METADATA: Metadata = {
   openGraph: {
     siteName: SITE_NAME,
     type: 'website',
-    locale: 'sk_SK',
+    locale: OG_LOCALE_MAP[DEFAULT_LOCALE],
   },
   robots: {
     index: true,
@@ -33,9 +49,7 @@ export const DEFAULT_METADATA: Metadata = {
       'max-snippet': -1,
     },
   },
-  alternates: {
-    canonical: SITE_URL,
-  },
+  alternates: buildLocaleAlternates('/'),
 }
 
 export function buildPageMetadata(title: string, description?: string): Metadata {
@@ -69,9 +83,7 @@ export function getProductMetadata(product: Product): Metadata {
           ]
         : [],
     },
-    alternates: {
-      canonical: `${SITE_URL}/produkty/${product.handle}`,
-    },
+    alternates: buildLocaleAlternates(`/produkty/${product.handle}`),
   }
 }
 
@@ -98,9 +110,7 @@ export function getCollectionMetadata(collection: Collection): Metadata {
           ]
         : [],
     },
-    alternates: {
-      canonical: `${SITE_URL}/kolekcie/${collection.handle}`,
-    },
+    alternates: buildLocaleAlternates(`/kolekcie/${collection.handle}`),
   }
 }
 
@@ -174,9 +184,7 @@ export function getBundlesPageMetadata(): Metadata {
       type: 'website',
       url: `${SITE_URL}/balicky`,
     },
-    alternates: {
-      canonical: `${SITE_URL}/balicky`,
-    },
+    alternates: buildLocaleAlternates('/balicky'),
   }
 }
 

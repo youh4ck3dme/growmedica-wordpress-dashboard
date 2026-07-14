@@ -3,10 +3,12 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { ANNOUNCEMENT_BAR } from '@/lib/brand'
+import { useT } from '@/components/i18n/LocaleProvider'
 
 const STORAGE_KEY = 'growmedica-announcement-dismissed'
 
 export default function AnnouncementBar() {
+  const t = useT()
   const [dismissed, setDismissed] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -32,22 +34,22 @@ export default function AnnouncementBar() {
       aria-hidden={!showBar}
     >
       {showBar ? (
-        <div className="announcement-bar" role="region" aria-label="Aktuálna ponuka">
+        <div className="announcement-bar" role="region" aria-label={t('aria.announcement')}>
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-4 py-2 text-center text-xs font-semibold sm:text-sm">
-            <span className="announcement-bar__text">{ANNOUNCEMENT_BAR.message}</span>
+            <span className="announcement-bar__text">{t('announcement.message')}</span>
             {ANNOUNCEMENT_BAR.href && (
               <Link
                 href={ANNOUNCEMENT_BAR.href}
                 className="announcement-bar__link shrink-0 underline underline-offset-2"
               >
-                {ANNOUNCEMENT_BAR.linkLabel}
+                {t('announcement.linkLabel')}
               </Link>
             )}
             <button
               type="button"
               onClick={dismiss}
               className="announcement-bar__close ml-auto shrink-0 rounded p-1"
-              aria-label="Zavrieť oznámenie"
+              aria-label={t('aria.closeAnnouncement')}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

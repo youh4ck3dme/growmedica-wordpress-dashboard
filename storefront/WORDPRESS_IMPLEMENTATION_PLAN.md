@@ -64,7 +64,7 @@ Nahradiť Shopify ako source of truth za **WordPress + WooCommerce** a prepojiť
 
 - [ ] Production `CMS_PROVIDER=wordpress`
 - [ ] Odstránenie Shopify env premenných
-- [ ] DNS: `growmedica.sk` → Next.js, `cms.growmedica.sk` → WordPress
+- [ ] DNS: `growmedica.cz` → Next.js, `cms.growmedica.cz` → WordPress
 
 ---
 
@@ -75,16 +75,16 @@ Nahradiť Shopify ako source of truth za **WordPress + WooCommerce** a prepojiť
 CMS_PROVIDER=wordpress
 
 # WordPress / WooCommerce (server-only)
-WORDPRESS_BASE_URL=https://cms.growmedica.sk
+WORDPRESS_BASE_URL=https://cms.growmedica.cz
 WOO_CONSUMER_KEY=ck_...
 WOO_CONSUMER_SECRET=cs_...
 WORDPRESS_REVALIDATION_SECRET=your-random-webhook-secret-min-16-chars
 
 # Dashboard iframe (WordPress admin alebo custom plugin route)
-NEXT_PUBLIC_DASHBOARD_URL=https://cms.growmedica.sk/wp-admin
+NEXT_PUBLIC_DASHBOARD_URL=https://cms.growmedica.cz/wp-admin
 
 # Zachované zo storefrontu
-NEXT_PUBLIC_SITE_URL=https://growmedica.sk
+NEXT_PUBLIC_SITE_URL=https://growmedica.cz
 MISTRAL_API_KEY=...
 ```
 
@@ -108,7 +108,7 @@ storefront/src/lib/
 
 ## Odporúčaný postup (ďalší krok)
 
-1. Postaviť WordPress + WooCommerce na `cms.growmedica.sk`
+1. Postaviť WordPress + WooCommerce na `cms.growmedica.cz`
 2. Vygenerovať WooCommerce REST API keys (Read/Write)
 3. Importovať kategórie a produkty
 4. Nastaviť `CMS_PROVIDER=wordpress` na Vercel preview

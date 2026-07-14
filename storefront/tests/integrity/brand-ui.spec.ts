@@ -33,7 +33,7 @@ test.describe('Brand UI — layout markup (SSR HTML)', () => {
     expect(footerContent).toMatch(/<footer[^>]*role="contentinfo"/)
   })
 
-  test('logo wordmark GrowMedica.sk je v HTML', () => {
+  test('logo wordmark GrowMedica.cz je v HTML', () => {
     const logoPath = path.join(process.cwd(), 'src/components/ui/Logo.tsx')
     const content = fs.readFileSync(logoPath, 'utf8')
     expect(content).toContain('className="storefront-logo__grow"')
@@ -43,14 +43,14 @@ test.describe('Brand UI — layout markup (SSR HTML)', () => {
 })
 
 test.describe('Brand UI — homepage copy & structure', () => {
-  test('hero nadpis a CTA zodpovedajú brand boardu', () => {
+  test('hero nadpis a CTA používajú i18n kľúče', () => {
     const sliderPath = path.join(process.cwd(), 'src/components/sections/HeroSlider.tsx')
     const content = fs.readFileSync(sliderPath, 'utf8')
     expect(content).toContain('id="hero-heading"')
-    expect(content).toContain('BRAND_COPY.heroTitle')
-    expect(content).toContain('BRAND_COPY.heroSubtitle')
+    expect(content).toContain("t('hero.title')")
+    expect(content).toContain("t('hero.subtitle')")
     expect(content).toContain('id="hero-cta-primary"')
-    expect(content).toContain('BRAND_COPY.heroCta')
+    expect(content).toContain("t('hero.cta')")
   })
 
   test('USP panel obsahuje všetky 4 value props', () => {
@@ -62,11 +62,11 @@ test.describe('Brand UI — homepage copy & structure', () => {
     }
   })
 
-  test('featured sekcia má správny nadpis', () => {
-    const homePath = path.join(process.cwd(), 'src/app/page.tsx')
-    const content = fs.readFileSync(homePath, 'utf8')
+  test('featured sekcia má správny nadpis cez i18n', () => {
+    const homeSectionsPath = path.join(process.cwd(), 'src/components/home/HomeSections.tsx')
+    const content = fs.readFileSync(homeSectionsPath, 'utf8')
     expect(content).toContain('id="featured-heading"')
-    expect(content).toContain('BRAND_COPY.featuredHeading')
+    expect(content).toContain("t('home.featuredHeading', locale)")
   })
 })
 
@@ -85,9 +85,10 @@ test.describe('Brand UI — meta & accessibility', () => {
     expect(content).toContain('themeColor: BRAND_COPY.themeColor')
   })
 
-  test('html lang je sk', () => {
+  test('html lang je dynamický podľa locale', () => {
     const layoutPath = path.join(process.cwd(), 'src/app/layout.tsx')
     const content = fs.readFileSync(layoutPath, 'utf8')
-    expect(content).toMatch(/lang="sk"/)
+    expect(content).toMatch(/lang=\{locale\}/)
+    expect(content).toContain('getRequestLocale')
   })
 })

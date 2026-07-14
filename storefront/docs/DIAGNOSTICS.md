@@ -40,9 +40,9 @@ Fixtures:
 
 | Environment | URL |
 |-------------|-----|
-| Storefront | https://growmedica.sk |
-| WordPress CMS | https://cms.growmedica.sk |
-| WP Admin (iframe) | https://cms.growmedica.sk/wp-admin |
+| Storefront | https://growmedica.cz |
+| WordPress CMS | https://cms.growmedica.cz |
+| WP Admin (iframe) | https://cms.growmedica.cz/wp-admin |
 
 ## Category banner coverage
 

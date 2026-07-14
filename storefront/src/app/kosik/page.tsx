@@ -7,6 +7,8 @@ import { getCart, CART_COOKIE } from '@/lib/catalog/cart'
 import type { Cart } from '@/lib/shopify/types'
 import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { t } from '@/lib/i18n/translate'
 
 export const metadata: Metadata = {
   ...buildPageMetadata('Košík', BRAND_COPY.pageDescriptions.cart),
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
 }
 
 export default async function KosikPage() {
+  const locale = await getRequestLocale()
   const cookieStore = await cookies()
   const cartId = cookieStore.get(CART_COOKIE)?.value
 
@@ -32,14 +35,14 @@ export default async function KosikPage() {
   return (
     <div className="py-8 lg:py-12 bg-(--color-surface-2) min-h-[70vh]">
       <Container>
-        <h1 className="text-3xl font-bold text-(--color-text) mb-8">Košík</h1>
+        <h1 className="text-3xl font-bold text-(--color-text) mb-8">{t('cart.pageTitle', locale)}</h1>
 
         {isEmpty ? (
           <EmptyState
             icon="cart"
-            title="Košík je prázdny"
-            description="Pridajte produkty a pokračujte v nákupe."
-            actionLabel="Pokračovať v nákupe"
+            title={t('empty.cart.title', locale)}
+            description={t('empty.cart.description', locale)}
+            actionLabel={t('empty.cart.action', locale)}
             actionHref="/produkty"
           />
         ) : (

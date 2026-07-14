@@ -1,8 +1,10 @@
 # WordPress + WooCommerce Setup — GrowMedica CMS
 
-Cieľ: headless CMS na `cms.growmedica.sk` (produkcia) alebo `http://localhost:8080` (lokálne).
+Cieľ: headless CMS na `cms.growmedica.cz` (produkcia) alebo `http://localhost:8080` (lokálne).
 
-## 1. Lokálny dev (Docker)
+## 1. Lokálny dev
+
+### Možnosť A — Docker (odporúčané ak OrbStack beží)
 
 ```bash
 cd growmedica-wordpress-dashboard
@@ -10,12 +12,27 @@ docker compose up -d
 # Počkaj ~30s, potom otvor http://localhost:8080
 ```
 
-### WordPress inštalácia (first run)
+### Možnosť B — wp-cli + PHP built-in server (bez Docker)
+
+Keď Docker/OrbStack neodpovedá, použite automatický skript:
+
+```bash
+cd growmedica-wordpress-dashboard
+./scripts/setup-wordpress-local.sh
+# WP Admin: http://localhost:8080/wp-admin
+# Credentials: wordpress-credentials.local.env (gitignored)
+```
+
+Skript nainštaluje WordPress, WooCommerce, importuje 14 kategórií + 15 produktov a vytvorí Woo REST API keys.
+
+**Mu-plugin pre lokálny dev:** `wordpress/mu-plugins/growmedica-local-http-api.php` — HTTP Basic Auth pre WooCommerce Store API (Woo 10+ vyžaduje HTTPS; na localhoste rieši auth). **Na produkcii tento plugin nenasadzujte** — produkcia používa HTTPS.
+
+## 2. WordPress inštalácia (first run)
 
 1. Jazyk: **Slovenčina**
 2. Názov: **GrowMedica CMS**
 3. Admin účet + silné heslo
-4. Email: admin@growmedica.sk
+4. Email: admin@growmedica.cz
 
 ### Permalinky
 
@@ -85,14 +102,14 @@ yarn import:products     # produkty z mock/fixture dát
 ## 7. Produkcia (hosting checklist)
 
 - [ ] VPS/managed WP hosting (min. 2 GB RAM)
-- [ ] DNS `cms.growmedica.sk` → WP server
+- [ ] DNS `cms.growmedica.cz` → WP server
 - [ ] SSL certifikát (Let's Encrypt)
 - [ ] PHP 8.2+, MariaDB 10.6+
 - [ ] WooCommerce REST API keys (Read/Write, server-only)
-- [ ] CSP `frame-ancestors` pre `/wp-admin` (growmedica.sk, *.vercel.app, localhost:5555)
-- [ ] `WORDPRESS_BASE_URL=https://cms.growmedica.sk` na Vercel
+- [ ] CSP `frame-ancestors` pre `/wp-admin` (growmedica.cz, *.vercel.app, localhost:5555)
+- [ ] `WORDPRESS_BASE_URL=https://cms.growmedica.cz` na Vercel
 - [ ] Mu-plugin `growmedica-revalidate.php` + env `GROWMEDICA_STOREFRONT_URL`, `GROWMEDICA_REVALIDATION_SECRET`
-- [ ] `frame-ancestors` pre wp-admin: `growmedica.sk`, `*.vercel.app`, `localhost:5555`
+- [ ] `frame-ancestors` pre wp-admin: `growmedica.cz`, `*.vercel.app`, `localhost:5555`
 
 ## 9. ISR webhook (mu-plugin)
 

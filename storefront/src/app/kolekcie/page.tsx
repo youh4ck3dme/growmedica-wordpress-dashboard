@@ -3,18 +3,23 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { getNavCollectionItems } from '@/lib/catalog/nav'
-import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
 import { getMegaMenuBannerSrc } from '@/lib/mega-menu-banners'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { t } from '@/lib/i18n/translate'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = buildPageMetadata(
-  'Kolekcie',
-  BRAND_COPY.pageDescriptions.collections,
-)
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale()
+  return buildPageMetadata(
+    t('collections.pageTitle', locale),
+    t('collections.pageDescription', locale),
+  )
+}
 
 export default async function KolekciePage() {
+  const locale = await getRequestLocale()
   let collections: Awaited<ReturnType<typeof getNavCollectionItems>> = []
   try {
     collections = await getNavCollectionItems()
@@ -25,32 +30,32 @@ export default async function KolekciePage() {
   return (
     <div className="py-8 lg:py-12 bg-(--color-surface-2) min-h-[60vh]">
       <Container>
-        <nav aria-label="Breadcrumb" className="mb-6">
+        <nav aria-label={t('aria.breadcrumb', locale)} className="mb-6">
           <ol className="flex items-center gap-2 text-sm text-(--color-text-muted)">
             <li>
               <Link href="/" className="hover:text-(--color-primary) transition-colors">
-                Domov
+                {t('common.home', locale)}
               </Link>
             </li>
             <li aria-hidden="true">/</li>
             <li className="text-(--color-text) font-medium" aria-current="page">
-              Kolekcie
+              {t('nav.collections', locale)}
             </li>
           </ol>
         </nav>
 
         <header className="mb-10 text-center max-w-2xl mx-auto">
           <h1 className="text-3xl lg:text-4xl font-bold text-(--color-text) mb-3">
-            Kolekcie produktov
+            {t('collections.pageTitle', locale)}
           </h1>
           <p className="text-(--color-text-muted)">
-            Objavte našu ponuku organizovanú do prehľadných kategórií pre vaše zdravie a kondíciu.
+            {t('collections.pageDescription', locale)}
           </p>
         </header>
 
         {collections.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-xl border border-(--color-border)">
-            <p className="text-(--color-text-muted)">Nenašli sa žiadne kolekcie.</p>
+            <p className="text-(--color-text-muted)">{t('collections.empty', locale)}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -91,7 +96,7 @@ export default async function KolekciePage() {
                       />
                     )}
                     <span className="absolute left-4 top-4 badge badge-brand text-xs uppercase tracking-wide">
-                      Kolekcia
+                      {t('collections.badge', locale)}
                     </span>
                   </div>
 

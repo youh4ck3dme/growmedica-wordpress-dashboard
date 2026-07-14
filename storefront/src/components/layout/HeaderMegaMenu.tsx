@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Container } from '@/components/ui/Container'
 import CategoryMegaPanel from '@/components/layout/CategoryMegaPanel'
 import { useHoverIntent } from '@/hooks/useHoverIntent'
+import { useT } from '@/components/i18n/LocaleProvider'
 import type { NavCollectionItem } from '@/lib/catalog/nav'
 import type { ProductListItem } from '@/lib/shopify/types'
 
@@ -16,6 +17,7 @@ interface HeaderMegaMenuProps {
 }
 
 export default function HeaderMegaMenu({ categories }: HeaderMegaMenuProps) {
+  const t = useT()
   const wrapperRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
   const [activeHandle, setActiveHandle] = useState(categories[0]?.handle ?? '')
@@ -98,7 +100,7 @@ export default function HeaderMegaMenu({ categories }: HeaderMegaMenuProps) {
         aria-controls="category-mega-menu-panel"
         onClick={() => (isOpen ? close() : open())}
       >
-        Kategórie
+        {t('nav.categories')}
         <svg
           className={`h-3.5 w-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
@@ -126,7 +128,7 @@ export default function HeaderMegaMenu({ categories }: HeaderMegaMenuProps) {
             id="category-mega-menu-panel"
             className="mega-menu-panel"
             role="region"
-            aria-label="Kategórie produktov"
+            aria-label={t('aria.categoryProducts')}
             onMouseEnter={handleEnter}
             onMouseLeave={handleLeave}
           >

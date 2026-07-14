@@ -136,7 +136,7 @@ Validácia: `storefront/src/lib/env.ts`.
 | Premenná | Production | Preview | Development (local pull) |
 |----------|------------|---------|--------------------------|
 | `SHOPIFY_*` | rovnaké | rovnaké | rovnaké |
-| `NEXT_PUBLIC_SITE_URL` | `https://growmedica.nexify-studio.tech` | `https://growmedica.nexify-studio.tech` | `http://localhost:5555` |
+| `NEXT_PUBLIC_SITE_URL` | `https://growmedica.cz` | `https://growmedica.cz` | `http://localhost:5555` |
 
 ### Preview — globálne vs. branch-scoped
 
@@ -278,7 +278,7 @@ vercel redeploy growmedicanextjs-XXXXX-h4ck3d.vercel.app \
 
 ## Smoke test (po deployi)
 
-Testuj proti **Vercel deployment URL**, nie `growmedica.sk` ak ešte smeruje na legacy Apache PHP.
+Testuj proti **Vercel deployment URL**, nie `growmedica.cz` ak ešte smeruje na legacy Apache PHP.
 
 ```bash
 curl -I https://growmedicanextjs.vercel.app

@@ -168,7 +168,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
               Hodnotenia zákazníkov
             </h2>
             <p className="text-xs text-(--color-text-muted)">
-              Všetky recenzie sú od overených zákazníkov obchodu GrowMedica.sk.
+              Všetky recenzie sú od overených zákazníkov obchodu GrowMedica.cz.
             </p>
           </div>
 

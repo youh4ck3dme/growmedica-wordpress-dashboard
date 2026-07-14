@@ -113,7 +113,7 @@ export default function Header({ megaMenuCategories = [] }: HeaderProps) {
               href="/"
               id="site-logo"
               className="noor-header-center shrink-0 site-logo-mark"
-              aria-label="GrowMedica.sk — domov"
+              aria-label="GrowMedica.cz — domov"
             >
               <Logo iconSize={32} />
             </Link>

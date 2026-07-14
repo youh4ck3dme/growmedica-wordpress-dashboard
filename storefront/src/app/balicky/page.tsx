@@ -34,7 +34,7 @@ function mapProductsByBundleSlug(
 }
 
 export default async function BalickyPage() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.nexify-studio.tech'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.cz'
   let productsByHandle = new Map<string, Awaited<ReturnType<typeof getBundleProducts>>[number]>()
 
   try {

@@ -1,16 +1,18 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useMemo } from 'react'
 import { Menu, Search, ShoppingBag } from 'lucide-react'
 import { Container } from '@/components/ui/Container'
 import Logo from '@/components/ui/Logo'
 import MobileNav from '@/components/layout/MobileNav'
 import HeaderMegaMenu, { type MegaMenuCategory } from '@/components/layout/HeaderMegaMenu'
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher'
+import { useLocale } from '@/components/i18n/LocaleProvider'
 import { StorefrontThemeSwitcher } from '@/components/theme/StorefrontThemeSwitcher'
 import { ThemeSearch } from '@/components/ui/ThemeSearch'
 import { useStorefrontTheme } from '@/components/theme/StorefrontThemeProvider'
-import { PRIMARY_NAV_LINKS } from '@/lib/navigation/primary-nav'
+import { getPrimaryNavLinks } from '@/lib/navigation/primary-nav'
 import { shouldHideThemeSwitcher } from '@/lib/theme/storefront-theme'
 import { cn } from '@/lib/utils'
 
@@ -19,6 +21,8 @@ interface GlassNavbarProps {
 }
 
 export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProps) {
+  const { locale, t } = useLocale()
+  const primaryLinks = useMemo(() => getPrimaryNavLinks(locale), [locale])
   const [mobileOpen, setMobileOpen] = useState(false)
   const [cartCount, setCartCount] = useState(0)
   const [scrolled, setScrolled] = useState(false)
@@ -64,6 +68,10 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
 
   const showThemeSwitcher = !shouldHideThemeSwitcher()
   const { theme } = useStorefrontTheme()
+  const cartAria =
+    cartCount > 0
+      ? `${t('aria.cart')}, ${t('aria.cartItems', { count: cartCount })}`
+      : t('aria.cart')
 
   return (
     <>
@@ -82,7 +90,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
                 type="button"
                 className="glass-navbar__action lg:hidden text-(--color-text)"
                 onClick={() => setMobileOpen(true)}
-                aria-label="Otvoriť hlavné menu"
+                aria-label={t('aria.openMenu')}
                 aria-expanded={mobileOpen}
               >
                 <Menu className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
@@ -93,16 +101,16 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
               href="/"
               id="site-logo"
               className="noor-header-center shrink-0 site-logo-mark"
-              aria-label="GrowMedica.sk — domov"
+              aria-label={t('aria.home')}
             >
               <Logo iconSize={32} />
             </Link>
 
             <nav
               className="noor-header-nav hidden lg:flex items-center gap-0 min-w-0 flex-1 justify-center flex-wrap"
-              aria-label="Hlavná navigácia"
+              aria-label={t('aria.mainNav')}
             >
-              {PRIMARY_NAV_LINKS.map((link) => (
+              {primaryLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -120,10 +128,13 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
             </nav>
 
             <div className="noor-header-right flex items-center gap-0.5 shrink-0">
+              <Suspense fallback={null}>
+                <LanguageSwitcher className="hidden sm:inline-flex" />
+              </Suspense>
               {showThemeSwitcher && <StorefrontThemeSwitcher />}
               <ThemeSearch
                 className={`glass-navbar__action${theme === 'noor' ? '' : ' lg:hidden'}`}
-                aria-label="Vyhľadávanie"
+                aria-label={t('aria.search')}
               >
                 <Search className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
               </ThemeSearch>
@@ -132,7 +143,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
                 href="/kosik"
                 id="cart-button"
                 className="glass-navbar__action relative"
-                aria-label={`Nákupný košík${cartCount > 0 ? `, ${cartCount} položiek` : ''}`}
+                aria-label={cartAria}
               >
                 <ShoppingBag className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
                 {cartCount > 0 && (
@@ -152,7 +163,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
       <MobileNav
         isOpen={mobileOpen}
         onClose={() => setMobileOpen(false)}
-        primaryLinks={PRIMARY_NAV_LINKS}
+        primaryLinks={primaryLinks}
         categoryLinks={categoryLinks}
       />
     </>

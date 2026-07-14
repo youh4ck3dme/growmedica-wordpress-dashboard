@@ -16,6 +16,8 @@ import { NoorThemeChrome } from '@/components/theme/NoorThemeChrome'
 import { NoorUiProviders } from '@/components/noor/providers/NoorUiProviders'
 import { getThemeBootstrapScript, isStorefrontTheme, resolveInitialTheme, STORAGE_KEY } from '@/lib/theme/storefront-theme'
 import { DASHBOARD_ROUTE_HEADER, isDashboardRouteHeader } from '@/lib/dashboard'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { LocaleProvider } from '@/components/i18n/LocaleProvider'
 
 const montserrat = { variable: 'font-montserrat' }
 const inter = { variable: 'font-inter' }
@@ -56,6 +58,7 @@ export default async function RootLayout({
 }) {
   const headersList = await headers()
   const isDashboardRoute = isDashboardRouteHeader(headersList.get(DASHBOARD_ROUTE_HEADER))
+  const locale = isDashboardRoute ? 'sk' : await getRequestLocale()
 
   const cookieStore = await cookies()
   const cookieTheme = cookieStore.get(STORAGE_KEY)?.value
@@ -66,7 +69,7 @@ export default async function RootLayout({
   if (isDashboardRoute) {
     return (
       <html
-        lang="sk"
+        lang={locale}
         suppressHydrationWarning
         className={`${montserrat.variable} ${inter.variable} ${playfair.variable}`}
       >
@@ -79,7 +82,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang="sk"
+      lang={locale}
       suppressHydrationWarning
       data-scroll-behavior="smooth"
       data-storefront-theme={ssrTheme}
@@ -97,7 +100,8 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(getOrganizationJsonLd()) }}
         />
-        <StorefrontThemeProvider>
+        <LocaleProvider locale={locale}>
+          <StorefrontThemeProvider>
           <NoorUiProviders>
             <MotionProvider>
               <NoorThemeChrome />
@@ -111,7 +115,8 @@ export default async function RootLayout({
               </div>
             </MotionProvider>
           </NoorUiProviders>
-        </StorefrontThemeProvider>
+          </StorefrontThemeProvider>
+        </LocaleProvider>
       </body>
     </html>
   )

@@ -10,7 +10,7 @@ function getPageFile(route: string) {
   return `src/app${route}/page.tsx`
 }
 
-test.describe('Brand naming — GrowMedica.sk', () => {
+test.describe('Brand naming — GrowMedica.cz', () => {
   for (const pagePath of PAGES_WITHOUT_LEGACY_NAME) {
     test(`${pagePath} neobsahuje legacy názov Grow Medical`, async () => {
       const localPath = path.join(process.cwd(), getPageFile(pagePath))
@@ -29,7 +29,7 @@ test.describe('Brand naming — GrowMedica.sk', () => {
   test('/o-nas obsahuje aktualizovaný H1', async () => {
     const brandPath = path.join(process.cwd(), 'src/lib/brand.ts')
     const content = fs.readFileSync(brandPath, 'utf8')
-    expect(content).toContain("aboutPageTitle: 'O spoločnosti GrowMedica.sk'")
+    expect(content).toContain("aboutPageTitle: 'O spoločnosti GrowMedica.cz'")
   })
 
   test('homepage nemá trust strip', async () => {
@@ -43,6 +43,6 @@ test.describe('Brand naming — GrowMedica.sk', () => {
     const stripPath = path.join(process.cwd(), 'src/components/layout/TrustStrip.tsx')
     const content = fs.readFileSync(stripPath, 'utf8')
     expect(content).toContain('className="trust-strip"')
-    expect(content).toContain('BRAND_COPY.tagline')
+    expect(content).toContain("t('trust.tagline', locale)")
   })
 })

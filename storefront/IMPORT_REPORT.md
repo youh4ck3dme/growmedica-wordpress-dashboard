@@ -1,45 +1,26 @@
-# Import Report — WooCommerce katalóg
+# Import Report — Categories
 
-**Dátum:** júl 2026  
-**Režim:** mock/fixture + dry-run pripravený pre live import
+- Created: 14
+- Skipped: 0
+- Errors: 0
 
-## Kategórie (14/14)
+- proteiny: created (id 16)
+- aminokyseliny: created (id 17)
+- sportova-vyziva: created (id 18)
+- regeneracia: created (id 19)
+- zdrave-potraviny: created (id 20)
+- vitaminy-mineraly: created (id 21)
+- klby-pohyb: created (id 22)
+- imunita: created (id 23)
+- travenie: created (id 24)
+- srdce-cievy: created (id 25)
+- spanok-stres: created (id 26)
+- krasa-pokozka: created (id 27)
+- detox-pecen: created (id 28)
+- specialna-vyziva: created (id 29)
 
-| Slug | Stav |
-|------|------|
-| proteiny | ✅ fixture |
-| aminokyseliny | ✅ fixture |
-| sportova-vyziva | ✅ fixture |
-| regeneracia | ✅ fixture |
-| zdrave-potraviny | ✅ fixture |
-| vitaminy-mineraly | ✅ fixture |
-| klby-pohyb | ✅ fixture |
-| imunita | ✅ fixture |
-| travenie | ✅ fixture |
-| srdce-cievy | ✅ fixture |
-| spanok-stres | ✅ fixture |
-| krasa-pokozka | ✅ fixture |
-| detox-pecen | ✅ fixture |
-| specialna-vyziva | ✅ fixture |
+## Products
 
-**Woo mock coverage:** 45 produktov, 14/14 kategórií (`tests/fixtures/woo-category-coverage.json`).
-
-## Produkty
-
-| Zdroj | Počet |
-|-------|-------|
-| `scripts/fixtures/woo-import-products.json` | 15 (live import seed) |
-| `WOO_MOCK_MODE` mock catalog | 45 (3 per category + featured) |
-
-## Spustenie
-
-```bash
-yarn import:categories:dry   # preview
-yarn import:categories       # live → WooCommerce
-yarn import:products:dry
-yarn import:products
-```
-
-## Live import (produkcia)
-
-Po nastavení `WORDPRESS_BASE_URL` + API keys v `.env.local` spustite `yarn import:categories` a `yarn import:products`. Aktualizujte tento report s reálnymi počtami z WooCommerce API.
+- Created: 15
+- Skipped: 0
+- Errors: 0

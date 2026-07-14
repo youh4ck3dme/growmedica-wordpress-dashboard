@@ -43,7 +43,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'cms.growmedica.sk',
+        hostname: 'cms.growmedica.cz',
         pathname: '/wp-content/uploads/**',
       },
       {

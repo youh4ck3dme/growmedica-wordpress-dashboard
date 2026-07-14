@@ -33,8 +33,8 @@ We validated the `Image Src` column in the legacy export file `export/shopify_pr
 We ran the validation on the corrected newer export file `export/shopify_products_20260604_195804.csv`:
 *   **Empty image records**: 0
 *   **Invalid image URLs**: 0
-*   **Domains used in Image Src**: `growmedica.sk` (675 times)
-*   **Verdict**: **READY_FOR_SHOPIFY_TEST_IMPORT**. The image URLs point to the live public domain `https://growmedica.sk` which Shopify can successfully fetch.
+*   **Domains used in Image Src**: `growmedica.cz` (675 times)
+*   **Verdict**: **READY_FOR_SHOPIFY_TEST_IMPORT**. The image URLs point to the live public domain `https://growmedica.cz` which Shopify can successfully fetch.
 
 ---
 
@@ -65,7 +65,7 @@ We generated the following CSV files on your Desktop (`~/Desktop/`):
 
 ## 5. Recommendation for Image Base URL
 
-In `export_shopify.php` at line 137, the image base URL was changed from local docker (`http://localhost:8080`) to production `https://growmedica.sk`. 
+In `export_shopify.php` at line 137, the image base URL was changed from local docker (`http://localhost:8080`) to production `https://growmedica.cz`. 
 *   **If the live domain is actually `https://growmedical.sk`**, we recommend modifying line 137 in `export_shopify.php` to:
     ```php
     $image_base = 'https://growmedical.sk';

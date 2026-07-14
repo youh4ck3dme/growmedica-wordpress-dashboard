@@ -11,6 +11,8 @@ import {
   type CollectionListOptions,
 } from '@/lib/catalog/nav'
 import { getCollectionMetadata } from '@/lib/seo'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { t } from '@/lib/i18n/translate'
 
 export const revalidate = 3600
 
@@ -78,6 +80,7 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
 }
 
 export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
+  const locale = await getRequestLocale()
   const { handle } = await params
   const rawSearch = await searchParams
   const listOptions = parseListOptions(rawSearch)
@@ -98,11 +101,11 @@ export default async function CollectionPage({ params, searchParams }: Collectio
   return (
     <div className="py-8 lg:py-12">
       <Container>
-        <nav aria-label="Breadcrumb" className="mb-6">
+        <nav aria-label={t('aria.breadcrumb', locale)} className="mb-6">
           <ol className="flex items-center gap-2 text-sm text-(--color-text-muted)">
-            <li><Link href="/" className="hover:text-(--color-primary) transition-colors">Domov</Link></li>
+            <li><Link href="/" className="hover:text-(--color-primary) transition-colors">{t('common.home', locale)}</Link></li>
             <li aria-hidden="true">/</li>
-            <li><Link href="/kolekcie" className="hover:text-(--color-primary) transition-colors">Kolekcie</Link></li>
+            <li><Link href="/kolekcie" className="hover:text-(--color-primary) transition-colors">{t('nav.collections', locale)}</Link></li>
             <li aria-hidden="true">/</li>
             <li className="text-(--color-text) font-medium" aria-current="page">{view.title}</li>
           </ol>
@@ -121,38 +124,40 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
         <ProductGrid
           products={view.products}
-          emptyTitle="V tejto kategórii nie sú produkty"
-          emptyDescription="Skúste zmeniť filtre alebo prejsť na inú kategóriu."
+          emptyTitle={t('empty.collection.title', locale)}
+          emptyDescription={t('empty.collection.description', locale)}
+          emptyAction={t('empty.products.action', locale)}
+          listAriaLabel={t('aria.productList', locale)}
         />
 
         {(view.hasPreviousPage || view.hasNextPage) && (
           <nav
             className="mt-10 flex items-center justify-center gap-4"
-            aria-label="Stránkovanie kategórie"
+            aria-label={t('aria.collectionPagination', locale)}
           >
             {view.hasPreviousPage ? (
               <Link
                 href={buildPageHref(view.handle, page - 1, rawSearch)}
                 className="btn btn-secondary"
               >
-                ← Predchádzajúca
+                {t('common.previous', locale)}
               </Link>
             ) : (
               <span className="btn btn-secondary opacity-40 pointer-events-none" aria-hidden="true">
-                ← Predchádzajúca
+                {t('common.previous', locale)}
               </span>
             )}
-            <span className="text-sm text-(--color-text-muted)">Strana {view.page}</span>
+            <span className="text-sm text-(--color-text-muted)">{t('common.page', locale, { page: String(view.page) })}</span>
             {view.hasNextPage ? (
               <Link
                 href={buildPageHref(view.handle, page + 1, rawSearch)}
                 className="btn btn-secondary"
               >
-                Ďalšia →
+                {t('common.next', locale)}
               </Link>
             ) : (
               <span className="btn btn-secondary opacity-40 pointer-events-none" aria-hidden="true">
-                Ďalšia →
+                {t('common.next', locale)}
               </span>
             )}
           </nav>
