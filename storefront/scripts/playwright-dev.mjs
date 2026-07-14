@@ -22,7 +22,7 @@ const pinnedEnv = {
   MISTRAL_MOCK_MODE: process.env.MISTRAL_MOCK_MODE ?? '1',
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY ?? 'mock-mistral-api-key',
   MISTRAL_MODEL: process.env.MISTRAL_MODEL ?? 'mistral-large-latest',
-  NEXT_PUBLIC_DASHBOARD_MODE: process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'iframe',
+  NEXT_PUBLIC_DASHBOARD_MODE: process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'hybrid',
   NEXT_PUBLIC_DASHBOARD_URL:
     process.env.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://growmedica-nexus.lovable.app/admin',
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? `http://127.0.0.1:${port}`,

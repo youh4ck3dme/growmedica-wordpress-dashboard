@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { DASHBOARD_AGENT_SECRET_HEADER } from '@/lib/dashboard-agent/auth'
+import { useLocale } from '@/components/i18n/LocaleProvider'
+import { dashboardFetch } from '@/lib/dashboard-agent/clientAuth'
 
 type IntegrationStatusProps = {
-  agentSecret: string
+  sessionReady: boolean
 }
 
 type StatusPayload = {
@@ -14,39 +15,38 @@ type StatusPayload = {
   write_mode?: string
 }
 
-export default function IntegrationStatus({ agentSecret }: IntegrationStatusProps) {
+export default function IntegrationStatus({ sessionReady }: IntegrationStatusProps) {
+  const { t } = useLocale()
   const [status, setStatus] = useState<StatusPayload | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!sessionReady) return
     let cancelled = false
 
     async function load() {
       try {
-        const response = await fetch('/api/dashboard/agent', {
+        const response = await dashboardFetch('/api/dashboard/agent', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            [DASHBOARD_AGENT_SECRET_HEADER]: agentSecret,
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ command: 'Stav integrácie' }),
         })
         const payload = await response.json()
-        if (!response.ok) throw new Error(payload.error ?? 'Nepodarilo sa načítať stav')
+        if (!response.ok) throw new Error(payload.error ?? t('dashboard.error.integrationLoad'))
         const action = payload.actions?.[0]
         if (!cancelled) setStatus((action?.result as StatusPayload) ?? null)
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Chyba stavu integrácie')
+          setError(err instanceof Error ? err.message : t('dashboard.error.integrationLoad'))
         }
       }
     }
 
-    if (agentSecret) void load()
+    void load()
     return () => {
       cancelled = true
     }
-  }, [agentSecret])
+  }, [sessionReady, t])
 
   if (error) {
     return (
@@ -59,17 +59,17 @@ export default function IntegrationStatus({ agentSecret }: IntegrationStatusProp
   if (!status) {
     return (
       <div className="text-xs text-(--color-text-muted)" data-testid="dashboard-integration-loading">
-        Načítavam stav integrácie…
+        {t('dashboard.integration.loading')}
       </div>
     )
   }
 
   return (
     <div className="flex flex-wrap gap-2" data-testid="dashboard-integration-status">
-      <Badge label="CMS" value={status.cms_provider ?? '—'} />
-      <Badge label="Mistral" value={status.mistral ?? '—'} />
-      <Badge label="Katalóg" value={status.catalog ?? '—'} />
-      <Badge label="Zápis" value={status.write_mode ?? '—'} />
+      <Badge label={t('dashboard.integration.cms')} value={status.cms_provider ?? '—'} />
+      <Badge label={t('dashboard.integration.mistral')} value={status.mistral ?? '—'} />
+      <Badge label={t('dashboard.integration.catalog')} value={status.catalog ?? '—'} />
+      <Badge label={t('dashboard.integration.write')} value={status.write_mode ?? '—'} />
     </div>
   )
 }

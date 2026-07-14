@@ -8,7 +8,11 @@ export type AgentMessage = {
 export type AgentToolName =
   | 'list_products'
   | 'get_product'
+  | 'list_collections'
+  | 'get_collection_products'
+  | 'catalog_summary'
   | 'optimize_product_copy'
+  | 'generate_product_seo'
   | 'bulk_update_prices'
   | 'export_catalog_csv'
   | 'get_integration_status'

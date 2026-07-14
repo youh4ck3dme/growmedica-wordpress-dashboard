@@ -46,21 +46,22 @@ test.describe('Dashboard route — smoke', () => {
     expect(disallowList).toContain('/dashboard')
   })
 
-  test('shows fallback when NEXT_PUBLIC_DASHBOARD_URL is missing', () => {
+  test('shows fallback when iframe URL is missing in iframe-only mode', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
 
     expect(content).toContain('Dashboard nie je nakonfigurovaný')
     expect(content).toContain('data-testid="dashboard-unconfigured"')
     expect(content).toContain('data-testid="dashboard-legacy-nexus-link"')
-    expect(content).toContain('wp-admin')
+    expect(content).toContain('NEXUS_DASHBOARD_IFRAME_URL')
   })
 
-  test('renders iframe when NEXT_PUBLIC_DASHBOARD_URL is set', () => {
+  test('renders DashboardShell with hybrid agent + Nexus iframe', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
-    expect(content).toContain('<DashboardFrame src={dashboardUrl}')
-    expect(content).toContain('GrowMedica Nexus Dashboard')
+    expect(content).toContain("import DashboardShell from '@/components/dashboard/agent/DashboardShell'")
+    expect(content).toContain('<DashboardShell mode={mode} dashboardUrl={dashboardUrl}')
+    expect(content).toMatch(/getDashboardMode|getDashboardUrl/)
   })
 
   test('contains meta title and robot policies', () => {

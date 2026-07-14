@@ -7,26 +7,38 @@ Natívny AI admin modul v Next.js storefronte na `/dashboard`. Mistral orchestru
 | Režim | Správanie |
 |-------|-----------|
 | `agentic` | Len Command Bar + AI panely |
-| `iframe` | Len WordPress admin iframe (legacy) |
-| `hybrid` | Tabs: **AI Agent** (default) + **WordPress admin** |
+| `iframe` | Len Lovable Nexus iframe |
+| `hybrid` | Tabs: **AI Agent** (default) + **Nexus admin** (Lovable iframe) |
+
+Default: `hybrid`.
 
 ## Env premenné
 
 | Premenná | Príklad | Účel |
 |---|---|---|
 | `NEXT_PUBLIC_DASHBOARD_MODE` | `hybrid` | Režim dashboardu |
+| `NEXT_PUBLIC_DASHBOARD_URL` | `https://growmedica-nexus.lovable.app/admin` | Nexus iframe URL |
 | `DASHBOARD_AGENT_SECRET` | `local-dashboard-agent-secret-min-16-chars` | Auth pre `/api/dashboard/*` (min. 16 znakov) |
 | `MISTRAL_API_KEY` | `...` | Live Mistral (alebo `MISTRAL_MOCK_MODE=1`) |
 | `CMS_PROVIDER` | `wordpress` | Katalóg backend |
 | `WOO_MOCK_MODE` | `1` | Mock katalóg pre dev/test |
+| `UPSTASH_REDIS_REST_URL` | `...` | Voliteľná persistencia audit logu |
+| `UPSTASH_REDIS_REST_TOKEN` | `...` | Upstash token |
 
-## API
+## API auth
 
-Všetky routes vyžadujú header:
+Dashboard API akceptuje:
+
+1. **HttpOnly session cookie** (preferované v prehliadači) — vytvorí sa cez `POST /api/dashboard/session`
+2. **Header** (testy, curl, smoke skripty):
 
 ```
 x-dashboard-agent-secret: <DASHBOARD_AGENT_SECRET>
 ```
+
+### `POST /api/dashboard/session`
+
+Vydá httpOnly cookie `growmedica-dashboard-agent-session` (24h). Volá sa automaticky pri načítaní `/dashboard`.
 
 ### `POST /api/dashboard/agent`
 
@@ -61,7 +73,11 @@ Stiahnutie CSV exportu vygenerovaného nástrojom `export_catalog_csv`.
 |------|-------|
 | `list_products` | Zoznam produktov (search, limit) |
 | `get_product` | Detail podľa slug/handle |
-| `optimize_product_copy` | AI návrh title/short_description |
+| `list_collections` | Zoznam kategórií/kolekcií |
+| `get_collection_products` | Produkty v kategórii podľa handle |
+| `catalog_summary` | Agregovaný prehľad katalógu |
+| `optimize_product_copy` | AI návrh title/short_description (SK, compliance + dĺžka) |
+| `generate_product_seo` | Meta title + description pre SEO |
 | `bulk_update_prices` | Hromadná zmena cien (`confirm: true` pre zápis) |
 | `export_catalog_csv` | Export CSV + download link |
 | `get_integration_status` | CMS + Mistral + mock/live stav |
@@ -71,10 +87,42 @@ Stiahnutie CSV exportu vygenerovaného nástrojom `export_catalog_csv`.
 ## Príklady príkazov
 
 - „Zobraz produkty“
+- „Zoznam kategórií“
+- „Súhrn katalógu“
 - „Export CSV katalógu“
 - „Stav integrácie“
 - „Hromadná zmena cien o 5%“
 - „Optimalizuj copy produktu omega-3“
+- „SEO pre produkt reishi-extrakt“
+
+## E4 — Kvalita SK copy (`optimize_product_copy`)
+
+Tool generuje `title` + `short_description` po slovensky s GrowMedica tónom. Výstup prechádza:
+
+- **Compliance** — rovnaké zakázané vzory ako `checkCompliance` (liečba, vyliečenie, …)
+- **Dĺžka** — title 10–80 znakov, short_description 40–220 znakov
+- **Retry** — pri live Mistral jeden opakovaný pokus s feedbackom
+
+Súbory: `src/lib/dashboard-agent/copyQuality.ts`, `prompts/optimize-product-copy.ts`
+
+### Manuálny live test
+
+```bash
+MISTRAL_MOCK_MODE=0 MISTRAL_API_KEY=... yarn dev
+curl -s -X POST http://localhost:5555/api/dashboard/agent \
+  -H "Content-Type: application/json" \
+  -H "x-dashboard-agent-secret: local-dashboard-agent-secret-min-16-chars" \
+  -d '{"command":"Optimalizuj copy produktu proteiny-mock-1"}' | jq '.actions[] | select(.tool=="optimize_product_copy")'
+```
+
+### Automatické testy
+
+```bash
+yarn test:dashboard-agent          # mock — optimize_product_copy
+npx playwright test tests/integrity/copy-quality.spec.ts
+MISTRAL_API_KEY=... MISTRAL_MOCK_MODE=0 yarn playwright test tests/integrity/dashboard-agent-live.spec.ts
+MISTRAL_API_KEY=... node scripts/mistral-agent-live-smoke.mjs
+```
 
 ## Lokálny štart
 
@@ -86,10 +134,18 @@ WOO_MOCK_MODE=1
 MISTRAL_MOCK_MODE=1
 NEXT_PUBLIC_DASHBOARD_MODE=hybrid
 DASHBOARD_AGENT_SECRET=local-dashboard-agent-secret-min-16-chars
-NEXT_PUBLIC_DASHBOARD_URL=http://localhost:8080/wp-admin
+NEXT_PUBLIC_DASHBOARD_URL=https://growmedica-nexus.lovable.app/admin
 
 yarn dev
 # → http://localhost:5555/dashboard
+```
+
+## Live Mistral smoke
+
+```bash
+MISTRAL_MOCK_MODE=0 MISTRAL_API_KEY=... node scripts/mistral-agent-live-smoke.mjs
+# alebo
+MISTRAL_API_KEY=... yarn playwright test tests/integrity/dashboard-agent-live.spec.ts
 ```
 
 ## Testy
@@ -102,7 +158,7 @@ yarn test:dashboard-agent
 
 | Súbor | Účel |
 |---|---|
-| `src/lib/dashboard-agent/` | Orchestrator, tools, memory, audit |
-| `src/app/api/dashboard/` | Agent, audit, export API |
+| `src/lib/dashboard-agent/` | Orchestrator, tools, memory, audit, session |
+| `src/app/api/dashboard/` | Agent, audit, export, session API |
 | `src/components/dashboard/agent/` | UI Command Bar a panely |
 | `src/lib/dashboard.ts` | `getDashboardMode()`, `getDashboardUrl()` |

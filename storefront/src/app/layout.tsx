@@ -74,7 +74,7 @@ export default async function RootLayout({
         className={`${montserrat.variable} ${inter.variable} ${playfair.variable}`}
       >
         <body className="font-(--font-inter) antialiased" suppressHydrationWarning>
-          {children}
+          <LocaleProvider locale={locale}>{children}</LocaleProvider>
         </body>
       </html>
     )

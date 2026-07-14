@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   try {
     const params = Object.fromEntries(request.nextUrl.searchParams.entries())
     const { limit, offset } = querySchema.parse(params)
-    const entries = listAuditEntries(limit, offset)
+    const entries = await listAuditEntries(limit, offset)
     return NextResponse.json({ entries, limit, offset })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Audit request failed'

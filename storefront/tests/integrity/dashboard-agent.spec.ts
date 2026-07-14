@@ -65,10 +65,59 @@ test.describe('Dashboard Agent API', () => {
     expect(audit.entries[0].tool).toBeTruthy()
   })
 
-  test('/dashboard HTML contains command bar in agentic mode', async ({ request }) => {
+  test('catalog_summary tool returns stats', async ({ request }) => {
+    const response = await request.post('/api/dashboard/agent', {
+      headers: { ...AGENT_HEADERS, 'Content-Type': 'application/json' },
+      data: { command: 'Súhrn katalógu' },
+    })
+    const body = await response.json()
+    const action = body.actions.find((a: { tool: string }) => a.tool === 'catalog_summary')
+    expect(action).toBeTruthy()
+    expect(action.status).toBe('ok')
+    expect(action.result.product_count).toBeGreaterThan(0)
+  })
+
+  test('list_collections tool returns categories', async ({ request }) => {
+    const response = await request.post('/api/dashboard/agent', {
+      headers: { ...AGENT_HEADERS, 'Content-Type': 'application/json' },
+      data: { command: 'Zoznam kategórií' },
+    })
+    const body = await response.json()
+    const action = body.actions.find((a: { tool: string }) => a.tool === 'list_collections')
+    expect(action).toBeTruthy()
+    expect(action.status).toBe('ok')
+    expect(action.result.count).toBeGreaterThan(0)
+  })
+
+  test('POST /api/dashboard/session returns ok', async ({ request }) => {
+    const response = await request.post('/api/dashboard/session')
+    expect(response.ok()).toBe(true)
+    const body = await response.json()
+    expect(body.ok).toBe(true)
+  })
+
+  test('optimize_product_copy returns validated SK copy in mock mode', async ({ request }) => {
+    const response = await request.post('/api/dashboard/agent', {
+      headers: { ...AGENT_HEADERS, 'Content-Type': 'application/json' },
+      data: { command: 'Optimalizuj copy produktu proteiny-mock-1' },
+    })
+    expect(response.ok()).toBe(true)
+    const body = await response.json()
+    const action = body.actions.find(
+      (a: { tool: string }) => a.tool === 'optimize_product_copy',
+    )
+    expect(action).toBeTruthy()
+    expect(action.status).toBe('ok')
+    expect(action.result.title).toContain('optimalizované')
+    expect(action.result.short_description.length).toBeGreaterThanOrEqual(40)
+    expect(action.result.short_description).not.toMatch(/lieč/i)
+  })
+
+  test('/dashboard HTML contains command bar in agentic or hybrid mode', async ({ request }) => {
+    const mode = process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'hybrid'
     test.skip(
-      process.env.NEXT_PUBLIC_DASHBOARD_MODE !== 'agentic',
-      'Requires NEXT_PUBLIC_DASHBOARD_MODE=agentic',
+      mode !== 'agentic' && mode !== 'hybrid',
+      'Requires NEXT_PUBLIC_DASHBOARD_MODE=agentic or hybrid',
     )
 
     const response = await request.get('/dashboard')
@@ -76,5 +125,8 @@ test.describe('Dashboard Agent API', () => {
     const html = await response.text()
     expect(html).toContain('data-testid="dashboard-command-bar"')
     expect(html).toContain('data-testid="dashboard-shell"')
+    if (mode === 'hybrid') {
+      expect(html).toContain('data-testid="dashboard-tab-nexus"')
+    }
   })
 })

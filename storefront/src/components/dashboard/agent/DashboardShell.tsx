@@ -7,30 +7,36 @@ import AgentPanel, { type AgentChatMessage } from '@/components/dashboard/agent/
 import AuditLogPanel from '@/components/dashboard/agent/AuditLogPanel'
 import CommandBar from '@/components/dashboard/agent/CommandBar'
 import IntegrationStatus from '@/components/dashboard/agent/IntegrationStatus'
-import { DASHBOARD_AGENT_SECRET_HEADER } from '@/lib/dashboard-agent/auth'
+import { useLocale } from '@/components/i18n/LocaleProvider'
+import { dashboardFetch, ensureDashboardSession } from '@/lib/dashboard-agent/clientAuth'
 import { LEGACY_NEXUS_ADMIN_URL, type DashboardMode } from '@/lib/dashboard'
 import type { AgentRunResult } from '@/lib/dashboard-agent/types'
 
-type DashboardTab = 'agent' | 'wordpress'
+type DashboardTab = 'agent' | 'nexus'
 
 type DashboardShellProps = {
   mode: DashboardMode
   dashboardUrl?: string
-  agentSecret: string
 }
 
 const CONVERSATION_STORAGE_KEY = 'growmedica_dashboard_agent_conversation_id'
 
-export default function DashboardShell({ mode, dashboardUrl, agentSecret }: DashboardShellProps) {
+export default function DashboardShell({ mode, dashboardUrl }: DashboardShellProps) {
+  const { t } = useLocale()
   const showAgent = mode === 'agentic' || mode === 'hybrid'
-  const showWordpress = mode === 'iframe' || mode === 'hybrid'
-  const [activeTab, setActiveTab] = useState<DashboardTab>(showAgent ? 'agent' : 'wordpress')
+  const showNexus = mode === 'iframe' || mode === 'hybrid'
+  const [activeTab, setActiveTab] = useState<DashboardTab>(showAgent ? 'agent' : 'nexus')
   const [messages, setMessages] = useState<AgentChatMessage[]>([])
   const [conversationId, setConversationId] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [agentError, setAgentError] = useState<string | null>(null)
   const [auditRefreshKey, setAuditRefreshKey] = useState(0)
+  const [sessionReady, setSessionReady] = useState(false)
   const isDev = process.env.NODE_ENV === 'development'
+
+  useEffect(() => {
+    void ensureDashboardSession().then(setSessionReady)
+  }, [])
 
   useEffect(() => {
     const stored =
@@ -52,8 +58,8 @@ export default function DashboardShell({ mode, dashboardUrl, agentSecret }: Dash
   }, [])
 
   const runCommand = async (command: string) => {
-    if (!agentSecret) {
-      setAgentError('Chýba DASHBOARD_AGENT_SECRET v server env.')
+    if (!sessionReady) {
+      setAgentError(t('dashboard.error.noSession'))
       return
     }
 
@@ -62,12 +68,9 @@ export default function DashboardShell({ mode, dashboardUrl, agentSecret }: Dash
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/dashboard/agent', {
+      const response = await dashboardFetch('/api/dashboard/agent', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          [DASHBOARD_AGENT_SECRET_HEADER]: agentSecret,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           command,
           conversation_id: conversationId || undefined,
@@ -75,7 +78,7 @@ export default function DashboardShell({ mode, dashboardUrl, agentSecret }: Dash
       })
 
       const payload = (await response.json()) as AgentRunResult & { error?: string }
-      if (!response.ok) throw new Error(payload.error ?? 'Agent je dočasne nedostupný.')
+      if (!response.ok) throw new Error(payload.error ?? t('dashboard.error.agentUnavailable'))
 
       if (payload.conversation_id && payload.conversation_id !== conversationId) {
         setConversationId(payload.conversation_id)
@@ -90,7 +93,7 @@ export default function DashboardShell({ mode, dashboardUrl, agentSecret }: Dash
       ])
       setAuditRefreshKey((k) => k + 1)
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Nepodarilo sa spracovať príkaz.'
+      const message = error instanceof Error ? error.message : t('dashboard.error.commandFailed')
       setAgentError(message)
       setMessages((current) => [...current, { role: 'assistant', content: `❌ ${message}` }])
     } finally {
@@ -103,9 +106,10 @@ export default function DashboardShell({ mode, dashboardUrl, agentSecret }: Dash
       <header className="shrink-0 border-b border-(--color-border) px-4 py-3 sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-lg font-semibold text-(--color-text)">GrowMedica Dashboard</h1>
+            <h1 className="text-lg font-semibold text-(--color-text)">{t('dashboard.title')}</h1>
             <p className="text-xs text-(--color-text-muted)">
-              Mistral AI Command Bar · režim: <span className="font-medium">{mode}</span>
+              {t('dashboard.subtitle')} · {t('dashboard.modeLabel')}{' '}
+              <span className="font-medium">{mode}</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -116,7 +120,7 @@ export default function DashboardShell({ mode, dashboardUrl, agentSecret }: Dash
               className="btn btn-secondary text-xs"
               data-testid="dashboard-legacy-nexus-link"
             >
-              Legacy Nexus admin
+              {t('dashboard.legacyNexus')}
             </Link>
             {isDev && dashboardUrl && (
               <a
@@ -126,27 +130,27 @@ export default function DashboardShell({ mode, dashboardUrl, agentSecret }: Dash
                 className="btn btn-secondary text-xs"
                 data-testid="dashboard-dev-direct-link"
               >
-                Dev: WP admin
+                {t('dashboard.devNexus')}
               </a>
             )}
           </div>
         </div>
 
-        {showAgent && showWordpress && (
+        {showAgent && showNexus && (
           <div className="mt-3 flex gap-2" data-testid="dashboard-tabs">
             <TabButton
               active={activeTab === 'agent'}
               onClick={() => setActiveTab('agent')}
               testId="dashboard-tab-agent"
             >
-              AI Agent
+              {t('dashboard.tab.agent')}
             </TabButton>
             <TabButton
-              active={activeTab === 'wordpress'}
-              onClick={() => setActiveTab('wordpress')}
-              testId="dashboard-tab-wordpress"
+              active={activeTab === 'nexus'}
+              onClick={() => setActiveTab('nexus')}
+              testId="dashboard-tab-nexus"
             >
-              WordPress admin
+              {t('dashboard.tab.nexus')}
             </TabButton>
           </div>
         )}
@@ -154,34 +158,33 @@ export default function DashboardShell({ mode, dashboardUrl, agentSecret }: Dash
 
       {showAgent && (mode === 'agentic' || activeTab === 'agent') && (
         <main className="flex flex-1 flex-col gap-4 overflow-y-auto px-4 py-4 sm:px-6">
-          <IntegrationStatus agentSecret={agentSecret} />
-          <CommandBar disabled={isLoading} onSubmit={runCommand} />
+          <IntegrationStatus sessionReady={sessionReady} />
+          <CommandBar disabled={isLoading || !sessionReady} onSubmit={runCommand} />
           {agentError && (
             <p className="text-sm text-red-600" data-testid="dashboard-agent-error">
               {agentError}
             </p>
           )}
           <AgentPanel messages={messages} isLoading={isLoading} />
-          <AuditLogPanel agentSecret={agentSecret} refreshKey={auditRefreshKey} />
+          <AuditLogPanel sessionReady={sessionReady} refreshKey={auditRefreshKey} />
         </main>
       )}
 
-      {showWordpress && (mode === 'iframe' || activeTab === 'wordpress') && (
+      {showNexus && (mode === 'iframe' || activeTab === 'nexus') && (
         <main className="flex flex-1 flex-col overflow-hidden">
           {dashboardUrl ? (
-            <DashboardFrame src={dashboardUrl} />
+            <DashboardFrame src={dashboardUrl} title="GrowMedica Nexus Dashboard" />
           ) : (
             <div
               className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center"
               data-testid="dashboard-unconfigured"
             >
-              <h2 className="text-lg font-semibold text-(--color-text)">WordPress admin nie je nakonfigurovaný</h2>
+              <h2 className="text-lg font-semibold text-(--color-text)">{t('dashboard.nexusUnconfigured')}</h2>
               <p className="max-w-md text-sm text-(--color-text-muted)">
-                Nastavte{' '}
+                {t('dashboard.nexusUnconfiguredHint')}{' '}
                 <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
                   NEXT_PUBLIC_DASHBOARD_URL
-                </code>{' '}
-                na WordPress admin URL.
+                </code>
               </p>
             </div>
           )}
