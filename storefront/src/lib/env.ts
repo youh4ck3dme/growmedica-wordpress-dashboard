@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { getCmsProvider } from '@/lib/cms'
+import { isShopifyTokenlessMode } from '@/lib/shopify/config'
 
 const wordpressEnvSchema = z.object({
   WORDPRESS_BASE_URL: z
@@ -30,20 +31,40 @@ function readShopifyStorefrontToken(): string | undefined {
   )
 }
 
-const shopifyEnvSchema = z.object({
-  SHOPIFY_STORE_DOMAIN: z
-    .string()
-    .min(1, 'SHOPIFY_STORE_DOMAIN is required')
-    .refine((v) => v.endsWith('.myshopify.com'), {
-      message: 'SHOPIFY_STORE_DOMAIN must end with .myshopify.com',
-    }),
-  SHOPIFY_STOREFRONT_ACCESS_TOKEN: z
-    .string()
-    .min(1, 'SHOPIFY_STOREFRONT_ACCESS_TOKEN is required'),
-  SHOPIFY_API_VERSION: z
-    .string()
-    .regex(/^\d{4}-\d{2}$/, 'SHOPIFY_API_VERSION must match YYYY-MM'),
-})
+const shopifyEnvSchema = z
+  .object({
+    SHOPIFY_STORE_DOMAIN: z
+      .string()
+      .min(1, 'SHOPIFY_STORE_DOMAIN is required')
+      .refine((v) => v.endsWith('.myshopify.com'), {
+        message: 'SHOPIFY_STORE_DOMAIN must end with .myshopify.com',
+      }),
+    SHOPIFY_STOREFRONT_ACCESS_TOKEN: z.string().optional(),
+    SHOPIFY_API_VERSION: z
+      .string()
+      .regex(/^\d{4}-\d{2}$/, 'SHOPIFY_API_VERSION must match YYYY-MM'),
+  })
+  .superRefine((data, ctx) => {
+    if (isShopifyTokenlessMode()) return
+
+    const token = data.SHOPIFY_STOREFRONT_ACCESS_TOKEN?.trim()
+    if (!token) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['SHOPIFY_STOREFRONT_ACCESS_TOKEN'],
+        message:
+          'SHOPIFY_STOREFRONT_ACCESS_TOKEN is required (or set SHOPIFY_STOREFRONT_TOKENLESS=1 for tokenless Storefront API)',
+      })
+      return
+    }
+    if (token.startsWith('shpat_')) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['SHOPIFY_STOREFRONT_ACCESS_TOKEN'],
+        message: 'SHOPIFY_STOREFRONT_ACCESS_TOKEN must not be Admin token (shpat_)',
+      })
+    }
+  })
 
 const revalidationSecretSchema = z
   .string()

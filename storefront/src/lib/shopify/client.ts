@@ -9,6 +9,7 @@
  */
 
 import { env } from '@/lib/env'
+import { buildStorefrontHeaders } from './config'
 import { getMockShopifyResponse, isShopifyMockMode } from './mock'
 import type { ShopifyResponse } from './types'
 
@@ -46,11 +47,7 @@ export async function shopifyFetch<T>({
 
   const response = await fetch(getShopifyGraphqlUrl(), {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': env.SHOPIFY_STOREFRONT_ACCESS_TOKEN,
-      'X-Shopify-Api-Version': env.SHOPIFY_API_VERSION,
-    },
+    headers: buildStorefrontHeaders(env.SHOPIFY_API_VERSION, env.SHOPIFY_STOREFRONT_ACCESS_TOKEN),
     body: JSON.stringify({ query, variables }),
     cache,
     next: Object.keys(nextOptions).length > 0 ? nextOptions : undefined,

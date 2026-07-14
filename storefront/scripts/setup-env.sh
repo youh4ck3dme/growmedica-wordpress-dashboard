@@ -112,6 +112,9 @@ prompt_api_version
 prompt_site_url
 
 cat > "$ENV_FILE" <<EOF
+# CMS — live Shopify catalog (growmedica.myshopify.com)
+CMS_PROVIDER=shopify
+
 # Shopify — server-side only (never commit)
 SHOPIFY_STORE_DOMAIN=${SHOPIFY_STORE_DOMAIN}
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=${SHOPIFY_STOREFRONT_ACCESS_TOKEN}
@@ -131,6 +134,14 @@ echo "Kontrola (bez tokenov):"
 grep -E '^(SHOPIFY_STORE_DOMAIN|SHOPIFY_API_VERSION|NEXT_PUBLIC_SITE_URL)=' "$ENV_FILE"
 grep -q '^SHOPIFY_STOREFRONT_ACCESS_TOKEN=.' "$ENV_FILE" && echo "SHOPIFY_STOREFRONT_ACCESS_TOKEN=PRESENT" || echo "SHOPIFY_STOREFRONT_ACCESS_TOKEN=MISSING"
 grep -q '^SHOPIFY_REVALIDATION_SECRET=.' "$ENV_FILE" && echo "SHOPIFY_REVALIDATION_SECRET=PRESENT" || echo "SHOPIFY_REVALIDATION_SECRET=MISSING"
+
+grep -q '^CMS_PROVIDER=shopify' "$ENV_FILE" && echo "CMS_PROVIDER=shopify" || echo "CMS_PROVIDER=MISSING"
+
+echo ""
+read -r -p "Spustit yarn shopify:smoke na overenie Storefront API? [Y/n]: " run_smoke
+if [[ "${run_smoke:-Y}" =~ ^[Yy]$ ]]; then
+  node scripts/shopify-smoke-test.mjs && echo "Shopify smoke OK."
+fi
 
 echo ""
 read -r -p "Spustit yarn build na overenie env.ts? [Y/n]: " run_build

@@ -21,7 +21,7 @@ const shopifyTestEnv: Record<string, string> = {
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY ?? 'mock-mistral-api-key',
   MISTRAL_MODEL: process.env.MISTRAL_MODEL ?? 'mistral-large-latest',
   NEXT_PUBLIC_DEFAULT_LOCALE: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'sk',
-  NEXT_PUBLIC_DASHBOARD_MODE: process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'iframe',
+  NEXT_PUBLIC_DASHBOARD_MODE: process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'hybrid',
   DASHBOARD_AGENT_SECRET:
     process.env.DASHBOARD_AGENT_SECRET ?? 'mock-dashboard-agent-secret-123456',
   NEXT_PUBLIC_DASHBOARD_URL:
@@ -44,6 +44,21 @@ if (dashboardTestUrl) {
 
 const playwrightEnv = isWooTest ? wooTestEnv : shopifyTestEnv;
 
+const requestedSpecFiles = process.argv.filter((arg) => arg.endsWith('.spec.ts'));
+const onlyShopifyLiveSpec =
+  requestedSpecFiles.length > 0 &&
+  requestedSpecFiles.every((arg) => arg.includes('shopify-live.spec.ts'));
+const skipWebServer =
+  process.env.PLAYWRIGHT_SKIP_WEBSERVER === '1' || onlyShopifyLiveSpec;
+
+const playwrightWebServer = {
+  command: `node scripts/ensure-dev-port.mjs ${playwrightDevPort} && node scripts/playwright-dev.mjs ${playwrightDevPort}`,
+  url: playwrightDevUrl,
+  reuseExistingServer: !process.env.CI,
+  timeout: 120_000,
+  env: playwrightEnv,
+};
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -51,21 +66,17 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [['list'], ['html', { open: 'never' }]],
-  webServer: isPwaProductionTest
-    ? {
-        command: 'yarn start --port 5556',
-        url: 'http://127.0.0.1:5556',
-        reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
-        env: playwrightEnv,
-      }
-    : {
-        command: `node scripts/ensure-dev-port.mjs ${playwrightDevPort} && node scripts/playwright-dev.mjs ${playwrightDevPort}`,
-        url: playwrightDevUrl,
-        reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
-        env: playwrightEnv,
-      },
+  webServer: skipWebServer
+    ? undefined
+    : isPwaProductionTest
+      ? {
+          command: 'yarn start --port 5556',
+          url: 'http://127.0.0.1:5556',
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+          env: playwrightEnv,
+        }
+      : playwrightWebServer,
   use: {
     baseURL: isPwaProductionTest
       ? 'http://127.0.0.1:5556'

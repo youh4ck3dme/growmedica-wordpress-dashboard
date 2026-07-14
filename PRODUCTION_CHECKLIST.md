@@ -1,9 +1,38 @@
-# Production cutover checklist — GrowMedica WordPress
+# Production cutover checklist — GrowMedica
 
 **Aktualizované:** 14. júl 2026  
 **UI/UX:** Storefront UI sa pri cutoveri nemení — len infra, env a dáta.
 
-## Vercel env (`growmedica-wordpress-dashboard`)
+**Aktuálna priorita:** live katalóg zo **Shopify** (`growmedica.myshopify.com`). WordPress produkcia (`cms.growmedica.cz`) je odložená.
+
+Detail: [storefront/docs/SHOPIFY_LIVE.md](./storefront/docs/SHOPIFY_LIVE.md)
+
+## Vercel env — Shopify live (`growmedica-wordpress-dashboard`)
+
+| Premenná | Hodnota |
+|----------|---------|
+| `CMS_PROVIDER` | `shopify` |
+| `SHOPIFY_STORE_DOMAIN` | `growmedica.myshopify.com` |
+| `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | Storefront API token (**nie** `shpat_`) — alebo `SHOPIFY_STOREFRONT_TOKENLESS=1` |
+| `SHOPIFY_REVALIDATION_SECRET` | min. 16 znakov |
+| `SHOPIFY_API_VERSION` | `2025-01` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.growmedica.cz` |
+| `NEXT_PUBLIC_DASHBOARD_URL` | `https://growmedica-nexus.lovable.app/admin` |
+| `NEXT_PUBLIC_DASHBOARD_MODE` | `hybrid` |
+| `NEXT_PUBLIC_DEFAULT_LOCALE` | `sk` |
+| `MISTRAL_API_KEY` | produkčný kľúč (voliteľné) |
+| `DASHBOARD_AGENT_SECRET` | min. 16 znakov |
+
+**Odstrániť z Vercel:** `SHOPIFY_MOCK_MODE`, `WOO_MOCK_MODE` (pri Shopify režime).
+
+Skript:
+
+```bash
+cd storefront
+SHOPIFY_STOREFRONT_ACCESS_TOKEN=... ./scripts/set-shopify-vercel-env.sh --deploy
+```
+
+## Vercel env — WordPress (odložené / rollback)
 
 | Premenná | Hodnota |
 |----------|---------|
@@ -13,9 +42,7 @@
 | `WOO_CONSUMER_SECRET` | `cs_...` (server-only) |
 | `WORDPRESS_REVALIDATION_SECRET` | min. 16 znakov |
 | `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.cz/wp-admin` |
-| `NEXT_PUBLIC_SITE_URL` | `https://growmedica.cz` |
-| `NEXT_PUBLIC_DEFAULT_LOCALE` | `sk` (fallback; primárne geo podľa IP) |
-| `MISTRAL_API_KEY` | produkčný kľúč |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.growmedica.cz` |
 
 ## DNS
 
@@ -43,20 +70,38 @@ yarn import:categories
 yarn import:products
 ```
 
-## Pre-deploy overenie
+## Pre-deploy overenie (Shopify)
 
 ```bash
 cd storefront
+yarn setup:env              # lokálne — Storefront token
+yarn shopify:smoke
+yarn shopify:collections-audit
 yarn type-check
 yarn build
 yarn test:integrity
-CMS_PROVIDER=wordpress WOO_MOCK_MODE=1 yarn test:woo:integrity
-PREVIEW_URL=https://<preview-url> node scripts/production-smoke.mjs
+PREVIEW_URL=https://www.growmedica.cz yarn production:smoke
+curl -s https://www.growmedica.cz/api/products | head -c 400
 ```
+
+## Nexus admin — Shopify integrácia
+
+V **growmedica-nexus.lovable.app** → Shopify formulár:
+
+| Pole | Hodnota |
+|------|---------|
+| Store domain | `growmedica.myshopify.com` |
+| Admin access token | `shpat_…` |
+| Storefront access token | Storefront token (nie `shpat_`) |
+| API verzia | `2025-01` |
+
+Po uložení: **test pripojenia** v Nexus UI.
 
 ## Rollback
 
-Nastavte `CMS_PROVIDER=shopify` a Shopify env na Vercel. Shopify vrstva zostáva v `src/lib/shopify/` ako legacy fallback.
+**Na WordPress mock:** `CMS_PROVIDER=wordpress`, `WOO_MOCK_MODE=1`, redeploy.
+
+**Späť na Shopify:** `./scripts/set-shopify-vercel-env.sh --deploy`
 
 ## Súvisiace dokumenty
 
