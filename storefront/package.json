@@ -29,6 +29,7 @@
     "inventory:fix:apply": "node scripts/fix-shopify-inventory.mjs --apply",
     "inventory:fix:dry": "node scripts/fix-shopify-inventory.mjs --dry-run",
     "vercel:site-url": "bash scripts/set-vercel-site-url.sh",
+    "vercel:wordpress-env": "bash scripts/set-wordpress-vercel-env.sh",
     "test:ui": "playwright test --ui",
     "woo:smoke": "bash scripts/woo-smoke-test.sh",
     "import:categories": "node scripts/import-woo-categories.mjs",
