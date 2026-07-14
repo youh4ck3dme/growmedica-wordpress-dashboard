@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 48" fill="none">
+  <defs>
+    <linearGradient id="crossMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8ECF0"/>
+      <stop offset="50%" stop-color="#B8C4CE"/>
+      <stop offset="100%" stop-color="#8A9BAA"/>
+    </linearGradient>
+    <linearGradient id="leafGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6DD4A8"/>
+      <stop offset="100%" stop-color="#35C79A"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="8" width="12" height="32" rx="3" fill="url(#crossMetal)"/>
+  <rect x="0" y="18" width="24" height="12" rx="3" fill="url(#crossMetal)"/>
+  <path d="M14 28C14 28 22 26 24 32C26 38 20 42 16 40C12 38 10 34 12 30C13 28.5 14 28 14 28Z" fill="url(#leafGreen)"/>
+  <text x="34" y="22" font-family="Montserrat, sans-serif" font-weight="800" font-size="16" fill="#FFFFFF">Grow</text>
+  <text x="78" y="22" font-family="Montserrat, sans-serif" font-weight="800" font-size="16" fill="#35C79A">Medica</text>
+  <text x="138" y="22" font-family="Montserrat, sans-serif" font-weight="800" font-size="16" fill="#D1D5DB">.sk</text>
+</svg>

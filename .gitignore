@@ -1,0 +1,39 @@
+.env
+.env.*
+!.env.example
+!.env.local.example
+dump.sql
+*.sql
+*.sql.gz
+*.gz
+backups/
+database/
+stats/
+.DS_Store
+export/shopify/*.csv
+reports/*.csv
+docs/products_export_shopify.zip
+docs/*.mp4
+docs/video_*.mp4
+
+# Cursor / local IDE artifacts
+canvases/
+.cursor/plans/
+
+# Legacy admin assets (not tracked; storefront is Next.js in storefront/)
+/js/
+
+# Vercel CLI link metadata (projectId/orgId — never commit)
+.vercel/
+**/.vercel/
+storefront/.vercel/
+.vercel
+
+# Firebase agent blueprint — obsahuje production secrets (nikdy necommitovať)
+storefront/docs/FIREBASE_AGENT_BLUEPRINT.md
+storefront/docs/FIREBASE_AGENT_BLUEPRINT.secrets.env
+storefront/docs/FIREBASE_AGENT_BLUEPRINT.local.md
+storefront/docs/SHOPIFY_WEBHOOK_SETUP.md
+storefront/docs/SHOPIFY_WEBHOOK_SETUP.local.md
+supa.md
+.pnpm-store/

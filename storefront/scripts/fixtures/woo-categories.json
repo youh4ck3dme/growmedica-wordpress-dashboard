@@ -1,0 +1,72 @@
+[
+  {
+    "slug": "proteiny",
+    "title": "Proteíny",
+    "description": "Proteínové doplnky na podporu rastu a udržania svalovej hmoty."
+  },
+  {
+    "slug": "aminokyseliny",
+    "title": "Aminokyseliny",
+    "description": "Esenciálne aminokyseliny a BCAA pre výkon, regeneráciu a svalovú výživu."
+  },
+  {
+    "slug": "sportova-vyziva",
+    "title": "Športová výživa",
+    "description": "Energetické a výkonnostné doplnky pre aktívny životný štýl."
+  },
+  {
+    "slug": "regeneracia",
+    "title": "Regenerácia",
+    "description": "Produkty na podporu zotavenia po fyzickej námahe."
+  },
+  {
+    "slug": "zdrave-potraviny",
+    "title": "Zdravé potraviny",
+    "description": "Superpotraviny a funkčné potraviny pre každodennú výživu."
+  },
+  {
+    "slug": "vitaminy-mineraly",
+    "title": "Vitamíny a minerály",
+    "description": "Základné vitamíny a minerály pre imunitu a celkové zdravie."
+  },
+  {
+    "slug": "klby-pohyb",
+    "title": "Kĺby a pohyb",
+    "description": "Podpora kĺbov, chrupaviek a pohybového aparátu."
+  },
+  {
+    "slug": "imunita",
+    "title": "Imunita",
+    "description": "Posilnenie prirodzenej obranyschopnosti organizmu."
+  },
+  {
+    "slug": "travenie",
+    "title": "Trávenie",
+    "description": "Probiotiká, enzýmy a vláknina pre zdravé trávenie."
+  },
+  {
+    "slug": "srdce-cievy",
+    "title": "Srdce a cievy",
+    "description": "Podpora kardiovaskulárneho systému."
+  },
+  {
+    "slug": "spanok-stres",
+    "title": "Spánok a stres",
+    "description": "Relaxácia, kvalitný spánok a zvládanie stresu."
+  },
+  {
+    "slug": "krasa-pokozka",
+    "title": "Krása a pokožka",
+    "description": "Kolagén, kozmetické doplnky a starostlivosť o pokožku."
+  },
+  {
+    "slug": "detox-pecen",
+    "title": "Detox a pečeň",
+    "description": "Podpora detoxikácie a zdravia pečene."
+  },
+  {
+    "slug": "specialna-vyziva",
+    "title": "Špeciálna výživa",
+    "description": "Mykologické produkty, špecializované doplnky a zdravotné riešenia."
+  }
+]

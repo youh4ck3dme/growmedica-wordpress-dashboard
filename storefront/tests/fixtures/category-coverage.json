@@ -1,0 +1,113 @@
+{
+  "generatedAt": "2026-06-07T08:10:17.506144+00:00",
+  "source": "docs/products_export_shopify.zip",
+  "totalActive": 460,
+  "coveredCount": 446,
+  "ostatneCount": 14,
+  "coveragePercent": 97.0,
+  "counts": {
+    "sportova-vyziva": 1,
+    "regeneracia": 68,
+    "zdrave-potraviny": 56,
+    "vitaminy-mineraly": 37,
+    "klby-pohyb": 29,
+    "imunita": 64,
+    "travenie": 25,
+    "srdce-cievy": 33,
+    "spanok-stres": 12,
+    "krasa-pokozka": 75,
+    "detox-pecen": 9,
+    "proteiny": 2,
+    "aminokyseliny": 4,
+    "specialna-vyziva": 31,
+    "ostatne": 14
+  },
+  "categories": [
+    {
+      "slug": "sportova-vyziva",
+      "title": "Športová výživa",
+      "count": 1
+    },
+    {
+      "slug": "regeneracia",
+      "title": "Regeneračné doplnky",
+      "count": 68
+    },
+    {
+      "slug": "zdrave-potraviny",
+      "title": "Zdravé potraviny",
+      "count": 56
+    },
+    {
+      "slug": "vitaminy-mineraly",
+      "title": "Vitamíny a minerály",
+      "count": 37
+    },
+    {
+      "slug": "klby-pohyb",
+      "title": "Kĺby a pohyb",
+      "count": 29
+    },
+    {
+      "slug": "imunita",
+      "title": "Imunita",
+      "count": 64
+    },
+    {
+      "slug": "travenie",
+      "title": "Trávenie",
+      "count": 25
+    },
+    {
+      "slug": "srdce-cievy",
+      "title": "Srdce a cievy",
+      "count": 33
+    },
+    {
+      "slug": "spanok-stres",
+      "title": "Spánok a stres",
+      "count": 12
+    },
+    {
+      "slug": "krasa-pokozka",
+      "title": "Krása a pokožka",
+      "count": 75
+    },
+    {
+      "slug": "detox-pecen",
+      "title": "Detox a pečeň",
+      "count": 9
+    },
+    {
+      "slug": "proteiny",
+      "title": "Proteíny",
+      "count": 2
+    },
+    {
+      "slug": "aminokyseliny",
+      "title": "Aminokyseliny",
+      "count": 4
+    },
+    {
+      "slug": "specialna-vyziva",
+      "title": "Špeciálna výživa",
+      "count": 31
+    }
+  ],
+  "ostatneHandles": [
+    "energy-winter-balm",
+    "energy-droserin-balm",
+    "energy-cytosan-sampon",
+    "energy-water-balance",
+    "energy-tick",
+    "energy-zen-spray",
+    "alpa-masazay-olej-zakladny",
+    "alpa-herbal-hrejivy-masany-krm",
+    "chaga",
+    "yaomedica-reishi",
+    "zbystrenie-zmyslov",
+    "opity-majster",
+    "posilnenie-opory",
+    "bio-polyporus-prasok-100g-odvodhuje-organizmus"
+  ]
+}

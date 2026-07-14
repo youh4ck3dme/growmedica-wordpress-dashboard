@@ -1,0 +1,64 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files — NEVER commit real tokens
+.env
+.env.*
+!.env.example
+
+# Vercel CLI link metadata (projectId/orgId — never commit)
+.vercel/
+**/.vercel/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# playwright
+/playwright-report/
+/test-results/
+
+# Lighthouse audit exports (local only — huge JSON)
+.lighthouse/
+
+# Local docs binaries (canonical media lives in public/)
+docs/*.mp4
+docs/*.zip
+docs/komponents.zip
+
+# Firebase hosting experiments — commit only when intentionally adopted
+/firebase.json
+/apphosting.yaml
+
+# Serwist (generated at build)
+public/sw*
+public/swe-worker*
+
+# alternate package managers (project uses yarn)
+pnpm-lock.yaml
+pnpm-workspace.yaml
+.vercel

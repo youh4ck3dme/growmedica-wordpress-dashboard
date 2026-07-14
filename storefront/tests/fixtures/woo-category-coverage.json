@@ -1,0 +1,22 @@
+{
+  "totalActive": 45,
+  "coveredCount": 45,
+  "ostatneCount": 0,
+  "coveragePercent": 100,
+  "counts": {
+    "proteiny": 3,
+    "aminokyseliny": 3,
+    "sportova-vyziva": 3,
+    "regeneracia": 3,
+    "zdrave-potraviny": 3,
+    "vitaminy-mineraly": 3,
+    "klby-pohyb": 3,
+    "imunita": 3,
+    "travenie": 3,
+    "srdce-cievy": 3,
+    "spanok-stres": 3,
+    "krasa-pokozka": 3,
+    "detox-pecen": 3,
+    "specialna-vyziva": 3
+  }
+}

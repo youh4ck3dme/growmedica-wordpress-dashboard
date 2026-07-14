@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Vitamin C 1000 mg",
+    "slug": "vitamin-c-1000-mg",
+    "sku": "GM-VIT-C-1000",
+    "regular_price": "12.90",
+    "category": "vitaminy-mineraly",
+    "stock_quantity": 100,
+    "short_description": "Vitamín C pre podporu imunity.",
+    "description": "<p>Vysoká dávka vitamínu C pre každodennú podporu imunitného systému.</p>"
+  },
+  {
+    "name": "Magnesium B6",
+    "slug": "magnesium-b6",
+    "sku": "GM-MG-B6",
+    "regular_price": "9.50",
+    "category": "vitaminy-mineraly",
+    "stock_quantity": 80,
+    "short_description": "Horčík s vitamínom B6 pre svaly a nervy.",
+    "description": "<p>Kombinácia horčíka a B6 pre regeneráciu a kvalitný spánok.</p>"
+  },
+  {
+    "name": "Whey Protein 80%",
+    "slug": "whey-protein-80",
+    "sku": "GM-WHEY-80",
+    "regular_price": "29.90",
+    "category": "proteiny",
+    "stock_quantity": 50,
+    "short_description": "Srvátkový proteín s vysokým obsahom bielkovín.",
+    "description": "<p>Prémiový whey proteín pre rast a udržanie svalovej hmoty.</p>"
+  },
+  {
+    "name": "BCAA 2:1:1",
+    "slug": "bcaa-211",
+    "sku": "GM-BCAA",
+    "regular_price": "18.50",
+    "category": "aminokyseliny",
+    "stock_quantity": 60,
+    "short_description": "Esenciálne aminokyseliny pre regeneráciu.",
+    "description": "<p>BCAA v pomere 2:1:1 pre športovcov a aktívnych ľudí.</p>"
+  },
+  {
+    "name": "Cordyceps sinensis",
+    "slug": "cordyceps-sinensis",
+    "sku": "GM-CORDY",
+    "regular_price": "16.20",
+    "category": "imunita",
+    "stock_quantity": 40,
+    "short_description": "Huba cordyceps pre vitalitu a imunitu.",
+    "description": "<p>Mykologický extrakt cordyceps pre podporu energie a imunity.</p>"
+  },
+  {
+    "name": "Omega-3 Premium",
+    "slug": "omega-3-premium",
+    "sku": "GM-OM3",
+    "regular_price": "14.90",
+    "category": "srdce-cievy",
+    "stock_quantity": 70,
+    "short_description": "Rybie oleje s vysokým obsahom EPA a DHA.",
+    "description": "<p>Podpora srdca, mozgu a zdravých ciev.</p>"
+  },
+  {
+    "name": "Kolagén Marine",
+    "slug": "kolagen-marine",
+    "sku": "GM-COL",
+    "regular_price": "22.00",
+    "category": "krasa-pokozka",
+    "stock_quantity": 45,
+    "short_description": "Morský kolagén pre pokožku a kĺby.",
+    "description": "<p>Hydrolyzovaný morský kolagén typu I.</p>"
+  },
+  {
+    "name": "Probiotiká 10 miliárd",
+    "slug": "probiotika-10-miliard",
+    "sku": "GM-PROB",
+    "regular_price": "19.90",
+    "category": "travenie",
+    "stock_quantity": 55,
+    "short_description": "10 miliárd CFU pre zdravé črevá.",
+    "description": "<p>Multi-strain probiotiká pre podporu trávenia.</p>"
+  },
+  {
+    "name": "Glukosamín Chondroitín",
+    "slug": "glukosamin-chondroitin",
+    "sku": "GM-GLU",
+    "regular_price": "17.50",
+    "category": "klby-pohyb",
+    "stock_quantity": 35,
+    "short_description": "Podpora kĺbov a chrupaviek.",
+    "description": "<p>Glukosamín a chondroitín pre pohybový aparát.</p>"
+  },
+  {
+    "name": "Ashwagandha KSM-66",
+    "slug": "ashwagandha-ksm66",
+    "sku": "GM-ASH",
+    "regular_price": "15.90",
+    "category": "spanok-stres",
+    "stock_quantity": 65,
+    "short_description": "Adaptogén pre stres a spánok.",
+    "description": "<p>Standardizovaný extrakt ashwagandha KSM-66.</p>"
+  },
+  {
+    "name": "Milk Thistle",
+    "slug": "milk-thistle",
+    "sku": "GM-MILK",
+    "regular_price": "11.90",
+    "category": "detox-pecen",
+    "stock_quantity": 40,
+    "short_description": "Pestrec mariánsky pre pečeň.",
+    "description": "<p>Extrakt z pestreca pre detoxikáciu pečene.</p>"
+  },
+  {
+    "name": "Creatine Monohydrate",
+    "slug": "creatine-monohydrate",
+    "sku": "GM-CREAT",
+    "regular_price": "13.50",
+    "category": "sportova-vyziva",
+    "stock_quantity": 90,
+    "short_description": "Kreatín monohydrát pre silu a výkon.",
+    "description": "<p>Čistý kreatín monohydrát bez prídavkov.</p>"
+  },
+  {
+    "name": "Spirulina Bio",
+    "slug": "spirulina-bio",
+    "sku": "GM-SPIR",
+    "regular_price": "10.90",
+    "category": "zdrave-potraviny",
+    "stock_quantity": 75,
+    "short_description": "Bio spirulina — superpotravina.",
+    "description": "<p>100% bio spirulina v tabletách.</p>"
+  },
+  {
+    "name": "Regeneračný balíček",
+    "slug": "regeneracny-balicek",
+    "sku": "GM-REG-BUNDLE",
+    "regular_price": "34.90",
+    "category": "regeneracia",
+    "stock_quantity": 25,
+    "short_description": "Balíček pre rýchlejšie zotavenie.",
+    "description": "<p>Kombinácia produktov pre regeneráciu po tréningu.</p>"
+  },
+  {
+    "name": "Reishi Extrakt",
+    "slug": "reishi-extrakt",
+    "sku": "GM-REISHI",
+    "regular_price": "18.90",
+    "category": "specialna-vyziva",
+    "stock_quantity": 30,
+    "short_description": "Extrakt huby reishi.",
+    "description": "<p>Mykologický produkt pre imunitu a vitalitu.</p>"
+  }
+]

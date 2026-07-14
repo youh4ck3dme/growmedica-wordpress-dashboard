@@ -1,0 +1,45 @@
+# GrowMedica WordPress + WooCommerce — local dev CMS
+# Usage: docker compose up -d
+# CMS:   http://localhost:8080
+# Admin: http://localhost:8080/wp-admin
+# API:   http://localhost:8080/wp-json/wc/v3/products?per_page=1
+
+services:
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: growmedica
+      MYSQL_USER: growmedica
+      MYSQL_PASSWORD: growmedica_local
+      MYSQL_ROOT_PASSWORD: root_local
+    volumes:
+      - woo_db:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  wordpress:
+    image: wordpress:6.7-php8.2-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '8080:80'
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: growmedica
+      WORDPRESS_DB_PASSWORD: growmedica_local
+      WORDPRESS_DB_NAME: growmedica
+      WORDPRESS_TABLE_PREFIX: gm_
+      WORDPRESS_DEBUG: '1'
+    volumes:
+      - woo_wp:/var/www/html
+      - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+
+volumes:
+  woo_db:
+  woo_wp:
