@@ -1,0 +1,33 @@
+{
+  "products": [
+    {
+      "slug": "imunita-mock-1",
+      "name": "imunita-mock-1 Mock 0",
+      "sku": "MOCK-imunita-mock-1-0",
+      "price": "9.00",
+      "category": "imunita",
+      "variantId": "gid://woocommerce/ProductVariant/1000",
+      "inStock": true
+    },
+    {
+      "slug": "vitaminy-mineraly-mock-1",
+      "name": "vitaminy-mineraly-mock-1 Mock 3",
+      "sku": "MOCK-vitaminy-mineraly-mock-1-3",
+      "price": "18.00",
+      "category": "vitaminy-mineraly",
+      "variantId": "gid://woocommerce/ProductVariant/1003",
+      "inStock": true
+    },
+    {
+      "slug": "mycomedica-cordyceps-50-90-rastlinnych-kapsul",
+      "name": "mycomedica-cordyceps-50-90-rastlinnych-kapsul Mock 42",
+      "sku": "MOCK-mycomedica-cordyceps-50-90-rastlinnych-kapsul-42",
+      "price": "135.00",
+      "category": "imunita",
+      "variantId": "gid://woocommerce/ProductVariant/1042",
+      "inStock": true
+    }
+  ],
+  "total": 45,
+  "categories": 14
+}

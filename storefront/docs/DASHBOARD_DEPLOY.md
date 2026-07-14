@@ -10,37 +10,46 @@ Vzor je analogický k NOOR demo ([`NOOR_DEMO_DEPLOY.md`](./NOOR_DEMO_DEPLOY.md))
 
 ## Architektúra
 
-| | Storefront (tento projekt) | growmedica-nexus |
+| | Storefront (tento projekt) | WordPress CMS |
 |---|---|---|
-| **Stack** | Next.js 15 App Router v `storefront/` | TanStack Start + Vite + Supabase/Firebase |
-| **Admin routy** | `/dashboard` (iframe bridge) | `/admin`, `/admin/produkty`, `/admin/objednavky`, … |
-| **Vercel project** | `growmedicanextjs` | `growmedica-nexus` (nový) |
-| **Git repo** | [you640/c1growmedical-full-web](https://github.com/you640/c1growmedical-full-web) | [you640/growmedica-nexus](https://github.com/you640/growmedica-nexus) |
+| **Stack** | Next.js 15 App Router v `storefront/` | WordPress 6.7 + WooCommerce |
+| **Admin** | `/dashboard` (iframe bridge) | `/wp-admin` |
+| **Produkcia** | `https://growmedica.sk/dashboard` | `https://cms.growmedica.sk/wp-admin` |
 
-Používateľ naviguje na `https://<storefront>/dashboard`. URL v prehliadači zostáva `/dashboard`; navigácia v dashboarde prebieha vnútri iframe.
+Používateľ naviguje na `https://growmedica.sk/dashboard`. URL v prehliadači zostáva `/dashboard`; navigácia v dashboarde prebieha vnútri iframe.
+
+**Legacy:** growmedica-nexus (`https://growmedica-nexus.lovable.app/admin`) — len rollback fallback v `.env.example`.
 
 ## Storefront — env premenné
 
 | Premenná | Príklad | Účel |
 |---|---|---|
-| `NEXT_PUBLIC_DASHBOARD_URL` | `https://growmedica-nexus.lovable.app/admin` | `src` atribút iframe na `/dashboard` |
+| `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.sk/wp-admin` | `src` atribút iframe na `/dashboard` |
 
-Nastaviť vo Vercel projekte **`growmedicanextjs`** (Production + Preview podľa potreby).
-
-Ak premenná chýba, `/dashboard` zobrazí dev-friendly fallback (nie 500).
+Ak premenná chýba, `/dashboard` zobrazí fallback s odkazom na legacy Nexus.
 
 ### Lokálny vývoj
 
 ```bash
 cd storefront
 # .env.local
-NEXT_PUBLIC_DASHBOARD_URL=https://growmedica-nexus.lovable.app/admin
+NEXT_PUBLIC_DASHBOARD_URL=http://localhost:8080/wp-admin
 yarn dev
 ```
 
 Otvorte `http://localhost:5555/dashboard`.
 
-**CSP `frame-ancestors`:** Nexus musí povoliť origin storefrontu (`http://localhost:5555`, prípadne `http://127.0.0.1:5555`). Tieto hodnoty sú v `DEFAULT_FRAME_ANCESTORS` v growmedica-nexus a v `ALLOWED_FRAME_ANCESTORS` na Vercel. Ak iframe stále blokuje prehliadač, buď redeploy Nexus po zmene CSP, alebo spustite Nexus lokálne a nastavte `NEXT_PUBLIC_DASHBOARD_URL=http://localhost:8080/admin` (plne lokálny iframe bez cross-origin embedu).
+### WordPress `frame-ancestors`
+
+WordPress musí povoliť embed zo storefront originov. Do `wp-config.php` alebo security pluginu:
+
+```
+frame-ancestors 'self' https://growmedica.sk https://*.vercel.app http://localhost:5555 http://127.0.0.1:5555;
+```
+
+Ak iframe auth nefunguje (cookies third-party), použite **Application Passwords** alebo tlačidlo „Otvoriť WordPress admin priamo“ v `DashboardFrame`.
+
+Storefront CSP (`next.config.ts`): `frame-src 'self' https://cms.growmedica.sk` pre `/dashboard`.
 
 ## Storefront — implementácia (tento repozitár)
 

@@ -1,11 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
+import { wooTestEnv } from './tests/helpers/woo-env';
 
 const isPwaProductionTest = !!process.env.PWA_PRODUCTION_TEST;
 const isNoorDemoTest = process.env.NOOR_DEMO_TEST === '1';
+const isWooTest =
+  process.env.CMS_PROVIDER === 'wordpress' || process.env.WOO_MOCK_MODE === '1';
 const playwrightDevPort = process.env.PLAYWRIGHT_DEV_PORT ?? '5557';
 const playwrightDevUrl = `http://127.0.0.1:${playwrightDevPort}`;
 
 const shopifyTestEnv: Record<string, string> = {
+  CMS_PROVIDER: 'shopify',
   SHOPIFY_MOCK_MODE: process.env.SHOPIFY_MOCK_MODE ?? '1',
   SHOPIFY_STORE_DOMAIN: process.env.SHOPIFY_STORE_DOMAIN ?? 'mock-store.myshopify.com',
   SHOPIFY_STOREFRONT_ACCESS_TOKEN:
@@ -26,7 +30,13 @@ if (isNoorDemoTest) {
 const dashboardTestUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL?.trim();
 if (dashboardTestUrl) {
   shopifyTestEnv.NEXT_PUBLIC_DASHBOARD_URL = dashboardTestUrl;
+  wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL = dashboardTestUrl;
+} else {
+  wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL =
+    wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://cms.growmedica.sk/wp-admin';
 }
+
+const playwrightEnv = isWooTest ? wooTestEnv : shopifyTestEnv;
 
 export default defineConfig({
   testDir: './tests',
@@ -41,14 +51,14 @@ export default defineConfig({
         url: 'http://127.0.0.1:5556',
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
-        env: shopifyTestEnv,
+        env: playwrightEnv,
       }
     : {
         command: `node scripts/ensure-dev-port.mjs ${playwrightDevPort} && next dev --port ${playwrightDevPort}`,
         url: playwrightDevUrl,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
-        env: shopifyTestEnv,
+        env: playwrightEnv,
       },
   use: {
     baseURL: isPwaProductionTest
@@ -61,7 +71,9 @@ export default defineConfig({
     {
       name: 'integrity',
       testMatch: /integrity\/.*\.spec\.ts/,
-      testIgnore: '**/pwa.spec.ts',
+      testIgnore: isWooTest
+        ? ['**/pwa.spec.ts']
+        : ['**/pwa.spec.ts', '**/woo-*.spec.ts'],
       use: { ...devices['Desktop Chrome'] },
     },
     {

@@ -3,3 +3,11 @@ export * from './collections'
 export * from './nav'
 export * from './cart'
 export type { NavCollectionItem, CollectionView, CollectionListOptions } from './nav-types'
+export type {
+  Product,
+  ProductListItem,
+  Collection,
+  Cart,
+  Money,
+  ShopifyImage,
+} from '@/lib/shopify/types'

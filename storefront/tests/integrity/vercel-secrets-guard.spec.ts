@@ -1,10 +1,11 @@
 import { execSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { test, expect } from '@playwright/test'
 
 const REPO_ROOT = path.resolve(__dirname, '../../..')
 const STOREFRONT_ROOT = path.resolve(__dirname, '../..')
+const HAS_GIT = existsSync(path.join(REPO_ROOT, '.git'))
 
 const FORBIDDEN_TRACKED_PATTERNS = [
   /^\.vercel\//,
@@ -22,6 +23,8 @@ function gitTrackedFiles(): string[] {
 
 test.describe('Vercel link metadata — must stay out of git', () => {
   test('git index neobsahuje .vercel/project.json ani repo.json', () => {
+    test.skip(!HAS_GIT, 'Not a git repository')
+
     const tracked = gitTrackedFiles()
     const leaked = tracked.filter((file) =>
       FORBIDDEN_TRACKED_PATTERNS.some((pattern) => pattern.test(file)),
@@ -42,6 +45,8 @@ test.describe('Vercel link metadata — must stay out of git', () => {
   })
 
   test('git history neobsahuje .vercel/project.json ani repo.json', () => {
+    test.skip(!HAS_GIT, 'Not a git repository')
+
     let historyHits = ''
     try {
       historyHits = execSync(

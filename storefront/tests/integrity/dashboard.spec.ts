@@ -17,19 +17,16 @@ test.describe('Dashboard route — smoke', () => {
   })
 
   test('skips shop chrome (no site header or footer)', () => {
-    // 1. Verify that middleware sets the DASHBOARD_ROUTE_HEADER header
     expect(existsSync(MIDDLEWARE_PATH)).toBe(true)
     const middlewareContent = readFileSync(MIDDLEWARE_PATH, 'utf8')
     expect(middlewareContent).toContain('requestHeaders.set(DASHBOARD_ROUTE_HEADER, \'1\')')
     expect(middlewareContent).toContain("matcher: ['/dashboard'")
 
-    // 2. Verify that root layout checks this header and returns a layout without HeaderShell, Footer, or AnnouncementBar
     expect(existsSync(ROOT_LAYOUT_PATH)).toBe(true)
     const rootLayoutContent = readFileSync(ROOT_LAYOUT_PATH, 'utf8')
     expect(rootLayoutContent).toContain('const isDashboardRoute = isDashboardRouteHeader(headersList.get(DASHBOARD_ROUTE_HEADER))')
     expect(rootLayoutContent).toContain('if (isDashboardRoute) {')
-    
-    // The branch for isDashboardRoute should render children inside html/body directly without common layout elements
+
     const isDashboardRouteBranch = rootLayoutContent.match(/if\s*\(isDashboardRoute\)\s*\{([\s\S]*?)\}/)
     expect(isDashboardRouteBranch).toBeTruthy()
     if (isDashboardRouteBranch) {
@@ -53,18 +50,15 @@ test.describe('Dashboard route — smoke', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
 
-    // Statically verify the unconfigured condition renders correct heading and links
     expect(content).toContain('Dashboard nie je nakonfigurovaný')
     expect(content).toContain('data-testid="dashboard-unconfigured"')
-    expect(content).toContain('data-testid="dashboard-nexus-direct-link"')
-    expect(content).toContain('https://growmedica-nexus.lovable.app/admin/prihlasenie')
+    expect(content).toContain('data-testid="dashboard-legacy-nexus-link"')
+    expect(content).toContain('wp-admin')
   })
 
   test('renders iframe when NEXT_PUBLIC_DASHBOARD_URL is set', () => {
     expect(existsSync(DASHBOARD_PAGE_PATH)).toBe(true)
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
-
-    // Statically verify that it renders the DashboardFrame when configured
     expect(content).toContain('<DashboardFrame src={dashboardUrl} />')
   })
 
@@ -73,4 +67,3 @@ test.describe('Dashboard route — smoke', () => {
     expect(metadata.robots).toEqual({ index: false, follow: false })
   })
 })
-

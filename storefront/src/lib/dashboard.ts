@@ -1,4 +1,4 @@
-/** Public iframe target for growmedica-nexus admin (validated URL or undefined). */
+/** Public iframe target for WordPress admin (validated URL or undefined). */
 export function getDashboardUrl(): string | undefined {
   const raw = process.env.NEXT_PUBLIC_DASHBOARD_URL?.trim()
   if (!raw) return undefined

@@ -36,6 +36,8 @@ services:
       WORDPRESS_DB_NAME: growmedica
       WORDPRESS_TABLE_PREFIX: gm_
       WORDPRESS_DEBUG: '1'
+      GROWMEDICA_STOREFRONT_URL: http://host.docker.internal:5555
+      GROWMEDICA_REVALIDATION_SECRET: local-dev-revalidation-secret-min-16-chars
     volumes:
       - woo_wp:/var/www/html
       - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins:ro

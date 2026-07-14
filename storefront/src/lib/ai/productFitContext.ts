@@ -1,5 +1,5 @@
 import { getCategoryDefinition, resolveCategory } from '@/lib/category-map'
-import type { Product } from '@/lib/shopify/types'
+import type { Product } from '@/lib/catalog'
 
 const MAX_TEXT_LENGTH = 1200
 

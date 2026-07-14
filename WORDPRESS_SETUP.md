@@ -91,7 +91,14 @@ yarn import:products     # produkty z mock/fixture dát
 - [ ] WooCommerce REST API keys (Read/Write, server-only)
 - [ ] CSP `frame-ancestors` pre `/wp-admin` (growmedica.sk, *.vercel.app, localhost:5555)
 - [ ] `WORDPRESS_BASE_URL=https://cms.growmedica.sk` na Vercel
-- [ ] Webhook na `/api/revalidate` pri zmene produktu (fáza 7)
+- [ ] Mu-plugin `growmedica-revalidate.php` + env `GROWMEDICA_STOREFRONT_URL`, `GROWMEDICA_REVALIDATION_SECRET`
+- [ ] `frame-ancestors` pre wp-admin: `growmedica.sk`, `*.vercel.app`, `localhost:5555`
+
+## 9. ISR webhook (mu-plugin)
+
+`wordpress/mu-plugins/growmedica-revalidate.php` pošle POST na storefront pri uložení produktu/kategórie.
+
+Pozri [storefront/docs/WP_WEBHOOKS.md](./storefront/docs/WP_WEBHOOKS.md).
 
 ## 8. API endpointy
 

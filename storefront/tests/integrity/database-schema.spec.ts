@@ -1,12 +1,15 @@
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { test, expect } from '@playwright/test'
 
 const REPO_ROOT = path.resolve(__dirname, '../../..')
 const BASE_ENTITIES_PATH = path.join(REPO_ROOT, 'wpbox/schema/base-entities.yaml')
 const MIGRATION_MANIFEST_PATH = path.join(REPO_ROOT, 'wpbox/database/migration-manifest.yaml')
+const hasWpbox = existsSync(BASE_ENTITIES_PATH) && existsSync(MIGRATION_MANIFEST_PATH)
 
 test.describe('Database schema & CPT integrity tests', () => {
+  test.skip(!hasWpbox, 'wpbox/ not present in standalone storefront repo')
+
   test('base-entities.yaml contains all diagnostics CPTs', () => {
     const content = readFileSync(BASE_ENTITIES_PATH, 'utf8')
 
@@ -73,10 +76,9 @@ test.describe('Dashboard code & component integrity tests', () => {
     expect(content).toContain("import DashboardFrame from '@/components/dashboard/DashboardFrame'")
     expect(content).toContain("import { getDashboardUrl } from '@/lib/dashboard'")
 
-    // Expect page to render fallback with a direct Nexus link
     expect(content).toContain('data-testid="dashboard-unconfigured"')
-    expect(content).toContain('data-testid="dashboard-nexus-direct-link"')
-    expect(content).toContain('https://growmedica-nexus.vercel.app/admin/prihlasenie')
+    expect(content).toContain('data-testid="dashboard-legacy-nexus-link"')
+    expect(content).toContain('wp-admin')
   })
 
   test('DashboardFrame component renders iframe and handles load errors', () => {
@@ -86,8 +88,9 @@ test.describe('Dashboard code & component integrity tests', () => {
     expect(content).toContain('<iframe')
     expect(content).toContain('src={src}')
     expect(content).toContain('title={title}')
-    expect(content).toContain('onError={() => setLoadError(true)}')
-    expect(content).toContain('Dashboard sa nepodarilo načítať')
+    expect(content).toContain('onError={() => {')
+    expect(content).toContain('setLoadError(true)')
+    expect(content).toContain('WordPress admin sa nepodarilo načítať')
+    expect(content).toContain('sandbox=')
   })
 })
-

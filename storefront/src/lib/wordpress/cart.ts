@@ -143,6 +143,9 @@ export async function addToWooCart(
 
   for (const line of lines) {
     const { productId, product } = await resolveProductByVariantId(line.merchandiseId)
+    if (!product) {
+      throw new Error('Merchandise not found')
+    }
 
     const existing = session.items.find((item) => item.productId === productId)
     if (existing) {

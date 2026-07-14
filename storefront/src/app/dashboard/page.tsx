@@ -1,19 +1,19 @@
 import DashboardFrame from '@/components/dashboard/DashboardFrame'
 import { getDashboardUrl } from '@/lib/dashboard'
 
-const NEXUS_ADMIN_LOGIN_URL = 'https://growmedica-nexus.lovable.app/admin/prihlasenie'
+const LEGACY_NEXUS_ADMIN_URL = 'https://growmedica-nexus.lovable.app/admin/prihlasenie'
 const isDev = process.env.NODE_ENV === 'development'
 
-function NexusDirectLink({ className = '' }: { className?: string }) {
+function LegacyNexusLink({ className = '' }: { className?: string }) {
   return (
     <a
-      href={NEXUS_ADMIN_LOGIN_URL}
+      href={LEGACY_NEXUS_ADMIN_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className={`btn btn-secondary ${className}`.trim()}
-      data-testid="dashboard-nexus-direct-link"
+      className={`btn btn-secondary text-xs ${className}`.trim()}
+      data-testid="dashboard-legacy-nexus-link"
     >
-      Otvoriť Nexus priamo
+      Legacy Nexus admin
     </a>
   )
 }
@@ -33,9 +33,12 @@ export default function DashboardPage() {
           <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
             NEXT_PUBLIC_DASHBOARD_URL
           </code>{' '}
-          vo Vercel projekte alebo v <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">.env.local</code>.
+          na WordPress admin URL, napr.{' '}
+          <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
+            https://cms.growmedica.sk/wp-admin
+          </code>
         </p>
-        <NexusDirectLink className="mt-2" />
+        <LegacyNexusLink className="mt-2" />
       </div>
     )
   }
@@ -44,13 +47,13 @@ export default function DashboardPage() {
     <>
       {isDev && (
         <a
-          href={NEXUS_ADMIN_LOGIN_URL}
+          href={dashboardUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-4 right-4 z-50 rounded-full border border-(--color-border) bg-(--color-surface)/95 px-4 py-2 text-xs font-medium text-(--color-text-muted) shadow-sm backdrop-blur hover:text-(--color-text)"
-          data-testid="dashboard-dev-nexus-link"
+          data-testid="dashboard-dev-direct-link"
         >
-          Dev: Nexus admin
+          Dev: WP admin priamo
         </a>
       )}
       <DashboardFrame src={dashboardUrl} />

@@ -1,6 +1,19 @@
 import { z } from 'zod'
 import { getCmsProvider } from '@/lib/cms'
 
+const wordpressEnvSchema = z.object({
+  WORDPRESS_BASE_URL: z
+    .string()
+    .url('WORDPRESS_BASE_URL must be a valid URL')
+    .refine((v) => v.startsWith('https://') || v.startsWith('http://'), {
+      message: 'WORDPRESS_BASE_URL must use http or https',
+    }),
+  WOO_CONSUMER_KEY: z.string().min(1, 'WOO_CONSUMER_KEY is required'),
+  WOO_CONSUMER_SECRET: z.string().min(1, 'WOO_CONSUMER_SECRET is required'),
+})
+
+export type WordPressEnv = z.infer<typeof wordpressEnvSchema>
+
 function readEnv(name: string): string | undefined {
   const value = process.env[name]?.trim()
   return value || undefined
@@ -62,6 +75,42 @@ function validateShopifyEnv(): ShopifyEnv {
   }
 
   return result.data
+}
+
+let cachedWordPressEnv: WordPressEnv | null = null
+
+function validateWordPressEnv(): WordPressEnv {
+  const result = wordpressEnvSchema.safeParse({
+    WORDPRESS_BASE_URL: readEnv('WORDPRESS_BASE_URL'),
+    WOO_CONSUMER_KEY: readEnv('WOO_CONSUMER_KEY'),
+    WOO_CONSUMER_SECRET: readEnv('WOO_CONSUMER_SECRET'),
+  })
+
+  if (!result.success) {
+    console.error('Invalid WordPress environment variables:')
+    result.error.errors.forEach((err) => {
+      console.error(`  → ${err.path.join('.')}: ${err.message}`)
+    })
+    throw new Error(
+      'Invalid WordPress environment variables. Copy .env.example to .env.local and fill in values.',
+    )
+  }
+
+  return result.data
+}
+
+/** Validated WordPress config — only required when CMS_PROVIDER=wordpress (unless WOO_MOCK_MODE=1). */
+export function getWordPressEnv(): WordPressEnv {
+  if (process.env.WOO_MOCK_MODE === '1') {
+    return {
+      WORDPRESS_BASE_URL: readEnv('WORDPRESS_BASE_URL') ?? 'http://localhost:8080',
+      WOO_CONSUMER_KEY: readEnv('WOO_CONSUMER_KEY') ?? 'ck_mock',
+      WOO_CONSUMER_SECRET: readEnv('WOO_CONSUMER_SECRET') ?? 'cs_mock',
+    }
+  }
+  if (cachedWordPressEnv) return cachedWordPressEnv
+  cachedWordPressEnv = validateWordPressEnv()
+  return cachedWordPressEnv
 }
 
 /** Validated Shopify config — only required when CMS_PROVIDER=shopify. */

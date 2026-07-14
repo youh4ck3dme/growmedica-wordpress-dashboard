@@ -40,6 +40,22 @@ test.describe('Mock Shopify cart API', () => {
     expect(failedAddResponse.headers()['set-cookie'] ?? '').not.toContain('growmedical_cart_id')
   })
 
+  test('WooCommerce variant add-to-cart when CMS_PROVIDER=wordpress', async ({ request }) => {
+    test.skip(process.env.CMS_PROVIDER !== 'wordpress', 'Woo cart test — run via yarn test:woo:integrity')
+
+    const productsResponse = await request.get('/api/products')
+    const { products } = (await productsResponse.json()) as {
+      products: Array<{ variants: { edges: Array<{ node: { id: string } }> } }>
+    }
+    const variantId = products[0]?.variants.edges[0]?.node.id
+    expect(variantId).toMatch(/gid:\/\/woocommerce\/ProductVariant\//)
+
+    const addResponse = await request.post('/api/cart/add', {
+      data: { variantId, quantity: 1 },
+    })
+    expect(addResponse.ok()).toBe(true)
+  })
+
   test('pridanie do košíka aktualizuje badge v hlavičke', async () => {
     const btnPath = path.join(process.cwd(), 'src/components/product/AddToCartButton.tsx')
     expect(fs.existsSync(btnPath)).toBe(true)

@@ -31,6 +31,6 @@ Standard scripts are in `storefront/package.json`; the common ones:
 - `yarn test:integrity` — Playwright integrity suite; it boots its own dev server on port 5557 and injects mock env, so it does NOT need `.env.local`.
 
 ### Gotchas
-- `yarn test:integrity` includes `tests/integrity/database-schema.spec.ts`, which reads `../../../wpbox/schema/*.yaml` and `../../../wpbox/database/*.yaml`. That `wpbox/` directory is NOT part of this repo, so those 3 tests fail with `ENOENT` while the other 131 storefront tests pass. This is expected in a standalone checkout — not a regression.
+- `yarn test:integrity` includes `tests/integrity/database-schema.spec.ts`, which reads `../../../wpbox/schema/*.yaml` and `../../../wpbox/database/*.yaml`. That `wpbox/` directory is NOT part of this standalone repo — the 3 CPT tests are **skipped** (not failed) when `wpbox/` is absent. Expect **137 passed, 0 failed** in a normal storefront checkout.
 - Cart state is server-side: `/api/cart/add` stores the mock cart in-memory and sets an httpOnly `growmedical_cart_id` cookie. The `/kosik` page reads the cart from that cookie on a full server render, so to verify the cart in a browser, add an item then do a full navigation/reload of `/kosik` (the header badge updates client-side and may lag until reload).
 - Playwright Chromium browsers are already available in this environment; `yarn test:integrity` runs without an extra browser install step.

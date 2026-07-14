@@ -1,0 +1,88 @@
+#!/usr/bin/env node
+/**
+ * Production smoke: WooCommerce API curl + storefront HTTP checks.
+ *
+ * Usage:
+ *   PREVIEW_URL=https://growmedica.sk node scripts/production-smoke.mjs
+ */
+
+import { spawnSync } from 'node:child_process'
+import { existsSync, readFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const root = path.resolve(__dirname, '..')
+
+function loadEnvLocal() {
+  const envPath = path.join(root, '.env.local')
+  if (!existsSync(envPath)) return
+  const text = readFileSync(envPath, 'utf8')
+  for (const line of text.split('\n')) {
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith('#')) continue
+    const eq = trimmed.indexOf('=')
+    if (eq === -1) continue
+    const key = trimmed.slice(0, eq).trim()
+    const value = trimmed.slice(eq + 1).trim()
+    if (!process.env[key]) process.env[key] = value
+  }
+}
+
+async function main() {
+  loadEnvLocal()
+
+  const previewUrl = (process.env.PREVIEW_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:5555').replace(/\/$/, '')
+  const cmsProvider = process.env.CMS_PROVIDER ?? 'wordpress'
+  const wooMock = process.env.WOO_MOCK_MODE === '1'
+
+  console.log('=== GrowMedica production smoke ===')
+  console.log(`Preview URL: ${previewUrl}`)
+  console.log(`CMS_PROVIDER: ${cmsProvider}`)
+
+  if (!wooMock && cmsProvider === 'wordpress') {
+    const bash = spawnSync('bash', ['scripts/woo-smoke-test.sh'], {
+      cwd: root,
+      stdio: 'inherit',
+      env: process.env,
+    })
+    if (bash.status !== 0) {
+      process.exit(bash.status ?? 1)
+    }
+  } else {
+    console.log('→ Skipping WooCommerce curl (WOO_MOCK_MODE or non-WP provider)')
+  }
+
+  const endpoints = ['/api/products', '/kolekcie', '/produkty']
+  for (const endpoint of endpoints) {
+    const url = `${previewUrl}${endpoint}`
+    console.log(`→ GET ${url}`)
+    const res = await fetch(url, { redirect: 'follow' })
+    if (!res.ok) {
+      console.error(`❌ ${endpoint} returned HTTP ${res.status}`)
+      process.exit(1)
+    }
+    console.log(`✅ ${endpoint} HTTP ${res.status}`)
+  }
+
+  const revalidateSecret =
+    process.env.WORDPRESS_REVALIDATION_SECRET ??
+    process.env.SHOPIFY_REVALIDATION_SECRET ??
+    'mock-revalidation-secret-123456'
+
+  const revalidateUrl = `${previewUrl}/api/revalidate?secret=${encodeURIComponent(revalidateSecret)}&tag=woo-products`
+  console.log(`→ POST ${revalidateUrl}`)
+  const rev = await fetch(revalidateUrl, { method: 'POST' })
+  if (!rev.ok) {
+    console.error(`❌ Revalidate returned HTTP ${rev.status}`)
+    process.exit(1)
+  }
+  console.log('✅ ISR revalidate endpoint reachable')
+
+  console.log('\n✅ Production smoke passed')
+}
+
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})
