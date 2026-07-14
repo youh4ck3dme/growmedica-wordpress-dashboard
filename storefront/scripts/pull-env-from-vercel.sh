@@ -8,7 +8,7 @@ TMP=".env.vercel-pull.tmp"
 BACKUP=".env.local.backup.$(date +%Y%m%d-%H%M%S)"
 LOCAL_SITE_URL="${LOCAL_SITE_URL:-http://localhost:5555}"
 VERCEL_SCOPE="${VERCEL_SCOPE:-h4ck3d}"
-VERCEL_PROJECT="${VERCEL_PROJECT:-growmedicanextjs}"
+VERCEL_PROJECT="${VERCEL_PROJECT:-growmedica-wordpress-dashboard}"
 
 if ! command -v vercel >/dev/null 2>&1; then
   echo "Chyba: nainstaluj Vercel CLI (npm i -g vercel) a spusti vercel login"

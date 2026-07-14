@@ -33,14 +33,24 @@ async function main() {
   loadEnvLocal()
 
   const previewUrl = (process.env.PREVIEW_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:5555').replace(/\/$/, '')
-  const cmsProvider = process.env.CMS_PROVIDER ?? 'wordpress'
+  const cmsProvider = process.env.CMS_PROVIDER ?? 'shopify'
   const wooMock = process.env.WOO_MOCK_MODE === '1'
+  const shopifyMock = process.env.SHOPIFY_MOCK_MODE === '1'
 
   console.log('=== GrowMedica production smoke ===')
   console.log(`Preview URL: ${previewUrl}`)
   console.log(`CMS_PROVIDER: ${cmsProvider}`)
 
-  if (!wooMock && cmsProvider === 'wordpress') {
+  if (cmsProvider === 'shopify' && !shopifyMock) {
+    const shopify = spawnSync('node', ['scripts/shopify-smoke-test.mjs'], {
+      cwd: root,
+      stdio: 'inherit',
+      env: process.env,
+    })
+    if (shopify.status !== 0) {
+      process.exit(shopify.status ?? 1)
+    }
+  } else if (!wooMock && cmsProvider === 'wordpress') {
     const bash = spawnSync('bash', ['scripts/woo-smoke-test.sh'], {
       cwd: root,
       stdio: 'inherit',
@@ -49,6 +59,8 @@ async function main() {
     if (bash.status !== 0) {
       process.exit(bash.status ?? 1)
     }
+  } else if (shopifyMock && cmsProvider === 'shopify') {
+    console.log('→ Skipping Shopify Storefront smoke (SHOPIFY_MOCK_MODE=1)')
   } else {
     console.log('→ Skipping WooCommerce curl (WOO_MOCK_MODE or non-WP provider)')
   }
@@ -70,7 +82,8 @@ async function main() {
     process.env.SHOPIFY_REVALIDATION_SECRET ??
     'mock-revalidation-secret-123456'
 
-  const revalidateUrl = `${previewUrl}/api/revalidate?secret=${encodeURIComponent(revalidateSecret)}&tag=woo-products`
+  const revalidateTag = cmsProvider === 'shopify' ? 'products' : 'woo-products'
+  const revalidateUrl = `${previewUrl}/api/revalidate?secret=${encodeURIComponent(revalidateSecret)}&tag=${revalidateTag}`
   console.log(`→ POST ${revalidateUrl}`)
   const rev = await fetch(revalidateUrl, { method: 'POST' })
   if (!rev.ok) {

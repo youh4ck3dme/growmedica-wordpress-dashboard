@@ -115,12 +115,14 @@ Nepridávať do gitu. Názvy musia sedieť s kódom v repozitári (nie `VITE_FIR
 | `SUPABASE_SERVICE_ROLE_KEY` | áno | Server-side admin operácie (integrations, webhooks) |
 | `VITE_SUPABASE_URL` | odporúčané | Client-side Supabase (build-time); môže byť rovnaké ako `SUPABASE_URL` |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | odporúčané | Client-side Supabase; môže byť rovnaké ako `SUPABASE_PUBLISHABLE_KEY` |
-| `SHOPIFY_STORE_DOMAIN` | áno | Shopify store pre admin integrácie |
-| `SHOPIFY_ADMIN_ACCESS_TOKEN` | áno | Shopify Admin API token |
-| `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | voliteľné | Storefront API testy z admin panelu |
+| `SHOPIFY_STORE_DOMAIN` | áno | `growmedica.myshopify.com` (nie placeholder `moj-shop.myshopify.com`) |
+| `SHOPIFY_ADMIN_ACCESS_TOKEN` | áno | Admin API token (`shpat_…`) — **iba toto pole** |
+| `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | odporúčané | Storefront API token — **NIE** `shpat_` (iný token z Develop app → Storefront API) |
 | `SHOPIFY_API_VERSION` | voliteľné | Default `2025-01` |
 | `ALLOWED_FRAME_ANCESTORS` | odporúčané | Extra `frame-ancestors` domény (bez `'self'`) |
 | `MISTRAL_API_KEY` | nie (fáza 3) | Zatiaľ nepoužívané v kóde |
+
+> **Shopify live katalóg (storefront):** [SHOPIFY_LIVE.md](./SHOPIFY_LIVE.md) — S1–S6, Vercel env, smoke testy.
 
 > **Poznámka:** `FIREBASE_SERVICE_ACCOUNT_JSON` v tomto repozitári **nie je** potrebné — server-side verify používa Firebase JWKS (`jose`), nie service account.
 

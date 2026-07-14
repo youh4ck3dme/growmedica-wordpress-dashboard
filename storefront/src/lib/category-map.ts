@@ -146,6 +146,7 @@ const RESOLVE_ORDER: CategoryDefinition[] = [
     rules: [
       { kind: 'tag', value: 'Imunita', match: 'ci' },
       { kind: 'productType', value: 'Imunita' },
+      { kind: 'productType', value: 'Priedušky a Kašeľ' },
     ],
   },
   {
@@ -245,6 +246,7 @@ const RESOLVE_ORDER: CategoryDefinition[] = [
       { kind: 'productType', value: 'Bioinformačné prípravky' },
       { kind: 'productType', value: 'BALÍČKY ZDRAVIA' },
       { kind: 'productType', value: 'PRE ZVIERATÁ' },
+      { kind: 'productType', value: 'Ostatné prípravky' },
       { kind: 'tag', value: 'ZDRAVOTNÉ RIEŠENIA', match: 'ci' },
       { kind: 'tag', value: 'MYKOLOGICKÉ PRODUKTY', match: 'ci' },
       { kind: 'tag', value: 'Mykologické prípravky', match: 'ci' },
