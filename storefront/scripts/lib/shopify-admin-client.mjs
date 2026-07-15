@@ -28,12 +28,67 @@ export function loadEnvLocal(root = STOREFRONT_ROOT) {
   }
 }
 
+let cachedClientCredentialsToken = null
+let cachedClientCredentialsExpiresAt = 0
+
 export function getShopifyAdminConfig() {
   return {
-    store: process.env.SHOPIFY_STORE_DOMAIN,
-    token: process.env.SHOPIFY_ADMIN_ACCESS_TOKEN,
+    store: process.env.SHOPIFY_STORE_DOMAIN ?? CANONICAL_SHOPIFY_STORE,
+    token: process.env.SHOPIFY_ADMIN_ACCESS_TOKEN?.trim(),
     apiVersion: process.env.SHOPIFY_API_VERSION ?? '2025-01',
   }
+}
+
+/** OAuth client credentials (Dev Dashboard app, 2025+) — token platí ~24 h. */
+export async function fetchClientCredentialsToken(
+  store = getShopifyAdminConfig().store,
+  clientId = process.env.SHOPIFY_CLIENT_ID?.trim(),
+  clientSecret = process.env.SHOPIFY_CLIENT_SECRET?.trim(),
+) {
+  if (!clientId || !clientSecret) {
+    throw new Error('Missing SHOPIFY_CLIENT_ID or SHOPIFY_CLIENT_SECRET for client credentials grant')
+  }
+  if (cachedClientCredentialsToken && Date.now() < cachedClientCredentialsExpiresAt - 60_000) {
+    return cachedClientCredentialsToken
+  }
+
+  const res = await fetch(`https://${store}/admin/oauth/access_token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: clientId,
+      client_secret: clientSecret,
+    }),
+  })
+
+  const text = await res.text()
+  if (!res.ok) {
+    throw new Error(`Client credentials HTTP ${res.status}: ${text}`)
+  }
+
+  const json = JSON.parse(text)
+  if (!json.access_token) {
+    throw new Error(`Client credentials response missing access_token: ${text}`)
+  }
+
+  cachedClientCredentialsToken = json.access_token
+  cachedClientCredentialsExpiresAt = Date.now() + (json.expires_in ?? 86_399) * 1000
+  return cachedClientCredentialsToken
+}
+
+/** Legacy shpat_ alebo client credentials token. */
+export async function resolveAdminAccessToken(config = getShopifyAdminConfig()) {
+  const legacy = config.token?.trim()
+  if (legacy?.startsWith('shpat_')) return legacy
+
+  const clientId = process.env.SHOPIFY_CLIENT_ID?.trim()
+  const clientSecret = process.env.SHOPIFY_CLIENT_SECRET?.trim()
+  if (clientId && clientSecret) {
+    return fetchClientCredentialsToken(config.store, clientId, clientSecret)
+  }
+
+  return legacy ?? ''
 }
 
 export function assertAdminConfig({ store, token, dryRun = false }) {
@@ -57,7 +112,11 @@ export function assertAdminConfig({ store, token, dryRun = false }) {
 }
 
 export async function adminGraphql(query, variables = {}, config = getShopifyAdminConfig()) {
-  const { store, token, apiVersion } = config
+  const { store, apiVersion } = config
+  const token = await resolveAdminAccessToken(config)
+  if (!token) {
+    throw new Error('No Admin API token — set SHOPIFY_ADMIN_ACCESS_TOKEN or SHOPIFY_CLIENT_ID+SECRET')
+  }
   const res = await fetch(`https://${store}/admin/api/${apiVersion}/graphql.json`, {
     method: 'POST',
     headers: {
@@ -85,4 +144,64 @@ export function parseArgValue(name, fallback) {
 
 export function parseArgFlag(name) {
   return process.argv.includes(name)
+}
+
+const DEVELOP_APPS_URL = 'https://admin.shopify.com/store/growmedica/settings/apps/development'
+
+/** REST shop.json — jasnejší 403 „API Access has been disabled“ než GraphQL. */
+export async function verifyAdminTokenRest(token, config = getShopifyAdminConfig()) {
+  if (!token?.startsWith('shpat_')) {
+    return {
+      ok: false,
+      code: 'missing_token',
+      message: 'Missing or invalid SHOPIFY_ADMIN_ACCESS_TOKEN (must start with shpat_)',
+    }
+  }
+
+  const store = config.store ?? CANONICAL_SHOPIFY_STORE
+  const apiVersion = config.apiVersion ?? '2025-01'
+
+  try {
+    const res = await fetch(`https://${store}/admin/api/${apiVersion}/shop.json`, {
+      headers: { 'X-Shopify-Access-Token': token },
+    })
+    const text = await res.text()
+    if (!res.ok) {
+      if (res.status === 403 && text.includes('API Access has been disabled')) {
+        return {
+          ok: false,
+          code: '403_api_disabled',
+          message: 'Shopify Admin API disabled — v Admin klikni Install app (token sám o sebe nestačí)',
+          human_url: DEVELOP_APPS_URL,
+          install_steps: [
+            'Otvor Develop apps → tvoja app (GrowMedica Nexus)',
+            'Configure Admin API scopes → Save',
+            'API credentials → Install app (povinné!)',
+            'Potom znova: yarn shopify:admin-verify',
+          ],
+          shopify_error: text,
+        }
+      }
+      if (res.status === 401) {
+        return {
+          ok: false,
+          code: '401_unauthorized',
+          message: 'Invalid or revoked Admin token',
+          human_url: DEVELOP_APPS_URL,
+        }
+      }
+      return { ok: false, code: 'error', message: `Admin REST HTTP ${res.status}: ${text.slice(0, 200)}` }
+    }
+
+    const shopJson = JSON.parse(text)
+    return {
+      ok: true,
+      code: 'ok',
+      shop: shopJson.shop?.name,
+      domain: shopJson.shop?.myshopify_domain ?? store,
+    }
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    return { ok: false, code: 'error', message: msg }
+  }
 }

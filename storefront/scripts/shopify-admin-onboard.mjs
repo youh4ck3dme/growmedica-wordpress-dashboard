@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url'
 import {
   CANONICAL_SHOPIFY_STORE,
   loadEnvLocal,
-  adminGraphql,
+  verifyAdminTokenRest,
 } from './lib/shopify-admin-client.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -33,17 +33,9 @@ const URLS = {
 }
 
 const DEFAULT_ENV_KEYS = {
-  CMS_PROVIDER: 'shopify',
   SHOPIFY_STORE_DOMAIN: CANONICAL_SHOPIFY_STORE,
   SHOPIFY_STOREFRONT_TOKENLESS: '1',
   SHOPIFY_API_VERSION: '2025-01',
-  SHOPIFY_REVALIDATION_SECRET: 'local-shopify-revalidation-secret-16',
-  NEXT_PUBLIC_SITE_URL: 'http://localhost:5555',
-  NEXT_PUBLIC_DASHBOARD_URL: 'https://growmedica-nexus.lovable.app/admin',
-  NEXT_PUBLIC_DASHBOARD_MODE: 'hybrid',
-  DASHBOARD_AGENT_SECRET: 'local-dashboard-agent-secret-min-16-chars',
-  MISTRAL_MOCK_MODE: '0',
-  MISTRAL_MODEL: 'mistral-large-latest',
 }
 
 function parseArgs(argv) {
@@ -60,7 +52,7 @@ function parseArgs(argv) {
     else if (a === '--verify-only') out.verifyOnly = true
     else if (a === '--no-vercel') out.vercel = false
     else if (a === '--skip-smoke') out.skipSmoke = true
-    else if (a === '--token' && argv[i + 1]) {
+    else if ((a === '--token' || a === '-t') && argv[i + 1]) {
       out.token = argv[++i].trim()
     }
   }
@@ -75,10 +67,14 @@ function upsertEnvLocal(updates) {
   const lines = existsSync(ENV_FILE) ? readFileSync(ENV_FILE, 'utf8').split('\n') : []
   const map = new Map()
   const order = []
+  const preamble = []
 
   for (const line of lines) {
     const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith('#')) continue
+    if (!trimmed || trimmed.startsWith('#')) {
+      if (order.length === 0) preamble.push(line)
+      continue
+    }
     const eq = trimmed.indexOf('=')
     if (eq === -1) continue
     const key = trimmed.slice(0, eq).trim()
@@ -92,57 +88,18 @@ function upsertEnvLocal(updates) {
     map.set(key, value)
   }
 
-  const preserved = new Set(order)
-  const header = [
-    '# CMS — live Shopify (growmedica.myshopify.com)',
-    '# Agent: yarn shopify:admin-onboard — docs/poznamky-agent.json',
-    '',
-  ]
+  const header =
+    preamble.length > 0
+      ? preamble
+      : [
+          '# CMS — Shopify Admin onboard (merge, neprepisuje existujúce kľúče)',
+          '# Agent: yarn shopify:admin-onboard — docs/poznamky-agent.json',
+          '',
+        ]
+
   const body = order.map((k) => `${k}=${map.get(k)}`)
-  const tail = lines.filter((l) => {
-    const t = l.trim()
-    if (!t || t.startsWith('#')) return false
-    const eq = t.indexOf('=')
-    if (eq === -1) return false
-    return !preserved.has(t.slice(0, eq).trim())
-  })
-
-  writeFileSync(ENV_FILE, [...header, ...body, ...tail].join('\n') + '\n', 'utf8')
+  writeFileSync(ENV_FILE, [...header, ...body].join('\n') + '\n', 'utf8')
   chmodSync(ENV_FILE, 0o600)
-}
-
-async function verifyAdminToken(token) {
-  if (!token?.startsWith('shpat_')) {
-    return { ok: false, code: 'missing_token', message: 'Missing or invalid SHOPIFY_ADMIN_ACCESS_TOKEN (must start with shpat_)' }
-  }
-
-  try {
-    const data = await adminGraphql('{ shop { name myshopifyDomain } }', {}, {
-      store: CANONICAL_SHOPIFY_STORE,
-      token,
-      apiVersion: process.env.SHOPIFY_API_VERSION ?? '2025-01',
-    })
-    return {
-      ok: true,
-      code: 'ok',
-      shop: data.shop?.name,
-      domain: data.shop?.myshopifyDomain,
-    }
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
-    if (msg.includes('403')) {
-      return {
-        ok: false,
-        code: '403_api_disabled',
-        message: 'Shopify Admin API disabled — Install app in Develop apps',
-        human_url: URLS.develop_apps,
-      }
-    }
-    if (msg.includes('401')) {
-      return { ok: false, code: '401_unauthorized', message: 'Invalid or revoked Admin token', human_url: URLS.develop_apps }
-    }
-    return { ok: false, code: 'error', message: msg }
-  }
 }
 
 function pushVercelAdminToken(token) {
@@ -157,10 +114,17 @@ function pushVercelAdminToken(token) {
     const add = spawnSync(
       'vercel',
       ['env', 'add', 'SHOPIFY_ADMIN_ACCESS_TOKEN', target, '--yes', '--scope', scope, '--non-interactive'],
-      { cwd: ROOT, input: token, stdio: ['pipe', 'pipe', 'pipe'] },
+      { cwd: ROOT, input: Buffer.from(token, 'utf8'), stdio: ['pipe', 'pipe', 'pipe'] },
     )
     if (add.status !== 0) {
-      return { ok: false, target, stderr: add.stderr?.toString() ?? '' }
+      const addPipe = spawnSync('bash', ['-c', `printf '%s' "$TOKEN" | vercel env add SHOPIFY_ADMIN_ACCESS_TOKEN ${target} --yes --scope ${scope} --non-interactive`], {
+        cwd: ROOT,
+        env: { ...process.env, TOKEN: token },
+        stdio: ['ignore', 'pipe', 'pipe'],
+      })
+      if (addPipe.status !== 0) {
+        return { ok: false, target, stderr: addPipe.stderr?.toString() ?? add.stderr?.toString() ?? '' }
+      }
     }
   }
   return { ok: true, targets }
@@ -185,6 +149,9 @@ function finish(report) {
     for (const p of report.pending_human) {
       log(`⏳ ${p.id}: ${p.message}`)
       if (p.url) log(`   → ${p.url}`)
+      if (p.install_steps?.length) {
+        for (const step of p.install_steps) log(`   • ${step}`)
+      }
     }
     if (report.errors?.length) {
       for (const e of report.errors) log(`✗ ${e}`)
@@ -240,7 +207,7 @@ async function main() {
     report.automated.push('Updated .env.local (chmod 600)')
   }
 
-  const verify = await verifyAdminToken(args.token)
+  const verify = await verifyAdminTokenRest(args.token)
   report.admin_api = verify.ok ? 'ok' : verify.code
   if (verify.ok) {
     report.automated.push(`Admin API OK: ${verify.shop} (${verify.domain})`)
@@ -250,9 +217,29 @@ async function main() {
       id: 'shopify_create_token',
       message: verify.message,
       url: verify.human_url ?? URLS.develop_apps,
+      ...(verify.install_steps ? { install_steps: verify.install_steps } : {}),
     })
-    report.status = 'blocked'
-    if (!args.verifyOnly && args.vercel) report.vercel = 'skipped_admin_invalid'
+    if (!args.verifyOnly && args.vercel) {
+      if (spawnSync('which', ['vercel'], { stdio: 'ignore' }).status === 0) {
+        const v = pushVercelAdminToken(args.token)
+        if (v.ok) {
+          report.vercel = verify.code === '403_api_disabled' ? 'ok_pending_shopify_install' : 'ok'
+          report.automated.push(
+            `Vercel SHOPIFY_ADMIN_ACCESS_TOKEN → ${v.targets.join(', ')}`,
+          )
+          if (verify.code === '403_api_disabled') {
+            report.status = 'partial'
+            report.automated.push('Token uložený lokálne + Vercel — čaká sa na Install app v Shopify Admin')
+          }
+        } else {
+          report.vercel = 'error'
+          report.errors.push(`Vercel push failed: ${v.stderr || v.target}`)
+        }
+      } else {
+        report.vercel = 'skipped_no_cli'
+      }
+    }
+    if (report.status !== 'partial') report.status = 'blocked'
     return finish(report)
   }
 

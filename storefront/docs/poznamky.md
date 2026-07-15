@@ -56,15 +56,21 @@ Over, že vľavo hore vidíš obchod **growmedica** (nie iný shop).
 
 ### 1d) Over token (terminál)
 
+**Odporúčané (automatizácia):**
+
+```bash
+cd storefront
+yarn shopify:admin-onboard --token "shpat_..."     # uloží .env.local + Vercel, pri 403 exit 0 (partial)
+yarn shopify:admin-verify                          # len overí token z .env.local
+yarn shopify:admin-fix                             # otvorí Shopify Admin a čaká na Install app
+```
+
+**Manuálne (curl):**
+
 ```bash
 cd storefront
 # vlož token do .env.local ako SHOPIFY_ADMIN_ACCESS_TOKEN=shpat_...
-node --input-type=module -e "
-import { loadEnvLocal, adminGraphql } from './scripts/lib/shopify-admin-client.mjs';
-loadEnvLocal();
-const d = await adminGraphql('{ shop { name } }');
-console.log('OK:', d.shop.name);
-"
+yarn shopify:admin-verify
 ```
 
 | Výstup | Znamená |

@@ -43,6 +43,8 @@
     "vercel:shopify-env": "bash scripts/set-shopify-vercel-env.sh",
     "setup:shopify-env": "bash scripts/setup-shopify-env-noninteractive.sh",
     "shopify:admin-onboard": "node scripts/shopify-admin-onboard.mjs",
+    "shopify:admin-verify": "node scripts/shopify-admin-onboard.mjs --verify-only",
+    "shopify:admin-fix": "node scripts/shopify-admin-fix-403.mjs",
     "test:wordpress:local": "playwright test tests/integrity/wordpress-local.spec.ts --project=integrity",
     "test:quick": "yarn type-check && bash scripts/quick-diagnostic.sh",
     "diagnostic": "bash scripts/quick-diagnostic.sh",
