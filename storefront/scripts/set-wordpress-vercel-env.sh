@@ -51,7 +51,7 @@ upsert_env_var() {
   local value=$2
   local target=$3
   remove_env_var "$name" "$target"
-  vercel env add "$name" "$target" --value "$value" --yes "${vercel_args[@]}"
+  printf '%s' "$value" | vercel env add "$name" "$target" --yes "${vercel_args[@]}"
   echo "  ✓ $name → $target"
 }
 

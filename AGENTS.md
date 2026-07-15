@@ -65,6 +65,16 @@ V mock režime `src/lib/wordpress/mock.ts` a `src/lib/shopify/mock.ts` servujú 
 - `/dashboard` nemá shop chrome (middleware `x-dashboard-route: 1`). Testy: `yarn test:dashboard-agent`.
 - Playwright Chromium je dostupný; `yarn test:integrity` nepotrebuje extra browser install.
 
+### Shopify Admin token (`shpat_`)
+
+Ak user dá Admin token alebo chce Nexus/Shopify zápis:
+
+1. Prečítaj [storefront/docs/poznamky-agent.md](./storefront/docs/poznamky-agent.md) a [poznamky-agent.json](./storefront/docs/poznamky-agent.json)
+2. Spusti `cd storefront && yarn shopify:admin-onboard --token "$TOKEN" --json`
+3. Pri `403_api_disabled` → human handoff na [Develop apps](https://admin.shopify.com/store/growmedica/settings/apps/development) (Install app)
+4. Po úspechu pripomeň Nexus env na [growmedica-nexus.lovable.app/admin](https://growmedica-nexus.lovable.app/admin) — mimo tohto repa
+5. Nikdy nedávaj `shpat_` do `SHOPIFY_STOREFRONT_ACCESS_TOKEN`
+
 ### Ďalší vývoj (priorita)
 
 1. WP produkcia (`cms.growmedica.cz`) — DNS, hosting, live Woo env na Vercel

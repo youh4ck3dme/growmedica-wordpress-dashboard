@@ -4,25 +4,47 @@
 
 import type { Metadata } from 'next'
 import { DEFAULT_LOCALE, HREFLANG_MAP, OG_LOCALE_MAP } from '@/lib/i18n/config'
+import { resolvePublicSiteUrl } from '@/lib/site-url'
 import { BRAND_COPY } from './brand'
 import type { Product, Collection } from './shopify/types'
 
 const SITE_NAME = BRAND_COPY.siteName
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.cz'
+const SITE_URL = resolvePublicSiteUrl()
 const SITE_DESCRIPTION = BRAND_COPY.siteDescription
 
-export function buildLocaleAlternates(pathname = '/'): Metadata['alternates'] {
+/** Canonical page URL without locale query params (root has no trailing slash). */
+export function buildCanonicalPageUrl(pathname = '/', siteUrl = SITE_URL): string {
   const path = pathname.startsWith('/') ? pathname : `/${pathname}`
-  const canonical = `${SITE_URL}${path === '/' ? '' : path}` || SITE_URL
+  return path === '/' ? siteUrl : `${siteUrl}${path}`
+}
 
+function buildLocaleHref(pageUrl: string, locale: string): string {
+  return `${pageUrl}?lang=${locale}`
+}
+
+export type HreflangLink = { hrefLang: string; href: string }
+
+/** Hreflang link tags — rendered manually to bypass Next.js root-path query strip. */
+export function buildHreflangLinks(pathname = '/', siteUrl = SITE_URL): HreflangLink[] {
+  const pageUrl = buildCanonicalPageUrl(pathname, siteUrl)
+  const entries: Array<[string, string]> = [
+    [HREFLANG_MAP.sk, 'sk'],
+    [HREFLANG_MAP.en, 'en'],
+    [HREFLANG_MAP.de, 'de'],
+    ['x-default', DEFAULT_LOCALE],
+  ]
+  return entries.map(([hrefLang, locale]) => ({
+    hrefLang,
+    href: buildLocaleHref(pageUrl, locale),
+  }))
+}
+
+export function buildLocaleAlternates(
+  pathname = '/',
+  siteUrl = SITE_URL,
+): Metadata['alternates'] {
   return {
-    canonical,
-    languages: {
-      [HREFLANG_MAP.sk]: `${SITE_URL}${path}?lang=sk`,
-      [HREFLANG_MAP.en]: `${SITE_URL}${path}?lang=en`,
-      [HREFLANG_MAP.de]: `${SITE_URL}${path}?lang=de`,
-      'x-default': `${SITE_URL}${path}?lang=${DEFAULT_LOCALE}`,
-    },
+    canonical: buildCanonicalPageUrl(pathname, siteUrl),
   }
 }
 

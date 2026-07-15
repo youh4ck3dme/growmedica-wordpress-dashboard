@@ -78,19 +78,26 @@ async function main() {
   }
 
   const revalidateSecret =
-    process.env.WORDPRESS_REVALIDATION_SECRET ??
-    process.env.SHOPIFY_REVALIDATION_SECRET ??
-    'mock-revalidation-secret-123456'
+    cmsProvider === 'shopify'
+      ? process.env.SHOPIFY_REVALIDATION_SECRET
+      : process.env.WORDPRESS_REVALIDATION_SECRET ?? process.env.SHOPIFY_REVALIDATION_SECRET
 
   const revalidateTag = cmsProvider === 'shopify' ? 'products' : 'woo-products'
-  const revalidateUrl = `${previewUrl}/api/revalidate?secret=${encodeURIComponent(revalidateSecret)}&tag=${revalidateTag}`
-  console.log(`→ POST ${revalidateUrl}`)
-  const rev = await fetch(revalidateUrl, { method: 'POST' })
-  if (!rev.ok) {
-    console.error(`❌ Revalidate returned HTTP ${rev.status}`)
-    process.exit(1)
+
+  if (!revalidateSecret?.trim()) {
+    console.warn(
+      `⚠️ Skipping ISR revalidate — set ${cmsProvider === 'shopify' ? 'SHOPIFY_REVALIDATION_SECRET' : 'WORDPRESS_REVALIDATION_SECRET'} (production value from Vercel)`,
+    )
+  } else {
+    const revalidateUrl = `${previewUrl}/api/revalidate?secret=${encodeURIComponent(revalidateSecret)}&tag=${revalidateTag}`
+    console.log(`→ POST ${revalidateUrl.replace(revalidateSecret, '<secret>')}`)
+    const rev = await fetch(revalidateUrl, { method: 'POST' })
+    if (!rev.ok) {
+      console.error(`❌ Revalidate returned HTTP ${rev.status}`)
+      process.exit(1)
+    }
+    console.log('✅ ISR revalidate endpoint reachable')
   }
-  console.log('✅ ISR revalidate endpoint reachable')
 
   console.log('\n✅ Production smoke passed')
 }

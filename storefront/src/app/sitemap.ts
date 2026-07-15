@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next'
 import { getAllProductHandlesForSitemap } from '@/lib/catalog/products'
 import { getNavCollectionItems } from '@/lib/catalog/nav'
+import { resolvePublicSiteUrl } from '@/lib/site-url'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.cz'
+const BASE_URL = resolvePublicSiteUrl()
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages

@@ -1,6 +1,6 @@
-import { Mistral } from '@mistralai/mistralai'
 import { getMistralEnv } from '@/lib/ai/env'
 import { AiError } from '@/lib/ai/errors'
+import { mistralChatComplete } from '@/lib/ai/mistralHttp'
 import { appendConversationMessages, getConversationMessages } from './conversationMemory'
 import { logToolExecution } from './auditLog'
 import { ADMIN_AGENT_SYSTEM_PROMPT } from './prompts/admin-agent'
@@ -8,6 +8,20 @@ import { executeAgentTool, inferToolsFromCommand } from './tools'
 import type { AgentAction, AgentMessage, AgentRunResult } from './types'
 
 const MISTRAL_SUMMARY_TIMEOUT_MS = 30_000
+
+async function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error(message)), ms)
+      }),
+    ])
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId)
+  }
+}
 
 function newConversationId(): string {
   return `conv-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
@@ -93,36 +107,35 @@ async function summarizeWithMistral(
     return buildReplyFromActions(command, actions)
   }
 
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), MISTRAL_SUMMARY_TIMEOUT_MS)
+  const { MISTRAL_API_KEY, MISTRAL_MODEL } = getMistralEnv()
 
   try {
-    const { MISTRAL_API_KEY, MISTRAL_MODEL } = getMistralEnv()
-    const client = new Mistral({ apiKey: MISTRAL_API_KEY })
-    const response = await client.chat.complete(
-      {
+    const content = await withTimeout(
+      mistralChatComplete({
+        apiKey: MISTRAL_API_KEY,
         model: MISTRAL_MODEL,
         messages: [
           { role: 'system', content: ADMIN_AGENT_SYSTEM_PROMPT },
-          ...history.slice(-6).map((m) => ({ role: m.role, content: m.content })),
+          ...history.slice(-6).map((m) => ({
+            role: m.role as 'user' | 'assistant',
+            content: m.content,
+          })),
           {
             role: 'user',
             content: `Príkaz: ${command}\nVýsledky nástrojov: ${JSON.stringify(actions).slice(0, 3000)}\nZhrň stručne po slovensky.`,
           },
         ],
         temperature: 0.3,
-      },
-      { signal: controller.signal },
+      }),
+      MISTRAL_SUMMARY_TIMEOUT_MS,
+      'Mistral summary timeout',
     )
 
-    const content = response.choices?.[0]?.message?.content
-    if (typeof content === 'string' && content.trim()) return content.trim()
+    if (content.trim()) return content.trim()
     return buildReplyFromActions(command, actions)
   } catch (error) {
     console.warn('[dashboard-agent] Mistral summary failed:', error)
     return buildReplyFromActions(command, actions)
-  } finally {
-    clearTimeout(timeoutId)
   }
 }
 

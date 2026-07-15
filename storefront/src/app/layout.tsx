@@ -16,8 +16,10 @@ import { NoorThemeChrome } from '@/components/theme/NoorThemeChrome'
 import { NoorUiProviders } from '@/components/noor/providers/NoorUiProviders'
 import { getThemeBootstrapScript, isStorefrontTheme, resolveInitialTheme, STORAGE_KEY } from '@/lib/theme/storefront-theme'
 import { DASHBOARD_ROUTE_HEADER, isDashboardRouteHeader } from '@/lib/dashboard'
+import { PATHNAME_HEADER } from '@/lib/request-headers'
 import { getRequestLocale } from '@/lib/i18n/server'
 import { LocaleProvider } from '@/components/i18n/LocaleProvider'
+import { HreflangLinks } from '@/components/seo/HreflangLinks'
 
 const montserrat = { variable: 'font-montserrat' }
 const inter = { variable: 'font-inter' }
@@ -58,6 +60,7 @@ export default async function RootLayout({
 }) {
   const headersList = await headers()
   const isDashboardRoute = isDashboardRouteHeader(headersList.get(DASHBOARD_ROUTE_HEADER))
+  const pathname = headersList.get(PATHNAME_HEADER) ?? '/'
   const locale = isDashboardRoute ? 'sk' : await getRequestLocale()
 
   const cookieStore = await cookies()
@@ -88,6 +91,9 @@ export default async function RootLayout({
       data-storefront-theme={ssrTheme}
       className={`${montserrat.variable} ${inter.variable} ${playfair.variable}`}
     >
+      <head>
+        <HreflangLinks pathname={pathname} />
+      </head>
       <body className="font-(--font-inter) antialiased" suppressHydrationWarning>
         <Script
           id="storefront-theme-bootstrap"

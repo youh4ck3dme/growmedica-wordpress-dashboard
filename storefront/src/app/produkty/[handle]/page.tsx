@@ -18,6 +18,7 @@ import {
 import { getProductMetadata, getProductJsonLd, getBreadcrumbJsonLd } from '@/lib/seo'
 import { getCollectionUrl } from '@/lib/utils'
 import { getCategoryDefinition, resolveCategory } from '@/lib/category-map'
+import { resolvePublicSiteUrl } from '@/lib/site-url'
 
 export const revalidate = 3600
 
@@ -52,7 +53,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const categorySlug = resolveCategory({ productType: p.productType, tags: p.tags })
   const categoryDef = getCategoryDefinition(categorySlug)
   const images = p.images.edges.map((e) => e.node)
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.cz'
+  const siteUrl = resolvePublicSiteUrl()
 
   const [relatedProducts] = await Promise.all([
     categorySlug !== 'ostatne'

@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next'
+import { resolvePublicSiteUrl } from '@/lib/site-url'
 
 export default function robots(): MetadataRoute.Robots {
-  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.cz'
+  const BASE_URL = resolvePublicSiteUrl()
 
   return {
     rules: [

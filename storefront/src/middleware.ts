@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { DASHBOARD_ROUTE_HEADER } from '@/lib/dashboard'
+import { PATHNAME_HEADER } from '@/lib/request-headers'
 import {
   isValidLocale,
   LOCALE_COOKIE,
@@ -20,6 +21,7 @@ export function middleware(request: NextRequest) {
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set(DASHBOARD_ROUTE_HEADER, '1')
     requestHeaders.set(LOCALE_HEADER, 'sk')
+    requestHeaders.set(PATHNAME_HEADER, pathname)
     return NextResponse.next({ request: { headers: requestHeaders } })
   }
 
@@ -45,6 +47,7 @@ export function middleware(request: NextRequest) {
 
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set(LOCALE_HEADER, resolved)
+  requestHeaders.set(PATHNAME_HEADER, pathname)
 
   const response = NextResponse.next({ request: { headers: requestHeaders } })
 

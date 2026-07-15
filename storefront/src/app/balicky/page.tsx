@@ -11,6 +11,7 @@ import {
   getBundleCatalogItemListJsonLd,
   getBundlesPageMetadata,
 } from '@/lib/seo'
+import { resolvePublicSiteUrl } from '@/lib/site-url'
 
 export const revalidate = 3600
 
@@ -34,7 +35,7 @@ function mapProductsByBundleSlug(
 }
 
 export default async function BalickyPage() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://growmedica.cz'
+  const siteUrl = resolvePublicSiteUrl()
   let productsByHandle = new Map<string, Awaited<ReturnType<typeof getBundleProducts>>[number]>()
 
   try {

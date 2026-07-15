@@ -21,13 +21,18 @@ export const MONEY_FRAGMENT = /* GraphQL */ `
   }
 `
 
+/**
+ * Variant fields for product detail.
+ * NOTE: Do NOT request `quantityAvailable` without Storefront scope
+ * `unauthenticated_read_product_inventory` — Shopify returns ACCESS_DENIED
+ * and our client would 500 the whole product page (tokenless mode has no inventory scope).
+ */
 export const PRODUCT_VARIANT_FRAGMENT = /* GraphQL */ `
   ${MONEY_FRAGMENT}
   fragment ProductVariantFragment on ProductVariant {
     id
     title
     availableForSale
-    quantityAvailable
     sku
     selectedOptions {
       name
@@ -132,21 +137,13 @@ export const PRODUCT_DETAIL_FRAGMENT = /* GraphQL */ `
       description
     }
     updatedAt
-    metafields(identifiers: [
-      { namespace: "custom", key: "composition" }
-      { namespace: "custom", key: "zlozenie" }
-      { namespace: "custom", key: "usage" }
-      { namespace: "custom", key: "davkovanie" }
-      { namespace: "custom", key: "navod_pouzitia" }
-      { namespace: "custom", key: "navod" }
-    ]) {
-      namespace
-      key
-      value
-      type
-    }
   }
 `
+
+// Product metafields (composition, usage, …) require Storefront scope
+// `unauthenticated_read_metafields`. Tokenless / default public access lacks it and
+// Shopify returns ACCESS_DENIED which previously 500'd the product page. Re-add
+// metafields(identifiers: [...]) here only after that scope is granted on the token.
 
 // ─── Cart Fragment ────────────────────────────────────────────────────────────
 
