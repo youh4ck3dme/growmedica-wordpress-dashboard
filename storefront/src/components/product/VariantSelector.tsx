@@ -107,7 +107,7 @@ export default function VariantSelector({ product, onVariantChange }: VariantSel
       {selectedVariant && (
         <div className="text-xs text-(--color-text-muted) pt-1">
           {selectedVariant.sku && <span>SKU: {selectedVariant.sku}</span>}
-          {selectedVariant.quantityAvailable !== null &&
+          {selectedVariant.quantityAvailable != null &&
             selectedVariant.quantityAvailable > 0 &&
             selectedVariant.quantityAvailable <= 10 && (
               <span className="ml-3 text-(--color-warning) font-medium">

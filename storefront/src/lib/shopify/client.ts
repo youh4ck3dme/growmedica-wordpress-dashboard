@@ -63,7 +63,13 @@ export async function shopifyFetch<T>({
 
   if (body.errors && body.errors.length > 0) {
     const errorMessages = body.errors.map((e) => e.message).join(', ')
-    throw new Error(`Shopify GraphQL errors: ${errorMessages}`)
+    // Field-level ACCESS_DENIED (e.g. inventory/metafields without scopes) can
+    // still return usable `data`. Only hard-fail when the payload is unusable.
+    const hasData = body.data != null && Object.values(body.data as object).some((v) => v != null)
+    if (!hasData) {
+      throw new Error(`Shopify GraphQL errors: ${errorMessages}`)
+    }
+    console.warn(`[shopifyFetch] GraphQL field errors (using partial data): ${errorMessages}`)
   }
 
   return body.data

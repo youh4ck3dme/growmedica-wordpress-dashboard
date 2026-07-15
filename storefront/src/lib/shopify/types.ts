@@ -35,7 +35,8 @@ export interface ProductVariant {
   price: Money
   compareAtPrice: Money | null
   sku: string | null
-  quantityAvailable: number | null
+  /** Present only when Storefront token has `unauthenticated_read_product_inventory`. */
+  quantityAvailable?: number | null
   image: ShopifyImage | null
 }
 

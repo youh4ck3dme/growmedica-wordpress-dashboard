@@ -24,6 +24,8 @@ Shopify Admin → Settings → Apps → Develop apps → Create app → Configur
 
 Odporúčané scopes: `unauthenticated_read_product_listings`, `unauthenticated_read_product_inventory`, `unauthenticated_write_checkouts`, `unauthenticated_read_checkouts`.
 
+**Tokenless / minimálny token:** product detail **nežiada** `quantityAvailable` ani `metafields` — tieto polia vyžadujú `unauthenticated_read_product_inventory` resp. `unauthenticated_read_metafields`. Bez nich Shopify vráti `ACCESS_DENIED` a starší client by vyhodil 500 na `/produkty/[handle]`. Zobrazenie zostatku skladu a zloženia z metafieldov zapni až po pridaní týchto scopes.
+
 ## S1 — Lokálny smoke
 
 ```bash
