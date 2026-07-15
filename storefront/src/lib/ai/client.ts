@@ -1,9 +1,10 @@
-import { Mistral } from '@mistralai/mistralai'
-import type { z } from 'zod'
 import { checkCompliance } from '@/lib/ai/compliance'
 import { getMistralEnv } from '@/lib/ai/env'
 import { AiError } from '@/lib/ai/errors'
+import { mistralChatComplete } from '@/lib/ai/mistralHttp'
 import { checkRateLimit } from '@/lib/ai/rateLimit'
+
+import type { z } from 'zod'
 
 const MAX_RETRIES = 3
 const BASE_DELAY_MS = 1000
@@ -39,6 +40,22 @@ function getMockMistralOutput<T>(prompt: string, schema: z.ZodSchema<T>): T {
       notIdealFor: ['tehotné ženy bez konzultácie', 'ľudia s liečbou bez odporúčania odborníka'],
       howToUse: 'Dodržujte odporúčané dávkovanie na obale produktu.',
       safeDisclaimer: 'Toto odporúčanie nenahrádza konzultáciu s lekárom ani odborníkom.',
+    })
+  }
+
+  if (prompt.includes('"title"') && prompt.includes('"short_description"')) {
+    return schema.parse({
+      title: 'Optimalizovaný názov produktu — GrowMedica',
+      short_description:
+        'Prírodný výživový doplnok vhodný ako súčasť vyváženej stravy a aktívneho životného štýlu.',
+    })
+  }
+
+  if (prompt.includes('"meta_title"') && prompt.includes('"meta_description"')) {
+    return schema.parse({
+      meta_title: 'Produkt GrowMedica | Doplnky výživy',
+      meta_description:
+        'Prírodný výživový doplnok GrowMedica pre každodennú podporu vitality. Objednajte online s doručením.',
     })
   }
 
@@ -78,6 +95,20 @@ function isAuthError(error: Error): boolean {
   return /401|403|unauthorized|forbidden|invalid api key/i.test(error.message)
 }
 
+async function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error(message)), ms)
+      }),
+    ])
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId)
+  }
+}
+
 async function completeWithMistralKey<T>(
   apiKey: string,
   prompt: string,
@@ -85,39 +116,27 @@ async function completeWithMistralKey<T>(
   model: string,
   temperature: number,
 ): Promise<T> {
-  const client = new Mistral({ apiKey })
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS)
+  const content = await withTimeout(
+    mistralChatComplete({
+      apiKey,
+      model,
+      messages: [{ role: 'user', content: prompt }],
+      temperature,
+      responseFormat: 'json_object',
+    }),
+    TIMEOUT_MS,
+    'Mistral API timeout',
+  )
 
+  let parsed: unknown
   try {
-    const response = await client.chat.complete(
-      {
-        model,
-        messages: [{ role: 'user', content: prompt }],
-        temperature,
-        responseFormat: { type: 'json_object' },
-      },
-      { signal: controller.signal },
-    )
-
-    const rawContent = response.choices?.[0]?.message?.content
-    if (rawContent == null) {
-      throw new Error('Mistral API: No content in response')
-    }
-
-    const content = extractMessageContent(rawContent)
-    let parsed: unknown
-    try {
-      parsed = JSON.parse(content)
-    } catch {
-      console.error('[Mistral] Invalid JSON:', content.slice(0, 500))
-      throw new Error('Mistral API: Invalid JSON response')
-    }
-
-    return schema.parse(parsed)
-  } finally {
-    clearTimeout(timeoutId)
+    parsed = JSON.parse(content)
+  } catch {
+    console.error('[Mistral] Invalid JSON:', content.slice(0, 500))
+    throw new Error('Mistral API: Invalid JSON response')
   }
+
+  return schema.parse(parsed)
 }
 
 export async function callMistral<T>(

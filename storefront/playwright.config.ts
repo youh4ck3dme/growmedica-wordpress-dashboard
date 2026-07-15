@@ -45,11 +45,24 @@ if (dashboardTestUrl) {
 const playwrightEnv = isWooTest ? wooTestEnv : shopifyTestEnv;
 
 const requestedSpecFiles = process.argv.filter((arg) => arg.endsWith('.spec.ts'));
+const unitOnlySpecPatterns = [
+  'shopify-live.spec.ts',
+  'seo-alternates.spec.ts',
+  'copy-quality.spec.ts',
+  'i18n-detect.spec.ts',
+];
 const onlyShopifyLiveSpec =
   requestedSpecFiles.length > 0 &&
   requestedSpecFiles.every((arg) => arg.includes('shopify-live.spec.ts'));
+const onlyUnitSpecs =
+  requestedSpecFiles.length > 0 &&
+  requestedSpecFiles.every((arg) =>
+    unitOnlySpecPatterns.some((pattern) => arg.includes(pattern)),
+  );
 const skipWebServer =
-  process.env.PLAYWRIGHT_SKIP_WEBSERVER === '1' || onlyShopifyLiveSpec;
+  process.env.PLAYWRIGHT_SKIP_WEBSERVER === '1' ||
+  onlyShopifyLiveSpec ||
+  onlyUnitSpecs;
 
 const playwrightWebServer = {
   command: `node scripts/ensure-dev-port.mjs ${playwrightDevPort} && node scripts/playwright-dev.mjs ${playwrightDevPort}`,

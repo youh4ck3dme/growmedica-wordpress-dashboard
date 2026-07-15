@@ -64,7 +64,7 @@ upsert_env_var() {
   local target=$3
 
   remove_env_var "$name" "$target"
-  timeout 60 vercel env add "$name" "$target" --value "$value" --yes "${vercel_args[@]}"
+  timeout 60 bash -c "printf '%s' \"$value\" | vercel env add \"$name\" \"$target\" --yes \"\${vercel_args[@]}\""
   echo "  - Added $name to $target"
 }
 

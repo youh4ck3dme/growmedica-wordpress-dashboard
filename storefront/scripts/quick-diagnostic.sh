@@ -37,8 +37,16 @@ else
 fi
 
 echo ""
-echo "── Playwright (i18n) ──"
-if yarn playwright test tests/integrity/i18n.spec.ts --project=integrity --reporter=line >/dev/null 2>&1; then
+echo "── Playwright (unit integrity) ──"
+if yarn test:unit-integrity --reporter=line >/dev/null 2>&1; then
+  pass "test:unit-integrity"
+else
+  fail "test:unit-integrity"
+fi
+
+echo ""
+echo "── Playwright (i18n middleware) ──"
+if yarn test:i18n --reporter=line >/dev/null 2>&1; then
   pass "test:i18n"
 else
   fail "test:i18n"
