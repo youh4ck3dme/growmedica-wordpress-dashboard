@@ -1,6 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { updateCartDiscountCodes, CART_COOKIE } from '@/lib/catalog/cart'
+import { isWordPressCms } from '@/lib/cms'
+import { normalizeShopifyCartId } from '@/lib/shopify/cart'
 
 // Helper to compute total cart item count
 function getCartCount(cart: { lines?: { edges?: Array<{ node: { quantity?: number } }> } }) {
@@ -19,7 +21,10 @@ export async function POST(request: NextRequest) {
     }
 
     const cookieStore = await cookies()
-    const cartId = cookieStore.get(CART_COOKIE)?.value
+    const rawCartId = cookieStore.get(CART_COOKIE)?.value
+    const cartId = isWordPressCms()
+      ? rawCartId?.trim() || null
+      : normalizeShopifyCartId(rawCartId)
 
     if (!cartId) {
       return NextResponse.json({ error: 'Cart not found' }, { status: 404 })
@@ -40,7 +45,10 @@ export async function POST(request: NextRequest) {
 export async function DELETE() {
   try {
     const cookieStore = await cookies()
-    const cartId = cookieStore.get(CART_COOKIE)?.value
+    const rawCartId = cookieStore.get(CART_COOKIE)?.value
+    const cartId = isWordPressCms()
+      ? rawCartId?.trim() || null
+      : normalizeShopifyCartId(rawCartId)
 
     if (!cartId) {
       return NextResponse.json({ error: 'Cart not found' }, { status: 404 })

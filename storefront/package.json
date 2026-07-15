@@ -18,7 +18,7 @@
     "test:dashboard-agent": "CMS_PROVIDER=wordpress WOO_MOCK_MODE=1 MISTRAL_MOCK_MODE=1 NEXT_PUBLIC_DASHBOARD_MODE=hybrid DASHBOARD_AGENT_SECRET=mock-dashboard-agent-secret-123456 playwright test tests/integrity/dashboard-agent.spec.ts --project=integrity",
     "mistral:smoke": "node scripts/mistral-agent-live-smoke.mjs",
     "test:i18n": "playwright test tests/integrity/i18n-middleware.spec.ts --project=integrity",
-    "test:unit-integrity": "playwright test tests/integrity/seo-alternates.spec.ts tests/integrity/copy-quality.spec.ts tests/integrity/i18n-detect.spec.ts --project=integrity",
+    "test:unit-integrity": "playwright test tests/integrity/seo-alternates.spec.ts tests/integrity/copy-quality.spec.ts tests/integrity/i18n-detect.spec.ts tests/integrity/cart-id.spec.ts --project=integrity",
     "test:seo": "playwright test tests/integrity/seo-alternates.spec.ts tests/integrity/seo-hreflang-html.spec.ts --project=integrity",
     "production:smoke": "node scripts/production-smoke.mjs",
     "test:noor-demo": "NOOR_DEMO_TEST=1 NEXT_PUBLIC_DEFAULT_THEME=noor NEXT_PUBLIC_HIDE_THEME_SWITCHER=1 playwright test tests/integrity/noor-demo.spec.ts --project=integrity",

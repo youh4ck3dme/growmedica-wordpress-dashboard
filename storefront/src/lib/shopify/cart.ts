@@ -19,10 +19,33 @@ const CART_COOKIE_NAME = 'growmedical_cart_id'
 
 // ─── Cookie helpers (server-side) ─────────────────────────────────────────────
 
+/**
+ * Normalize + validate a Shopify cart id from a cookie.
+ * Rejects garbage values (e.g. "undefined", Woo ids) that make GraphQL throw
+ * `Variable $cartId of type ID! was provided invalid value` → /api/cart 500.
+ */
+export function normalizeShopifyCartId(raw: string | null | undefined): string | null {
+  if (!raw) return null
+  let value = raw.trim()
+  if (!value || value === 'undefined' || value === 'null') return null
+
+  try {
+    if (value.includes('%')) {
+      value = decodeURIComponent(value)
+    }
+  } catch {
+    // keep raw value
+  }
+
+  value = value.trim()
+  if (!value.startsWith('gid://shopify/Cart/')) return null
+  return value
+}
+
 export function getCartIdFromCookieHeader(cookieHeader: string | null): string | null {
   if (!cookieHeader) return null
   const match = cookieHeader.match(new RegExp(`${CART_COOKIE_NAME}=([^;]+)`))
-  return match?.[1] ?? null
+  return normalizeShopifyCartId(match?.[1] ?? null)
 }
 
 export const CART_COOKIE = CART_COOKIE_NAME
@@ -30,12 +53,21 @@ export const CART_COOKIE = CART_COOKIE_NAME
 // ─── Cart API ─────────────────────────────────────────────────────────────────
 
 export async function getCart(cartId: string): Promise<Cart | null> {
-  const data = await shopifyFetch<{ cart: Cart | null }>({
-    query: GET_CART_QUERY,
-    variables: { cartId },
-    cache: 'no-store',
-  })
-  return data.cart
+  const normalized = normalizeShopifyCartId(cartId)
+  if (!normalized) return null
+
+  try {
+    const data = await shopifyFetch<{ cart: Cart | null }>({
+      query: GET_CART_QUERY,
+      variables: { cartId: normalized },
+      cache: 'no-store',
+    })
+    return data.cart
+  } catch (error) {
+    // Expired/invalid carts must not 500 the storefront header badge.
+    console.warn('[Shopify Cart] getCart failed:', error)
+    return null
+  }
 }
 
 export async function createCart(
