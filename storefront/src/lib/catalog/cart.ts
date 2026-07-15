@@ -8,6 +8,7 @@ import * as wooCart from '@/lib/wordpress/cart'
 import type { Cart } from '@/lib/shopify/types'
 
 export const CART_COOKIE = shopifyCart.CART_COOKIE
+export const normalizeShopifyCartId = shopifyCart.normalizeShopifyCartId
 
 export function getCartIdFromCookieHeader(cookieHeader: string | null): string | null {
   if (isWordPressCms()) {

@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { createCart, addToCart, getCart, CART_COOKIE } from '@/lib/catalog/cart'
+import { normalizeShopifyCartId } from '@/lib/shopify/cart'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     const cookieStore = await cookies()
-    const existingCartId = cookieStore.get(CART_COOKIE)?.value
+    const existingCartId = normalizeShopifyCartId(cookieStore.get(CART_COOKIE)?.value)
 
     let cart
     if (existingCartId) {
