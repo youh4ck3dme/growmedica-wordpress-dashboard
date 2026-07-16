@@ -19,7 +19,7 @@ export default function Velkoobchod() {
           <div className="bg-white p-8 md:p-12 rounded-2xl shadow-(--shadow-card) border border-(--color-border)">
             <div className="prose prose-lg text-(--color-text-muted) space-y-6">
               <p className="text-lg">
-                Ste lekáreň, fitness centrum, bio obchod alebo terapeut a radi by ste zaradili biomedicínske
+                Ste predajňa, fitness centrum, bio obchod alebo terapeut a radi by ste zaradili biomedicínske
                 supplementy {BRAND_COPY.companyName} do svojej ponuky?
               </p>
               <p>Hľadáme stabilných partnerov, ktorým záleží na kvalite a zdraví ich zákazníkov tak ako nám.</p>

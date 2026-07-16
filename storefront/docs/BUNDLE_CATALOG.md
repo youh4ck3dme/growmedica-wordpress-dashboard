@@ -81,7 +81,7 @@ Pre skladové väzby nainštalujte **Shopify Bundles** a prepojte komponenty bal
 
 ## Compliance
 
-- Balíček **Tehotenstvo prep** (`balicek-tehotenstvo-prep`) — len s disclaimerom, odporúčame konzultáciu s lekárom.
+- Balíček **Tehotenstvo prep** (`balicek-tehotenstvo-prep`) — len s disclaimerom, odporúčame konzultáciu s odborníkom.
 - Tvrdenia formulujte ako **podporu**, nie liečbu (rovnako ako chatbot).
 
 ## Kompletný zoznam 63 balíčkov

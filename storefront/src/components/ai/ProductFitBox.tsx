@@ -15,7 +15,7 @@ const fitBoxClasses: Record<ProductFitOutput['fit'], string> = {
 
 const fitLabels: Record<ProductFitOutput['fit'], string> = {
   good: 'Vhodné',
-  maybe: 'Overte si u lekárnika',
+  maybe: 'Overte si u odborníka',
   not_recommended: 'Nevhodné',
 }
 

@@ -39,7 +39,7 @@ function getMockMistralOutput<T>(prompt: string, schema: z.ZodSchema<T>): T {
       bestFor: ['aktívny životný štýl', 'bežné doplnenie stravy'],
       notIdealFor: ['tehotné ženy bez konzultácie', 'ľudia s liečbou bez odporúčania odborníka'],
       howToUse: 'Dodržujte odporúčané dávkovanie na obale produktu.',
-      safeDisclaimer: 'Toto odporúčanie nenahrádza konzultáciu s lekárom ani odborníkom.',
+      safeDisclaimer: 'Toto odporúčanie nenahrádza konzultáciu s kvalifikovaným odborníkom.',
     })
   }
 
@@ -64,7 +64,7 @@ function getMockMistralOutput<T>(prompt: string, schema: z.ZodSchema<T>): T {
     recommendedHandles: ['vitaminy-mineraly-mock-1', 'regeneracia-mock-1'],
     recommendedCategories: ['vitaminy-mineraly', 'regeneracia'],
     reasoningForUser:
-      'Vybrané doplnky zodpovedajú všeobecnému cieľu podpory vitality. Odporúčanie nenahrádza konzultáciu s lekárom ani odborníkom.',
+      'Vybrané doplnky zodpovedajú všeobecnému cieľu podpory vitality. Odporúčanie nenahrádza konzultáciu s kvalifikovaným odborníkom.',
     warnings: [],
     bundleSuggestion: null,
   })

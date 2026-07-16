@@ -23,4 +23,4 @@ export function checkCompliance(text: string): string[] {
 }
 
 export const SAFE_DISCLAIMER =
-  'Toto nie je lekárska rada. Pri zdravotných ťažkostiach sa poraďte s lekárom alebo lekárnikom.'
+  'Toto nie je odborná zdravotná rada. Pri zdravotných ťažkostiach sa poraďte s kvalifikovaným odborníkom.'
