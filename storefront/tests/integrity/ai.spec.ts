@@ -26,11 +26,13 @@ test.describe('AI Integration — API Endpoints', () => {
     expect(content).toContain('userInput')
   })
 
-  test('4. /api/ai/recommend by mal odmietnuť krátky vstup s 400', async () => {
+  test('4. /api/ai/recommend by mal mať min. dĺžku vstupu (krátke pozdravy OK)', async () => {
     const routePath = path.join(process.cwd(), 'src/app/api/ai/recommend/route.ts')
     const content = fs.readFileSync(routePath, 'utf8')
     expect(content).toContain('z.object')
-    expect(content).toContain('min(10)') // checking min length validation
+    // 2 znaky = „ahoj“ prejde; prázdny / 1 znak = 400 s ľudskou hláškou
+    expect(content).toMatch(/\.min\(2/)
+    expect(content).toContain('formatRecommendError')
   })
 
   test('5. /api/ai/product-fit by mal overiť vhodnosť produktu s 200', async () => {

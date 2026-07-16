@@ -19,7 +19,7 @@ Vytvoriť produkčný Next.js 15 headless storefront pre Grow Medical napojený 
 | Framework     | Next.js 15 (App Router)              |
 | Jazyk         | TypeScript (strict mode)             |
 | Štýlovanie    | Tailwind CSS 4                       |
-| API           | Shopify Storefront API GraphQL 2025-01 |
+| API           | Shopify Storefront API GraphQL 2026-07 |
 | Env validácia | Zod                                  |
 | Linting       | ESLint + Prettier                    |
 | Deployment    | Vercel                               |

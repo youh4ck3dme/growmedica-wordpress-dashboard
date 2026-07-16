@@ -7,6 +7,13 @@ export const STOREFRONT_ROOT = resolve(__dirname, '../..')
 
 /** Canonical store — tn43yx-0k.myshopify.com redirects here (same shop, 460 products). */
 export const CANONICAL_SHOPIFY_STORE = 'growmedica.myshopify.com'
+export const DEFAULT_SHOPIFY_API_VERSION = '2026-07'
+export const REQUIRED_ADMIN_SCOPES = Object.freeze([
+  'read_products',
+  'write_products',
+  'read_inventory',
+  'write_inventory',
+])
 
 export function loadEnvLocal(root = STOREFRONT_ROOT) {
   const path = resolve(root, '.env.local')
@@ -35,7 +42,7 @@ export function getShopifyAdminConfig() {
   return {
     store: process.env.SHOPIFY_STORE_DOMAIN ?? CANONICAL_SHOPIFY_STORE,
     token: process.env.SHOPIFY_ADMIN_ACCESS_TOKEN?.trim(),
-    apiVersion: process.env.SHOPIFY_API_VERSION ?? '2025-01',
+    apiVersion: process.env.SHOPIFY_API_VERSION ?? DEFAULT_SHOPIFY_API_VERSION,
   }
 }
 
@@ -77,17 +84,18 @@ export async function fetchClientCredentialsToken(
   return cachedClientCredentialsToken
 }
 
-/** Legacy shpat_ alebo client credentials token. */
+/** Prefer renewable Dev Dashboard credentials; fall back to a legacy Admin token. */
 export async function resolveAdminAccessToken(config = getShopifyAdminConfig()) {
-  const legacy = config.token?.trim()
-  if (legacy?.startsWith('shpat_')) return legacy
-
   const clientId = process.env.SHOPIFY_CLIENT_ID?.trim()
   const clientSecret = process.env.SHOPIFY_CLIENT_SECRET?.trim()
-  if (clientId && clientSecret) {
+  if (clientId || clientSecret) {
+    if (!clientId || !clientSecret) {
+      throw new Error('SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET must be set together')
+    }
     return fetchClientCredentialsToken(config.store, clientId, clientSecret)
   }
 
+  const legacy = config.token?.trim()
   return legacy ?? ''
 }
 
@@ -97,13 +105,17 @@ export function assertAdminConfig({ store, token, dryRun = false }) {
       throw new Error('Missing SHOPIFY_STORE_DOMAIN in .env.local (must end with .myshopify.com)')
     }
   }
-  if (!token?.startsWith('shpat_')) {
+  const hasClientCredentials = Boolean(
+    process.env.SHOPIFY_CLIENT_ID?.trim() && process.env.SHOPIFY_CLIENT_SECRET?.trim(),
+  )
+  if (!token?.trim() && !hasClientCredentials) {
     if (dryRun) {
-      console.warn('No SHOPIFY_ADMIN_ACCESS_TOKEN — dry-run listing only.\n')
+      console.warn('No Shopify Admin credentials — dry-run listing only.\n')
       return false
     }
     throw new Error(
-      'Missing SHOPIFY_ADMIN_ACCESS_TOKEN (shpat_...) in .env.local.\n' +
+      'Missing Shopify Admin credentials in .env.local. Set SHOPIFY_CLIENT_ID + ' +
+        'SHOPIFY_CLIENT_SECRET (preferred) or SHOPIFY_ADMIN_ACCESS_TOKEN.\n' +
         'Shopify Admin → Settings → Apps → Develop apps → Admin API scopes:\n' +
         '  read_products, write_products, read_inventory, write_inventory',
     )
@@ -150,16 +162,16 @@ const DEVELOP_APPS_URL = 'https://admin.shopify.com/store/growmedica/settings/ap
 
 /** REST shop.json — jasnejší 403 „API Access has been disabled“ než GraphQL. */
 export async function verifyAdminTokenRest(token, config = getShopifyAdminConfig()) {
-  if (!token?.startsWith('shpat_')) {
+  if (!token?.trim()) {
     return {
       ok: false,
       code: 'missing_token',
-      message: 'Missing or invalid SHOPIFY_ADMIN_ACCESS_TOKEN (must start with shpat_)',
+      message: 'Missing Shopify Admin access token',
     }
   }
 
   const store = config.store ?? CANONICAL_SHOPIFY_STORE
-  const apiVersion = config.apiVersion ?? '2025-01'
+  const apiVersion = config.apiVersion ?? DEFAULT_SHOPIFY_API_VERSION
 
   try {
     const res = await fetch(`https://${store}/admin/api/${apiVersion}/shop.json`, {
@@ -194,14 +206,115 @@ export async function verifyAdminTokenRest(token, config = getShopifyAdminConfig
     }
 
     const shopJson = JSON.parse(text)
+    const servedApiVersion = res.headers.get('x-shopify-api-version')
+    if (servedApiVersion && servedApiVersion !== apiVersion) {
+      return {
+        ok: false,
+        code: 'api_version_fallback',
+        message:
+          `Shopify served API ${servedApiVersion} instead of requested ${apiVersion}; ` +
+          'the configured version is inaccessible and must be upgraded.',
+        requested_api_version: apiVersion,
+        served_api_version: servedApiVersion,
+      }
+    }
     return {
       ok: true,
       code: 'ok',
       shop: shopJson.shop?.name,
       domain: shopJson.shop?.myshopify_domain ?? store,
+      api_version: servedApiVersion ?? apiVersion,
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     return { ok: false, code: 'error', message: msg }
+  }
+}
+
+/** Verify that the installed app has the scopes required by GrowMedica Admin writes. */
+export async function verifyAdminScopesGraphql(
+  token,
+  config = getShopifyAdminConfig(),
+  requiredScopes = REQUIRED_ADMIN_SCOPES,
+) {
+  if (!token?.trim()) {
+    return {
+      ok: false,
+      code: 'missing_token',
+      message: 'Missing Shopify Admin access token',
+      required: [...requiredScopes],
+      granted: [],
+      missing: [...requiredScopes],
+    }
+  }
+
+  const store = config.store ?? CANONICAL_SHOPIFY_STORE
+  const apiVersion = config.apiVersion ?? DEFAULT_SHOPIFY_API_VERSION
+
+  try {
+    const res = await fetch(`https://${store}/admin/api/${apiVersion}/graphql.json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Access-Token': token,
+      },
+      body: JSON.stringify({
+        query: `query GrowMedicaGrantedScopes {
+          currentAppInstallation {
+            accessScopes { handle }
+          }
+        }`,
+      }),
+    })
+    const text = await res.text()
+    if (!res.ok) {
+      return {
+        ok: false,
+        code: 'scope_check_http_error',
+        message: `Admin GraphQL HTTP ${res.status}: ${text.slice(0, 200)}`,
+        required: [...requiredScopes],
+        granted: [],
+        missing: [...requiredScopes],
+      }
+    }
+
+    const json = JSON.parse(text)
+    if (json.errors?.length) {
+      return {
+        ok: false,
+        code: 'scope_check_graphql_error',
+        message: json.errors.map((error) => error.message).join('; '),
+        required: [...requiredScopes],
+        granted: [],
+        missing: [...requiredScopes],
+      }
+    }
+
+    const granted = (json.data?.currentAppInstallation?.accessScopes ?? [])
+      .map((scope) => scope.handle)
+      .filter(Boolean)
+      .sort()
+    const missing = requiredScopes.filter((scope) => !granted.includes(scope))
+    return {
+      ok: missing.length === 0,
+      code: missing.length === 0 ? 'ok' : 'missing_scopes',
+      message:
+        missing.length === 0
+          ? 'Required Shopify Admin scopes are granted'
+          : `Missing Shopify Admin scopes: ${missing.join(', ')}`,
+      required: [...requiredScopes],
+      granted,
+      missing,
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    return {
+      ok: false,
+      code: 'scope_check_error',
+      message,
+      required: [...requiredScopes],
+      granted: [],
+      missing: [...requiredScopes],
+    }
   }
 }

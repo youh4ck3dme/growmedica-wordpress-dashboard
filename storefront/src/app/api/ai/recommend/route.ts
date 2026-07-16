@@ -7,8 +7,13 @@ import { AiError } from '@/lib/ai/errors'
 import { getClientIp } from '@/lib/ai/request'
 import { recommendSchema } from '@/lib/ai/schemas'
 
+/** Min 2 znaky — krátke pozdravy (ahoj) majú dostať ľudskú odpoveď, nie 400 Zod dump. */
 const recommendInputSchema = z.object({
-  userInput: z.string().min(10).max(1000),
+  userInput: z
+    .string()
+    .trim()
+    .min(2, 'Napíšte aspoň 2 znaky — napr. „viac energie“, „spánok“ alebo „imunita“.')
+    .max(1000, 'Text je príliš dlhý (max. 1000 znakov).'),
 })
 
 const RECOMMEND_PROMPT_SCHEMA = `
@@ -24,10 +29,31 @@ Vráť IBA JSON objekt s nasledujúcou štruktúrou:
 PRAVIDLÁ:
 - Odporúčaj IBA produkty z poskytnutého zoznamu (presné handle).
 - Ak nič nesedí, vráť prázdne polia a vysvetli to v reasoningForUser.
+- Ak je vstup len pozdrav alebo príliš vágny (napr. „ahoj“, „help“), neodporúčaj náhodné produkty — v summary a reasoningForUser zdvorilo požiadaj o cieľ (energia, spánok, imunita, šport…) a nechaj recommendedHandles prázdne.
 - Nikdy neodporúčaj produkty pre liečbu alebo diagnostiku.
 - Nikdy negarantuj zdravotné výsledky.
 - Disclaimer: "${SAFE_DISCLAIMER}"
 `
+
+function formatRecommendError(error: unknown): { message: string; status: number } {
+  if (error instanceof z.ZodError) {
+    const first = error.issues[0]?.message
+    return {
+      message:
+        first && !first.startsWith('[')
+          ? first
+          : 'Napíšte aspoň 2 znaky — napr. „viac energie“, „spánok“ alebo „imunita“.',
+      status: 400,
+    }
+  }
+  if (error instanceof AiError) {
+    return { message: error.message, status: error.status }
+  }
+  if (error instanceof Error) {
+    return { message: error.message, status: 500 }
+  }
+  return { message: 'Nepodarilo sa vygenerovať odporúčania.', status: 500 }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -72,10 +98,7 @@ Používateľov vstup: ${JSON.stringify(userInput)}
     })
   } catch (error) {
     console.error('[AI Recommend] Error:', error)
-    const message =
-      error instanceof Error ? error.message : 'Nepodarilo sa vygenerovať odporúčania.'
-    const status =
-      error instanceof AiError ? error.status : error instanceof z.ZodError ? 400 : 500
+    const { message, status } = formatRecommendError(error)
     return NextResponse.json({ error: message }, { status })
   }
 }

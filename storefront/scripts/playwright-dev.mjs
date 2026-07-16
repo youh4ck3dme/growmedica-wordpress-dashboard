@@ -32,7 +32,7 @@ const pinnedEnv = {
   SHOPIFY_STORE_DOMAIN: process.env.SHOPIFY_STORE_DOMAIN ?? 'mock-store.myshopify.com',
   SHOPIFY_STOREFRONT_ACCESS_TOKEN:
     process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ?? 'mock-storefront-token',
-  SHOPIFY_API_VERSION: process.env.SHOPIFY_API_VERSION ?? '2025-01',
+  SHOPIFY_API_VERSION: process.env.SHOPIFY_API_VERSION ?? '2026-07',
 }
 
 for (const [key, value] of Object.entries(pinnedEnv)) {

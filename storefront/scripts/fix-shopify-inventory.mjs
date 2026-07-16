@@ -4,8 +4,10 @@
  *
  * Requires .env.local:
  *   SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
- *   SHOPIFY_ADMIN_ACCESS_TOKEN=shpat_...
- *   SHOPIFY_API_VERSION=2025-01
+ *   SHOPIFY_CLIENT_ID=...
+ *   SHOPIFY_CLIENT_SECRET=...
+ *   SHOPIFY_API_VERSION=2026-07
+ * Legacy fallback: SHOPIFY_ADMIN_ACCESS_TOKEN=shpat_...
  *
  * Admin API scopes: read_products, write_products, read_inventory, write_inventory
  *
@@ -17,6 +19,7 @@
  *   node scripts/fix-shopify-inventory.mjs --handle=mycomedica-bio-coriolus-100-g
  *   node scripts/fix-shopify-inventory.mjs --strategy=untracked
  *   node scripts/fix-shopify-inventory.mjs --limit=5
+ *   node scripts/fix-shopify-inventory.mjs --location-id=gid://shopify/Location/123
  *
  * Strategies:
  *   full (default) — inventoryPolicy CONTINUE + untracked + set quantity at primary location
@@ -43,11 +46,19 @@ const force = parseArgFlag('--force')
 const quantity = Math.max(1, Number(parseArgValue('--quantity', '100')) || 100)
 const limit = parseArgValue('--limit', null) ? Number(parseArgValue('--limit', '0')) : null
 const handleFilter = parseArgValue('--handle', null)
+const locationIdFilter = parseArgValue('--location-id', null)
 const strategy = parseArgValue('--strategy', 'full')
 
 const VALID_STRATEGIES = new Set(['full', 'quantity', 'untracked', 'continue'])
 if (!VALID_STRATEGIES.has(strategy)) {
   console.error(`Invalid --strategy=${strategy}. Use: ${[...VALID_STRATEGIES].join(', ')}`)
+  process.exit(1)
+}
+if (apply && strategy === 'full') {
+  console.error(
+    'Refusing live --strategy=full: disabling tracking and setting quantity are conflicting writes. ' +
+      'Review the product and choose --strategy=untracked, --strategy=continue, or --strategy=quantity.',
+  )
   process.exit(1)
 }
 
@@ -60,28 +71,25 @@ async function getPrimaryLocationId() {
   const data = await adminGraphql(
     `query {
       locations(first: 10) {
-        edges {
-          node {
-            id
-            name
-            isActive
-            fulfillsOnlineOrders
-          }
-        }
+        nodes { id }
       }
     }`,
     {},
     config,
   )
 
-  const locations = data.locations.edges.map((e) => e.node).filter((l) => l.isActive)
-  const online =
-    locations.find((l) => l.fulfillsOnlineOrders) ??
-    locations.find((l) => /shop|sklad|warehouse|default/i.test(l.name)) ??
-    locations[0]
-
-  if (!online) throw new Error('No active Shopify location found')
-  return online
+  const locations = data.locations.nodes
+  if (locationIdFilter) {
+    const selected = locations.find((location) => location.id === locationIdFilter)
+    if (!selected) throw new Error(`Configured --location-id is not available: ${locationIdFilter}`)
+    return selected
+  }
+  if (locations.length === 1) return locations[0]
+  if (locations.length === 0) throw new Error('No Shopify location found')
+  throw new Error(
+    'Multiple Shopify locations found. Pass the intended fulfilment location explicitly: ' +
+      '--location-id=gid://shopify/Location/...',
+  )
 }
 
 async function fetchAllVariants() {
@@ -100,7 +108,8 @@ async function fetchAllVariants() {
               id
               handle
               title
-              variants(first: 100) {
+              variants(first: 50) {
+                pageInfo { hasNextPage }
                 edges {
                   node {
                     id
@@ -113,7 +122,7 @@ async function fetchAllVariants() {
                         edges {
                           node {
                             id
-                            location { id name }
+                            location { id }
                             quantities(names: ["available"]) {
                               name
                               quantity
@@ -135,6 +144,11 @@ async function fetchAllVariants() {
 
     for (const productEdge of data.products.edges) {
       const product = productEdge.node
+      if (product.variants.pageInfo.hasNextPage) {
+        throw new Error(
+          `Product ${product.handle} has more than 50 variants; refusing a partial inventory run.`,
+        )
+      }
       for (const variantEdge of product.variants.edges) {
         variants.push({
           productId: product.id,
@@ -301,7 +315,7 @@ async function main() {
   }
 
   const location = await getPrimaryLocationId()
-  console.log(`Primary location: ${location.name} (${location.id})\n`)
+  console.log(`Primary location: ${location.id}\n`)
 
   const variants = await fetchAllVariants()
   if (variants.length === 0) {
@@ -311,6 +325,7 @@ async function main() {
 
   let fixed = 0
   let skipped = 0
+  let failed = 0
 
   for (const variant of variants) {
     const label = `${variant.productHandle} / ${variant.variantTitle}`
@@ -331,10 +346,15 @@ async function main() {
       fixed++
     } catch (err) {
       console.error(`error: ${label} — ${err instanceof Error ? err.message : err}`)
+      failed++
     }
   }
 
-  console.log(`\nDone. ${fixed} updated, ${skipped} already OK (of ${variants.length} variants).`)
+  const outcome = dryRun ? `${fixed} planned` : `${fixed} updated`
+  console.log(
+    `\nDone. ${outcome}, ${skipped} already OK, ${failed} failed (of ${variants.length} variants).`,
+  )
+  if (failed > 0) process.exitCode = 1
   console.log('Test: add product → /kosik → Prejsť k pokladni (Shopify checkout).')
 }
 

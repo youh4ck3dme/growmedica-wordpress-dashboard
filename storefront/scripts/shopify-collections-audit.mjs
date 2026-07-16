@@ -58,7 +58,7 @@ function loadEnvLocal() {
 async function storefrontGraphql(query, variables = {}) {
   const domain = process.env.SHOPIFY_STORE_DOMAIN?.trim()
   const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN?.trim()
-  const apiVersion = process.env.SHOPIFY_API_VERSION?.trim() || '2025-01'
+  const apiVersion = process.env.SHOPIFY_API_VERSION?.trim() || '2026-07'
 
   const tokenless = process.env.SHOPIFY_STOREFRONT_TOKENLESS === '1'
   if (!domain || (!tokenless && !token)) {

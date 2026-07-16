@@ -41,4 +41,6 @@ supa.md
 # Local WordPress (wp-cli install, not Docker volume)
 wordpress-data/
 wordpress-credentials.local.env
+wordpress-production.local.env
+wordpress.local.md
 wordpress-php-server.log

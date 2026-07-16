@@ -85,7 +85,7 @@ function buildStorefrontHeaders(token, apiVersion) {
 async function storefrontGraphql(query, variables = {}) {
   const domain = process.env.SHOPIFY_STORE_DOMAIN?.trim()
   const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN?.trim()
-  const apiVersion = process.env.SHOPIFY_API_VERSION?.trim() || '2025-01'
+  const apiVersion = process.env.SHOPIFY_API_VERSION?.trim() || '2026-07'
   const tokenless = isTokenlessMode()
 
   if (!domain?.endsWith('.myshopify.com')) {
@@ -115,6 +115,13 @@ async function storefrontGraphql(query, variables = {}) {
   if (!res.ok) {
     throw new Error(`Storefront API HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`)
   }
+  const servedApiVersion = res.headers.get('x-shopify-api-version')
+  if (servedApiVersion && servedApiVersion !== apiVersion) {
+    throw new Error(
+      `Storefront API served ${servedApiVersion} instead of requested ${apiVersion}; ` +
+        'upgrade SHOPIFY_API_VERSION before continuing.',
+    )
+  }
 
   const body = await res.json()
   if (body.errors?.length) {
@@ -132,7 +139,7 @@ async function main() {
   console.log('=== Shopify Storefront API smoke ===')
   console.log(`CMS_PROVIDER: ${cmsProvider}`)
   console.log(`Store: ${process.env.SHOPIFY_STORE_DOMAIN ?? '(missing)'}`)
-  console.log(`API version: ${process.env.SHOPIFY_API_VERSION ?? '2025-01'}`)
+  console.log(`API version: ${process.env.SHOPIFY_API_VERSION ?? '2026-07'}`)
   console.log(`Tokenless: ${isTokenlessMode() ? 'yes' : 'no'}`)
 
   if (mockMode) {

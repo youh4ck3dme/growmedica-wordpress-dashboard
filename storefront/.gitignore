@@ -62,3 +62,4 @@ public/swe-worker*
 pnpm-lock.yaml
 pnpm-workspace.yaml
 .vercel
+.env.nexus-lovable-paste.tmp
