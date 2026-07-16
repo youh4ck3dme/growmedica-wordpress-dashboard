@@ -122,7 +122,9 @@ export default async function Footer() {
                   {t('footer.companyAddressLabel', locale)}
                 </span>
                 GrowMedica s.r.o.<br />
-                BELLOVA 6, KOŠICE, 040 01
+                Bellova 3455/6<br />
+                040 01 Košice - Staré Mesto<br />
+                IČO: 56 455 143
               </li>
               <li>
                 <Link
@@ -142,7 +144,8 @@ export default async function Footer() {
           style={{ borderTop: '1px solid var(--color-footer-border)', color: 'var(--color-footer-text)' }}
         >
           <p>
-            © {new Date().getFullYear()} GrowMedica s.r.o. {t('footer.copyright', locale)}
+            © {new Date().getFullYear()} GrowMedica s.r.o. · IČO: 56 455 143 · DIČ: 2122314975.{' '}
+            {t('footer.copyright', locale)}
           </p>
           <div className="flex items-center gap-3 text-white/90">
             {['VISA', 'MC', 'GPAY', 'APAY', 'DPD', 'Packeta'].map((method) => (

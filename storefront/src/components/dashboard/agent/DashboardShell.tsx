@@ -1,41 +1,45 @@
 'use client'
 
-import { type ReactNode, useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import DashboardFrame from '@/components/dashboard/DashboardFrame'
+import { useLocale } from '@/components/i18n/LocaleProvider'
+import { ensureDashboardSession, checkDashboardSession } from '@/lib/dashboard-agent/clientAuth'
+import { LEGACY_NEXUS_ADMIN_URL } from '@/lib/dashboard'
+import SecretGate from '@/components/dashboard/SecretGate'
+import { DashboardLayout, type DashboardView } from '@/components/dashboard/layout/DashboardLayout'
+import HomePanel from '@/components/dashboard/panels/HomePanel'
+import ProductsPanel from '@/components/dashboard/panels/ProductsPanel'
+import ProductDetailPanel from '@/components/dashboard/panels/ProductDetailPanel'
+import OrdersPanel from '@/components/dashboard/panels/OrdersPanel'
+import InventoryPanel from '@/components/dashboard/panels/InventoryPanel'
 import AgentPanel, { type AgentChatMessage } from '@/components/dashboard/agent/AgentPanel'
 import AuditLogPanel from '@/components/dashboard/agent/AuditLogPanel'
 import CommandBar from '@/components/dashboard/agent/CommandBar'
 import IntegrationStatus from '@/components/dashboard/agent/IntegrationStatus'
-import { useLocale } from '@/components/i18n/LocaleProvider'
-import { dashboardFetch, ensureDashboardSession } from '@/lib/dashboard-agent/clientAuth'
-import { LEGACY_NEXUS_ADMIN_URL, type DashboardMode } from '@/lib/dashboard'
+import { dashboardFetch } from '@/lib/dashboard-agent/clientAuth'
 import type { AgentRunResult } from '@/lib/dashboard-agent/types'
-
-type DashboardTab = 'agent' | 'nexus'
-
-type DashboardShellProps = {
-  mode: DashboardMode
-  dashboardUrl?: string
-}
 
 const CONVERSATION_STORAGE_KEY = 'growmedica_dashboard_agent_conversation_id'
 
-export default function DashboardShell({ mode, dashboardUrl }: DashboardShellProps) {
+export default function DashboardShell() {
   const { t } = useLocale()
-  const showAgent = mode === 'agentic' || mode === 'hybrid'
-  const showNexus = mode === 'iframe' || mode === 'hybrid'
-  const [activeTab, setActiveTab] = useState<DashboardTab>(showAgent ? 'agent' : 'nexus')
+  const [authenticated, setAuthenticated] = useState(false)
+  const [sessionReady, setSessionReady] = useState(false)
+  const [checkingSession, setCheckingSession] = useState(true)
+  const [activeView, setActiveView] = useState<DashboardView>('home')
+  const [selectedHandle, setSelectedHandle] = useState('')
   const [messages, setMessages] = useState<AgentChatMessage[]>([])
   const [conversationId, setConversationId] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [agentError, setAgentError] = useState<string | null>(null)
   const [auditRefreshKey, setAuditRefreshKey] = useState(0)
-  const [sessionReady, setSessionReady] = useState(false)
-  const isDev = process.env.NODE_ENV === 'development'
 
   useEffect(() => {
-    void ensureDashboardSession().then(setSessionReady)
+    void checkDashboardSession().then((ok) => {
+      setAuthenticated(ok)
+      setSessionReady(ok)
+      setCheckingSession(false)
+    })
   }, [])
 
   useEffect(() => {
@@ -56,6 +60,15 @@ export default function DashboardShell({ mode, dashboardUrl }: DashboardShellPro
       window.localStorage.setItem(CONVERSATION_STORAGE_KEY, generated)
     }
   }, [])
+
+  const handleSecretSubmit = async (secret: string) => {
+    const ok = await ensureDashboardSession(secret)
+    if (ok) {
+      setAuthenticated(true)
+      setSessionReady(true)
+    }
+    return ok
+  }
 
   const runCommand = async (command: string) => {
     if (!sessionReady) {
@@ -101,63 +114,76 @@ export default function DashboardShell({ mode, dashboardUrl }: DashboardShellPro
     }
   }
 
+  const navigate = (view: DashboardView) => {
+    setActiveView(view)
+    if (view !== 'product-detail') setSelectedHandle('')
+  }
+
+  const selectProduct = (handle: string) => {
+    setSelectedHandle(handle)
+    setActiveView('product-detail')
+  }
+
+  if (checkingSession) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center text-sm text-(--color-text-muted)">
+        {t('dashboard.gate.checking')}
+      </div>
+    )
+  }
+
+  if (!authenticated) {
+    return (
+      <SecretGate
+        onAuthenticated={() => {
+          setAuthenticated(true)
+          setSessionReady(true)
+        }}
+        onSubmitSecret={handleSecretSubmit}
+      />
+    )
+  }
+
   return (
-    <div className="flex h-dvh w-full flex-col bg-(--color-surface)" data-testid="dashboard-shell">
-      <header className="shrink-0 border-b border-(--color-border) px-4 py-3 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-lg font-semibold text-(--color-text)">{t('dashboard.title')}</h1>
-            <p className="text-xs text-(--color-text-muted)">
-              {t('dashboard.subtitle')} · {t('dashboard.modeLabel')}{' '}
-              <span className="font-medium">{mode}</span>
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
+    <DashboardLayout activeView={activeView} onNavigate={navigate}>
+      {activeView === 'home' && (
+        <HomePanel
+          sessionReady={sessionReady}
+          onNavigateProducts={() => navigate('products')}
+          onNavigateOrders={() => navigate('orders')}
+          onNavigateInventory={() => navigate('inventory')}
+        />
+      )}
+
+      {activeView === 'products' && (
+        <ProductsPanel sessionReady={sessionReady} onSelectProduct={selectProduct} />
+      )}
+
+      {activeView === 'product-detail' && selectedHandle && (
+        <ProductDetailPanel
+          handle={selectedHandle}
+          sessionReady={sessionReady}
+          onBack={() => navigate('products')}
+        />
+      )}
+
+      {activeView === 'orders' && <OrdersPanel sessionReady={sessionReady} />}
+
+      {activeView === 'inventory' && <InventoryPanel sessionReady={sessionReady} />}
+
+      {activeView === 'agent' && (
+        <div className="mx-auto max-w-3xl space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-(--color-text)">{t('dashboard.nav.agent')}</h2>
             <Link
               href={LEGACY_NEXUS_ADMIN_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-secondary text-xs"
-              data-testid="dashboard-legacy-nexus-link"
+              className="text-xs text-(--color-text-muted) hover:text-(--color-text)"
             >
               {t('dashboard.legacyNexus')}
             </Link>
-            {isDev && dashboardUrl && (
-              <a
-                href={dashboardUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-secondary text-xs"
-                data-testid="dashboard-dev-direct-link"
-              >
-                {t('dashboard.devNexus')}
-              </a>
-            )}
           </div>
-        </div>
-
-        {showAgent && showNexus && (
-          <div className="mt-3 flex gap-2" data-testid="dashboard-tabs">
-            <TabButton
-              active={activeTab === 'agent'}
-              onClick={() => setActiveTab('agent')}
-              testId="dashboard-tab-agent"
-            >
-              {t('dashboard.tab.agent')}
-            </TabButton>
-            <TabButton
-              active={activeTab === 'nexus'}
-              onClick={() => setActiveTab('nexus')}
-              testId="dashboard-tab-nexus"
-            >
-              {t('dashboard.tab.nexus')}
-            </TabButton>
-          </div>
-        )}
-      </header>
-
-      {showAgent && (mode === 'agentic' || activeTab === 'agent') && (
-        <main className="flex flex-1 flex-col gap-4 overflow-y-auto px-4 py-4 sm:px-6">
           <IntegrationStatus sessionReady={sessionReady} />
           <CommandBar disabled={isLoading || !sessionReady} onSubmit={runCommand} />
           {agentError && (
@@ -165,58 +191,20 @@ export default function DashboardShell({ mode, dashboardUrl }: DashboardShellPro
               {agentError}
             </p>
           )}
-          <AgentPanel messages={messages} isLoading={isLoading} />
+          <AgentPanel
+            messages={messages}
+            isLoading={isLoading}
+            onSelectProduct={selectProduct}
+          />
+        </div>
+      )}
+
+      {activeView === 'audit' && (
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-4 text-lg font-semibold text-(--color-text)">{t('dashboard.audit.title')}</h2>
           <AuditLogPanel sessionReady={sessionReady} refreshKey={auditRefreshKey} />
-        </main>
+        </div>
       )}
-
-      {showNexus && (mode === 'iframe' || activeTab === 'nexus') && (
-        <main className="flex flex-1 flex-col overflow-hidden">
-          {dashboardUrl ? (
-            <DashboardFrame src={dashboardUrl} title="GrowMedica Nexus Dashboard" />
-          ) : (
-            <div
-              className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center"
-              data-testid="dashboard-unconfigured"
-            >
-              <h2 className="text-lg font-semibold text-(--color-text)">{t('dashboard.nexusUnconfigured')}</h2>
-              <p className="max-w-md text-sm text-(--color-text-muted)">
-                {t('dashboard.nexusUnconfiguredHint')}{' '}
-                <code className="rounded bg-(--color-border)/40 px-1.5 py-0.5 text-xs">
-                  NEXT_PUBLIC_DASHBOARD_URL
-                </code>
-              </p>
-            </div>
-          )}
-        </main>
-      )}
-    </div>
-  )
-}
-
-function TabButton({
-  active,
-  onClick,
-  children,
-  testId,
-}: {
-  active: boolean
-  onClick: () => void
-  children: ReactNode
-  testId: string
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-        active
-          ? 'bg-(--color-primary) text-white'
-          : 'border border-(--color-border) text-(--color-text-muted) hover:text-(--color-text)'
-      }`}
-      data-testid={testId}
-    >
-      {children}
-    </button>
+    </DashboardLayout>
   )
 }

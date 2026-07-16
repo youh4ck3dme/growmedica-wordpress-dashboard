@@ -13,13 +13,14 @@
 | Vercel | `h4ck3d/growmedica-wordpress-dashboard` |
 | Admin Google | `erikbabcan@gmail.com` |
 
-## Zostáva
+## Zostáva (aktuálne — shop už = Woo na produkcii)
 
-1. **Deploy storefront** — AI SupplementFinder fix (`userInput` min 2, ľudské errory) je v gite, treba production deploy.
-2. **Nexus publish** — ak cloud patch ešte nie je published.
-3. **ADMIN_EMAILS** — potvrdiť `erikbabcan@gmail.com` v Lovable Secrets.
-4. **CMS** — Woo/mu-plugins len na explicitný cutover; shop = Shopify.
-5. **Write testy** — inventory/bundles len dry-run alebo po schválení.
+1. **Deploy storefront** — firemné údaje + cookie cart ešte lokálne / nie plne na www.
+2. **Stripe / GoPay** merchant keys (BACS+COD už idú).
+3. **Packeta / DPD** API (flat rate doprava už má ceny).
+4. **Mu-plugin revalidate** na cms (namespace ešte nevidno).
+5. Manuálny E2E nákup v prehliadači.
+6. Detail: `reports/REMAINING_WORK_NOW.md`
 
 ## Zakázané
 

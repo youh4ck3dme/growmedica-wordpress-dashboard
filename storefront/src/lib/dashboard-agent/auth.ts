@@ -43,3 +43,14 @@ export function isDashboardAgentAuthorized(request: NextRequest): boolean {
   const sessionToken = request.cookies.get(DASHBOARD_SESSION_COOKIE)?.value
   return verifyDashboardSessionToken(sessionToken)
 }
+
+/** Alias used by dashboard API routes. */
+export function authorizeDashboardRequest(request: NextRequest): boolean {
+  return isDashboardAgentAuthorized(request)
+}
+
+export function isDashboardSecretValid(secret: string | null | undefined): boolean {
+  const expected = process.env.DASHBOARD_AGENT_SECRET?.trim()
+  if (!expected || !secret?.trim()) return false
+  return secret.trim() === expected
+}

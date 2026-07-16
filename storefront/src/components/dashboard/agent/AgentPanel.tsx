@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
 import type { AgentAction } from '@/lib/dashboard-agent/types'
+import AgentActionResults from '@/components/dashboard/agent/AgentActionResults'
 
 export type AgentChatMessage = {
   role: 'user' | 'assistant'
@@ -13,9 +14,14 @@ export type AgentChatMessage = {
 type AgentPanelProps = {
   messages: AgentChatMessage[]
   isLoading?: boolean
+  onSelectProduct?: (handle: string) => void
 }
 
-export default function AgentPanel({ messages, isLoading = false }: AgentPanelProps) {
+export default function AgentPanel({
+  messages,
+  isLoading = false,
+  onSelectProduct,
+}: AgentPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -46,12 +52,7 @@ export default function AgentPanel({ messages, isLoading = false }: AgentPanelPr
         >
           {message.content}
           {message.actions && message.actions.length > 0 && (
-            <details className="mt-2 text-xs opacity-80">
-              <summary className="cursor-pointer">Tool výsledky ({message.actions.length})</summary>
-              <pre className="mt-1 overflow-x-auto rounded bg-black/5 p-2 text-[11px]">
-                {JSON.stringify(message.actions, null, 2)}
-              </pre>
-            </details>
+            <AgentActionResults actions={message.actions} onSelectProduct={onSelectProduct} />
           )}
         </div>
       ))}
@@ -59,7 +60,7 @@ export default function AgentPanel({ messages, isLoading = false }: AgentPanelPr
       {isLoading && (
         <div className="flex items-center gap-2 text-sm text-(--color-text-muted)" data-testid="dashboard-agent-loading">
           <Loader2 className="h-4 w-4 animate-spin" />
-          Agent spracováva príkaz…
+          Spracovávam…
         </div>
       )}
     </div>

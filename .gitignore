@@ -44,3 +44,6 @@ wordpress-credentials.local.env
 wordpress-production.local.env
 wordpress.local.md
 wordpress-php-server.log
+docs/wordpress.secrets.md
+docs/plugins/
+docs/Prihlasovacie*

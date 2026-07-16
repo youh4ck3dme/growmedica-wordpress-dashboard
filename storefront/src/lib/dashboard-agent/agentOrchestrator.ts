@@ -1,13 +1,15 @@
 import { getMistralEnv } from '@/lib/ai/env'
 import { AiError } from '@/lib/ai/errors'
-import { mistralChatComplete } from '@/lib/ai/mistralHttp'
+import { mistralChatCompleteWithTools } from '@/lib/ai/mistralHttp'
 import { appendConversationMessages, getConversationMessages } from './conversationMemory'
 import { logToolExecution } from './auditLog'
+import { MISTRAL_TOOL_SCHEMAS } from './mistralTools'
 import { ADMIN_AGENT_SYSTEM_PROMPT } from './prompts/admin-agent'
 import { executeAgentTool, inferToolsFromCommand } from './tools'
-import type { AgentAction, AgentMessage, AgentRunResult } from './types'
+import type { AgentAction, AgentMessage, AgentRunResult, AgentToolName } from './types'
 
 const MISTRAL_SUMMARY_TIMEOUT_MS = 30_000
+const MISTRAL_TOOL_TIMEOUT_MS = 30_000
 
 async function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promise<T> {
   let timeoutId: ReturnType<typeof setTimeout> | undefined
@@ -25,6 +27,10 @@ async function withTimeout<T>(promise: Promise<T>, ms: number, message: string):
 
 function newConversationId(): string {
   return `conv-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+}
+
+function isKnownTool(name: string): name is AgentToolName {
+  return MISTRAL_TOOL_SCHEMAS.some((tool) => tool.function.name === name)
 }
 
 function buildReplyFromActions(command: string, actions: AgentAction[]): string {
@@ -78,6 +84,15 @@ function buildReplyFromActions(command: string, actions: AgentAction[]): string 
       const r = action.result as { meta_title?: string }
       return `✅ SEO meta: „${r.meta_title ?? '—'}“`
     }
+    if (action.tool === 'apply_product_copy' || action.tool === 'apply_product_seo') {
+      const r = action.result as { dry_run?: boolean; handle?: string }
+      if (r.dry_run) return `⚠️ Dry-run: copy/SEO pre ${r.handle ?? 'produkt'} — potvrďte zápis.`
+      return `✅ Zmeny uložené a katalóg revalidovaný.`
+    }
+    if (action.tool === 'list_orders') {
+      const r = action.result as { count: number }
+      return `✅ Nájdených ${r.count} objednávok.`
+    }
     if (action.tool === 'get_product') {
       const r = action.result as { title?: string; price?: string }
       return `✅ ${r.title ?? 'Produkt'} — ${r.price ?? '—'} EUR`
@@ -98,6 +113,49 @@ function mapMistralError(error: unknown): string {
   return 'Agent je dočasne nedostupný. Skúste príkaz znova.'
 }
 
+async function planToolsWithMistral(
+  command: string,
+  history: AgentMessage[],
+): Promise<Array<{ tool: AgentToolName; args: Record<string, unknown> }>> {
+  if (process.env.MISTRAL_MOCK_MODE === '1') {
+    return inferToolsFromCommand(command)
+  }
+
+  const { MISTRAL_API_KEY, MISTRAL_MODEL } = getMistralEnv()
+
+  const result = await withTimeout(
+    mistralChatCompleteWithTools({
+      apiKey: MISTRAL_API_KEY,
+      model: MISTRAL_MODEL,
+      messages: [
+        { role: 'system', content: ADMIN_AGENT_SYSTEM_PROMPT },
+        ...history.slice(-6).map((m) => ({
+          role: m.role as 'user' | 'assistant',
+          content: m.content,
+        })),
+        { role: 'user', content: command },
+      ],
+      tools: MISTRAL_TOOL_SCHEMAS,
+      toolChoice: 'auto',
+      temperature: 0.1,
+    }),
+    MISTRAL_TOOL_TIMEOUT_MS,
+    'Mistral tool planning timeout',
+  )
+
+  const planned = result.toolCalls
+    .filter((call): call is { id: string; name: AgentToolName; arguments: Record<string, unknown> } =>
+      isKnownTool(call.name),
+    )
+    .map((call) => ({
+      tool: call.name,
+      args: call.arguments,
+    }))
+
+  if (planned.length > 0) return planned
+  return inferToolsFromCommand(command)
+}
+
 async function summarizeWithMistral(
   command: string,
   actions: AgentAction[],
@@ -111,7 +169,7 @@ async function summarizeWithMistral(
 
   try {
     const content = await withTimeout(
-      mistralChatComplete({
+      mistralChatCompleteWithTools({
         apiKey: MISTRAL_API_KEY,
         model: MISTRAL_MODEL,
         messages: [
@@ -126,7 +184,7 @@ async function summarizeWithMistral(
           },
         ],
         temperature: 0.3,
-      }),
+      }).then((r) => r.content),
       MISTRAL_SUMMARY_TIMEOUT_MS,
       'Mistral summary timeout',
     )
@@ -150,7 +208,15 @@ export async function runDashboardAgent(input: {
 
   try {
     const history = getConversationMessages(conversationId)
-    const planned = inferToolsFromCommand(command)
+    let planned: Array<{ tool: AgentToolName; args: Record<string, unknown> }>
+
+    try {
+      planned = await planToolsWithMistral(command, history)
+    } catch (error) {
+      console.warn('[dashboard-agent] Mistral tool planning failed, using regex fallback:', error)
+      planned = inferToolsFromCommand(command)
+    }
+
     const actions: AgentAction[] = []
 
     for (const plan of planned) {

@@ -1,5 +1,6 @@
 import { Container } from '@/components/ui/Container'
 import BrandPageHeader from '@/components/ui/BrandPageHeader'
+import { COMPANY } from '@/lib/company'
 import { KontaktForm } from './KontaktForm'
 
 export default function Kontakt() {
@@ -25,10 +26,10 @@ export default function Kontakt() {
                   <div>
                     <strong className="block text-lg mb-1 text-(--color-text)">E-mail:</strong>
                     <a
-                      href="mailto:info@growmedica.cz"
+                      href={`mailto:${COMPANY.email}`}
                       className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
                     >
-                      info@growmedica.cz
+                      {COMPANY.email}
                     </a>
                     <p className="text-sm text-gray-400 mt-1">Odpovedáme väčšinou do 24 hodín.</p>
                   </div>
@@ -41,10 +42,10 @@ export default function Kontakt() {
                   <div>
                     <strong className="block text-lg mb-1 text-(--color-text)">Zákaznícka linka:</strong>
                     <a
-                      href="tel:+421900000000"
+                      href={`tel:${COMPANY.phoneTel}`}
                       className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
                     >
-                      +421 900 000 000
+                      {COMPANY.phoneDisplay}
                     </a>
                     <p className="text-sm text-gray-400 mt-1">Po - Pia: 9:00 - 16:00</p>
                   </div>
@@ -59,15 +60,17 @@ export default function Kontakt() {
                       Sídlo spoločnosti a fakturačné údaje:
                     </strong>
                     <p className="text-(--color-text-muted) leading-relaxed">
-                      GrowMedica s.r.o.
+                      {COMPANY.legalName}
                       <br />
-                      BELLOVA 6
+                      {COMPANY.street}
                       <br />
-                      KOŠICE, 040 01
+                      {COMPANY.zip} {COMPANY.city}
                       <br />
-                      IČO: 12345678
+                      {COMPANY.country}
                       <br />
-                      DIČ: 2020202020
+                      IČO: {COMPANY.ico}
+                      <br />
+                      DIČ: {COMPANY.dic}
                     </p>
                   </div>
                 </li>

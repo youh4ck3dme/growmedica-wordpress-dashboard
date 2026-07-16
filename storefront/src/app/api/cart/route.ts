@@ -86,11 +86,22 @@ export async function PUT(request: NextRequest) {
     }
 
     const cart = await updateCartLines(cartId, [{ id: lineId, quantity }])
-    
-    return NextResponse.json({
+
+    const response = NextResponse.json({
       count: getCartCount(cart),
       cart,
     })
+    // Woo cart id is a signed payload that changes with each mutation — always refresh cookie.
+    if (isWordPressCms() && cart?.id) {
+      response.cookies.set(CART_COOKIE, cart.id, {
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+      })
+    }
+    return response
   } catch (error) {
     console.error('[Cart API] PUT error:', error)
     return NextResponse.json({ error: 'Failed to update cart' }, { status: 500 })
@@ -115,10 +126,20 @@ export async function DELETE(request: NextRequest) {
 
     const cart = await removeCartLines(cartId, [lineId])
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       count: getCartCount(cart),
       cart,
     })
+    if (isWordPressCms() && cart?.id) {
+      response.cookies.set(CART_COOKIE, cart.id, {
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+      })
+    }
+    return response
   } catch (error) {
     console.error('[Cart API] DELETE error:', error)
     return NextResponse.json({ error: 'Failed to remove item from cart' }, { status: 500 })

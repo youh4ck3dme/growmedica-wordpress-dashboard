@@ -20,7 +20,7 @@ const shopifyTestEnv: Record<string, string> = {
   MISTRAL_MOCK_MODE: process.env.MISTRAL_MOCK_MODE ?? '1',
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY ?? 'mock-mistral-api-key',
   MISTRAL_MODEL: process.env.MISTRAL_MODEL ?? 'mistral-large-latest',
-  NEXT_PUBLIC_DEFAULT_LOCALE: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'sk',
+  NEXT_PUBLIC_DEFAULT_LOCALE: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'cs',
   NEXT_PUBLIC_DASHBOARD_MODE: process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'hybrid',
   DASHBOARD_AGENT_SECRET:
     process.env.DASHBOARD_AGENT_SECRET ?? 'mock-dashboard-agent-secret-123456',

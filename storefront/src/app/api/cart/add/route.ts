@@ -1,7 +1,27 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { createCart, addToCart, getCart, CART_COOKIE } from '@/lib/catalog/cart'
+import { isWordPressCms } from '@/lib/cms'
 import { normalizeShopifyCartId } from '@/lib/shopify/cart'
+
+function resolveExistingCartId(raw: string | undefined): string | null {
+  if (!raw?.trim() || raw === 'undefined' || raw === 'null') return null
+  if (isWordPressCms()) {
+    // Woo cart id is a signed cookie payload (woo-cart-v1.…); do not run Shopify normalizer.
+    return raw.trim()
+  }
+  return normalizeShopifyCartId(raw)
+}
+
+function setCartCookie(response: NextResponse, cartId: string) {
+  response.cookies.set(CART_COOKIE, cartId, {
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+  })
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,7 +35,7 @@ export async function POST(request: NextRequest) {
     }
 
     const cookieStore = await cookies()
-    const existingCartId = normalizeShopifyCartId(cookieStore.get(CART_COOKIE)?.value)
+    const existingCartId = resolveExistingCartId(cookieStore.get(CART_COOKIE)?.value)
 
     let cart
     if (existingCartId) {
@@ -33,17 +53,12 @@ export async function POST(request: NextRequest) {
       cart = await createCart([{ merchandiseId: variantId, quantity }])
     }
 
-    const count = cart.lines.edges.reduce((total: number, edge: { node: { quantity?: number } }) => total + (edge.node.quantity || 0), 0)
+    const count = cart.lines.edges.reduce(
+      (total: number, edge: { node: { quantity?: number } }) => total + (edge.node.quantity || 0),
+      0,
+    )
     const response = NextResponse.json({ cart, count })
-
-    response.cookies.set(CART_COOKIE, cart.id, {
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-    })
-
+    setCartCookie(response, cart.id)
     return response
   } catch (error) {
     console.error('[Cart API] Add error:', error)

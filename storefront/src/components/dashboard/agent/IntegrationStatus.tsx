@@ -6,6 +6,7 @@ import { dashboardFetch } from '@/lib/dashboard-agent/clientAuth'
 
 type IntegrationStatusProps = {
   sessionReady: boolean
+  health?: Record<string, string | boolean> | null
 }
 
 type StatusPayload = {
@@ -15,12 +16,16 @@ type StatusPayload = {
   write_mode?: string
 }
 
-export default function IntegrationStatus({ sessionReady }: IntegrationStatusProps) {
+export default function IntegrationStatus({ sessionReady, health }: IntegrationStatusProps) {
   const { t } = useLocale()
-  const [status, setStatus] = useState<StatusPayload | null>(null)
+  const [status, setStatus] = useState<StatusPayload | null>(health ? mapHealth(health) : null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (health) {
+      setStatus(mapHealth(health))
+      return
+    }
     if (!sessionReady) return
     let cancelled = false
 
@@ -46,7 +51,7 @@ export default function IntegrationStatus({ sessionReady }: IntegrationStatusPro
     return () => {
       cancelled = true
     }
-  }, [sessionReady, t])
+  }, [sessionReady, health, t])
 
   if (error) {
     return (
@@ -72,6 +77,15 @@ export default function IntegrationStatus({ sessionReady }: IntegrationStatusPro
       <Badge label={t('dashboard.integration.write')} value={status.write_mode ?? '—'} />
     </div>
   )
+}
+
+function mapHealth(health: Record<string, string | boolean>): StatusPayload {
+  return {
+    cms_provider: String(health.cms_provider ?? '—'),
+    mistral: String(health.mistral ?? '—'),
+    catalog: String(health.catalog ?? '—'),
+    write_mode: String(health.write_mode ?? '—'),
+  }
 }
 
 function Badge({ label, value }: { label: string; value: string }) {

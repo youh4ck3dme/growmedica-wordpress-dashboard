@@ -62,17 +62,26 @@ test.describe('PWA — manifest & offline', () => {
     expect(existsSync(swSourcePath)).toBe(true)
     const source = readFileSync(swSourcePath, 'utf-8')
     expect(source).toContain('navigationPreload: false')
-    expect(source).toMatch(
-      /matcher: \(\{ request, sameOrigin \}\) => sameOrigin && request\.mode === 'navigate',\s*handler: new NetworkFirst/,
-    )
+    expect(source).toContain('isDashboardPath')
+    expect(source).toMatch(/handler: new NetworkFirst/)
+    expect(source).toMatch(/!isDashboardPath\(url\.pathname\)/)
     expect(source).toContain("url: '/offline.html'")
     expect(source).toContain('setCatchHandler')
   })
 
-  test('sw.js build nemá navigationPreload a navigate používa NetworkFirst', () => {
+  test('sw.js build nemá navigationPreload a dashboard ide cez NetworkOnly', () => {
     expect(existsSync(swJsPath)).toBe(true)
     const content = readFileSync(swJsPath, 'utf-8')
     expect(content).not.toContain('navigationPreload:!0')
-    expect(content).toMatch(/"navigate"===\w\.mode\}?,handler:new \w+/)
+    expect(content).toContain('/dashboard')
+    expect(content).toMatch(/handler:new \w+/)
+  })
+
+  test('sw.ts vylučuje /dashboard z NetworkFirst a offline fallback', () => {
+    expect(existsSync(swSourcePath)).toBe(true)
+    const source = readFileSync(swSourcePath, 'utf-8')
+    expect(source).toContain('isDashboardPath')
+    expect(source).toContain('!isDashboardPath(url.pathname)')
+    expect(source).toMatch(/\/api\/dashboard/)
   })
 })

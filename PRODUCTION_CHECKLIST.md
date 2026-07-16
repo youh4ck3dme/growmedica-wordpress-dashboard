@@ -19,11 +19,10 @@ Detail: [storefront/docs/SHOPIFY_LIVE.md](./storefront/docs/SHOPIFY_LIVE.md)
 | `SHOPIFY_CLIENT_ID` | Dev Dashboard app ID (server-only) |
 | `SHOPIFY_CLIENT_SECRET` | Dev Dashboard secret (sensitive, server-only) |
 | `NEXT_PUBLIC_SITE_URL` | `https://www.growmedica.cz` |
-| `NEXT_PUBLIC_DASHBOARD_URL` | `https://growmedica-nexus.lovable.app/admin` |
-| `NEXT_PUBLIC_DASHBOARD_MODE` | `hybrid` |
-| `NEXT_PUBLIC_DEFAULT_LOCALE` | `sk` |
-| `MISTRAL_API_KEY` | produkčný kľúč (voliteľné) |
-| `DASHBOARD_AGENT_SECRET` | min. 16 znakov |
+| `NEXT_PUBLIC_DASHBOARD_MODE` | `agentic` |
+| `DASHBOARD_AGENT_SECRET` | min. 32 znakov |
+| `DASHBOARD_ALLOW_LIVE_WRITES` | `1` (pre live zápisy z dashboardu) |
+| `UPSTASH_REDIS_REST_URL` + `TOKEN` | audit log + conversation memory |
 
 **Odstrániť z Vercel:** `SHOPIFY_MOCK_MODE`, `WOO_MOCK_MODE` (pri Shopify režime).
 

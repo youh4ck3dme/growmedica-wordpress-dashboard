@@ -15,6 +15,14 @@ import {
   validateProductCopyOutput,
 } from '@/lib/dashboard-agent/copyQuality'
 import { buildOptimizeProductCopyPrompt } from '@/lib/dashboard-agent/prompts/optimize-product-copy'
+import { revalidateProductCache } from '@/lib/dashboard/revalidate'
+import {
+  getAdminOrder,
+  isLiveWriteAllowed,
+  listAdminOrders,
+  updateAdminProduct,
+  updateInventoryQuantity,
+} from '@/lib/shopify/admin'
 import { storeExport } from './exports'
 import type { AgentAction, AgentToolName } from './types'
 
@@ -39,6 +47,11 @@ export const AGENT_TOOL_DEFINITIONS = [
   { name: 'bulk_update_prices', description: 'Bulk update prices (dry-run unless confirm=true)' },
   { name: 'export_catalog_csv', description: 'Export catalog to CSV download' },
   { name: 'get_integration_status', description: 'CMS and Mistral integration health' },
+  { name: 'apply_product_copy', description: 'Apply optimized title and description to a product (confirm=true)' },
+  { name: 'apply_product_seo', description: 'Apply SEO meta title and description to a product (confirm=true)' },
+  { name: 'update_inventory', description: 'Update inventory quantity for a product (confirm=true)' },
+  { name: 'list_orders', description: 'List recent Shopify orders' },
+  { name: 'get_order', description: 'Get order detail by ID or order number' },
 ] as const
 
 function isMockWriteMode(): boolean {
@@ -291,10 +304,101 @@ Popis: ${product.description.slice(0, 400)}`
             cms_provider: cms,
             mistral: mistralMock ? 'mock' : 'configured',
             catalog: wooMock || shopifyMock ? 'mock' : 'live',
-            write_mode: isMockWriteMode() ? 'dry_run_only' : 'live_writes_allowed',
+            write_mode: isStagingWriteAllowed() ? 'live_writes_allowed' : 'dry_run_only',
           },
           status: 'ok',
         }
+      }
+
+      case 'apply_product_copy': {
+        const handle = String(args.handle ?? '')
+        const title = String(args.title ?? '')
+        const shortDescription = String(args.short_description ?? '')
+        const confirm = args.confirm === true
+        if (!handle || !title) throw new Error('handle and title are required')
+        if (!confirm || !isStagingWriteAllowed()) {
+          return {
+            tool,
+            args,
+            result: {
+              dry_run: true,
+              handle,
+              title,
+              short_description: shortDescription,
+              message: 'Nastavte confirm=true a DASHBOARD_ALLOW_LIVE_WRITES=1 pre zápis',
+            },
+            status: 'dry_run',
+          }
+        }
+        const updated = await updateAdminProduct(handle, {
+          title,
+          description: shortDescription,
+        })
+        const tags = revalidateProductCache(handle)
+        return { tool, args, result: { product: updated, revalidated: tags }, status: 'ok' }
+      }
+
+      case 'apply_product_seo': {
+        const handle = String(args.handle ?? '')
+        const metaTitle = String(args.meta_title ?? '')
+        const metaDescription = String(args.meta_description ?? '')
+        const confirm = args.confirm === true
+        if (!handle) throw new Error('handle is required')
+        if (!confirm || !isStagingWriteAllowed()) {
+          return {
+            tool,
+            args,
+            result: {
+              dry_run: true,
+              handle,
+              meta_title: metaTitle,
+              meta_description: metaDescription,
+              message: 'Nastavte confirm=true a DASHBOARD_ALLOW_LIVE_WRITES=1 pre zápis',
+            },
+            status: 'dry_run',
+          }
+        }
+        const seoDescription = `<p><strong>${metaTitle}</strong></p><p>${metaDescription}</p>`
+        const updated = await updateAdminProduct(handle, { description: seoDescription })
+        const tags = revalidateProductCache(handle)
+        return { tool, args, result: { product: updated, revalidated: tags }, status: 'ok' }
+      }
+
+      case 'update_inventory': {
+        const handle = String(args.handle ?? '')
+        const quantity = Number(args.quantity ?? 0)
+        const confirm = args.confirm === true
+        if (!handle) throw new Error('handle is required')
+        if (!confirm || !isLiveWriteAllowed()) {
+          return {
+            tool,
+            args,
+            result: {
+              dry_run: true,
+              handle,
+              quantity,
+              message: 'Nastavte confirm=true a DASHBOARD_ALLOW_LIVE_WRITES=1 pre zápis',
+            },
+            status: 'dry_run',
+          }
+        }
+        const item = await updateInventoryQuantity(handle, quantity)
+        const tags = revalidateProductCache(handle)
+        return { tool, args, result: { item, revalidated: tags }, status: 'ok' }
+      }
+
+      case 'list_orders': {
+        const limit = Number(args.limit ?? 10)
+        const orders = await listAdminOrders(Math.min(limit, 50))
+        return { tool, args, result: { count: orders.length, orders }, status: 'ok' }
+      }
+
+      case 'get_order': {
+        const orderId = String(args.order_id ?? args.name ?? '')
+        if (!orderId) throw new Error('order_id is required')
+        const order = await getAdminOrder(orderId)
+        if (!order) throw new Error(`Order not found: ${orderId}`)
+        return { tool, args, result: order, status: 'ok' }
       }
 
       default:
@@ -353,6 +457,11 @@ export function inferToolsFromCommand(command: string): Array<{ tool: AgentToolN
 
   if (slugMatch && /detail|info|zobraz/.test(lower)) {
     return [{ tool: 'get_product', args: { handle: slugMatch[1] } }]
+  }
+
+  if (/objednávk|objednávok|objednavk|orders?/i.test(lower)) {
+    const limitMatch = command.match(/(\d+)/)
+    return [{ tool: 'list_orders', args: { limit: limitMatch ? Number(limitMatch[1]) : 10 } }]
   }
 
   if (/produkt|katalóg|katalog|list|zoznam/.test(lower)) {
