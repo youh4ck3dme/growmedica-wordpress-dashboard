@@ -83,6 +83,7 @@ growmedica-wordpress-dashboard/
 | Dokument | |
 |----------|--|
 | [STATUS.md](./STATUS.md) | **Hlavný stav + backlog** |
+| [docs/OPERATIONS.md](./docs/OPERATIONS.md) | **Endpointy, env, prevádzka** |
 | [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) | Deploy / env / smoke |
 | [docs/vzorfirma.md](./docs/vzorfirma.md) | IČO, DIČ, IBAN |
 | [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) | Vývoj + freeze |

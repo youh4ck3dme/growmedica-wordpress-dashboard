@@ -16,6 +16,7 @@ Kód: `storefront/src/lib/company.ts` (musí sedieť s touto tabuľkou).
 | IČO | **56 455 143** |
 | DIČ | **2122314975** |
 | E-mail | **info@growmedica.cz** |
+| Telefón | *(doplniť — zatiaľ sa na webe nezobrazuje)* |
 | Web (eshop) | https://www.growmedica.cz |
 | CMS | https://cms.growmedica.cz |
 

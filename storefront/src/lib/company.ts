@@ -16,8 +16,9 @@ export const COMPANY = {
   icoDigits: '56455143',
   dic: '2122314975',
   email: 'info@growmedica.cz',
-  phoneDisplay: '+421 900 000 000',
-  phoneTel: '+421900000000',
+  /** Prázdne = nezobrazovať falošné číslo (doplň reálne a deploy). */
+  phoneDisplay: '',
+  phoneTel: '',
   iban: 'SK48 0200 0000 0050 3517 2956',
   ibanCompact: 'SK4802000000005035172956',
   bic: 'SUBASKBX',

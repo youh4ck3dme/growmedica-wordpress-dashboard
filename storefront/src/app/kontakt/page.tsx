@@ -11,7 +11,7 @@ export default function Kontakt() {
           <BrandPageHeader
             eyebrow="Sme tu pre vás"
             title="Kontaktujte nás"
-            subtitle="Máte otázky ohľadom produktov, vašej objednávky, alebo hľadáte odbornú radu? Neváhajte nám napísať alebo zavolať."
+            subtitle="Máte otázky ohľadom produktov, vašej objednávky, alebo hľadáte odbornú radu? Napíšte nám e-mailom."
           />
 
           <div className="grid md:grid-cols-2 gap-8 md:gap-12">
@@ -35,21 +35,23 @@ export default function Kontakt() {
                   </div>
                 </li>
 
-                <li className="flex items-start">
-                  <div className="h-10 w-10 rounded-full bg-green-100 text-(--color-accent-green) flex items-center justify-center mr-5 shrink-0 text-xl font-bold">
-                    ☏
-                  </div>
-                  <div>
-                    <strong className="block text-lg mb-1 text-(--color-text)">Zákaznícka linka:</strong>
-                    <a
-                      href={`tel:${COMPANY.phoneTel}`}
-                      className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
-                    >
-                      {COMPANY.phoneDisplay}
-                    </a>
-                    <p className="text-sm text-gray-400 mt-1">Po - Pia: 9:00 - 16:00</p>
-                  </div>
-                </li>
+                {COMPANY.phoneDisplay && COMPANY.phoneTel ? (
+                  <li className="flex items-start">
+                    <div className="h-10 w-10 rounded-full bg-green-100 text-(--color-accent-green) flex items-center justify-center mr-5 shrink-0 text-xl font-bold">
+                      ☏
+                    </div>
+                    <div>
+                      <strong className="block text-lg mb-1 text-(--color-text)">Zákaznícka linka:</strong>
+                      <a
+                        href={`tel:${COMPANY.phoneTel}`}
+                        className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
+                      >
+                        {COMPANY.phoneDisplay}
+                      </a>
+                      <p className="text-sm text-gray-400 mt-1">Po - Pia: 9:00 - 16:00</p>
+                    </div>
+                  </li>
+                ) : null}
 
                 <li className="flex items-start">
                   <div className="h-10 w-10 rounded-full bg-green-100 text-(--color-accent-green) flex items-center justify-center mr-5 shrink-0 text-xl font-bold">
