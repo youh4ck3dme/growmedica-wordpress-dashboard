@@ -20,7 +20,10 @@ export function buildCanonicalPageUrl(pathname = '/', siteUrl = SITE_URL): strin
 }
 
 function buildLocaleHref(pageUrl: string, locale: string): string {
-  return `${pageUrl}?lang=${locale}`
+  // Root must be `https://host/` before query for valid hreflang (PSI SEO).
+  const normalized =
+    pageUrl === SITE_URL || pageUrl === `${SITE_URL}/` ? `${SITE_URL}/` : pageUrl
+  return `${normalized}?lang=${locale}`
 }
 
 export type HreflangLink = { hrefLang: string; href: string }
@@ -58,6 +61,23 @@ export const DEFAULT_METADATA: Metadata = {
     siteName: SITE_NAME,
     type: 'website',
     locale: OG_LOCALE_MAP[DEFAULT_LOCALE],
+    url: SITE_URL,
+    title: BRAND_COPY.siteTitle,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: '/android-chrome-512x512.png',
+        width: 512,
+        height: 512,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: BRAND_COPY.siteTitle,
+    description: SITE_DESCRIPTION,
+    images: ['/android-chrome-512x512.png'],
   },
   robots: {
     index: true,

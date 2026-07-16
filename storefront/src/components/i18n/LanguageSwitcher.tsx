@@ -57,7 +57,7 @@ export default function LanguageSwitcher({ className = '' }: { className?: strin
       <button
         type="button"
         className="inline-flex items-center gap-1 rounded-lg border border-(--color-border) bg-(--color-surface)/80 px-2 py-1 text-[10px] font-bold tracking-wider text-(--color-text) transition-colors hover:border-(--color-primary)/40"
-        aria-label={t('locale.switcher')}
+        aria-label={`${t('locale.switcher')}: ${LOCALE_LABELS[locale]}`}
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-controls={listId}

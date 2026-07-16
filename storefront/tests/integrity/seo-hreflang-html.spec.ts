@@ -27,7 +27,8 @@ test.describe('SEO hreflang HTML output', () => {
     )
 
     const cs = links.find((l) => l.hrefLang === 'cs-CZ')
-    expect(cs?.href).not.toMatch(/\/\?lang=/)
+    // Root uses `/` before query for PSI/crawl-friendly hreflang
+    expect(cs?.href).toMatch(/\/\?lang=cs$/)
   })
 
   test('nested path renders hreflang with lang query on canonical base', async ({ request }) => {

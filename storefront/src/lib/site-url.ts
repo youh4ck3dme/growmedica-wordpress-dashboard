@@ -1,4 +1,5 @@
-const DEFAULT_SITE_URL = 'https://growmedica.cz'
+/** Prefer www — matches production canonical used by Vercel + PSI. */
+const DEFAULT_SITE_URL = 'https://www.growmedica.cz'
 
 /** Safe public site URL — empty or invalid NEXT_PUBLIC_SITE_URL falls back to production default. */
 export function resolvePublicSiteUrl(): string {

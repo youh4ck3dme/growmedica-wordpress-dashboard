@@ -61,7 +61,6 @@ export default function Logo({
       <span
         className="storefront-logo__wordmark text-lg sm:text-xl font-extrabold tracking-tight whitespace-nowrap leading-none"
         style={{ fontFamily: 'Montserrat, sans-serif' }}
-        aria-label={BRAND_COPY.siteName}
       >
         <span className="storefront-logo__grow">Grow</span>
         <span className="storefront-logo__accent">Medica</span>
