@@ -50,19 +50,18 @@ const unitOnlySpecPatterns = [
   'seo-alternates.spec.ts',
   'copy-quality.spec.ts',
   'i18n-detect.spec.ts',
+  'cart-id.spec.ts',
 ];
-const onlyShopifyLiveSpec =
+const onlyLiveOrUnitSpecs =
   requestedSpecFiles.length > 0 &&
-  requestedSpecFiles.every((arg) => arg.includes('shopify-live.spec.ts'));
-const onlyUnitSpecs =
-  requestedSpecFiles.length > 0 &&
-  requestedSpecFiles.every((arg) =>
-    unitOnlySpecPatterns.some((pattern) => arg.includes(pattern)),
+  requestedSpecFiles.every(
+    (arg) =>
+      arg.includes('/live/') ||
+      arg.includes('shopify-live.spec.ts') ||
+      unitOnlySpecPatterns.some((pattern) => arg.includes(pattern)),
   );
 const skipWebServer =
-  process.env.PLAYWRIGHT_SKIP_WEBSERVER === '1' ||
-  onlyShopifyLiveSpec ||
-  onlyUnitSpecs;
+  process.env.PLAYWRIGHT_SKIP_WEBSERVER === '1' || onlyLiveOrUnitSpecs;
 
 const playwrightWebServer = {
   command: `node scripts/ensure-dev-port.mjs ${playwrightDevPort} && node scripts/playwright-dev.mjs ${playwrightDevPort}`,

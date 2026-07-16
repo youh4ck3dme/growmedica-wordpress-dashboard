@@ -200,6 +200,16 @@ curl -s 'https://www.growmedica.cz/api/products?limit=1' | head -c 200
 
 Diagnostika: [../storefront/docs/DIAGNOSTICS.md](../storefront/docs/DIAGNOSTICS.md)
 
+### Testy (e2e + integrity)
+
+| | |
+|--|--|
+| Priečinok | `storefront/tests/` |
+| README | [../storefront/tests/README.md](../storefront/tests/README.md) |
+| Prompt | [PROMPT_TESTS.md](./PROMPT_TESTS.md) |
+| Live nákup | `cd storefront && yarn test:e2e:live` |
+| Woo integrity | `cd storefront && yarn test:woo:integrity` |
+
 ---
 
 ## 7. Mapa dokumentácie

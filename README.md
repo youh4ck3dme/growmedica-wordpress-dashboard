@@ -56,9 +56,12 @@ SHOPIFY_STORE_DOMAIN=growmedica.myshopify.com
 cd storefront
 yarn type-check
 yarn diagnostic
-yarn test:woo:integrity      # Woo mock
+yarn test:woo:integrity      # Woo mock integrity
+yarn test:e2e:live           # produkčný nákup www → cms
 yarn production:smoke        # PREVIEW_URL=https://www.growmedica.cz
 ```
+
+Testy: `storefront/tests/` · [tests/README.md](./storefront/tests/README.md) · prompt: [docs/PROMPT_TESTS.md](./docs/PROMPT_TESTS.md)
 
 ## Štruktúra
 
