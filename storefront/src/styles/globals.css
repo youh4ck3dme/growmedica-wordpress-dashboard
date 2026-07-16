@@ -1183,6 +1183,20 @@
   .aspect-product { aspect-ratio: 1 / 1; }
   .font-montserrat { font-family: var(--font-montserrat), sans-serif; }
 
+  /* CMS HTML can include wide tables/images — keep mobile iPhone layouts usable */
+  .product-description {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .product-description img,
+  .product-description table,
+  .product-description iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
   .product-description h1,
   .product-description h2,
   .product-description h3 {

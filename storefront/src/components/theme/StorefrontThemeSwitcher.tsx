@@ -132,7 +132,7 @@ export function StorefrontThemeSwitcher({
         role="listbox"
         aria-label="Prepínač vzhľadu"
         hidden={!open}
-        className="absolute right-0 top-full z-50 mt-1 min-w-[7.5rem] overflow-hidden rounded-lg border border-(--color-border) bg-(--color-surface) py-0.5 shadow-sm"
+        className="absolute right-0 top-full z-50 mt-1 min-w-30 overflow-hidden rounded-lg border border-(--color-border) bg-(--color-surface) py-0.5 shadow-sm"
       >
         {OPTIONS.map((option) => {
           const active = theme === option.value

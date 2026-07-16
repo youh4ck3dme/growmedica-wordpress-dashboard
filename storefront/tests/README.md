@@ -24,11 +24,13 @@ tests/
 
 | Príkaz | Čo beží |
 |--------|---------|
-| `yarn test:integrity` | integrity (mock, s dev serverom) |
-| `yarn test:woo:integrity` | len `woo-*` integrity, Woo mock |
+| `yarn test:integrity` | integrity mock (**bez WordPressu**) |
+| `yarn test:integrity:iphone` | **live** katalóg ≥300 + **všetky iPhone** viewports (www) |
+| `yarn test:integrity:iphone:mock` | mock layout iPhone 17 family |
+| `yarn test:woo:integrity` | len `woo-*` integrity, Woo **mock** (bez real WP) |
 | `yarn test:e2e` | e2e `shop.spec.ts` (mock server) |
 | `yarn test:e2e:live` | **produkcia** www → košík → cms checkout |
-| `yarn test:integrity:live` | live integrity (Shopify / agent) |
+| `yarn test:integrity:live` | live integrity (Shopify / agent / mobile catalog) |
 | `yarn test:unit-integrity` | rýchle unit-like integrity |
 | `yarn test:shopify-admin` | unit Node test |
 | `yarn test:dashboard-agent` | agent mock |
