@@ -1,11 +1,16 @@
-import { NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
+import { authorizeDashboardRequest } from '@/lib/dashboard-agent/auth'
 import { getCmsProvider } from '@/lib/cms'
 import { isShopifyAdminConfigured } from '@/lib/shopify/admin'
 import { isShopifyMockMode } from '@/lib/shopify/mock'
 import { isWooMockMode } from '@/lib/wordpress/mock'
 
-/** Read-only health check — no auth required. */
-export async function GET() {
+/** Public probe — minimal surface for uptime checks. */
+export async function GET(request: NextRequest) {
+  if (!authorizeDashboardRequest(request)) {
+    return NextResponse.json({ ok: true })
+  }
+
   const cms = getCmsProvider()
   const mistralMock = process.env.MISTRAL_MOCK_MODE === '1'
   const wooMock = isWooMockMode()

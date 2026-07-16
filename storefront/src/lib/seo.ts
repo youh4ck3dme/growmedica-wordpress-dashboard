@@ -212,6 +212,11 @@ export function getOrganizationJsonLd() {
   }
 }
 
+/** Escape JSON for safe embedding in <script type="application/ld+json">. */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c')
+}
+
 export function getBundlesPageMetadata(): Metadata {
   const title = BRAND_COPY.bundlesHeading
   const description = BRAND_COPY.pageDescriptions.bundles

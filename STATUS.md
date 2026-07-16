@@ -1,6 +1,6 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-16 (auto-finish pass)  
+**Aktualizované:** 2026-07-17 (security + multi-SKU checkout)  
 **Branch:** `feat/dashboard-agent-v2`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 
@@ -13,13 +13,14 @@
 | Oblasť | Stav |
 |--------|------|
 | Next + Woo katalóg na www | ✅ |
-| Cookie košík, checkout cms | ✅ |
+| Cookie košík, checkout cms | ✅ multi-SKU cez `gm_cart` mu-plugin |
 | Firma, VOP, GDPR, IBAN, e-maily, SMTP | ✅ |
 | BACS + COD, doprava SK s cenami, free od 50 € | ✅ |
 | Test order REST (BACS + DPD 3,90 → cancel) | ✅ opakovane |
-| ISR revalidate snippet | ✅ |
+| ISR revalidate snippet | ✅ header-only secret |
 | Dokumentácia STATUS / OPERATIONS / TODO | ✅ |
 | Git clean + secrets mimo gitu | ✅ |
+| Security hardening (XSS, live-write AND, CORS, CI) | ✅ 2026-07-17 |
 | Fake telefón skrytý (kým nedáš reálne číslo) | ✅ |
 | Duplicitná DPD plugin metóda bez ceny vypnutá | ✅ |
 | Audit skladu (qty 50 ≈ fiktívne) | ✅ [reports/STOCK_AUDIT.md](./reports/STOCK_AUDIT.md) |
@@ -32,7 +33,8 @@
 
 | # | Úloha | Prečo agent nemôže |
 |---|--------|---------------------|
-| 1 | **Manuálny nákup v prehliadači** (1× BACS) | potvrdenie UX + e-mail v tvojej schránke |
+| 0 | **Nasadiť mu-plugins na cms** (`growmedica-checkout-seed.php`, CORS, revalidate) | prístup na produkčný WP filesystem |
+| 1 | **Manuálny nákup v prehliadači** (1× + 2× SKU BACS) | potvrdenie UX + e-mail v tvojej schránke |
 | 2 | **Reálne telefónne číslo** | neexistuje v dátach — daj ho a doplníme |
 | 3 | **Stripe** API keys (test/live) | merchant účet |
 | 4 | **GoPay** merchant | merchant účet |

@@ -56,6 +56,34 @@ test.describe('Mock Shopify cart API', () => {
     expect(addResponse.ok()).toBe(true)
   })
 
+  test('WooCommerce multi-SKU checkoutUrl seeds gm_cart for all lines', async ({ request }) => {
+    test.skip(process.env.CMS_PROVIDER !== 'wordpress', 'Woo cart test — run via yarn test:woo:integrity')
+
+    const productsResponse = await request.get('/api/products?limit=10')
+    const { products } = (await productsResponse.json()) as {
+      products: Array<{ variants: { edges: Array<{ node: { id: string } }> } }>
+    }
+    const v1 = products[0]?.variants.edges[0]?.node.id
+    const v2 = products[1]?.variants.edges[0]?.node.id
+    expect(v1).toBeTruthy()
+    expect(v2).toBeTruthy()
+
+    const add1 = await request.post('/api/cart/add', { data: { variantId: v1, quantity: 2 } })
+    expect(add1.ok()).toBe(true)
+    const cookie1 = add1.headers()['set-cookie']?.split(';')[0] ?? ''
+
+    const add2 = await request.post('/api/cart/add', {
+      headers: { cookie: cookie1 },
+      data: { variantId: v2, quantity: 1 },
+    })
+    expect(add2.ok()).toBe(true)
+    const body = (await add2.json()) as { cart: { checkoutUrl: string; totalQuantity: number } }
+    expect(body.cart.totalQuantity).toBeGreaterThanOrEqual(3)
+    expect(body.cart.checkoutUrl).toContain('gm_cart=')
+    const gm = new URL(body.cart.checkoutUrl).searchParams.get('gm_cart') ?? ''
+    expect(gm.split(',').length).toBeGreaterThanOrEqual(2)
+  })
+
   test('pridanie do košíka aktualizuje badge v hlavičke', async () => {
     const btnPath = path.join(process.cwd(), 'src/components/product/AddToCartButton.tsx')
     expect(fs.existsSync(btnPath)).toBe(true)

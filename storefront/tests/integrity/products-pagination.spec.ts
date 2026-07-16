@@ -29,7 +29,7 @@ test.describe('Products catalog pagination', () => {
     )
   })
 
-  test('/api/products uses full catalog and direct handle lookups', async () => {
+  test('/api/products uses capped catalog and direct handle lookups', async () => {
     const productsLibPath = path.join(process.cwd(), 'src/lib/shopify/products.ts')
     const libContent = fs.readFileSync(productsLibPath, 'utf8')
     expect(libContent).toContain('PRODUCTS_PAGE_SIZE')
@@ -39,6 +39,8 @@ test.describe('Products catalog pagination', () => {
     expect(fs.existsSync(apiPath)).toBe(true)
     const apiContent = fs.readFileSync(apiPath, 'utf8')
     expect(apiContent).toContain('getProductByHandle')
-    expect(apiContent).toContain("pages: 'all'")
+    expect(apiContent).toContain('MAX_PAGE_SIZE')
+    expect(apiContent).toContain('pages: 1')
+    expect(apiContent).not.toContain("pages: 'all'")
   })
 })

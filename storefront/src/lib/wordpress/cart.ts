@@ -32,12 +32,21 @@ type PayloadV1 = {
 }
 
 function cartSigningSecret(): string {
-  return (
+  const secret =
+    process.env.CART_SIGNING_SECRET?.trim() ||
     process.env.WORDPRESS_REVALIDATION_SECRET?.trim() ||
     process.env.DASHBOARD_AGENT_SECRET?.trim() ||
-    process.env.SHOPIFY_REVALIDATION_SECRET?.trim() ||
-    'growmedica-dev-cart-secret'
-  )
+    process.env.SHOPIFY_REVALIDATION_SECRET?.trim()
+
+  if (secret) return secret
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'Cart signing secret missing — set CART_SIGNING_SECRET or WORDPRESS_REVALIDATION_SECRET',
+    )
+  }
+
+  return 'growmedica-dev-cart-secret'
 }
 
 function signPayload(payloadB64: string): string {
@@ -150,24 +159,50 @@ function cmsCheckoutBase(): string {
   return env.WORDPRESS_BASE_URL.replace(/\/$/, '')
 }
 
-function buildCheckoutUrl(items: WooCartItem[]): string {
+/**
+ * Build CMS checkout URL that seeds ALL cart lines via mu-plugin `gm_cart`.
+ * Single-line carts keep classic Woo `add-to-cart` (works without mu-plugin).
+ * Multi-line requires `wordpress/mu-plugins/growmedica-checkout-seed.php` on CMS.
+ */
+export function buildWooCheckoutUrl(items: Array<{ productId: number; quantity: number }>): string {
   const base = cmsCheckoutBase()
-  // Woo pages (SK): cart=/kosik, checkout=/kontrola-objednavky
-  if (items.length === 0) return `${base}/kosik/`
-  // Seed Woo session with first line, land on real checkout page.
+  const normalized = items
+    .filter((item) => item.productId > 0 && item.quantity > 0)
+    .map((item) => ({
+      productId: item.productId,
+      quantity: Math.min(Math.floor(item.quantity), 99),
+    }))
+
+  if (normalized.length === 0) return `${base}/kosik/`
+
+  if (normalized.length === 1) {
+    const params = new URLSearchParams()
+    params.set('add-to-cart', String(normalized[0].productId))
+    params.set('quantity', String(normalized[0].quantity))
+    return `${base}/kontrola-objednavky/?${params.toString()}`
+  }
+
+  const seed = normalized.map((item) => `${item.productId}:${item.quantity}`).join(',')
   const params = new URLSearchParams()
-  params.set('add-to-cart', String(items[0].productId))
-  params.set('quantity', String(items[0].quantity))
-  return `${base}/kontrola-objednavky/?${params.toString()}`
+  params.set('gm_cart', seed)
+  return `${base}/?${params.toString()}`
+}
+
+function buildCheckoutUrl(items: WooCartItem[]): string {
+  return buildWooCheckoutUrl(items)
 }
 
 async function buildCart(session: WooCartSession): Promise<Cart> {
+  const products = await Promise.all(
+    session.items.map((item) => getWooProductBySlug(item.slug)),
+  )
+
   const lines: CartLine[] = []
   let subtotal = 0
 
-  for (const item of session.items) {
-    const product = await getWooProductBySlug(item.slug)
-    if (!product) continue
+  session.items.forEach((item, index) => {
+    const product = products[index]
+    if (!product) return
 
     const unitPrice = parseFloat(product.priceRange.minVariantPrice.amount)
     const lineTotal = unitPrice * item.quantity
@@ -192,7 +227,7 @@ async function buildCart(session: WooCartSession): Promise<Cart> {
         subtotalAmount: money(lineTotal),
       },
     })
-  }
+  })
 
   return {
     id: session.id,
@@ -304,7 +339,5 @@ export async function updateWooCartDiscountCodes(
 }
 
 export function getWooCheckoutUrl(productId: number, quantity = 1): string {
-  const base = cmsCheckoutBase()
-  // Prefer real checkout page when present; cart page always works as fallback entry.
-  return `${base}/kontrola-objednavky/?add-to-cart=${productId}&quantity=${quantity}`
+  return buildWooCheckoutUrl([{ productId, quantity }])
 }

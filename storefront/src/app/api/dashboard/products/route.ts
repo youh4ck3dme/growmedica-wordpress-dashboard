@@ -37,7 +37,7 @@ export async function PUT(request: NextRequest) {
     const body = updateSchema.parse(await request.json())
     const { updateAdminProduct, isLiveWriteAllowed } = await import('@/lib/shopify/admin')
 
-    if (!body.confirm && !isLiveWriteAllowed()) {
+    if (!body.confirm || !isLiveWriteAllowed()) {
       return NextResponse.json(
         { error: 'Live writes require confirm=true and DASHBOARD_ALLOW_LIVE_WRITES=1', dry_run: true },
         { status: 403 },

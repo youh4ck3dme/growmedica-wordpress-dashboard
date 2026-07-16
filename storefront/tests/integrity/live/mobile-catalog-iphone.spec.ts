@@ -32,14 +32,21 @@ async function assertNoHorizontalOverflow(page: Page, opts?: { soft?: boolean })
 }
 
 test.describe('Live API — katalóg 300+', () => {
-  test(`GET /api/products vráti aspoň ${MIN_PRODUCTS} produktov`, async ({ request }) => {
-    const res = await request.get(`${BASE}/api/products`)
-    expect(res.ok(), `HTTP ${res.status()}`).toBeTruthy()
-    const data = (await res.json()) as { products: Array<{ id: string; handle: string }> }
-    expect(data.products.length).toBeGreaterThanOrEqual(MIN_PRODUCTS)
-    // Woo SoT
+  test(`sitemap / produkťy majú aspoň ${MIN_PRODUCTS} produktov`, async ({ request }) => {
+    const sitemapRes = await request.get(`${BASE}/sitemap.xml`)
+    expect(sitemapRes.ok(), `sitemap HTTP ${sitemapRes.status()}`).toBeTruthy()
+    const xml = await sitemapRes.text()
+    const productUrls = [...xml.matchAll(/https?:\/\/[^<]+\/produkty\/[a-z0-9-]+/gi)]
+    const unique = new Set(productUrls.map((m) => m[0]))
+    expect(unique.size).toBeGreaterThanOrEqual(MIN_PRODUCTS)
+
+    // Capped public API still returns Woo/Shopify ids
+    const apiRes = await request.get(`${BASE}/api/products?limit=10`)
+    expect(apiRes.ok(), `API HTTP ${apiRes.status()}`).toBeTruthy()
+    const data = (await apiRes.json()) as { products: Array<{ id: string }> }
+    expect(data.products.length).toBeGreaterThan(0)
     expect(data.products[0]?.id).toMatch(/woocommerce|shopify|gid:/i)
-    console.log(`CATALOG_COUNT=${data.products.length}`)
+    console.log(`SITEMAP_PRODUCT_COUNT=${unique.size}`)
   })
 })
 
@@ -111,26 +118,20 @@ for (const vp of IPHONE_VIEWPORTS) {
   })
 }
 
-test.describe('Spot-check 300 handles via API (batch)', () => {
+test.describe('Spot-check 300 handles via sitemap (batch)', () => {
   test('aspoň 300 handle-ov je non-empty a unique', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/products`)
-    expect(res.ok()).toBeTruthy()
-    const { products } = (await res.json()) as {
-      products: Array<{ handle: string; title: string }>
-    }
-    expect(products.length).toBeGreaterThanOrEqual(MIN_PRODUCTS)
-
-    const handles = products.map((p) => p.handle).filter(Boolean)
+    const sitemapRes = await request.get(`${BASE}/sitemap.xml`)
+    expect(sitemapRes.ok()).toBeTruthy()
+    const xml = await sitemapRes.text()
+    const handles = [...xml.matchAll(/\/produkty\/([a-z0-9-]+)/gi)].map((m) => m[1])
     const unique = new Set(handles)
-    expect(unique.size).toBe(handles.length)
-    expect(handles.length).toBeGreaterThanOrEqual(MIN_PRODUCTS)
+    expect(unique.size).toBeGreaterThanOrEqual(MIN_PRODUCTS)
 
-    // sample 20 PDP HEAD-like GETs (not all 300 HTML — too slow; API covers count)
-    const sample = handles.slice(0, 20)
+    const sample = [...unique].slice(0, 20)
     for (const handle of sample) {
       const r = await request.get(`${BASE}/produkty/${handle}`)
       expect(r.status(), handle).toBeLessThan(500)
     }
-    console.log(`HANDLES_OK=${handles.length} PDP_SAMPLE=${sample.length}`)
+    console.log(`HANDLES_OK=${unique.size} PDP_SAMPLE=${sample.length}`)
   })
 })

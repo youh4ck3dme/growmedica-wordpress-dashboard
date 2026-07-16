@@ -1,8 +1,14 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { z } from 'zod'
 import { createCart, addToCart, getCart, CART_COOKIE } from '@/lib/catalog/cart'
 import { isWordPressCms } from '@/lib/cms'
 import { normalizeShopifyCartId } from '@/lib/shopify/cart'
+
+const addSchema = z.object({
+  variantId: z.string().min(1),
+  quantity: z.number().int().min(1).max(99).optional().default(1),
+})
 
 function resolveExistingCartId(raw: string | undefined): string | null {
   if (!raw?.trim() || raw === 'undefined' || raw === 'null') return null
@@ -25,14 +31,8 @@ function setCartCookie(response: NextResponse, cartId: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { variantId, quantity = 1 } = (await request.json()) as {
-      variantId?: string
-      quantity?: number
-    }
-
-    if (!variantId) {
-      return NextResponse.json({ error: 'variantId is required' }, { status: 400 })
-    }
+    const body = addSchema.parse(await request.json())
+    const { variantId, quantity } = body
 
     const cookieStore = await cookies()
     const existingCartId = resolveExistingCartId(cookieStore.get(CART_COOKIE)?.value)
@@ -61,6 +61,9 @@ export async function POST(request: NextRequest) {
     setCartCookie(response, cart.id)
     return response
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: 'Neplatné údaje košíka', details: error.flatten() }, { status: 400 })
+    }
     console.error('[Cart API] Add error:', error)
     return NextResponse.json({ error: 'Nepodarilo sa pridať do košíka' }, { status: 500 })
   }

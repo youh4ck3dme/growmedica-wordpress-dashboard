@@ -65,10 +65,65 @@ HTML
 fi
 
 mkdir -p "$WP/wp-content/mu-plugins"
+
+# Clean empty blog homepage on CMS front only (no "Blog / nothing was found")
+cat > "$WP/wp-content/mu-plugins/growmedica-clean-homepage.php" <<'PHP'
+<?php
+/**
+ * Plugin Name: GrowMedica Clean Homepage
+ * Description: Hides the empty WordPress blog on the CMS front page only.
+ */
+if (!defined('ABSPATH')) { exit; }
+
+function growmedica_is_empty_blog_front_page(): bool {
+    if (is_admin() || wp_doing_ajax() || wp_doing_cron()) { return false; }
+    if (defined('REST_REQUEST') && REST_REQUEST) { return false; }
+    return is_front_page() && is_home();
+}
+
+function growmedica_storefront_url(): string {
+    $from_env = getenv('GROWMEDICA_STOREFRONT_URL')
+        ?: (defined('GROWMEDICA_STOREFRONT_URL') ? (string) GROWMEDICA_STOREFRONT_URL : '');
+    if (is_string($from_env) && $from_env !== '') {
+        return untrailingslashit($from_env);
+    }
+    return 'https://www.growmedica.cz';
+}
+
+add_action('template_redirect', static function (): void {
+    if (!growmedica_is_empty_blog_front_page()) { return; }
+    $shop = esc_url(growmedica_storefront_url());
+    $admin = esc_url(admin_url());
+    $site = esc_html(get_bloginfo('name') ?: 'GrowMedica CMS');
+    $year = (int) gmdate('Y');
+    status_header(200);
+    nocache_headers();
+    header('Content-Type: text/html; charset=UTF-8');
+    echo '<!DOCTYPE html><html lang="sk"><head><meta charset="UTF-8" />'
+        . '<meta name="viewport" content="width=device-width, initial-scale=1" />'
+        . '<meta name="robots" content="noindex, nofollow" />'
+        . '<title>' . $site . '</title>'
+        . '<style>body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,sans-serif;background:#f6f7f9;color:#1a1d21;padding:24px}'
+        . 'main{width:min(100%,28rem);background:#fff;border:1px solid #e6e8ec;border-radius:16px;padding:2rem 1.75rem;text-align:center;box-shadow:0 8px 30px rgba(16,24,40,.06)}'
+        . 'h1{margin:0 0 .5rem;font-size:1.35rem}p{margin:0 0 1.25rem;color:#5b6470;line-height:1.5;font-size:.95rem}'
+        . '.actions{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center}'
+        . 'a{display:inline-flex;align-items:center;justify-content:center;min-height:2.5rem;padding:0 1rem;border-radius:999px;text-decoration:none;font-weight:600;font-size:.9rem}'
+        . 'a.primary{background:#0f766e;color:#fff}a.secondary{background:#eef1f4;color:#1a1d21}'
+        . 'footer{margin-top:1.5rem;font-size:.75rem;color:#8a93a0}</style></head><body><main>'
+        . '<h1>' . $site . '</h1>'
+        . '<p>Headless CMS pre GrowMedica. Verejný e‑shop je na storefronte — tu je správa katalógu a pokladne.</p>'
+        . '<div class="actions"><a class="primary" href="' . $shop . '/">Otvoriť e‑shop</a>'
+        . '<a class="secondary" href="' . $admin . '">WP Admin</a></div>'
+        . '<footer>© ' . $year . ' GrowMedica</footer></main></body></html>';
+    exit;
+}, 1);
+PHP
+
 echo "=== base OK ==="
 wp --path="$WP" option get siteurl
 wp --path="$WP" option get permalink_structure
 wp --path="$WP" plugin list
+ls -la "$WP/wp-content/mu-plugins/"
 echo SETUP_BASE_DONE
 REMOTE
 )

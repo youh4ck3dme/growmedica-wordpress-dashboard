@@ -1,18 +1,18 @@
 # GrowMedica WordPress + WooCommerce — local dev CMS
-# Usage: docker compose up -d
+# Usage: docker compose --env-file .env.docker.local up -d
+#        (or defaults below for quick start)
 # CMS:   http://localhost:8080
 # Admin: http://localhost:8080/wp-admin
-# API:   http://localhost:8080/wp-json/wc/v3/products?per_page=1
 
 services:
   db:
     image: mariadb:10.11
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: growmedica
-      MYSQL_USER: growmedica
-      MYSQL_PASSWORD: growmedica_local
-      MYSQL_ROOT_PASSWORD: root_local
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-growmedica}
+      MYSQL_USER: ${MYSQL_USER:-growmedica}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-growmedica_local}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_local}
     volumes:
       - woo_db:/var/lib/mysql
     healthcheck:
@@ -31,13 +31,20 @@ services:
       - '8080:80'
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: growmedica
-      WORDPRESS_DB_PASSWORD: growmedica_local
-      WORDPRESS_DB_NAME: growmedica
+      WORDPRESS_DB_USER: ${MYSQL_USER:-growmedica}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-growmedica_local}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-growmedica}
       WORDPRESS_TABLE_PREFIX: gm_
-      WORDPRESS_DEBUG: '1'
-      GROWMEDICA_STOREFRONT_URL: http://host.docker.internal:5555
-      GROWMEDICA_REVALIDATION_SECRET: local-dev-revalidation-secret-min-16-chars
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-0}
+      GROWMEDICA_STOREFRONT_URL: ${GROWMEDICA_STOREFRONT_URL:-http://host.docker.internal:5555}
+      GROWMEDICA_REVALIDATION_SECRET: ${GROWMEDICA_REVALIDATION_SECRET:-local-dev-revalidation-secret-min-16-chars}
+      GROWMEDICA_CORS_ORIGINS: ${GROWMEDICA_CORS_ORIGINS:-}
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/wp-admin/install.php']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
     volumes:
       - woo_wp:/var/www/html
       - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins:ro

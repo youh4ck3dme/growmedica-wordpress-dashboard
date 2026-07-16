@@ -24,12 +24,16 @@ function growmedica_revalidate_storefront(string $tag): void
     if ($cfg['secret'] === '' || $cfg['storefront'] === '') {
         return;
     }
-    $url = rtrim($cfg['storefront'], '/') . '/api/revalidate?secret=' . rawurlencode($cfg['secret']) . '&tag=' . rawurlencode($tag);
+    // Secret goes in header only — never in query string (access/proxy logs).
+    $url = rtrim($cfg['storefront'], '/') . '/api/revalidate';
     wp_remote_post($url, [
         'timeout' => 10,
         'blocking' => false,
-        'headers' => ['Content-Type' => 'application/json'],
-        'body' => '{}',
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'x-revalidation-secret' => $cfg['secret'],
+        ],
+        'body' => wp_json_encode(['tag' => $tag]),
     ]);
 }
 

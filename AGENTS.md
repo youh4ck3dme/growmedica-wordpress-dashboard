@@ -17,7 +17,8 @@ Referencia: [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) �
 
 - Aplikácia je Next.js 15 / React 19 storefront v `storefront/` (GrowMedica, SK e-commerce).
 - Package manager: **Yarn 1** (`storefront/yarn.lock`). Node 22. Všetky príkazy z `storefront/`.
-- WordPress mu-plugins: `wordpress/mu-plugins/`
+- WordPress mu-plugins: `wordpress/mu-plugins/` (CORS allowlist, ISR revalidate header-only, **checkout seed `gm_cart`**)
+- Default `CMS_PROVIDER` = **wordpress** (live). Shopify len explicitne.
 - Hlavný stav: [STATUS.md](./STATUS.md) · [TODO.md](./TODO.md)
 
 ### Local env (required to run `yarn dev` / `yarn build`)

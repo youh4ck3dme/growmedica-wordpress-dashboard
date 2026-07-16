@@ -1,9 +1,20 @@
-import { createHmac, randomUUID } from 'node:crypto'
+import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto'
 import { type NextRequest } from 'next/server'
 
 export const DASHBOARD_AGENT_SECRET_HEADER = 'x-dashboard-agent-secret'
 export const DASHBOARD_SESSION_COOKIE = 'growmedica-dashboard-agent-session'
 export const DASHBOARD_SESSION_MAX_AGE_SEC = 24 * 60 * 60
+
+function safeEqual(a: string, b: string): boolean {
+  try {
+    const ba = Buffer.from(a)
+    const bb = Buffer.from(b)
+    if (ba.length !== bb.length) return false
+    return timingSafeEqual(ba, bb)
+  } catch {
+    return false
+  }
+}
 
 export function getDashboardAgentSecret(): string {
   const secret = process.env.DASHBOARD_AGENT_SECRET?.trim()
@@ -30,7 +41,7 @@ export function verifyDashboardSessionToken(token: string | null | undefined): b
   const [sessionId, signature] = token.split('.')
   if (!sessionId || !signature) return false
   const expected = signSessionId(sessionId)
-  return expected.length > 0 && signature === expected
+  return expected.length > 0 && safeEqual(signature, expected)
 }
 
 export function isDashboardAgentAuthorized(request: NextRequest): boolean {
@@ -38,7 +49,7 @@ export function isDashboardAgentAuthorized(request: NextRequest): boolean {
   if (!expected) return false
 
   const provided = request.headers.get(DASHBOARD_AGENT_SECRET_HEADER)?.trim()
-  if (provided === expected) return true
+  if (provided && safeEqual(provided, expected)) return true
 
   const sessionToken = request.cookies.get(DASHBOARD_SESSION_COOKIE)?.value
   return verifyDashboardSessionToken(sessionToken)
@@ -52,5 +63,5 @@ export function authorizeDashboardRequest(request: NextRequest): boolean {
 export function isDashboardSecretValid(secret: string | null | undefined): boolean {
   const expected = process.env.DASHBOARD_AGENT_SECRET?.trim()
   if (!expected || !secret?.trim()) return false
-  return secret.trim() === expected
+  return safeEqual(secret.trim(), expected)
 }

@@ -1,11 +1,13 @@
 # GrowMedica — TODO
 
-**Aktualizované:** 2026-07-16  
+**Aktualizované:** 2026-07-17  
 **Hlavný stav:** [STATUS.md](./STATUS.md) · **Prevádzka:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)
 
 ## Hotové agentom ✅
 
 - [x] Woo live na www, cookie cart, checkout cms  
+- [x] Multi-SKU checkout seed (`gm_cart` mu-plugin)  
+- [x] Security P0–P2 (DOMPurify-like sanitize, live-write guards, CORS, CI)  
 - [x] Firma / IBAN / e-maily / SMTP / VOP stránky  
 - [x] BACS + COD, doprava SK, free ≥ 50 €  
 - [x] REST smoke order  
@@ -16,7 +18,8 @@
 
 ## Zostáva na teba
 
-- [ ] Manuálny E2E nákup v prehliadači  
+- [ ] **Nasadiť mu-plugin** `growmedica-checkout-seed.php` (+ CORS/revalidate) na **cms.growmedica.cz**  
+- [ ] Manuálny E2E nákup v prehliadači (1 SKU + 2 SKU)  
 - [ ] Telefón (reálne číslo)  
 - [ ] Stripe a/alebo GoPay keys  
 - [ ] Packeta / DPD API  

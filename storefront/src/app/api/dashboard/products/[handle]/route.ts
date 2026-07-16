@@ -46,7 +46,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
   try {
     const body = updateSchema.parse(await request.json())
 
-    if (!body.confirm && !isLiveWriteAllowed()) {
+    if (!body.confirm || !isLiveWriteAllowed()) {
       return NextResponse.json(
         {
           error: 'Live writes require confirm=true and DASHBOARD_ALLOW_LIVE_WRITES=1',
