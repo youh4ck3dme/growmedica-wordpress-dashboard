@@ -11,9 +11,6 @@ test.beforeEach(async ({ context, baseURL }) => {
       url: baseURL ?? 'http://127.0.0.1:5557',
     },
   ]);
-  await context.addInitScript(() => {
-    window.localStorage.setItem('gm_cookie_consent', 'accepted');
-  });
 });
 
 test.describe('1. Domovská stránka (Homepage)', () => {
