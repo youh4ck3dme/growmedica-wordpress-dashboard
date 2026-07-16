@@ -24,6 +24,8 @@ tests/
 
 | Príkaz | Čo beží |
 |--------|---------|
+| `yarn test:all` | **všetky testy za sebou** (mock + live) |
+| `yarn test:all:local` | len lokálne (bez live www / iPhone live) |
 | `yarn test:integrity` | integrity mock (**bez WordPressu**) |
 | `yarn test:integrity:iphone` | **live** katalóg ≥300 + **všetky iPhone** viewports (www) |
 | `yarn test:integrity:iphone:mock` | mock layout iPhone 17 family |

@@ -115,19 +115,26 @@ export default defineConfig({
             '**/revalidation.spec.ts',
             '**/live/**',
             '**/mobile-iphone-layout.spec.ts',
+            // requires local WP :8080 — not needed when production is SoT
+            '**/wordpress-local.spec.ts',
           ]
         : [
             '**/pwa.spec.ts',
             '**/woo-*.spec.ts',
             '**/live/**',
             '**/mobile-iphone-layout.spec.ts',
+            '**/wordpress-local.spec.ts',
           ],
-      use: { ...devices['Desktop Chrome'] },
+      use: { browserName: 'chromium', ...devices['Desktop Chrome'] },
     },
     {
       name: 'integrity-iphone',
       testMatch: /integrity\/mobile-iphone-layout\.spec\.ts/,
-      use: { ...devices['iPhone 13'] },
+      use: {
+        browserName: 'chromium',
+        ...devices['iPhone 13'],
+        defaultBrowserType: 'chromium',
+      },
     },
     {
       name: 'integrity-live-iphone',
