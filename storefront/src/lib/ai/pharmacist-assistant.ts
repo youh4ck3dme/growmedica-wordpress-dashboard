@@ -114,6 +114,6 @@ export function detectHandoff(userText: string): AssistantHandoff | null {
     reason: 'acute_or_serious_symptoms',
     target: 'human_pharmacist',
     message:
-      'Pri akútnych alebo závažných ťažkostiach kontaktujte lekára alebo lekárňu. Môžete nás tiež kontaktovať cez /kontakt.',
+      'Pri akútnych alebo závažných ťažkostiach kontaktujte kvalifikovaného odborníka. Môžete nás tiež kontaktovať cez /kontakt.',
   }
 }

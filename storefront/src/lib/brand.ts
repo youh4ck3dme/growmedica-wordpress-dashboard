@@ -49,15 +49,15 @@ export const BRAND_COPY = {
   siteDescription:
     'GrowMedica.cz — overené biomedicínske doplnky stravy pre zdravie a vitalitu. Rýchle doručenie a odborné poradenstvo.',
   aboutLabel: 'Prečo GrowMedica',
-  aboutHeading: 'Rast, príroda a lekárska presnosť v jednom e-shope',
+  aboutHeading: 'Rast, príroda a odborná precíznosť v jednom e-shope',
   aboutBody:
-    'GrowMedica.cz spája lekársku presnosť s prírodnou rovnováhou — overené produkty, dôveryhodný nákup a rastúca komunita spokojných zákazníkov.',
+    'GrowMedica.cz spája odbornú precíznosť s prírodnou rovnováhou — overené produkty, dôveryhodný nákup a rastúca komunita spokojných zákazníkov.',
   aboutSlogan: 'Zdravie, ktoré rastie s vami.',
   aboutHealthLines: [
     'Overené zloženie — bez zbytočných prídavných látok',
-    'Lekárska presnosť pri výbere každého produktu',
+    'Odborná precíznosť pri výbere každého produktu',
     '460+ doplnkov pre imunitu, pohyb, spánok aj krásu',
-    'Rýchle doručenie a poradenstvo s lekárnikom online',
+    'Rýchle doručenie a produktové poradenstvo online',
     'Balíčky zdravia za zvýhodnené ceny',
   ] as const,
   bundlesHeading: 'Balíčky zdravia',

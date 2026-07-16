@@ -10,7 +10,7 @@ import { SAFE_DISCLAIMER } from '@/lib/ai/compliance'
 const INITIAL_ASSISTANT_MESSAGE: AssistantChatMessage = {
   role: 'assistant',
   content:
-    'Som váš virtuálny lekárnik GrowMedica. Pomôžem s výberom produktu alebo s orientáciou v objednávke.',
+    'Som váš virtuálny farmaceut GrowMedica. Pomôžem s výberom produktu alebo s orientáciou v objednávke.',
 }
 
 const ASSISTANT_CONVERSATION_STORAGE_KEY = 'growmedica_assistant_conversation_id'
@@ -137,7 +137,7 @@ export function PharmacistAssistantDrawer() {
       <button
         type="button"
         className="assistant-drawer__backdrop"
-        aria-label="Zavrieť chat s lekárnikom"
+        aria-label="Zavrieť chat"
         onClick={() => setOpen(false)}
       />
       <aside
@@ -207,7 +207,7 @@ export function PharmacistAssistantDrawer() {
               placeholder="Napíšte správu..."
               className="assistant-drawer__input"
               disabled={isSending}
-              aria-label="Správa pre lekárnika"
+              aria-label="Správa pre asistenta"
             />
             <button
               type="submit"

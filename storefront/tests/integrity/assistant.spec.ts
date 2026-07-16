@@ -43,7 +43,7 @@ test.describe('Pharmacist Assistant — UI', () => {
     const drawerContent = fs.readFileSync(drawerPath, 'utf8')
     expect(drawerContent).toContain('data-testid="pharmacist-assistant-drawer"')
     expect(drawerContent).toContain('GrowMedica Farmaceut')
-    expect(drawerContent).toContain('Som váš virtuálny lekárnik GrowMedica')
+    expect(drawerContent).toContain('Som váš virtuálny farmaceut GrowMedica')
 
     const finderPath = path.join(process.cwd(), 'src/components/ai/SupplementFinder.tsx')
     const finderContent = fs.readFileSync(finderPath, 'utf8')
@@ -58,7 +58,7 @@ test.describe('Pharmacist Assistant — UI', () => {
     const drawerPath = path.join(process.cwd(), 'src/components/ai/PharmacistAssistantDrawer.tsx')
     expect(fs.existsSync(drawerPath)).toBe(true)
     const content = fs.readFileSync(drawerPath, 'utf8')
-    expect(content).toContain('Správa pre lekárnika')
+    expect(content).toContain('Správa pre asistenta')
     expect(content).toContain('Odoslať správu')
     expect(content).toContain('assistant-drawer__bubble')
   })

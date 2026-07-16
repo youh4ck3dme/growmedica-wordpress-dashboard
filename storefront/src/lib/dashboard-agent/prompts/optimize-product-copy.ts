@@ -18,7 +18,7 @@ Pravidlá:
 - title: 40–70 znakov, jasný názov produktu pre e-shop, bez veľkých písmen celého nadpisu
 - short_description: 120–200 znakov, 1–2 vety, informačný tón
 - Produkt je výživový doplnok, NIE liek
-- Zakázané tvrdenia: liečba, vyliečenie, diagnóza, terapia, 100% účinnosť, nahradí lekára, zabráni chorobe
+- Zakázané tvrdenia: liečba, vyliečenie, diagnóza, terapia, 100% účinnosť, nahrádza odborníka, zabráni chorobe
 - Neuvádzaj účinky, ktoré nie sú v originálnom popise
 - Profesionálny, dôveryhodný tón značky GrowMedica
 - Bez anglicizmov, ak nie sú v origináli${retryBlock}

@@ -1,4 +1,4 @@
-# Virtuálny lekárnik — assistant chat
+# Virtuálny farmaceut — assistant chat
 
 Headless GrowMedica storefront uses **Mistral** via Next.js route `POST /api/assistant/chat` (no Python backend).
 

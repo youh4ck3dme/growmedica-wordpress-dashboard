@@ -122,7 +122,7 @@ export const HEALTH_BUNDLE_CATALOG: readonly HealthBundle[] = [
     ['Vitamín D3', 'Omega-3', 'Folát'],
     10,
     'standard',
-    'Len po konzultácii s lekárom. Nie je určené na liečbu.',
+    'Len po konzultácii s odborníkom. Nie je určené na liečbu.',
   ),
   bundle(59, 'senior-vitalita', 'Senior vitalita', 'sezonne', ['Multivitamín 50+', 'Omega-3', 'Vitamín D3'], 12, 'standard'),
   bundle(60, 'muz-40-plus', 'Muž 40+', 'sezonne', ['Multivitamín pre mužov', 'CoQ10', 'Saw palmetto'], 12, 'standard'),
