@@ -4,7 +4,6 @@ import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { SAFE_DISCLAIMER } from '@/lib/ai/compliance'
-import { openPharmacistAssistant } from '@/lib/ai/pharmacist-assistant-events'
 import type { ProductFitOutput } from '@/lib/ai/schemas'
 import { cn } from '@/lib/utils'
 
@@ -66,13 +65,6 @@ export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
       <p className="text-sm text-(--color-text-muted) mb-4">
         Krátko popíšte svoje ciele — AI posúdi, či vám produkt sedí. {SAFE_DISCLAIMER}
       </p>
-      <button
-        type="button"
-        className="ai-widget-chat-link mb-4"
-        onClick={() => openPharmacistAssistant()}
-      >
-        Poradiť sa s lekárnikom
-      </button>
 
       <form onSubmit={handleCheckFit} className="space-y-4">
         <textarea
