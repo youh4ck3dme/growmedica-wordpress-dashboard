@@ -1,40 +1,35 @@
-# GrowMedica WordPress Dashboard
+# GrowMedica — Next.js + WooCommerce
 
-Headless **Next.js storefront + WordPress/WooCommerce CMS** pre GrowMedica (produkčná doména: **growmedica.cz**).
+Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 
-> **⛔ UI/UX FREEZE:** Storefront UI je uzamknutý. Ďalší vývoj = backend, integrácia, dashboard logika, testy.  
-> Detail: [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) · [TODO.md](../TODO.md)
+| | URL |
+|--|-----|
+| E-shop | https://www.growmedica.cz |
+| CMS admin | https://cms.growmedica.cz/wp-admin |
 
-## Stav
+> **⛔ UI/UX FREEZE** — nemeniť layout/dizajn storefrontu bez zadania.  
+> **Stav a úlohy:** **[STATUS.md](./STATUS.md)** · [TODO.md](./TODO.md)
 
-| Oblasť | Stav |
-|---|---|
-| Storefront UI (Next.js 15, PWA, AI) | ✅ |
-| Geo-lokalizácia UI (CS / SK / EN / DE) | ✅ |
-| WordPress/WooCommerce integrácia | ✅ `CMS_PROVIDER=wordpress` |
-| Unified catalog provider | ✅ `src/lib/catalog/` |
-| Košík + checkout BFF | ✅ WooCommerce session |
-| Dashboard → WP admin iframe | ✅ `/dashboard` |
-| ISR webhooks | ✅ mu-plugin + `/api/revalidate` |
-| Playwright Woo testy | ✅ `yarn test:woo:integrity` |
-| Shopify integrácia | 🟡 Legacy rollback (`CMS_PROVIDER=shopify`) |
+## Stav (skrátka)
 
-## Quick Start
+| | |
+|--|--|
+| Katalóg | ✅ Woo (`CMS_PROVIDER=wordpress`) |
+| Košík | ✅ cookie BFF → cms checkout |
+| Platby | ✅ BACS + COD · ⬜ Stripe/GoPay |
+| Doprava SK | ✅ flat rates · ⬜ Packeta/DPD map API |
+| Firma / e-maily | ✅ [docs/vzorfirma.md](./docs/vzorfirma.md) |
 
-Všetky `yarn` príkazy spúšťaj z priečinka **`storefront/`** (tam je `package.json`):
+## Quick start
 
 ```bash
-cd /cesta/k/projektu/growmedica-wordpress-dashboard/storefront
-# alebo ak si už v growmedica-wordpress-dashboard/:
 cd storefront
-
 yarn install
-cp .env.example .env.local
-yarn dev
-# http://localhost:5555
+cp .env.example .env.local   # mock hodnoty stačia na dev
+yarn dev                     # http://localhost:5555
 ```
 
-### WordPress režim (produkcia)
+### Produkčný WordPress režim (env)
 
 ```bash
 CMS_PROVIDER=wordpress
@@ -42,80 +37,62 @@ WORDPRESS_BASE_URL=https://cms.growmedica.cz
 WOO_CONSUMER_KEY=ck_...
 WOO_CONSUMER_SECRET=cs_...
 WORDPRESS_REVALIDATION_SECRET=...
-NEXT_PUBLIC_DASHBOARD_URL=https://cms.growmedica.cz/wp-admin
-NEXT_PUBLIC_SITE_URL=https://growmedica.cz
-NEXT_PUBLIC_DEFAULT_LOCALE=cs
+NEXT_PUBLIC_SITE_URL=https://www.growmedica.cz
 ```
 
-### i18n (CS / SK / EN / DE)
+Secrets **nikdy do gitu** — len `.env.local` / `wordpress-production.local.env`.
 
-UI texty sa prekladajú podľa geo / cookie / `Accept-Language`. URL slugy (`/produkty`, `/kolekcie`) sa nemenia.
-
-| Priorita | Zdroj |
-|----------|--------|
-| 1 | `?lang=cs\|sk\|en\|de` (nastaví cookie, redirect) |
-| 2 | Cookie `growmedica_locale` (30 dní) |
-| 3 | `x-vercel-ip-country` (CZ→cs, SK→sk, DE/AT/CH→de, ostatné→en) |
-| 4 | `Accept-Language` (`cs` pred `sk`) |
-| 5 | `NEXT_PUBLIC_DEFAULT_LOCALE` (fallback: `cs`) |
-
-Prepínač v headeri ukazuje **len aktuálny locale**; po kliknutí dropdown CS / SK / EN / DE.
-
-Detailná dokumentácia: [storefront/docs/I18N.md](./storefront/docs/I18N.md)
-
-### Lokálny WordPress (Docker)
-
-```bash
-docker compose up -d
-# http://localhost:8080/wp-admin
-```
-
-Pozri [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md).
-
-### Shopify režim (legacy rollback)
+### Shopify (legacy rollback)
 
 ```bash
 CMS_PROVIDER=shopify
 SHOPIFY_STORE_DOMAIN=growmedica.myshopify.com
-SHOPIFY_STOREFRONT_ACCESS_TOKEN=...
+# + Storefront token alebo TOKENLESS=1
 ```
 
-## Testy
-
-Z priečinka `storefront/`:
+## Testy a smoke
 
 ```bash
 cd storefront
 yarn type-check
-yarn test:integrity          # Shopify mock (default) — 149+ testov
-yarn test:i18n               # len i18n testy
-yarn test:woo:integrity      # WordPress mock
-yarn build
-yarn production:smoke        # curl + HTTP smoke
+yarn diagnostic
+yarn test:woo:integrity      # Woo mock
+yarn production:smoke        # PREVIEW_URL=https://www.growmedica.cz
 ```
 
 ## Štruktúra
 
 ```
 growmedica-wordpress-dashboard/
-├── storefront/                 # Next.js app
-│   ├── src/lib/catalog/        # Unified CMS API
-│   ├── src/lib/wordpress/      # WooCommerce client + adapter
-│   └── src/lib/shopify/        # Legacy rollback
-├── wordpress/mu-plugins/       # CORS + ISR revalidation
-├── docker-compose.yml
+├── STATUS.md                 # ← čo je live a čo robiť
+├── TODO.md
 ├── PRODUCTION_CHECKLIST.md
-└── RELEASE_NOTES_v1.0-wordpress.md
+├── docs/vzorfirma.md         # firma / banka
+├── reports/                  # aktuálne reporty
+│   └── archive/              # historické plány
+├── storefront/               # Next.js app
+│   ├── src/lib/catalog/      # unified CMS
+│   ├── src/lib/wordpress/    # Woo client + cart
+│   └── src/lib/shopify/      # rollback / import
+├── wordpress/mu-plugins/     # CORS + revalidate (zdroj)
+└── scripts/                  # CMS setup
 ```
 
 ## Dokumentácia
 
-- **[Development Guide](./storefront/docs/DEVELOPMENT.md)** — pravidlá vývoja, UI freeze, architektúra
-- [TODO](../TODO.md) — aktuálne úlohy a fázy
-- [i18n CS/SK/EN/DE](./storefront/docs/I18N.md)
-- [WordPress Setup](./WORDPRESS_SETUP.md)
-- [Woo Cart BFF](./storefront/docs/WOO_CART.md)
-- [Dashboard Deploy](./storefront/docs/DASHBOARD_DEPLOY.md)
-- [WP Webhooks](./storefront/docs/WP_WEBHOOKS.md)
-- [Diagnostics](./storefront/docs/DIAGNOSTICS.md)
-- [Production Checklist](./PRODUCTION_CHECKLIST.md)
+| Dokument | |
+|----------|--|
+| [STATUS.md](./STATUS.md) | **Hlavný stav + backlog** |
+| [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) | Deploy / env / smoke |
+| [docs/vzorfirma.md](./docs/vzorfirma.md) | IČO, DIČ, IBAN |
+| [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) | Vývoj + freeze |
+| [storefront/docs/WOO_CART.md](./storefront/docs/WOO_CART.md) | Košík |
+| [storefront/docs/I18N.md](./storefront/docs/I18N.md) | CS/SK/EN/DE |
+| [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md) | Lokálny WP |
+| [AGENTS.md](./AGENTS.md) | Pravidlá pre AI |
+
+## Zakázané
+
+- Secrets v gite  
+- `DB_*` na Vercel  
+- UI redesign bez zadania  

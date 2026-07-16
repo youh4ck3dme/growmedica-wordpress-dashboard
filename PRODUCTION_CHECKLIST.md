@@ -1,114 +1,107 @@
-# Production cutover checklist — GrowMedica
+# Production checklist — GrowMedica
 
-**Aktualizované:** 16. júl 2026
-**UI/UX:** Storefront UI sa pri cutoveri nemení — len infra, env a dáta.
+**Aktualizované:** 2026-07-16  
+**UI freeze:** len infra, env, dáta — nie redesign.
 
-**Aktuálna priorita:** live katalóg zo **Shopify** (`growmedica.myshopify.com`). WordPress produkcia (`cms.growmedica.cz`) je odložená.
+Hlavný stav: [STATUS.md](./STATUS.md)
 
-Detail: [storefront/docs/SHOPIFY_LIVE.md](./storefront/docs/SHOPIFY_LIVE.md)
+---
 
-## Vercel env — Shopify live (`growmedica-wordpress-dashboard`)
+## Live stack
 
-| Premenná | Hodnota |
-|----------|---------|
-| `CMS_PROVIDER` | `shopify` |
-| `SHOPIFY_STORE_DOMAIN` | `growmedica.myshopify.com` |
-| `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | Storefront API token (**nie** `shpat_`) — alebo `SHOPIFY_STOREFRONT_TOKENLESS=1` |
-| `SHOPIFY_REVALIDATION_SECRET` | min. 16 znakov |
-| `SHOPIFY_API_VERSION` | `2026-07` (live Admin + Storefront smoke overené) |
-| `SHOPIFY_CLIENT_ID` | Dev Dashboard app ID (server-only) |
-| `SHOPIFY_CLIENT_SECRET` | Dev Dashboard secret (sensitive, server-only) |
-| `NEXT_PUBLIC_SITE_URL` | `https://www.growmedica.cz` |
-| `NEXT_PUBLIC_DASHBOARD_MODE` | `agentic` |
-| `DASHBOARD_AGENT_SECRET` | min. 32 znakov |
-| `DASHBOARD_ALLOW_LIVE_WRITES` | `1` (pre live zápisy z dashboardu) |
-| `UPSTASH_REDIS_REST_URL` + `TOKEN` | audit log + conversation memory |
+| | |
+|--|--|
+| E-shop | https://www.growmedica.cz (Next.js / Vercel) |
+| CMS | https://cms.growmedica.cz (WooCommerce) |
+| `CMS_PROVIDER` | **`wordpress`** |
+| Rollback | `CMS_PROVIDER=shopify` + Shopify env (dočasné) |
 
-**Odstrániť z Vercel:** `SHOPIFY_MOCK_MODE`, `WOO_MOCK_MODE` (pri Shopify režime).
+---
 
-Preferovaný Admin flow nemá trvalý `SHOPIFY_ADMIN_ACCESS_TOKEN`: server si z Client ID/Secret vyžiada krátkodobý token. Legacy `shpat_` je iba fallback.
+## Vercel env (Production) — WordPress
 
-Skript:
-
-```bash
-cd storefront
-SHOPIFY_STOREFRONT_ACCESS_TOKEN=... ./scripts/set-shopify-vercel-env.sh --deploy
-```
-
-## Vercel env — WordPress (odložené / rollback)
-
-| Premenná | Hodnota |
-|----------|---------|
+| Premenná | Poznámka |
+|----------|----------|
 | `CMS_PROVIDER` | `wordpress` |
 | `WORDPRESS_BASE_URL` | `https://cms.growmedica.cz` |
-| `WOO_CONSUMER_KEY` | `ck_...` (server-only) |
-| `WOO_CONSUMER_SECRET` | `cs_...` (server-only) |
-| `WORDPRESS_REVALIDATION_SECRET` | min. 16 znakov |
-| `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.cz/wp-admin` |
+| `WOO_CONSUMER_KEY` | server-only |
+| `WOO_CONSUMER_SECRET` | server-only |
+| `WORDPRESS_REVALIDATION_SECRET` | = cms `growmedica_revalidation_secret` |
 | `NEXT_PUBLIC_SITE_URL` | `https://www.growmedica.cz` |
+| `NEXT_PUBLIC_DASHBOARD_URL` | `https://cms.growmedica.cz/wp-admin` |
+| `NEXT_PUBLIC_DEFAULT_LOCALE` | `cs` |
+| `DASHBOARD_AGENT_SECRET` | min 16 znakov |
+| `MISTRAL_API_KEY` / `MISTRAL_MODEL` | dashboard AI |
+| Shopify env | môže ostať pre rollback / import skripty |
 
-## DNS
+**Nikdy na Vercel:** `DB_*`, SMTP heslá CMS, Application Password (okrem skriptov lokálne).
 
-- [x] Domény pridané na Vercel projekt `growmedica-wordpress-dashboard` (`growmedica.cz`, `www.growmedica.cz`)
-- [ ] **WebSupport DNS** — zmeniť A `@` z `37.9.175.131` na `76.76.21.21` + CNAME `www` → `cname.vercel-dns.com`
-- [ ] Overiť SSL po propagácii: `curl -I https://growmedica.cz`
-- [ ] `cms.growmedica.cz` → WordPress hosting (SSL)
+Lokálne secrets: gitignored `wordpress-production.local.env`, `storefront/.env.local`.
 
-Skript: `cd storefront && ./scripts/setup-growmedica-cz-domain.sh --deploy`
+---
 
-## WordPress hosting
+## CMS (Woo) — musí bežať
 
-- [ ] WooCommerce REST API keys (Read/Write)
-- [ ] Permalinky: `/produkt/%postname%/`
-- [ ] Mu-plugins: `growmedica-cors.php`, `growmedica-revalidate.php`
-- [ ] `GROWMEDICA_STOREFRONT_URL=https://growmedica.cz`
-- [ ] `GROWMEDICA_REVALIDATION_SECRET` = rovnaký ako `WORDPRESS_REVALIDATION_SECRET`
-- [ ] CSP `frame-ancestors` pre wp-admin embed
+- [x] Coming soon off  
+- [x] Adresa: Bellova 3455/6, Košice - Staré Mesto  
+- [x] BACS + IBAN, COD  
+- [x] Zóna SK + doprava s cenami + free ≥ 50 €  
+- [x] E-mail footer + SK subjects  
+- [x] SMTP  
+- [x] terms_page_id (VOP)  
+- [ ] Stripe / GoPay keys  
+- [ ] Packeta / DPD API  
 
-## Import dát
+Firma: [docs/vzorfirma.md](./docs/vzorfirma.md)
+
+---
+
+## Pre-deploy
 
 ```bash
 cd storefront
-yarn import:categories
-yarn import:products
-```
-
-## Pre-deploy overenie (Shopify)
-
-```bash
-cd storefront
-yarn setup:env              # lokálne — Storefront token
-yarn shopify:admin-verify   # Admin API + required read/write scopes
-yarn shopify:smoke
-yarn shopify:collections-audit
 yarn type-check
 yarn build
-yarn test:integrity
-PREVIEW_URL=https://www.growmedica.cz yarn production:smoke
-curl -s https://www.growmedica.cz/api/products | head -c 400
+yarn diagnostic
 ```
 
-## Nexus admin — Shopify integrácia
+## Post-deploy smoke
 
-Nexus produkcia zatiaľ číta iba legacy `SHOPIFY_ADMIN_ACCESS_TOKEN`; trvalý token ani Client ID/Secret tam nie sú. `ADMIN_EMAILS` key existuje, ale encrypted hodnotu CLI neodhalí a ani jeden ponúkaný účet nie je lokálne potvrdený. Pred dokončením S8 treba potvrdiť admin účet a podporiť server-side client-credentials exchange.
+```bash
+PREVIEW_URL=https://www.growmedica.cz yarn production:smoke
+curl -s 'https://www.growmedica.cz/api/products?limit=1' | head -c 200
+# gid://woocommerce/Product/...
+curl -sI https://cms.growmedica.cz | head -3
+```
 
-| Server env | Hodnota |
-|------------|---------|
-| `SHOPIFY_STORE_DOMAIN` | `growmedica.myshopify.com` |
-| `SHOPIFY_CLIENT_ID` | Dev Dashboard app ID |
-| `SHOPIFY_CLIENT_SECRET` | sensitive; nikdy do client/browser env |
-| `SHOPIFY_API_VERSION` | `2026-07` |
+Manuálne: `/kontakt` (IČO) · košík · checkout · test e-mail.
 
-Po implementovaní server-side exchange: **Test pripojenia** v Nexus UI. Krátkodobý token neukladať do formulára ani Vercel env.
+---
 
-## Rollback
+## DNS (cieľ)
 
-**Na WordPress mock:** `CMS_PROVIDER=wordpress`, `WOO_MOCK_MODE=1`, redeploy.
+| Host | Cieľ |
+|------|------|
+| `www` | Vercel |
+| apex `growmedica.cz` | Vercel (redirect → www) |
+| `cms` | WebSupport `37.9.175.131` |
 
-**Späť na Shopify:** `./scripts/set-shopify-vercel-env.sh --deploy`
+---
 
-## Súvisiace dokumenty
+## Rollback na Shopify (núdzový)
 
-- [TODO.md](../TODO.md) — fázy vývoja
-- [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) — vývojársky návod + UI freeze
-- [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md) — lokálny WP
+```bash
+# Vercel: CMS_PROVIDER=shopify + Storefront tokenless/token
+# Redeploy
+```
+
+Import späť do Woo: `storefront/scripts/import-shopify-to-woo.mjs`
+
+---
+
+## Súvisiace
+
+- [TODO.md](./TODO.md)  
+- [reports/REMAINING_WORK_NOW.md](./reports/REMAINING_WORK_NOW.md)  
+- [reports/EMAIL_TEMPLATES.md](./reports/EMAIL_TEMPLATES.md)  
+- [storefront/docs/WOO_CART.md](./storefront/docs/WOO_CART.md)  

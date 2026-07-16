@@ -48,27 +48,10 @@ exit 1
 
 Semantika Vercel: **exit 0 = preskočiť build**, **exit 1 = pokračovať**.
 
-#### Cez CLI (odporúčané — script v repozitári)
+#### Ignore Build Step
 
-Rovnaká logika je v `scripts/vercel-skip-noor-demo-on-main-project.sh`. Dashboard môže volať:
-
-```bash
-bash scripts/vercel-skip-noor-demo-on-main-project.sh
-```
-
-Nastavenie cez API (len `growmedicanextjs`):
-
-```bash
-cd storefront
-VERCEL_TOKEN=xxx ./scripts/set-growmedicanextjs-ignore-noor-demo-branch.sh
-```
-
-Alebo po `vercel login`:
-
-```bash
-cd storefront
-yarn vercel:ignore-noor-demo-on-main
-```
+Nastav v Vercel Dashboard (Project → Settings → Git → Ignored Build Step).
+One-shot CLI skripty boli odstránené pri project cleanup (2026-07).
 
 **Nezmenené:**
 - env na `growmedicanextjs` (žiadne `NEXT_PUBLIC_DEFAULT_THEME=noor`)

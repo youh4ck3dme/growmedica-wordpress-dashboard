@@ -42,6 +42,10 @@ next-env.d.ts
 /playwright-report/
 /test-results/
 
+# Local import / smoke dumps
+IMPORT_*_REPORT.json
+IMPORT_REPORT.md
+
 # Lighthouse audit exports (local only — huge JSON)
 .lighthouse/
 
