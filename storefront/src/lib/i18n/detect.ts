@@ -3,13 +3,14 @@ import type { Locale, LocaleInput } from './types'
 import { SUPPORTED_LOCALES } from './types'
 
 export function isValidLocale(value: string | null | undefined): value is Locale {
-  return value === 'sk' || value === 'en' || value === 'de'
+  return value === 'cs' || value === 'sk' || value === 'en' || value === 'de'
 }
 
 function localeFromCountry(country: string | null | undefined): Locale | null {
   if (!country) return null
   const code = country.trim().toUpperCase()
-  if (code === 'SK' || code === 'CZ') return 'sk'
+  if (code === 'CZ') return 'cs'
+  if (code === 'SK') return 'sk'
   if (code === 'DE' || code === 'AT' || code === 'CH') return 'de'
   return 'en'
 }
@@ -17,6 +18,7 @@ function localeFromCountry(country: string | null | undefined): Locale | null {
 function localeFromAcceptLanguage(header: string | null | undefined): Locale | null {
   if (!header) return null
   const lower = header.toLowerCase()
+  if (/\bcs\b/.test(lower) || lower.startsWith('cs')) return 'cs'
   if (/\bsk\b/.test(lower) || lower.startsWith('sk')) return 'sk'
   if (/\bde\b/.test(lower) || lower.startsWith('de')) return 'de'
   return 'en'

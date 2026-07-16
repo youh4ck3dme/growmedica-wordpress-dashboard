@@ -70,7 +70,7 @@ Design referencia: [UI_UX_DESIGN_SYSTEM.md](../UI_UX_DESIGN_SYSTEM.md)
 | CMS | WordPress 6.7 + WooCommerce | Produkty, kategórie, objednávky |
 | AI | Mistral | Farmaceutický asistent + Dashboard Agent |
 | PWA | Serwist | Offline, install |
-| i18n | Cookie + geo + middleware | SK / EN / DE (URL slugy fixné) |
+| i18n | Cookie + geo + middleware | CS / SK / EN / DE (URL slugy fixné) |
 | Legacy | Shopify (`CMS_PROVIDER=shopify`) | Rollback fallback |
 
 ---

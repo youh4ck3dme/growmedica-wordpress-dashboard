@@ -1,9 +1,10 @@
 import type { Locale } from './types'
+import cs from './locales/cs.json'
 import sk from './locales/sk.json'
 import en from './locales/en.json'
 import de from './locales/de.json'
 
-const messages = { sk, en, de } as const
+const messages = { cs, sk, en, de } as const
 
 export type TranslationKey = keyof typeof sk
 
@@ -12,8 +13,8 @@ export function t(
   locale: Locale,
   vars?: Record<string, string | number>,
 ): string {
-  const table = messages[locale] ?? messages.sk
-  let value = table[key] ?? messages.sk[key] ?? key
+  const table = messages[locale] ?? messages.cs
+  let value = table[key as keyof typeof table] ?? messages.cs[key as keyof typeof messages.cs] ?? messages.sk[key] ?? key
 
   if (vars) {
     for (const [name, val] of Object.entries(vars)) {

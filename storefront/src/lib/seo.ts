@@ -4,6 +4,7 @@
 
 import type { Metadata } from 'next'
 import { DEFAULT_LOCALE, HREFLANG_MAP, OG_LOCALE_MAP } from '@/lib/i18n/config'
+import { SUPPORTED_LOCALES } from '@/lib/i18n/types'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
 import { BRAND_COPY } from './brand'
 import type { Product, Collection } from './shopify/types'
@@ -28,9 +29,7 @@ export type HreflangLink = { hrefLang: string; href: string }
 export function buildHreflangLinks(pathname = '/', siteUrl = SITE_URL): HreflangLink[] {
   const pageUrl = buildCanonicalPageUrl(pathname, siteUrl)
   const entries: Array<[string, string]> = [
-    [HREFLANG_MAP.sk, 'sk'],
-    [HREFLANG_MAP.en, 'en'],
-    [HREFLANG_MAP.de, 'de'],
+    ...SUPPORTED_LOCALES.map((locale) => [HREFLANG_MAP[locale], locale] as [string, string]),
     ['x-default', DEFAULT_LOCALE],
   ]
   return entries.map(([hrefLang, locale]) => ({
