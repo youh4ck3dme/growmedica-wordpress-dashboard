@@ -241,7 +241,7 @@ export function AssistantChatTrigger({
   className,
   children,
   onOpen,
-  'aria-label': ariaLabel = 'Otvoriť chat s lekárnikom',
+  'aria-label': ariaLabel = 'Poradiť sa',
   'data-testid': dataTestId = 'assistant-chat-trigger',
 }: {
   className?: string

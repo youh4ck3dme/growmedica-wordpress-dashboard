@@ -2904,10 +2904,6 @@
     flex-shrink: 0;
   }
 
-  .assistant-fab__label-short {
-    display: none;
-  }
-
   .assistant-fab--cookie-offset {
     bottom: calc(max(1rem, env(safe-area-inset-bottom, 0px)) + 7.5rem);
   }
@@ -2921,20 +2917,12 @@
   @media (max-width: 639px) {
     .assistant-fab {
       padding-inline: 0.75rem;
-    }
-
-    .assistant-fab__label {
-      display: none;
-    }
-
-    .assistant-fab__label-short {
-      display: inline;
       font-size: 0.8125rem;
     }
   }
 
   @media (max-width: 380px) {
-    .assistant-fab__label-short {
+    .assistant-fab__label {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -2947,72 +2935,9 @@
     }
   }
 
-  .assistant-footer-trigger {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-    padding: 0.5rem 0.875rem;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-    transition: background 0.15s ease;
-  }
-
-  .assistant-footer-trigger:hover {
-    background: rgba(255, 255, 255, 0.14);
-  }
-
   .mobile-nav-footer {
     position: relative;
     z-index: 1;
-  }
-
-  .assistant-mobile-trigger {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    gap: 0.625rem;
-    padding: 0.75rem 0.75rem;
-    min-height: 2.75rem;
-    border-radius: 0.5rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface-2);
-    color: var(--color-text);
-    font-size: 0.9375rem;
-    font-weight: 600;
-    cursor: pointer;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    position: relative;
-    z-index: 2;
-  }
-
-  .assistant-mobile-trigger:hover {
-    background: var(--color-primary-light);
-    color: var(--color-primary-dark);
-  }
-
-  .ai-widget-chat-link {
-    margin-top: 0.75rem;
-    font-size: 0.8125rem;
-    color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-  }
-
-  .ai-widget-chat-link:hover {
-    color: var(--color-primary-dark);
   }
 
   .sr-only {

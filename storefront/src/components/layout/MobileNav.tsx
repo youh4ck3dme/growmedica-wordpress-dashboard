@@ -1,12 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { MessageCircle } from 'lucide-react'
 import { Suspense, useEffect } from 'react'
 import Logo from '@/components/ui/Logo'
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher'
 import { useLocale } from '@/components/i18n/LocaleProvider'
-import { openPharmacistAssistant } from '@/lib/ai/pharmacist-assistant-events'
 import { StorefrontThemeSwitcher } from '@/components/theme/StorefrontThemeSwitcher'
 import { ThemeSearch } from '@/components/ui/ThemeSearch'
 import type { NavLinkItem } from '@/lib/navigation/primary-nav'
@@ -131,19 +129,6 @@ export default function MobileNav({
         </div>
 
         <div className="mobile-nav-footer shrink-0 border-t border-(--color-border) p-4 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-3">
-          <button
-            type="button"
-            className="assistant-mobile-trigger"
-            data-testid="assistant-mobile-trigger"
-            aria-label={t('assistant.mobileTrigger')}
-            onClick={() => {
-              openPharmacistAssistant()
-              onClose()
-            }}
-          >
-            <MessageCircle size={18} aria-hidden="true" />
-            {t('assistant.mobileTrigger')}
-          </button>
           {!shouldHideThemeSwitcher() && <StorefrontThemeSwitcher compact />}
           <p className="text-xs text-(--color-text-light)">© {new Date().getFullYear()} GrowMedica</p>
         </div>

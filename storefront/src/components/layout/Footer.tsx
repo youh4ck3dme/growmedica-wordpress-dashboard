@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import Logo from '@/components/ui/Logo'
-import { FooterAssistantTrigger } from '@/components/ai/FooterAssistantTrigger'
 import { getNavCollectionItems } from '@/lib/catalog/nav'
 import { getRequestLocale } from '@/lib/i18n/server'
 import { getFooterInfoLinks, t } from '@/lib/i18n/translate'
@@ -125,7 +124,7 @@ export default async function Footer() {
                 GrowMedica s.r.o.<br />
                 BELLOVA 6, KOŠICE, 040 01
               </li>
-              <li className="pt-2">
+              <li>
                 <Link
                   href="/kontakt"
                   className="inline-block px-4 py-2 mt-2 border border-white/30 rounded-lg text-white text-xs font-semibold hover:bg-white/10 transition-colors uppercase tracking-wider"
@@ -133,9 +132,6 @@ export default async function Footer() {
                 >
                   {t('footer.contactUs', locale)}
                 </Link>
-              </li>
-              <li>
-                <FooterAssistantTrigger />
               </li>
             </ul>
           </div>

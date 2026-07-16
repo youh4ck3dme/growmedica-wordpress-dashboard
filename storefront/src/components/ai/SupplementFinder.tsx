@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { SAFE_DISCLAIMER } from '@/lib/ai/compliance'
-import { openPharmacistAssistant } from '@/lib/ai/pharmacist-assistant-events'
 import type { AiProductSummary, RecommendApiResponse } from '@/lib/ai/schemas'
 import { getProductUrl } from '@/lib/utils'
 
@@ -91,13 +90,6 @@ export function SupplementFinder() {
           <p className="text-sm text-(--color-text-muted) max-w-lg mx-auto">
             AI asistent vám pomôže vybrať produkty na mieru z našej ponuky. {SAFE_DISCLAIMER}
           </p>
-          <button
-            type="button"
-            className="ai-widget-chat-link mt-2"
-            onClick={() => openPharmacistAssistant()}
-          >
-            Poradiť sa s lekárnikom
-          </button>
         </div>
 
         {/* Hlavný prémiový vyhľadávač v štýle Google/Gemini s animovaným dúhovým okrajom */}
