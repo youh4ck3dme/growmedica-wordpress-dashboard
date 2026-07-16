@@ -117,7 +117,7 @@ curl -sI -u "$WOO_CONSUMER_KEY:$WOO_CONSUMER_SECRET" \
 | 2.1 | Vercel **Preview** env | `CMS_PROVIDER=wordpress` |
 | | | `WORDPRESS_BASE_URL=https://cms.growmedica.cz` |
 | | | `WOO_CONSUMER_KEY` / `WOO_CONSUMER_SECRET` (z production.local.env) |
-| | | `WORDPRESS_REVALIDATION_SECRET=growmedica-wp-revalidate-2026-prod-k9m2` |
+| | | `WORDPRESS_REVALIDATION_SECRET` (z gitignored `wordpress-production.local.env` — **nikdy do gitu**) |
 | | | `WOO_MOCK_MODE=0` |
 | | | `NEXT_PUBLIC_SITE_URL` = preview URL alebo www |
 | 2.2 | Ponechať Shopify env | môžu ostať (nepoužijú sa pri wordpress provider) |
