@@ -18,15 +18,16 @@ test.describe('SEO hreflang HTML output', () => {
     const html = await response.text()
     const links = extractHreflangLinks(html)
 
+    expect(links.some((l) => l.hrefLang === 'cs-CZ' && l.href.includes('?lang=cs'))).toBe(true)
     expect(links.some((l) => l.hrefLang === 'sk-SK' && l.href.includes('?lang=sk'))).toBe(true)
     expect(links.some((l) => l.hrefLang === 'en' && l.href.includes('?lang=en'))).toBe(true)
     expect(links.some((l) => l.hrefLang === 'de-DE' && l.href.includes('?lang=de'))).toBe(true)
-    expect(links.some((l) => l.hrefLang === 'x-default' && l.href.includes('?lang=sk'))).toBe(
+    expect(links.some((l) => l.hrefLang === 'x-default' && l.href.includes('?lang=cs'))).toBe(
       true,
     )
 
-    const sk = links.find((l) => l.hrefLang === 'sk-SK')
-    expect(sk?.href).not.toMatch(/\/\?lang=/)
+    const cs = links.find((l) => l.hrefLang === 'cs-CZ')
+    expect(cs?.href).not.toMatch(/\/\?lang=/)
   })
 
   test('nested path renders hreflang with lang query on canonical base', async ({ request }) => {
@@ -35,7 +36,7 @@ test.describe('SEO hreflang HTML output', () => {
     const html = await response.text()
     const links = extractHreflangLinks(html)
 
-    const sk = links.find((l) => l.hrefLang === 'sk-SK')
-    expect(sk?.href).toMatch(/\/produkty\?lang=sk$/)
+    const cs = links.find((l) => l.hrefLang === 'cs-CZ')
+    expect(cs?.href).toMatch(/\/produkty\?lang=cs$/)
   })
 })

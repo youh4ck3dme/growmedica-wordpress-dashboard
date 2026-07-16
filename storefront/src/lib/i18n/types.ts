@@ -1,6 +1,6 @@
-export type Locale = 'sk' | 'en' | 'de'
+export type Locale = 'cs' | 'sk' | 'en' | 'de'
 
-export const SUPPORTED_LOCALES: Locale[] = ['sk', 'en', 'de']
+export const SUPPORTED_LOCALES: Locale[] = ['cs', 'sk', 'en', 'de']
 
 export const LOCALE_COOKIE = 'growmedica_locale'
 export const LOCALE_HEADER = 'x-growmedica-locale'

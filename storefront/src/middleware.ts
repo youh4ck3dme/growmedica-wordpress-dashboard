@@ -18,11 +18,25 @@ export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
 
   if (isDashboardPath(pathname)) {
+    const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value ?? null
+    const resolved = resolveLocaleFromInput({
+      cookieLocale,
+      country: request.headers.get('x-vercel-ip-country'),
+      acceptLanguage: request.headers.get('accept-language'),
+    })
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set(DASHBOARD_ROUTE_HEADER, '1')
-    requestHeaders.set(LOCALE_HEADER, 'sk')
+    requestHeaders.set(LOCALE_HEADER, resolved)
     requestHeaders.set(PATHNAME_HEADER, pathname)
-    return NextResponse.next({ request: { headers: requestHeaders } })
+    const response = NextResponse.next({ request: { headers: requestHeaders } })
+    if (!cookieLocale) {
+      response.cookies.set(LOCALE_COOKIE, resolved, {
+        path: '/',
+        maxAge: LOCALE_COOKIE_MAX_AGE,
+        sameSite: 'lax',
+      })
+    }
+    return response
   }
 
   const queryLang = searchParams.get('lang')

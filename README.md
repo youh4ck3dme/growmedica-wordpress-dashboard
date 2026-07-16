@@ -10,7 +10,7 @@ Headless **Next.js storefront + WordPress/WooCommerce CMS** pre GrowMedica (prod
 | Oblasť | Stav |
 |---|---|
 | Storefront UI (Next.js 15, PWA, AI) | ✅ |
-| Geo-lokalizácia UI (SK / EN / DE) | ✅ |
+| Geo-lokalizácia UI (CS / SK / EN / DE) | ✅ |
 | WordPress/WooCommerce integrácia | ✅ `CMS_PROVIDER=wordpress` |
 | Unified catalog provider | ✅ `src/lib/catalog/` |
 | Košík + checkout BFF | ✅ WooCommerce session |
@@ -44,22 +44,22 @@ WOO_CONSUMER_SECRET=cs_...
 WORDPRESS_REVALIDATION_SECRET=...
 NEXT_PUBLIC_DASHBOARD_URL=https://cms.growmedica.cz/wp-admin
 NEXT_PUBLIC_SITE_URL=https://growmedica.cz
-NEXT_PUBLIC_DEFAULT_LOCALE=sk
+NEXT_PUBLIC_DEFAULT_LOCALE=cs
 ```
 
-### i18n (SK / EN / DE)
+### i18n (CS / SK / EN / DE)
 
 UI texty sa prekladajú podľa geo / cookie / `Accept-Language`. URL slugy (`/produkty`, `/kolekcie`) sa nemenia.
 
 | Priorita | Zdroj |
 |----------|--------|
-| 1 | `?lang=sk\|en\|de` (nastaví cookie, redirect) |
+| 1 | `?lang=cs\|sk\|en\|de` (nastaví cookie, redirect) |
 | 2 | Cookie `growmedica_locale` (30 dní) |
-| 3 | `x-vercel-ip-country` (SK/CZ→sk, DE/AT/CH→de, ostatné→en) |
-| 4 | `Accept-Language` |
-| 5 | `NEXT_PUBLIC_DEFAULT_LOCALE` (fallback: `sk`, keď chýba geo aj Accept-Language) |
+| 3 | `x-vercel-ip-country` (CZ→cs, SK→sk, DE/AT/CH→de, ostatné→en) |
+| 4 | `Accept-Language` (`cs` pred `sk`) |
+| 5 | `NEXT_PUBLIC_DEFAULT_LOCALE` (fallback: `cs`) |
 
-Prepínač SK / EN / DE je v headeri. Dashboard (`/dashboard`) zostáva slovensky.
+Prepínač v headeri ukazuje **len aktuálny locale**; po kliknutí dropdown CS / SK / EN / DE.
 
 Detailná dokumentácia: [storefront/docs/I18N.md](./storefront/docs/I18N.md)
 
@@ -112,7 +112,7 @@ growmedica-wordpress-dashboard/
 
 - **[Development Guide](./storefront/docs/DEVELOPMENT.md)** — pravidlá vývoja, UI freeze, architektúra
 - [TODO](../TODO.md) — aktuálne úlohy a fázy
-- [i18n SK/EN/DE](./storefront/docs/I18N.md)
+- [i18n CS/SK/EN/DE](./storefront/docs/I18N.md)
 - [WordPress Setup](./WORDPRESS_SETUP.md)
 - [Woo Cart BFF](./storefront/docs/WOO_CART.md)
 - [Dashboard Deploy](./storefront/docs/DASHBOARD_DEPLOY.md)
