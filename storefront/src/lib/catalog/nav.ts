@@ -9,6 +9,7 @@ import {
   getWooCollectionViewByHandle,
   getWooCategoryFeaturedProducts,
 } from '@/lib/wordpress/collection-nav'
+import { shouldIncludeMegaMenuCollection } from './nav-types'
 
 export type { NavCollectionItem, CollectionView, CollectionListOptions } from './nav-types'
 
@@ -41,9 +42,7 @@ export async function getMegaMenuCategories(featuredCount = 3) {
   const collections = await getNavCollectionItems()
   // Keep full SK tree tops even when productCount is 0 (parity with growmedica.sk).
   // Still skip empty leaf-only nodes that have no children and no products.
-  const forMenu = collections.filter(
-    (c) => c.productCount > 0 || (c.children && c.children.length > 0) || c.handle.length > 0,
-  )
+  const forMenu = collections.filter(shouldIncludeMegaMenuCollection)
 
   return Promise.all(
     forMenu.map(async (cat) => ({
