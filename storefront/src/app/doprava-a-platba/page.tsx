@@ -4,7 +4,7 @@ import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { COMPANY } from '@/lib/company'
 import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = buildPageMetadata('Doprava a platba')
+export const metadata: Metadata = buildPageMetadata('Doprava a platba', undefined, '/doprava-a-platba')
 
 export default function DopravaPlatba() {
   return (

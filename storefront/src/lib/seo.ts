@@ -95,10 +95,21 @@ export const DEFAULT_METADATA: Metadata = {
   alternates: buildLocaleAlternates('/'),
 }
 
-export function buildPageMetadata(title: string, description?: string): Metadata {
+export function buildPageMetadata(
+  title: string,
+  description?: string,
+  pathname = '/',
+): Metadata {
+  const pageUrl = buildCanonicalPageUrl(pathname)
   return {
     title,
     ...(description ? { description } : {}),
+    alternates: buildLocaleAlternates(pathname),
+    openGraph: {
+      title,
+      ...(description ? { description } : {}),
+      url: pageUrl,
+    },
   }
 }
 

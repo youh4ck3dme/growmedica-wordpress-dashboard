@@ -15,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata(
     t('collections.pageTitle', locale),
     t('collections.pageDescription', locale),
+    '/kolekcie',
   )
 }
 

@@ -35,15 +35,23 @@ function metaString(product: WooProduct, key: string): string | null {
  * Real manufacturer/brand — never Woo tags[0] (often barcode / SKU noise).
  * Prefer Shopify import meta, then Brands for Woo, then safe default.
  */
+function normalizeVendorName(raw: string): string {
+  const value = raw.trim()
+  if (!value) return 'GrowMedica'
+  // Shopify import sometimes stored store domain as vendor
+  if (/^growmedica(\.sk|\.cz)?$/i.test(value)) return 'GrowMedica'
+  return value
+}
+
 export function resolveWooVendor(product: WooProduct): string {
   const fromMeta =
     metaString(product, '_shopify_vendor') ||
     metaString(product, 'shopify_vendor') ||
     metaString(product, '_vendor')
-  if (fromMeta) return fromMeta
+  if (fromMeta) return normalizeVendorName(fromMeta)
 
   const brand = product.brands?.[0]?.name?.trim()
-  if (brand) return brand
+  if (brand) return normalizeVendorName(brand)
 
   return 'GrowMedica'
 }

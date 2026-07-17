@@ -120,7 +120,14 @@ test.describe('Dashboard Agent API', () => {
     expect(response.ok()).toBe(true)
     const body = await response.json()
     expect(body.ok).toBe(true)
-    expect(body.cms_provider).toBeTruthy()
+    // Unauthenticated probe is intentionally minimal (no cms_provider leak).
+    expect(body.cms_provider).toBeUndefined()
+
+    const authed = await request.get('/api/dashboard/health', { headers: AGENT_HEADERS })
+    expect(authed.ok()).toBe(true)
+    const detail = await authed.json()
+    expect(detail.ok).toBe(true)
+    expect(detail.cms_provider).toBeTruthy()
   })
 
   test('GET /api/dashboard/products requires auth', async ({ request }) => {

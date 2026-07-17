@@ -15,14 +15,21 @@ function metaString(product, key) {
   return value.length > 0 ? value : null
 }
 
+function normalizeVendorName(raw) {
+  const value = String(raw).trim()
+  if (!value) return 'GrowMedica'
+  if (/^growmedica(\.sk|\.cz)?$/i.test(value)) return 'GrowMedica'
+  return value
+}
+
 function resolveWooVendor(product) {
   const fromMeta =
     metaString(product, '_shopify_vendor') ||
     metaString(product, 'shopify_vendor') ||
     metaString(product, '_vendor')
-  if (fromMeta) return fromMeta
+  if (fromMeta) return normalizeVendorName(fromMeta)
   const brand = product.brands?.[0]?.name?.trim()
-  if (brand) return brand
+  if (brand) return normalizeVendorName(brand)
   return 'GrowMedica'
 }
 
@@ -33,6 +40,16 @@ describe('resolveWooVendor', () => {
       meta_data: [{ key: '_shopify_vendor', value: 'MYCOMEDICA' }],
     }
     assert.equal(resolveWooVendor(product), 'MYCOMEDICA')
+  })
+
+  it('normalizes GrowMedica.sk store vendor to GrowMedica', () => {
+    assert.equal(
+      resolveWooVendor({
+        tags: [],
+        meta_data: [{ key: '_shopify_vendor', value: 'GrowMedica.sk' }],
+      }),
+      'GrowMedica',
+    )
   })
 
   it('does not use tags[0]', () => {
@@ -59,12 +76,13 @@ describe('adapter source contract', () => {
     assert.match(src, /getDeepestVisibleProductType/)
   })
 
-  it('Forma/Kategória facet list is fully expanded (no max-h-48 scroll)', () => {
+  it('Forma/Kategória and Výrobca facet lists are fully expanded', () => {
     const src = readFileSync(
       resolve(import.meta.dirname, '../../src/components/product/FilterableProductList.tsx'),
       'utf8',
     )
     assert.match(src, /Forma \/ Kategória/)
     assert.doesNotMatch(src, /max-h-48 overflow-y-auto/)
+    assert.doesNotMatch(src, /max-h-40 overflow-y-auto/)
   })
 })

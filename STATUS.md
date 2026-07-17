@@ -1,7 +1,7 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-17 (agent-done: snippets, SF, ISR sync, smoke)  
-**Branch:** `feat/dashboard-agent-v2`  
+**Aktualizované:** 2026-07-17 (main @ post PR #6/#7 + agent A–Z hardening)  
+**Branch:** `main`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 
 **Prevádzka / endpointy / env:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)  
@@ -28,6 +28,10 @@
 | **SuperFaktúra WooCommerce 1.53.2** | ✅ active + BACS/COD defaults · API key ešte ty |
 | CMS snippets redeploy | ✅ checkout seed + CORS + ISR (2026-07-17) |
 | Production smoke www | ✅ `/api/products` Woo gid |
+| Facets vendor/type/effect | ✅ controlled taxonomy + URL query sync |
+| Canonical listing pages | ✅ `buildPageMetadata(..., pathname)` |
+| Mega-menu empty leaves | ✅ PR #7 |
+| Vendor audit 460 | ✅ [reports/VENDOR_AUDIT.md](./reports/VENDOR_AUDIT.md) |
 
 **Shop ide predávať cez bankový prevod a dobierku** bez Stripe/Packeta API.
 

@@ -4,7 +4,7 @@ import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { COMPANY } from '@/lib/company'
 import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = buildPageMetadata('Ochrana osobných údajov')
+export const metadata: Metadata = buildPageMetadata('Ochrana osobných údajov', undefined, '/ochrana-osobnych-udajov')
 
 export default function GDPR() {
   return (
