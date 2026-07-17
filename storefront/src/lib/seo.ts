@@ -19,10 +19,12 @@ export function buildCanonicalPageUrl(pathname = '/', siteUrl = SITE_URL): strin
   return path === '/' ? siteUrl : `${siteUrl}${path}`
 }
 
-function buildLocaleHref(pageUrl: string, locale: string): string {
+function buildLocaleHref(pageUrl: string, locale: string, siteUrl = SITE_URL): string {
   // Root must be `https://host/` before query for valid hreflang (PSI SEO).
+  // Compare against the *passed* siteUrl (tests/CI inject custom base).
+  const root = siteUrl.replace(/\/$/, '')
   const normalized =
-    pageUrl === SITE_URL || pageUrl === `${SITE_URL}/` ? `${SITE_URL}/` : pageUrl
+    pageUrl === root || pageUrl === `${root}/` ? `${root}/` : pageUrl
   return `${normalized}?lang=${locale}`
 }
 
@@ -37,7 +39,7 @@ export function buildHreflangLinks(pathname = '/', siteUrl = SITE_URL): Hreflang
   ]
   return entries.map(([hrefLang, locale]) => ({
     hrefLang,
-    href: buildLocaleHref(pageUrl, locale),
+    href: buildLocaleHref(pageUrl, locale, siteUrl),
   }))
 }
 
