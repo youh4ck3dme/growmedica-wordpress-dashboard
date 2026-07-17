@@ -96,3 +96,6 @@ Parallel fixes applied:
 - integrity: `tests/integrity/seo-taxonomy-redirects.spec.ts`
 
 See also `REDIRECT_HANDOFF.md`.
+
+## Final verification
+See `FINAL_STATUS.md` (HTTP 301 smoke + sitemap counts on isolated build).
