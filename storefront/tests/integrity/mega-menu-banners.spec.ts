@@ -27,6 +27,15 @@ test.describe('Mega menu banners — static assets', () => {
     expect(getMegaMenuBannerSrc('ostatne')).toBeNull()
     expect(getMegaMenuBannerSrc('unknown-slug')).toBeNull()
   })
+
+  test('syntetické SK korene bez Woo kategórie majú statický fallback', () => {
+    const syntheticRoots = ['zdravotne-riesenia', 'mykologicke-produkty'] as const
+
+    for (const handle of syntheticRoots) {
+      expect(getMegaMenuBannerSrc(handle)).toBe(`/images/mega-menu/${handle}.webp`)
+      expect(fs.existsSync(path.join(BANNERS_DIR, `${handle}.webp`))).toBe(true)
+    }
+  })
 })
 
 test.describe('Mega menu banners — UI', () => {
@@ -39,9 +48,9 @@ test.describe('Mega menu banners — UI', () => {
     expect(content).toContain('mega-hero-banner--has-image')
   })
 
-  test('mega menu: všetkých 14 nav kategórií má WebP banner', () => {
-    // There are 14 category handles that have mapped webp files
-    expect(MEGA_MENU_BANNER_HANDLES.length).toBeGreaterThanOrEqual(14)
+  test('mega menu: všetky mapped handly majú WebP banner', () => {
+    // 14 legacy SEO slugs + 2 synthetic SK navigation roots.
+    expect(MEGA_MENU_BANNER_HANDLES.length).toBeGreaterThanOrEqual(16)
     for (const handle of MEGA_MENU_BANNER_HANDLES) {
       const filePath = path.join(BANNERS_DIR, `${handle}.webp`)
       expect(fs.existsSync(filePath)).toBe(true)
