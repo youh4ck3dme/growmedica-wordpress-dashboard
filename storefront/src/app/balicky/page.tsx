@@ -10,6 +10,7 @@ import {
   getBreadcrumbJsonLd,
   getBundleCatalogItemListJsonLd,
   getBundlesPageMetadata,
+  serializeJsonLd,
 } from '@/lib/seo'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
 
@@ -58,11 +59,11 @@ export default async function BalickyPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemListJsonLd) }}
       />
 
       <div className="py-10 lg:py-16 bg-(--color-bg) min-h-[70vh]">

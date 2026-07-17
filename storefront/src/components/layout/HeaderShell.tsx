@@ -1,24 +1,12 @@
 import GlassNavbar from '@/components/layout/GlassNavbar'
-import type { MegaMenuCategory } from '@/components/layout/HeaderMegaMenu'
-import {
-  getCategoryFeaturedProducts,
-  getNavCollectionItems,
-} from '@/lib/catalog/nav'
+import { getMegaMenuCategories } from '@/lib/catalog/nav'
 
 export default async function HeaderShell() {
-  let megaMenuCategories: MegaMenuCategory[] = []
+  let megaMenuCategories: Awaited<ReturnType<typeof getMegaMenuCategories>> = []
   try {
-    const collections = await getNavCollectionItems()
-    const withProducts = collections.filter((c) => c.productCount > 0)
-
-    megaMenuCategories = await Promise.all(
-      withProducts.map(async (cat) => ({
-        ...cat,
-        featuredProducts: await getCategoryFeaturedProducts(cat.handle, 3),
-      }))
-    )
+    megaMenuCategories = await getMegaMenuCategories()
   } catch {
-    // Shopify not configured — header still renders without mega menu categories
+    // CMS not configured — header still renders without mega menu categories
   }
 
   return <GlassNavbar megaMenuCategories={megaMenuCategories} />

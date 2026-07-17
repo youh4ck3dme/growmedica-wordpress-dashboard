@@ -40,18 +40,7 @@ fi
 exit 1
 ```
 
-Alebo (sync s repozitárom):
-
-```bash
-bash scripts/vercel-skip-noor-demo-on-main-project.sh
-```
-
-Nastaviť cez CLI/API:
-
-```bash
-cd storefront
-yarn vercel:ignore-noor-demo-on-main   # po vercel login alebo s VERCEL_TOKEN
-```
+Ignore Build Step nastav v Vercel Dashboard (Git settings). One-shot CLI skripty boli odstránené.
 
 | Projekt | Ignored Build Step | Branch `feat/noor-production-demo` |
 |---------|-------------------|--------------------------------------|
@@ -123,7 +112,7 @@ Nikdy necommituj reálne hodnoty. V chatoch/logoch reportuj len **PRESENT / MISS
 SHOPIFY_STORE_DOMAIN=          # musí končiť .myshopify.com — production: growmedica.myshopify.com
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=   # Storefront API token, NIE Admin shpat_
 SHOPIFY_REVALIDATION_SECRET=    # min. 16 znakov, custom string, nie shpat_
-SHOPIFY_API_VERSION=2025-01
+SHOPIFY_API_VERSION=2026-07
 NEXT_PUBLIC_SITE_URL=
 ```
 

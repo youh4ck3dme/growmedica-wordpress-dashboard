@@ -76,22 +76,19 @@ test.describe('Dashboard code & component integrity tests', () => {
     const content = readFileSync(DASHBOARD_PAGE_PATH, 'utf8')
 
     expect(content).toContain("import DashboardShell from '@/components/dashboard/agent/DashboardShell'")
-    expect(content).toMatch(/import \{[^}]*getDashboardMode[^}]*\} from '@\/lib\/dashboard'/)
-    expect(content).toMatch(/import \{[^}]*getDashboardUrl[^}]*\} from '@\/lib\/dashboard'/)
-    expect(content).toContain('data-testid="dashboard-unconfigured"')
-    expect(content).toContain('data-testid="dashboard-legacy-nexus-link"')
-    expect(content).toContain('NEXUS_DASHBOARD_IFRAME_URL')
+    expect(content).toContain('<DashboardShell')
+    expect(content).toContain('export default function DashboardPage')
   })
 
-  test('DashboardFrame component renders iframe and handles load errors', () => {
-    const content = readFileSync(DASHBOARD_FRAME_PATH, 'utf8')
-
-    expect(content).toContain('<iframe')
-    expect(content).toContain('src={src}')
-    expect(content).toContain('title={title}')
-    expect(content).toContain('onError={() => {')
-    expect(content).toContain('setLoadError(true)')
-    expect(content).toContain('Nexus admin')
-    expect(content).toContain('sandbox=')
+  test('DashboardShell is client agent shell with SecretGate', () => {
+    const shellPath = path.join(
+      REPO_ROOT,
+      'storefront/src/components/dashboard/agent/DashboardShell.tsx',
+    )
+    expect(existsSync(shellPath)).toBe(true)
+    const content = readFileSync(shellPath, 'utf8')
+    expect(content).toContain("'use client'")
+    expect(content).toContain('SecretGate')
+    expect(content).toContain('AgentPanel')
   })
 })

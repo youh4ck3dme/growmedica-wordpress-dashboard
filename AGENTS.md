@@ -17,8 +17,9 @@ Referencia: [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) �
 
 - Aplikácia je Next.js 15 / React 19 storefront v `storefront/` (GrowMedica, SK e-commerce).
 - Package manager: **Yarn 1** (`storefront/yarn.lock`). Node 22. Všetky príkazy z `storefront/`.
-- WordPress mu-plugins: `wordpress/mu-plugins/`
-- Hlavný TODO: [../TODO.md](../TODO.md)
+- WordPress mu-plugins: `wordpress/mu-plugins/` (CORS allowlist, ISR revalidate header-only, **checkout seed `gm_cart`**)
+- Default `CMS_PROVIDER` = **wordpress** (live). Shopify len explicitne.
+- Hlavný stav: [STATUS.md](./STATUS.md) · [TODO.md](./TODO.md)
 
 ### Local env (required to run `yarn dev` / `yarn build`)
 
@@ -35,7 +36,7 @@ SHOPIFY_MOCK_MODE=1
 SHOPIFY_STORE_DOMAIN=mock-store.myshopify.com
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=mock-storefront-token
 SHOPIFY_REVALIDATION_SECRET=mock-revalidation-secret-123456
-SHOPIFY_API_VERSION=2025-01
+SHOPIFY_API_VERSION=2026-07
 NEXT_PUBLIC_SITE_URL=http://localhost:5555
 NEXT_PUBLIC_DASHBOARD_URL=http://localhost:8080/wp-admin
 NEXT_PUBLIC_DASHBOARD_MODE=hybrid
@@ -77,7 +78,7 @@ Ak user dá Admin token alebo chce Nexus/Shopify zápis:
 
 ### Ďalší vývoj (priorita)
 
-1. WP produkcia (`cms.growmedica.cz`) — DNS, hosting, live Woo env na Vercel
+1. Live = Woo na www (`CMS_PROVIDER=wordpress`). Zostáva: E2E nákup, Stripe/GoPay, Packeta/DPD API, sklad. Detail: [STATUS.md](./STATUS.md)
 2. Dashboard Agent tools — rozšírenie `src/lib/dashboard-agent/tools.ts`
 3. ISR webhooks — `wordpress/mu-plugins/growmedica-revalidate.php`
 4. Import katalógu — `yarn import:categories` + `yarn import:products`

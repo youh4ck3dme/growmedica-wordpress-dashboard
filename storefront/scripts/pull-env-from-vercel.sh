@@ -46,7 +46,7 @@ missing=()
 [[ -z "$SHOPIFY_STORE_DOMAIN" ]] && missing+=("SHOPIFY_STORE_DOMAIN")
 [[ -z "$SHOPIFY_STOREFRONT_ACCESS_TOKEN" ]] && missing+=("SHOPIFY_STOREFRONT_ACCESS_TOKEN")
 [[ -z "$SHOPIFY_REVALIDATION_SECRET" ]] && missing+=("SHOPIFY_REVALIDATION_SECRET")
-[[ -z "$SHOPIFY_API_VERSION" ]] && SHOPIFY_API_VERSION="2025-01"
+[[ -z "$SHOPIFY_API_VERSION" ]] && SHOPIFY_API_VERSION="2026-07"
 
 if ((${#missing[@]})); then
   echo "Chyba: prazdne hodnoty z Vercel: ${missing[*]}"

@@ -1,0 +1,28 @@
+{
+  "probedAt": "2026-07-17T01:08:56.110408Z",
+  "results": [
+    {
+      "label": ".env.local:WOO_CONSUMER_*",
+      "ok": false,
+      "reason": "<urlopen error [Errno 61] Connection refused>",
+      "host": "localhost:8080"
+    },
+    {
+      "label": "wordpress-production.local.env:WOO_CONSUMER_*",
+      "ok": true,
+      "status": 200,
+      "host": "cms.growmedica.cz",
+      "total_products": "460",
+      "sample_id": 1054,
+      "sample_slug": "mycomedica-bio-polyporus-100-g",
+      "key_prefix": "ck_18af4\u2026"
+    },
+    {
+      "label": "wordpress-credentials.local.env:WOO_CONSUMER_*",
+      "ok": false,
+      "reason": "<urlopen error [Errno 61] Connection refused>",
+      "host": "localhost:8080"
+    }
+  ],
+  "recommendation": "wordpress-production.local.env:WOO_CONSUMER_*"
+}

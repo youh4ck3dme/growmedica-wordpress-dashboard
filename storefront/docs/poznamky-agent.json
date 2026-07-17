@@ -1,123 +1,107 @@
 {
   "id": "growmedica-shopify-admin-onboard",
-  "version": "1",
+  "version": "2",
   "human_doc": "./poznamky.md",
-  "entry_command": "yarn shopify:admin-onboard",
-  "description": "Nasadenie Shopify Admin tokenu (shpat_) — automatizuje storefront + Vercel; Shopify Admin UI a Nexus vyžadujú človeka.",
+  "entry_command": "yarn shopify:admin-onboard --json",
+  "description": "Shopify Admin onboarding cez Dev Dashboard client credentials; automatizuje token exchange, scope verify, local env, Vercel a Storefront smoke.",
   "prerequisites": {
     "cwd": "storefront",
-    "never_commit": ["SHOPIFY_ADMIN_ACCESS_TOKEN", ".env.local"]
+    "never_commit": [
+      "SHOPIFY_CLIENT_SECRET",
+      "SHOPIFY_ADMIN_ACCESS_TOKEN",
+      ".env.local"
+    ],
+    "required_scopes": [
+      "read_products",
+      "write_products",
+      "read_inventory",
+      "write_inventory"
+    ]
   },
   "steps": [
     {
-      "id": "shopify_create_token",
-      "title": "Vytvor a nainštaluj Admin app v Shopify",
+      "id": "shopify_client_credentials",
+      "title": "Release a nainštaluj GrowMedica Nexus app",
       "automated": false,
       "blocking": true,
       "urls": {
-        "shop_admin": "https://admin.shopify.com/store/growmedica",
-        "develop_apps": "https://admin.shopify.com/store/growmedica/settings/apps/development",
-        "apps_fallback": "https://admin.shopify.com/store/growmedica/settings/apps"
+        "dev_dashboard": "https://dev.shopify.com/dashboard/220990502/apps/378076692481/settings",
+        "shop_admin_apps": "https://admin.shopify.com/store/growmedica/settings/apps"
       },
       "actions": [
-        "Create an app (napr. GrowMedica Nexus)",
-        "Configure Admin API scopes: read_products, write_products, read_inventory, write_inventory",
-        "Save → API credentials → Install app",
-        "Skopíruj Admin API access token (shpat_...)"
-      ],
-      "alternatives": [
-        {
-          "if": "Develop apps nie je v menu",
-          "then": "Settings → Apps → Allow custom app development → ulož → Develop apps"
-        },
-        {
-          "if": "Nemáš Develop apps",
-          "then": "Musíš byť store owner alebo mať oprávnenie Develop apps"
-        }
+        "Release app version with all required scopes",
+        "Install app or Update access in GrowMedica Slovakia",
+        "Copy Client ID and Client secret into secure server env"
       ],
       "agent_input": {
-        "env": "SHOPIFY_ADMIN_ACCESS_TOKEN",
-        "cli_flag": "--token"
+        "env": ["SHOPIFY_CLIENT_ID", "SHOPIFY_CLIENT_SECRET"],
+        "legacy_fallback": "SHOPIFY_ADMIN_ACCESS_TOKEN"
       }
     },
     {
       "id": "storefront_onboard",
-      "title": "Storefront: .env.local + overenie + Vercel + smoke",
+      "title": "Token exchange, scope verify, .env.local, Vercel and smoke",
       "automated": true,
-      "command": "yarn shopify:admin-onboard --token \"$SHOPIFY_ADMIN_ACCESS_TOKEN\"",
-      "command_no_vercel": "yarn shopify:admin-onboard --token \"$SHOPIFY_ADMIN_ACCESS_TOKEN\" --no-vercel",
-      "success_when": "exit_code === 0 && report.admin_api === 'ok' && report.storefront_smoke === 'ok'",
+      "command": "yarn shopify:admin-onboard --json",
+      "command_no_vercel": "yarn shopify:admin-onboard --json --no-vercel",
+      "success_when": "exit_code === 0 && report.credential_mode === 'client_credentials' && report.admin_api === 'ok' && report.admin_scopes === 'ok' && report.env_local === 'ok' && report.vercel === 'ok' && report.storefront_smoke === 'ok'",
       "on_failure": {
+        "credential_exchange_failed": {
+          "human_step": "shopify_client_credentials",
+          "message": "Over Client ID/Secret a inštaláciu appky."
+        },
         "403_api_disabled": {
-          "human_step": "shopify_create_token",
-          "message": "Token je v env, ale Shopify vracia 403 — app nie je nainštalovaná."
+          "human_step": "shopify_client_credentials",
+          "message": "Release/install app alebo Update access v obchode."
         },
-        "401_unauthorized": {
-          "human_step": "shopify_create_token",
-          "message": "Neplatný token — vygeneruj nový v Shopify Admin."
+        "missing_scopes": {
+          "human_step": "shopify_client_credentials",
+          "message": "Release verziu so všetkými required scopes a potvrď Update access."
         },
-        "missing_token": {
-          "human_step": "shopify_create_token",
-          "message": "Chýba SHOPIFY_ADMIN_ACCESS_TOKEN — použi --token alebo env."
+        "api_version_fallback": {
+          "human_step": "storefront_onboard",
+          "message": "Shopify obslúžil inú verziu než requested; pinni podporovanú API verziu a zopakuj celý verify."
+        },
+        "missing_credentials": {
+          "human_step": "shopify_client_credentials",
+          "message": "Chýba kompletný pár SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET."
         }
       }
     },
     {
       "id": "nexus_env",
-      "title": "Nexus (Lovable): vlož rovnaký token",
+      "title": "Nexus server-side client credentials",
       "automated": false,
       "blocking": false,
       "urls": {
-        "nexus_admin": "https://growmedica-nexus.lovable.app/admin",
-        "lovable": "https://lovable.dev"
+        "nexus_admin": "https://growmedica-nexus.lovable.app/admin"
       },
       "env_vars": {
+        "ADMIN_EMAILS": "<user-confirmed Google account>",
         "SHOPIFY_STORE_DOMAIN": "growmedica.myshopify.com",
-        "SHOPIFY_ADMIN_ACCESS_TOKEN": "<shpat_ z kroku shopify_create_token>",
-        "SHOPIFY_API_VERSION": "2025-01",
-        "SHOPIFY_STOREFRONT_ACCESS_TOKEN": ""
+        "SHOPIFY_CLIENT_ID": "<Dev Dashboard Client ID>",
+        "SHOPIFY_CLIENT_SECRET": "<server-only Dev Dashboard secret>",
+        "SHOPIFY_API_VERSION": "2026-07"
       },
       "rules": [
-        "SHOPIFY_STOREFRONT_ACCESS_TOKEN nesmie byť shpat_",
-        "Po uložení spusti Test pripojenia v Nexus UI ak existuje"
-      ],
-      "alternatives": [
-        {
-          "if": "Integrations v Nexus UI nevidíš",
-          "then": "lovable.dev → projekt growmedica-nexus → Settings → Environment variables"
-        },
-        {
-          "if": "Nexus je na Vercel",
-          "then": "vercel.com → projekt Nexus → Settings → Environment Variables"
-        }
+        "Exchange client credentials only on the server",
+        "Do not persist the transient Admin token in browser config or Vercel env",
+        "Run Test connection and keep S8 pending until it passes"
       ]
-    },
-    {
-      "id": "iframe_firebase",
-      "title": "Ak dashboard iframe / login zlyhá",
-      "automated": false,
-      "blocking": false,
-      "urls": {
-        "firebase_auth_domains": "https://console.firebase.google.com/"
-      },
-      "actions": [
-        "Authentication → Settings → Authorized domains",
-        "Pridaj: growmedica.cz, www.growmedica.cz, growmedicanextjs.vercel.app, growmedica-nexus.lovable.app"
-      ],
-      "doc": "./DASHBOARD_DEPLOY.md#3-firebase-authorized-domains-manuálne-v-firebase-console"
     }
   ],
   "verification": {
-    "admin_api": "node scripts/shopify-admin-onboard.mjs --verify-only",
-    "storefront_catalog": "yarn shopify:smoke",
+    "admin_api_and_scopes": "yarn shopify:admin-verify --json",
+    "storefront_catalog": "SHOPIFY_STOREFRONT_TOKENLESS=1 yarn shopify:smoke",
+    "admin_dry_run": "node scripts/fix-shopify-inventory.mjs --dry-run --limit=1",
     "production_products": "curl -sS https://www.growmedica.cz/api/products | head -c 200",
-    "dashboard_agent": "BASE_URL=https://www.growmedica.cz node scripts/mistral-agent-live-smoke.mjs"
+    "typecheck": "yarn type-check"
   },
   "agent_protocol": [
-    "Ak user pošle shpat_ token → spusti yarn shopify:admin-onboard --token <token> --json",
-    "Ak 403 → vypíš human_step shopify_create_token s URL z tohto JSON; neopakuj Vercel push",
-    "Nikdy necommituj token; nikdy nedávaj shpat_ do SHOPIFY_STOREFRONT_ACCESS_TOKEN",
-    "Po úspechu pripomeň human_step nexus_env (Lovable — mimo tohto repa)",
-    "UI komponenty nemeň (AGENTS.md freeze)"
+    "Prefer SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET from secure env or .env.local",
+    "Treat legacy shpat as fallback only",
+    "Never commit or print credentials",
+    "Do not change storefront UI or design tokens",
+    "Require separate confirmation before a live write or bulk apply"
   ]
 }

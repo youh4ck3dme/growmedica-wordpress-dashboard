@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { getAllProductHandlesForSitemap } from '@/lib/catalog/products'
 import { getNavCollectionItems } from '@/lib/catalog/nav'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
+import { getIndexableSeoTaxonomyPaths } from '@/lib/seo-taxonomy'
 
 const BASE_URL = resolvePublicSiteUrl()
 
@@ -42,12 +43,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const collections = await getNavCollectionItems()
-    collectionPages = collections.map(({ handle }) => ({
-      url: `${BASE_URL}/kolekcie/${handle}`,
+    collectionPages = collections.map(({ href }) => ({
+      url: `${BASE_URL}${href}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))
+    const existingUrls = new Set(collectionPages.map(({ url }) => url))
+    for (const path of getIndexableSeoTaxonomyPaths()) {
+      const url = `${BASE_URL}/kategorie/${path}`
+      if (!existingUrls.has(url)) {
+        collectionPages.push({
+          url,
+          lastModified: new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        })
+      }
+    }
   } catch (error) {
     console.error('[Sitemap] Failed to fetch collections:', error)
   }

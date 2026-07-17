@@ -6,19 +6,21 @@ Natívny AI admin modul v Next.js storefronte na `/dashboard`. Mistral orchestru
 
 | Režim | Správanie |
 |-------|-----------|
-| `agentic` | Len Command Bar + AI panely |
-| `iframe` | Len Lovable Nexus iframe |
-| `hybrid` | Tabs: **AI Agent** (default) + **Nexus admin** (Lovable iframe) |
+| `agentic` | Natívny admin + AI Agent (default) |
+| `iframe` | Len externý admin iframe (legacy) |
+| `hybrid` | Tabs: AI Agent + iframe (legacy) |
 
-Default: `hybrid`.
+Default: `agentic`.
+
+Pozri [DASHBOARD_PANELS.md](./DASHBOARD_PANELS.md) pre natívne panely (produkty, objednávky, sklad).
 
 ## Env premenné
 
 | Premenná | Príklad | Účel |
 |---|---|---|
-| `NEXT_PUBLIC_DASHBOARD_MODE` | `hybrid` | Režim dashboardu |
-| `NEXT_PUBLIC_DASHBOARD_URL` | `https://growmedica-nexus.lovable.app/admin` | Nexus iframe URL |
-| `DASHBOARD_AGENT_SECRET` | `local-dashboard-agent-secret-min-16-chars` | Auth pre `/api/dashboard/*` (min. 16 znakov) |
+| `NEXT_PUBLIC_DASHBOARD_MODE` | `agentic` | Režim dashboardu |
+| `DASHBOARD_AGENT_SECRET` | `min-32-chars-secret` | Auth pre `/api/dashboard/*` + secret gate |
+| `DASHBOARD_ALLOW_LIVE_WRITES` | `1` | Povoliť live Shopify zápisy |
 | `MISTRAL_API_KEY` | `...` | Live Mistral (alebo `MISTRAL_MOCK_MODE=1`) |
 | `CMS_PROVIDER` | `wordpress` | Katalóg backend |
 | `WOO_MOCK_MODE` | `1` | Mock katalóg pre dev/test |
@@ -81,8 +83,15 @@ Stiahnutie CSV exportu vygenerovaného nástrojom `export_catalog_csv`.
 | `bulk_update_prices` | Hromadná zmena cien (`confirm: true` pre zápis) |
 | `export_catalog_csv` | Export CSV + download link |
 | `get_integration_status` | CMS + Mistral + mock/live stav |
+| `apply_product_copy` | Zapíše optimalizovaný copy do Shopify (`confirm: true`) |
+| `apply_product_seo` | Zapíše SEO meta do produktu (`confirm: true`) |
+| `update_inventory` | Zmena skladu podľa handle (`confirm: true`) |
+| `list_orders` | Posledné objednávky (Shopify Admin) |
+| `get_order` | Detail objednávky |
 
-**Bezpečnosť zápisu:** `bulk_update_prices` je default dry-run. V mock režime (`WOO_MOCK_MODE` / `SHOPIFY_MOCK_MODE` / `MISTRAL_MOCK_MODE`) sa nikdy nezapisuje do live katalógu.
+Agent používa **Mistral tool-calling** s regex fallbackom pri chybe API.
+
+**Bezpečnosť zápisu:** deštruktívne tools sú default dry-run. Live zápis vyžaduje `confirm: true` + `DASHBOARD_ALLOW_LIVE_WRITES=1`.
 
 ## Príklady príkazov
 

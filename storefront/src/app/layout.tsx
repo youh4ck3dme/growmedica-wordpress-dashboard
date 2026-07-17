@@ -3,7 +3,7 @@ import { cookies, headers } from 'next/headers'
 import Script from 'next/script'
 // import { Montserrat, Inter, Playfair_Display } from 'next/font/google'
 import '@/styles/globals.css'
-import { DEFAULT_METADATA, getOrganizationJsonLd } from '@/lib/seo'
+import { DEFAULT_METADATA, getOrganizationJsonLd, serializeJsonLd } from '@/lib/seo'
 import { BRAND_COPY } from '@/lib/brand'
 import AnnouncementBar from '@/components/layout/AnnouncementBar'
 import HeaderShell from '@/components/layout/HeaderShell'
@@ -104,7 +104,7 @@ export default async function RootLayout({
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(getOrganizationJsonLd()) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(getOrganizationJsonLd()) }}
         />
         <LocaleProvider locale={locale}>
           <StorefrontThemeProvider>

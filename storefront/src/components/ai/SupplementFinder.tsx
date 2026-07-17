@@ -46,9 +46,15 @@ export function SupplementFinder() {
         body: JSON.stringify({ userInput: input.trim() }),
       })
 
-      const data = (await response.json()) as RecommendApiResponse & { error?: string }
+      const data = (await response.json()) as RecommendApiResponse & { error?: unknown }
       if (!response.ok) {
-        throw new Error(data.error ?? 'Chyba pri spracovaní požiadavky.')
+        const raw = data.error
+        // Nikdy neukazuj surový Zod JSON dump v UI
+        const message =
+          typeof raw === 'string' && raw.trim() && !raw.trimStart().startsWith('[')
+            ? raw
+            : 'Nepodarilo sa spracovať požiadavku. Skúste popísať cieľ (napr. viac energie, spánok).'
+        throw new Error(message)
       }
 
       setRecommendations(data)

@@ -11,6 +11,7 @@
 
 # next.js
 /.next/
+/.next-*/
 /out/
 
 # production
@@ -42,6 +43,10 @@ next-env.d.ts
 /playwright-report/
 /test-results/
 
+# Local import / smoke dumps
+IMPORT_*_REPORT.json
+IMPORT_REPORT.md
+
 # Lighthouse audit exports (local only — huge JSON)
 .lighthouse/
 
@@ -62,3 +67,5 @@ public/swe-worker*
 pnpm-lock.yaml
 pnpm-workspace.yaml
 .vercel
+.env.nexus-lovable-paste.tmp
+IMPORT_SHOPIFY_TO_WOO_REPORT.json

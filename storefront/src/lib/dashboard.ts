@@ -6,11 +6,11 @@ export const NEXUS_DASHBOARD_IFRAME_URL = 'https://growmedica-nexus.lovable.app/
 /** Priamy login odkaz (nový tab). */
 export const LEGACY_NEXUS_ADMIN_URL = 'https://growmedica-nexus.lovable.app/admin/prihlasenie'
 
-/** agentic | iframe | hybrid (default: hybrid = AI Agent + Lovable Nexus) */
+/** agentic | iframe | hybrid (default: agentic = native admin + AI Command Bar) */
 export function getDashboardMode(): DashboardMode {
   const raw = process.env.NEXT_PUBLIC_DASHBOARD_MODE?.trim().toLowerCase()
   if (raw === 'agentic' || raw === 'iframe' || raw === 'hybrid') return raw
-  return 'hybrid'
+  return 'agentic'
 }
 
 function isLocalDashboardHost(hostname: string): boolean {

@@ -89,11 +89,46 @@ test.describe('Dashboard Agent API', () => {
     expect(action.result.count).toBeGreaterThan(0)
   })
 
-  test('POST /api/dashboard/session returns ok', async ({ request }) => {
-    const response = await request.post('/api/dashboard/session')
+  test('list_orders tool returns orders in mock mode', async ({ request }) => {
+    const response = await request.post('/api/dashboard/agent', {
+      headers: { ...AGENT_HEADERS, 'Content-Type': 'application/json' },
+      data: { command: 'Zobraz posledných 10 objednávok' },
+    })
+    const body = await response.json()
+    const action = body.actions.find((a: { tool: string }) => a.tool === 'list_orders')
+    expect(action).toBeTruthy()
+    expect(action.status).toBe('ok')
+  })
+
+  test('POST /api/dashboard/session with secret header returns ok', async ({ request }) => {
+    const response = await request.post('/api/dashboard/session', {
+      headers: AGENT_HEADERS,
+    })
     expect(response.ok()).toBe(true)
     const body = await response.json()
     expect(body.ok).toBe(true)
+    expect(body.authenticated).toBe(true)
+  })
+
+  test('POST /api/dashboard/session without secret returns 401', async ({ request }) => {
+    const response = await request.post('/api/dashboard/session')
+    expect(response.status()).toBe(401)
+  })
+
+  test('GET /api/dashboard/health is public', async ({ request }) => {
+    const response = await request.get('/api/dashboard/health')
+    expect(response.ok()).toBe(true)
+    const body = await response.json()
+    expect(body.ok).toBe(true)
+    expect(body.cms_provider).toBeTruthy()
+  })
+
+  test('GET /api/dashboard/products requires auth', async ({ request }) => {
+    const authed = await request.get('/api/dashboard/products', { headers: AGENT_HEADERS })
+    expect(authed.ok()).toBe(true)
+
+    const denied = await request.get('/api/dashboard/products')
+    expect(denied.status()).toBe(401)
   })
 
   test('optimize_product_copy returns validated SK copy in mock mode', async ({ request }) => {
@@ -113,20 +148,10 @@ test.describe('Dashboard Agent API', () => {
     expect(action.result.short_description).not.toMatch(/lieč/i)
   })
 
-  test('/dashboard HTML contains command bar in agentic or hybrid mode', async ({ request }) => {
-    const mode = process.env.NEXT_PUBLIC_DASHBOARD_MODE ?? 'hybrid'
-    test.skip(
-      mode !== 'agentic' && mode !== 'hybrid',
-      'Requires NEXT_PUBLIC_DASHBOARD_MODE=agentic or hybrid',
-    )
-
+  test('/dashboard HTML contains dashboard title', async ({ request }) => {
     const response = await request.get('/dashboard')
     expect(response.ok()).toBe(true)
     const html = await response.text()
-    expect(html).toContain('data-testid="dashboard-command-bar"')
-    expect(html).toContain('data-testid="dashboard-shell"')
-    if (mode === 'hybrid') {
-      expect(html).toContain('data-testid="dashboard-tab-nexus"')
-    }
+    expect(html).toContain('Dashboard | GrowMedica')
   })
 })

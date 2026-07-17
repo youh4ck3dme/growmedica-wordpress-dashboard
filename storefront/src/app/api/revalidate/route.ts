@@ -1,14 +1,31 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
 import { getRevalidationSecret } from '@/lib/env'
+import { timingSafeEqual } from 'node:crypto'
 
 const WOO_TAG_PATTERN =
   /^(woo-products|woo-categories|woo-product-.+|woo-category-.+)$/
 
+function safeEqual(a: string, b: string): boolean {
+  try {
+    const ba = Buffer.from(a)
+    const bb = Buffer.from(b)
+    if (ba.length !== bb.length) return false
+    return timingSafeEqual(ba, bb)
+  } catch {
+    return false
+  }
+}
+
 function resolveSecret(request: NextRequest): string | null {
-  const header = request.headers.get('x-revalidation-secret')
+  const header = request.headers.get('x-revalidation-secret')?.trim()
   if (header) return header
-  return request.nextUrl.searchParams.get('secret')
+
+  // Query-string secret only in non-production (legacy local scripts).
+  if (process.env.NODE_ENV !== 'production' && process.env.VERCEL_ENV !== 'production') {
+    return request.nextUrl.searchParams.get('secret')
+  }
+  return null
 }
 
 function revalidateWooTag(tag: string): string[] {
@@ -40,7 +57,7 @@ export async function POST(request: NextRequest) {
   }
 
   const secret = resolveSecret(request)
-  if (secret !== expectedSecret) {
+  if (!secret || !safeEqual(secret, expectedSecret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

@@ -1,0 +1,90 @@
+{
+  "count": 663,
+  "uniqueFromPaths": 663,
+  "multiTargetCollisions": 0,
+  "selfRedirects": 0,
+  "statusCode": 301,
+  "policy": "Host-independent: match on pathname only; never hardcode growmedica.sk host in Next redirects. Preserve locale prefix if present.",
+  "recommendedTargets": [
+    "Next.js next.config redirects (storefront) for public shop domain",
+    "Optional WP redirect plugin only if CMS URLs are still hit"
+  ],
+  "sample": [
+    {
+      "objectType": "category",
+      "objectId": "cat-001",
+      "fromPath": "/sk/hlavna-stranka/balicky-zdravia",
+      "toPath": "/sk/kategorie/balicky-zdravia",
+      "fromHost": "growmedica.sk",
+      "toHost": "growmedica.sk",
+      "statusCode": 301
+    },
+    {
+      "objectType": "category",
+      "objectId": "cat-002",
+      "fromPath": "/sk/hlavna-stranka/doplnky-vyzivy",
+      "toPath": "/sk/kategorie/doplnky-vyzivy",
+      "fromHost": "growmedica.sk",
+      "toHost": "growmedica.sk",
+      "statusCode": 301
+    },
+    {
+      "objectType": "category",
+      "objectId": "cat-003",
+      "fromPath": "/sk/hlavna-stranka/doplnky-vyzivy/antioxidanty",
+      "toPath": "/sk/kategorie/doplnky-vyzivy/antioxidanty",
+      "fromHost": "growmedica.sk",
+      "toHost": "growmedica.sk",
+      "statusCode": 301
+    },
+    {
+      "objectType": "category",
+      "objectId": "cat-004",
+      "fromPath": "/sk/hlavna-stranka/doplnky-vyzivy/antioxidanty/coq10",
+      "toPath": "/sk/kategorie/doplnky-vyzivy/antioxidanty/coq10",
+      "fromHost": "growmedica.sk",
+      "toHost": "growmedica.sk",
+      "statusCode": 301
+    },
+    {
+      "objectType": "category",
+      "objectId": "cat-005",
+      "fromPath": "/sk/hlavna-stranka/doplnky-vyzivy/antioxidanty/prirodne-antioxidanty",
+      "toPath": "/sk/kategorie/doplnky-vyzivy/antioxidanty/prirodne-antioxidanty",
+      "fromHost": "growmedica.sk",
+      "toHost": "growmedica.sk",
+      "statusCode": 301
+    },
+    {
+      "objectType": "category",
+      "objectId": "cat-006",
+      "fromPath": "/sk/hlavna-stranka/doplnky-vyzivy/antioxidanty/superovocie",
+      "toPath": "/sk/kategorie/doplnky-vyzivy/antioxidanty/superovocie",
+      "fromHost": "growmedica.sk",
+      "toHost": "growmedica.sk",
+      "statusCode": 301
+    },
+    {
+      "objectType": "category",
+      "objectId": "cat-007",
+      "fromPath": "/sk/hlavna-stranka/doplnky-vyzivy/diety",
+      "toPath": "/sk/kategorie/doplnky-vyzivy/diety-a-stravovanie",
+      "fromHost": "growmedica.sk",
+      "toHost": "growmedica.sk",
+      "statusCode": 301
+    },
+    {
+      "objectType": "category",
+      "objectId": "cat-008",
+      "fromPath": "/sk/hlavna-stranka/doplnky-vyzivy/diety/bez-gmo",
+      "toPath": "/sk/kategorie/doplnky-vyzivy/diety-a-stravovanie/bez-gmo",
+      "fromHost": "growmedica.sk",
+      "toHost": "growmedica.sk",
+      "statusCode": 301
+    }
+  ],
+  "byObjectType": {
+    "category": 199,
+    "product": 464
+  }
+}

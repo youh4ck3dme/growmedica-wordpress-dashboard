@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - 'storefront/**'
+      - 'wordpress/mu-plugins/**'
+      - '.github/workflows/ci.yml'
+  push:
+    branches: [main, master]
+    paths:
+      - 'storefront/**'
+      - 'wordpress/mu-plugins/**'
+      - '.github/workflows/ci.yml'
+
+defaults:
+  run:
+    working-directory: storefront
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CMS_PROVIDER: wordpress
+      WOO_MOCK_MODE: '1'
+      WOO_CONSUMER_KEY: ck_mock
+      WOO_CONSUMER_SECRET: cs_mock
+      WORDPRESS_BASE_URL: http://localhost:8080
+      WORDPRESS_REVALIDATION_SECRET: mock-revalidation-secret-123456
+      SHOPIFY_MOCK_MODE: '1'
+      SHOPIFY_STORE_DOMAIN: mock-store.myshopify.com
+      SHOPIFY_STOREFRONT_ACCESS_TOKEN: mock-storefront-token
+      SHOPIFY_REVALIDATION_SECRET: mock-revalidation-secret-123456
+      SHOPIFY_API_VERSION: '2026-07'
+      NEXT_PUBLIC_SITE_URL: http://localhost:5557
+      NEXT_PUBLIC_DASHBOARD_URL: http://localhost:8080/wp-admin
+      NEXT_PUBLIC_DASHBOARD_MODE: agentic
+      DASHBOARD_AGENT_SECRET: mock-dashboard-agent-secret-123456
+      MISTRAL_MOCK_MODE: '1'
+      MISTRAL_API_KEY: mock-mistral-api-key
+      MISTRAL_MODEL: mistral-large-latest
+      CI: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: yarn
+          cache-dependency-path: storefront/yarn.lock
+
+      - name: Install
+        run: yarn install --frozen-lockfile
+
+      - name: Type-check
+        run: yarn type-check
+
+      - name: Unit tests
+        run: yarn test:unit
+
+      - name: Install Playwright Chromium
+        run: yarn playwright install --with-deps chromium
+
+      - name: Integrity — Woo mock + secrets guard
+        run: yarn test:woo:integrity
+
+      - name: Integrity — unit-ish SEO/cart
+        run: yarn test:unit-integrity

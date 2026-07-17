@@ -92,17 +92,101 @@ export function getVariantId(variantGlobalId: string): string {
   return variantGlobalId.split('/').pop() ?? variantGlobalId
 }
 
-// ─── Sanitize HTML (Shopify bodyHtml) ────────────────────────────────────────
+// ─── Sanitize HTML (CMS bodyHtml) ────────────────────────────────────────────
+
+const ALLOWED_TAGS = new Set([
+  'p',
+  'br',
+  'strong',
+  'b',
+  'em',
+  'i',
+  'u',
+  'ul',
+  'ol',
+  'li',
+  'a',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'span',
+  'div',
+  'table',
+  'thead',
+  'tbody',
+  'tr',
+  'th',
+  'td',
+])
+
+const ALLOWED_ATTRS: Record<string, Set<string>> = {
+  a: new Set(['href', 'title', 'rel', 'target']),
+  td: new Set(['colspan', 'rowspan']),
+  th: new Set(['colspan', 'rowspan']),
+}
+
+function isSafeHref(value: string): boolean {
+  const trimmed = value.trim().toLowerCase()
+  if (!trimmed) return false
+  if (trimmed.startsWith('javascript:') || trimmed.startsWith('vbscript:') || trimmed.startsWith('data:')) {
+    return false
+  }
+  return (
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('mailto:') ||
+    trimmed.startsWith('tel:') ||
+    trimmed.startsWith('/') ||
+    trimmed.startsWith('#')
+  )
+}
 
 /**
- * Minimal allow-list sanitization for Shopify bodyHtml
- * Only allows basic formatting tags — no scripts, iframes, forms
+ * Allow-list HTML sanitizer for CMS product HTML (no scripts/event handlers).
+ * Prefer this over regex-only stripping — attributes like onclick='…' are removed.
  */
 export function sanitizeHtml(html: string): string {
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '')
-    .replace(/<form[^>]*>.*?<\/form>/gi, '')
-    .replace(/on\w+="[^"]*"/gi, '')
-    .replace(/javascript:/gi, '')
+  if (!html) return ''
+
+  let cleaned = html.replace(/\0/g, '')
+  cleaned = cleaned.replace(/<!--[\s\S]*?-->/g, '')
+  cleaned = cleaned.replace(
+    /<\/?(script|style|iframe|object|embed|form|input|button|textarea|select|link|meta|base|svg|math|video|audio|source|track)(\s[^>]*)?>/gi,
+    '',
+  )
+
+  return cleaned.replace(/<\/?([a-z0-9]+)(\s[^>]*)?>/gi, (match, rawTag: string, rawAttrs = '') => {
+    const tag = rawTag.toLowerCase()
+    const isClosing = match.startsWith('</')
+    if (!ALLOWED_TAGS.has(tag)) return ''
+    if (isClosing) return `</${tag}>`
+
+    const allowed = ALLOWED_ATTRS[tag]
+    if (!allowed || !rawAttrs.trim()) return `<${tag}>`
+
+    const attrs: string[] = []
+    const attrRe = /([a-z0-9:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi
+    let attrMatch: RegExpExecArray | null
+    while ((attrMatch = attrRe.exec(rawAttrs)) !== null) {
+      const name = attrMatch[1].toLowerCase()
+      if (name.startsWith('on')) continue
+      if (!allowed.has(name)) continue
+      const value = attrMatch[2] ?? attrMatch[3] ?? attrMatch[4] ?? ''
+      if (name === 'href' || name === 'src') {
+        if (!isSafeHref(value)) continue
+      }
+      if (name === 'target' && value !== '_blank' && value !== '_self') continue
+      const safe = value.replace(/"/g, '&quot;')
+      attrs.push(`${name}="${safe}"`)
+    }
+
+    if (tag === 'a' && attrs.some((a) => a.startsWith('target="_blank"'))) {
+      if (!attrs.some((a) => a.startsWith('rel='))) {
+        attrs.push('rel="noopener noreferrer"')
+      }
+    }
+
+    return attrs.length ? `<${tag} ${attrs.join(' ')}>` : `<${tag}>`
+  })
 }

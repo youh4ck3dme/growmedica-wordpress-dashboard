@@ -43,7 +43,7 @@ CMS_PROVIDER=shopify
 SHOPIFY_STORE_DOMAIN=growmedica.myshopify.com
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=<storefront-token>
 SHOPIFY_REVALIDATION_SECRET=<min-16-znakov>
-SHOPIFY_API_VERSION=2025-01
+SHOPIFY_API_VERSION=2026-07
 NEXT_PUBLIC_SITE_URL=http://localhost:5555
 ```
 
@@ -79,7 +79,7 @@ V **growmedica-nexus.lovable.app** → Shopify integrácia:
 | Pole | Hodnota |
 |------|---------|
 | Store domain | `growmedica.myshopify.com` |
-| API verzia | `2025-01` |
+| API verzia | `2026-07` |
 | Admin access token | `shpat_…` |
 | Storefront access token | Storefront token (voliteľné pre test pripojenia) |
 

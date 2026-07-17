@@ -5,7 +5,7 @@
  * Requires in .env.local (never commit):
  *   SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
  *   SHOPIFY_ADMIN_ACCESS_TOKEN=shpat_...  (Admin API, write_products)
- *   SHOPIFY_API_VERSION=2025-01
+ *   SHOPIFY_API_VERSION=2026-07
  *
  * Usage:
  *   node scripts/create-shopify-bundles.mjs
@@ -43,7 +43,7 @@ loadEnvFile(resolve(ROOT, '.env.local'))
 
 const STORE = process.env.SHOPIFY_STORE_DOMAIN
 const TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN
-const API_VERSION = process.env.SHOPIFY_API_VERSION ?? '2025-01'
+const API_VERSION = process.env.SHOPIFY_API_VERSION ?? '2026-07'
 const dryRun = process.argv.includes('--dry-run')
 const limitArg = process.argv.find((a) => a.startsWith('--limit='))
 const limit = limitArg ? Number(limitArg.split('=')[1]) : 10

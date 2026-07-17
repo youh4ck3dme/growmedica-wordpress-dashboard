@@ -101,10 +101,14 @@ yarn import:products     # produkty z mock/fixture dát
 
 ## 7. Produkcia (hosting checklist)
 
+**DB credentials (WebSupport):** gitignored — `wordpress.local.md` + `wordpress-production.local.env`.  
+Doplň `DB_PASSWORD`, potom `wp-config.php` na hostingu. **Nikdy** `DB_*` na Vercel ani do `storefront/.env.local`.
+
 - [ ] VPS/managed WP hosting (min. 2 GB RAM)
 - [ ] DNS `cms.growmedica.cz` → WP server
 - [ ] SSL certifikát (Let's Encrypt)
 - [ ] PHP 8.2+, MariaDB 10.6+
+- [ ] `wp-config.php` — `DB_NAME` / `DB_USER` / `DB_PASSWORD` / `DB_HOST` z `wordpress-production.local.env`
 - [ ] WooCommerce REST API keys (Read/Write, server-only)
 - [ ] CSP `frame-ancestors` pre `/wp-admin` (growmedica.cz, *.vercel.app, localhost:5555)
 - [ ] `WORDPRESS_BASE_URL=https://cms.growmedica.cz` na Vercel

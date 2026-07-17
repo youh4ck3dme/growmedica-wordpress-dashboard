@@ -1,8 +1,10 @@
+import { cache } from 'react'
 import { wooFetch } from './client'
 import { isWooMockMode, getMockWooCategories } from './mock'
 import type { WooCategory } from './types'
 
-export async function getWooCategories(): Promise<WooCategory[]> {
+/** Request-scoped cache — mega-menu featured fetches share one categories list. */
+export const getWooCategories = cache(async (): Promise<WooCategory[]> => {
   if (isWooMockMode()) {
     return getMockWooCategories()
   }
@@ -11,26 +13,16 @@ export async function getWooCategories(): Promise<WooCategory[]> {
     path: '/products/categories',
     params: {
       per_page: 100,
-      hide_empty: true,
+      hide_empty: false,
       orderby: 'name',
       order: 'asc',
     },
     tags: ['woo-categories'],
     revalidate: 3600,
   })
-}
+})
 
 export async function getWooCategoryBySlug(slug: string): Promise<WooCategory | null> {
-  if (isWooMockMode()) {
-    return getMockWooCategories().find((c) => c.slug === slug) ?? null
-  }
-
-  const categories = await wooFetch<WooCategory[]>({
-    path: '/products/categories',
-    params: { slug, per_page: 1 },
-    tags: [`woo-category-${slug}`],
-    revalidate: 3600,
-  })
-
-  return categories[0] ?? null
+  const categories = await getWooCategories()
+  return categories.find((c) => c.slug === slug) ?? null
 }

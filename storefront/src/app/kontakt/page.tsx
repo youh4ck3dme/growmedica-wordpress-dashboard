@@ -1,5 +1,6 @@
 import { Container } from '@/components/ui/Container'
 import BrandPageHeader from '@/components/ui/BrandPageHeader'
+import { COMPANY } from '@/lib/company'
 import { KontaktForm } from './KontaktForm'
 
 export default function Kontakt() {
@@ -10,7 +11,7 @@ export default function Kontakt() {
           <BrandPageHeader
             eyebrow="Sme tu pre vás"
             title="Kontaktujte nás"
-            subtitle="Máte otázky ohľadom produktov, vašej objednávky, alebo hľadáte odbornú radu? Neváhajte nám napísať alebo zavolať."
+            subtitle="Máte otázky ohľadom produktov, vašej objednávky, alebo hľadáte odbornú radu? Napíšte nám e-mailom."
           />
 
           <div className="grid md:grid-cols-2 gap-8 md:gap-12">
@@ -25,30 +26,32 @@ export default function Kontakt() {
                   <div>
                     <strong className="block text-lg mb-1 text-(--color-text)">E-mail:</strong>
                     <a
-                      href="mailto:info@growmedica.cz"
+                      href={`mailto:${COMPANY.email}`}
                       className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
                     >
-                      info@growmedica.cz
+                      {COMPANY.email}
                     </a>
                     <p className="text-sm text-gray-400 mt-1">Odpovedáme väčšinou do 24 hodín.</p>
                   </div>
                 </li>
 
-                <li className="flex items-start">
-                  <div className="h-10 w-10 rounded-full bg-green-100 text-(--color-accent-green) flex items-center justify-center mr-5 shrink-0 text-xl font-bold">
-                    ☏
-                  </div>
-                  <div>
-                    <strong className="block text-lg mb-1 text-(--color-text)">Zákaznícka linka:</strong>
-                    <a
-                      href="tel:+421900000000"
-                      className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
-                    >
-                      +421 900 000 000
-                    </a>
-                    <p className="text-sm text-gray-400 mt-1">Po - Pia: 9:00 - 16:00</p>
-                  </div>
-                </li>
+                {COMPANY.phoneDisplay && COMPANY.phoneTel ? (
+                  <li className="flex items-start">
+                    <div className="h-10 w-10 rounded-full bg-green-100 text-(--color-accent-green) flex items-center justify-center mr-5 shrink-0 text-xl font-bold">
+                      ☏
+                    </div>
+                    <div>
+                      <strong className="block text-lg mb-1 text-(--color-text)">Zákaznícka linka:</strong>
+                      <a
+                        href={`tel:${COMPANY.phoneTel}`}
+                        className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
+                      >
+                        {COMPANY.phoneDisplay}
+                      </a>
+                      <p className="text-sm text-gray-400 mt-1">Po - Pia: 9:00 - 16:00</p>
+                    </div>
+                  </li>
+                ) : null}
 
                 <li className="flex items-start">
                   <div className="h-10 w-10 rounded-full bg-green-100 text-(--color-accent-green) flex items-center justify-center mr-5 shrink-0 text-xl font-bold">
@@ -59,15 +62,17 @@ export default function Kontakt() {
                       Sídlo spoločnosti a fakturačné údaje:
                     </strong>
                     <p className="text-(--color-text-muted) leading-relaxed">
-                      GrowMedica s.r.o.
+                      {COMPANY.legalName}
                       <br />
-                      BELLOVA 6
+                      {COMPANY.street}
                       <br />
-                      KOŠICE, 040 01
+                      {COMPANY.zip} {COMPANY.city}
                       <br />
-                      IČO: 12345678
+                      {COMPANY.country}
                       <br />
-                      DIČ: 2020202020
+                      IČO: {COMPANY.ico}
+                      <br />
+                      DIČ: {COMPANY.dic}
                     </p>
                   </div>
                 </li>

@@ -118,7 +118,7 @@ Nepridávať do gitu. Názvy musia sedieť s kódom v repozitári (nie `VITE_FIR
 | `SHOPIFY_STORE_DOMAIN` | áno | `growmedica.myshopify.com` (nie placeholder `moj-shop.myshopify.com`) |
 | `SHOPIFY_ADMIN_ACCESS_TOKEN` | áno | Admin API token (`shpat_…`) — **iba toto pole** |
 | `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | odporúčané | Storefront API token — **NIE** `shpat_` (iný token z Develop app → Storefront API) |
-| `SHOPIFY_API_VERSION` | voliteľné | Default `2025-01` |
+| `SHOPIFY_API_VERSION` | voliteľné | Default `2026-07` |
 | `ALLOWED_FRAME_ANCESTORS` | odporúčané | Extra `frame-ancestors` domény (bez `'self'`) |
 | `MISTRAL_API_KEY` | nie (fáza 3) | Zatiaľ nepoužívané v kóde |
 

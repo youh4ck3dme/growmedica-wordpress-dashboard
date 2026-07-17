@@ -1,0 +1,1205 @@
+{
+  "Všeobecné": [
+    {
+      "id": "woocommerce_store_address",
+      "label": "1. riadok adresy",
+      "value": "",
+      "default": "",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_store_address_2",
+      "label": "2. riadok adresy",
+      "value": "",
+      "default": "",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_store_city",
+      "label": "Mesto",
+      "value": "",
+      "default": "",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_default_country",
+      "label": "Krajina/Štát",
+      "value": "SK",
+      "default": "US:CA",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_store_postcode",
+      "label": "PSČ",
+      "value": "",
+      "default": "",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_allowed_countries",
+      "label": "Lokality predaja",
+      "value": "all",
+      "default": "all",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_all_except_countries",
+      "label": "Predávať do všetkých krajín, okrem &hellip;",
+      "value": "",
+      "default": "",
+      "type": "multiselect"
+    },
+    {
+      "id": "woocommerce_specific_allowed_countries",
+      "label": "Predávať do špecifických krajín",
+      "value": "",
+      "default": "",
+      "type": "multiselect"
+    },
+    {
+      "id": "woocommerce_ship_to_countries",
+      "label": "Lokality pre dopravu",
+      "value": "",
+      "default": "",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_specific_ship_to_countries",
+      "label": "Prepravovať do špecifických krajín",
+      "value": "",
+      "default": "",
+      "type": "multiselect"
+    },
+    {
+      "id": "woocommerce_default_customer_address",
+      "label": "Predvolená lokácia zákazníka",
+      "value": "base",
+      "default": "base",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_address_autocomplete_enabled",
+      "label": "",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_calc_taxes",
+      "label": "Povoliť dane",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_enable_coupons",
+      "label": "Povoliť zľavové kódy",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_calc_discounts_sequentially",
+      "label": "",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_currency",
+      "label": "Mena",
+      "value": "EUR",
+      "default": "USD",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_currency_pos",
+      "label": "Pozícia meny",
+      "value": "right_space",
+      "default": "left",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_price_thousand_sep",
+      "label": "Oddeľovač tisícov",
+      "value": " ",
+      "default": ",",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_price_decimal_sep",
+      "label": "Oddeľovač desatinných miest",
+      "value": ",",
+      "default": ".",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_price_num_decimals",
+      "label": "Počet desatinných čísel",
+      "value": "2",
+      "default": "2",
+      "type": "number"
+    }
+  ],
+  "Produkty": [
+    {
+      "id": "woocommerce_shop_page_id",
+      "label": "Stránka obchodu",
+      "value": "8",
+      "default": "",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_cart_redirect_after_add",
+      "label": "Správanie Vložiť do košíka",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_enable_ajax_add_to_cart",
+      "label": "",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_placeholder_image",
+      "label": "Zástupný obrázok",
+      "value": "7",
+      "default": "",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_weight_unit",
+      "label": "Jednotka hmotnosti",
+      "value": "kg",
+      "default": "lbs",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_dimension_unit",
+      "label": "Jednotka rozmerov",
+      "value": "cm",
+      "default": "in",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_enable_reviews",
+      "label": "Povoliť recenzie",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_review_rating_verification_label",
+      "label": "",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_review_rating_verification_required",
+      "label": "",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_enable_review_rating",
+      "label": "Hodnotenia produktu",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_review_rating_required",
+      "label": "",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_manage_stock",
+      "label": "Spravovať sklad",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_hold_stock_minutes",
+      "label": "Držať sklad (v minútach)",
+      "value": "60",
+      "default": "60",
+      "type": "number"
+    },
+    {
+      "id": "woocommerce_notify_low_stock",
+      "label": "Upozornenie",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_notify_no_stock",
+      "label": "",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_stock_email_recipient",
+      "label": "Príjemca/príjemcovia oznámenia",
+      "value": "info@growmedica.sk",
+      "default": "info@growmedica.sk",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_notify_low_stock_amount",
+      "label": "Prah nízkeho skladu",
+      "value": "2",
+      "default": "2",
+      "type": "number"
+    },
+    {
+      "id": "woocommerce_notify_no_stock_amount",
+      "label": "Prah prázdneho skladu",
+      "value": "0",
+      "default": "0",
+      "type": "number"
+    },
+    {
+      "id": "woocommerce_hide_out_of_stock_items",
+      "label": "Zobrazovanie stavu skladu",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_stock_format",
+      "label": "Formát zobrazenia skladu",
+      "value": "",
+      "default": "",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_file_download_method",
+      "label": "Spôsob stiahnutia súboru",
+      "value": "force",
+      "default": "force",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_downloads_redirect_fallback_allowed",
+      "label": "",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_downloads_require_login",
+      "label": "Obmedzenie prístupu",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_downloads_grant_access_after_payment",
+      "label": "",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_downloads_deliver_inline",
+      "label": "Otvoriť v prehliadači",
+      "value": "",
+      "default": false,
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_downloads_add_hash_to_filename",
+      "label": "Názov súboru",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_downloads_count_partial",
+      "label": "Počítať čiastočné stiahnutia",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_attribute_lookup_enabled",
+      "label": "Povoliť používanie tabuľky",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_attribute_lookup_direct_updates",
+      "label": "Priame aktualizácie",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_attribute_lookup_optimized_updates",
+      "label": "Optimalizované aktualizácie",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_product_match_featured_image_by_sku",
+      "label": "Zhoda obrázkov",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    }
+  ],
+  "Doprava": [
+    {
+      "id": "woocommerce_enable_shipping_calc",
+      "label": "Kalkulácia",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_shipping_cost_requires_address",
+      "label": "",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_shipping_hide_rates_when_free",
+      "label": "",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_ship_to_destination",
+      "label": "Doručovacia adresa",
+      "value": "billing",
+      "default": "billing",
+      "type": "radio"
+    },
+    {
+      "id": "woocommerce_shipping_debug_mode",
+      "label": "Režim ladenia",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    }
+  ],
+  "Platby": [],
+  "Účty a súkromie": [
+    {
+      "id": "woocommerce_enable_guest_checkout",
+      "label": "Pokladňa",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_enable_checkout_login_reminder",
+      "label": "Prihlásenie",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_enable_delayed_account_creation",
+      "label": "Vytvorenie účtu",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_enable_signup_and_login_from_checkout",
+      "label": "Vytvorenie účtu",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_enable_myaccount_registration",
+      "label": "Vytvorenie účtu",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_registration_generate_password",
+      "label": "Možnosti vytvorenia účtu",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_erasure_request_removes_order_data",
+      "label": "Žiadosti o vymazanie účtu",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_erasure_request_removes_download_data",
+      "label": "",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_allow_bulk_remove_personal_data",
+      "label": "Odstránenie osobných údajov",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_registration_privacy_policy_text",
+      "label": "Zásady ochrany osobných udajov pr registrácii",
+      "value": "Vaše osobné údaje budú použité na zjednodušenie používania tejto webovej stránky, na správu prihlasovania do vášho účtu a na iné účely opísané v dokumente [privacy_policy].",
+      "default": "Vaše osobné údaje budú použité na zjednodušenie používania tejto webovej stránky, na správu prihlasovania do vášho účtu a na iné účely opísané v dokumente [privacy_policy].",
+      "type": "textarea"
+    },
+    {
+      "id": "woocommerce_checkout_privacy_policy_text",
+      "label": "Zásady ochrany osobných údajov v pokladni",
+      "value": "Vaše osobné údaje budú použité na spracovanie vašej objednávky, zjednodušenie používania tejto webovej stránky a na iné účely opísané v dokumente [privacy_policy].",
+      "default": "Vaše osobné údaje budú použité na spracovanie vašej objednávky, zjednodušenie používania tejto webovej stránky a na iné účely opísané v dokumente [privacy_policy].",
+      "type": "textarea"
+    }
+  ],
+  "E-maily": [
+    {
+      "id": "woocommerce_email_from_name",
+      "label": "Meno odosielateľa",
+      "value": "GrowMedica",
+      "default": "GrowMedica",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_email_from_address",
+      "label": "Adresa odosielateľa",
+      "value": "info@growmedica.sk",
+      "default": "info@growmedica.sk",
+      "type": "email"
+    },
+    {
+      "id": "woocommerce_email_header_image_width",
+      "label": "Šírka loga (px)",
+      "value": "120",
+      "default": "120",
+      "type": "number"
+    },
+    {
+      "id": "woocommerce_email_header_alignment",
+      "label": "Zarovnanie hlavičky",
+      "value": "left",
+      "default": "left",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_email_footer_text",
+      "label": "Text v pätičke",
+      "value": "{site_title}<br />{store_address}",
+      "default": "{site_title}<br />{store_address}",
+      "type": "textarea"
+    },
+    {
+      "id": "woocommerce_email_base_color",
+      "label": "Prízvuk",
+      "value": "#111111",
+      "default": "#111111",
+      "type": "color"
+    },
+    {
+      "id": "woocommerce_email_background_color",
+      "label": "Pozadie e-mailu",
+      "value": "#FFFFFF",
+      "default": "#FFFFFF",
+      "type": "color"
+    },
+    {
+      "id": "woocommerce_email_body_background_color",
+      "label": "Pozadie obsahu",
+      "value": "#FFFFFF",
+      "default": "#FFFFFF",
+      "type": "color"
+    },
+    {
+      "id": "woocommerce_email_text_color",
+      "label": "Nadpis a text",
+      "value": "#111111",
+      "default": "#111111",
+      "type": "color"
+    },
+    {
+      "id": "woocommerce_email_footer_text_color",
+      "label": "Sekundárny text",
+      "value": "#111111",
+      "default": "#111111",
+      "type": "color"
+    }
+  ],
+  "Integrácia": "ERROR: HTTP Error 404: Not Found",
+  "Viditeľnosť stránky": [],
+  "Predajné miesto": [
+    {
+      "id": "woocommerce_pos_store_name",
+      "label": "Store name",
+      "value": "GrowMedica",
+      "default": "GrowMedica",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_pos_store_address",
+      "label": "Physical address",
+      "value": "",
+      "default": "",
+      "type": "textarea"
+    },
+    {
+      "id": "woocommerce_pos_store_phone",
+      "label": "Telefónne číslo",
+      "value": "",
+      "default": "",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_pos_store_email",
+      "label": "E-mail",
+      "value": "info@growmedica.sk",
+      "default": "info@growmedica.sk",
+      "type": "email"
+    },
+    {
+      "id": "woocommerce_pos_refund_returns_policy",
+      "label": "Refund & Returns Policy",
+      "value": "",
+      "default": "",
+      "type": "textarea"
+    }
+  ],
+  "Pokročilé": [
+    {
+      "id": "woocommerce_cart_page_id",
+      "label": "Stránka košíka",
+      "value": "9",
+      "default": "",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_checkout_page_id",
+      "label": "Stránka pokladne",
+      "value": "10",
+      "default": 10,
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_myaccount_page_id",
+      "label": "Stránka Môj účet",
+      "value": "11",
+      "default": "",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_terms_page_id",
+      "label": "Obchodné podmienky",
+      "value": "",
+      "default": "",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_checkout_pay_endpoint",
+      "label": "Zaplatiť",
+      "value": "order-pay",
+      "default": "order-pay",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_checkout_order_received_endpoint",
+      "label": "Objednávka prijatá",
+      "value": "order-received",
+      "default": "order-received",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_add_payment_method_endpoint",
+      "label": "Pridať možnosť platby",
+      "value": "add-payment-method",
+      "default": "add-payment-method",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_delete_payment_method_endpoint",
+      "label": "Vymazať spôsob platby",
+      "value": "delete-payment-method",
+      "default": "delete-payment-method",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_set_default_payment_method_endpoint",
+      "label": "Nastaviť predvolený spôsob platby",
+      "value": "set-default-payment-method",
+      "default": "set-default-payment-method",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_orders_endpoint",
+      "label": "Objednávky",
+      "value": "orders",
+      "default": "orders",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_view_order_endpoint",
+      "label": "Zobraziť objednávku",
+      "value": "view-order",
+      "default": "view-order",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_downloads_endpoint",
+      "label": "Na stiahnutie",
+      "value": "downloads",
+      "default": "downloads",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_edit_account_endpoint",
+      "label": "Upraviť účet",
+      "value": "edit-account",
+      "default": "edit-account",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_edit_address_endpoint",
+      "label": "Adresy",
+      "value": "edit-address",
+      "default": "edit-address",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_payment_methods_endpoint",
+      "label": "Spôsoby platby",
+      "value": "payment-methods",
+      "default": "payment-methods",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_myaccount_lost_password_endpoint",
+      "label": "Zabudnuté heslo",
+      "value": "lost-password",
+      "default": "lost-password",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_logout_endpoint",
+      "label": "Odhlásiť",
+      "value": "customer-logout",
+      "default": "customer-logout",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_allow_tracking",
+      "label": "Povoliť sledovanie",
+      "value": "yes",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_show_marketplace_suggestions",
+      "label": "Zobraziť odporúčania",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_custom_orders_table_enabled",
+      "label": "Ukladanie údajov o objednávkach",
+      "value": "yes",
+      "default": "no",
+      "type": "radio"
+    },
+    {
+      "id": "woocommerce_custom_orders_table_data_sync_enabled",
+      "label": "",
+      "value": "",
+      "default": null,
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_analytics_enabled",
+      "label": "Analytika",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_rate_limit_checkout_enabled",
+      "label": "Limit sadzby Pokladňa",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_order_attribution_enabled",
+      "label": "Priradenie objednávky",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_site_visibility_badge_enabled",
+      "label": "Ikona viditeľnosti stránky",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_hpos_datastore_caching_enabled",
+      "label": "Ukladanie údajov do vyrovnávacej pamäte HPOS",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_remote_logging_enabled",
+      "label": "Vzdialené protokolovanie",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_deferred_transactional_emails_enabled",
+      "label": "Deferred emails",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_customer_review_request_enabled",
+      "label": "Customer review request (beta)",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_email_improvements_enabled",
+      "label": "Vylepšenia e-mailov",
+      "value": "yes",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_blueprint_enabled",
+      "label": "Plán (beta)",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_cost_of_goods_sold_enabled",
+      "label": "Náklady na predaný tovar",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_hpos_fts_index_enabled",
+      "label": "Indexy HPOS Fulltextové vyhľadávanie",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_block_email_editor_enabled",
+      "label": "Blokový editor e-mailov (alfa)",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "wc_feature_woocommerce_additional_variation_images_enabled",
+      "label": "Variation gallery",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_wc_visual_attribute_enabled",
+      "label": "Color swatches for attributes",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_point_of_sale_enabled",
+      "label": "Predajné miesto",
+      "value": "yes",
+      "default": "yes",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_mcp_integration_enabled",
+      "label": "WooCommerce MCP",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_destroy-empty-sessions_enabled",
+      "label": "Clear Customer Sessions When Empty",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_rest_api_caching_enabled",
+      "label": "REST API Caching",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_cart_save_for_later_enabled",
+      "label": "Save for Later in Cart",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_product_wishlist_enabled",
+      "label": "Wishlists",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_feature_product_instance_caching_enabled",
+      "label": "Cache Product Objects",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    }
+  ],
+  "Dane": [
+    {
+      "id": "woocommerce_prices_include_tax",
+      "label": "Ceny zadávané s daňou",
+      "value": "no",
+      "default": "no",
+      "type": "radio"
+    },
+    {
+      "id": "woocommerce_tax_based_on",
+      "label": "Počítať daň na základe",
+      "value": "shipping",
+      "default": "shipping",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_shipping_tax_class",
+      "label": "Trieda dane prepravy",
+      "value": "inherit",
+      "default": "inherit",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_tax_round_at_subtotal",
+      "label": "Zaokrúhľovanie",
+      "value": "no",
+      "default": "no",
+      "type": "checkbox"
+    },
+    {
+      "id": "woocommerce_tax_classes",
+      "label": "Doplnkové daňové triedy",
+      "value": "",
+      "default": "",
+      "type": "textarea"
+    },
+    {
+      "id": "woocommerce_tax_display_shop",
+      "label": "Zobraziť ceny v obchode",
+      "value": "excl",
+      "default": "excl",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_tax_display_cart",
+      "label": "Zobraziť ceny v nákupnom košíku a v pokladni",
+      "value": "excl",
+      "default": "excl",
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_price_display_suffix",
+      "label": "Prípona za zobrazením ceny",
+      "value": "",
+      "default": "",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_tax_total_display",
+      "label": "Zobraziť celkovú sumu daní",
+      "value": "itemized",
+      "default": "itemized",
+      "type": "select"
+    }
+  ],
+  "WC Admin": [
+    {
+      "id": "woocommerce_excluded_report_order_statuses",
+      "label": "Vylúčené stavy objednávok",
+      "value": [
+        "pending",
+        "cancelled",
+        "failed"
+      ],
+      "default": [
+        "pending",
+        "cancelled",
+        "failed"
+      ],
+      "type": "multiselect"
+    },
+    {
+      "id": "woocommerce_actionable_order_statuses",
+      "label": "Stavy objednávok s dostupnou akciou",
+      "value": [
+        "processing",
+        "on-hold"
+      ],
+      "default": [
+        "processing",
+        "on-hold"
+      ],
+      "type": "multiselect"
+    },
+    {
+      "id": "woocommerce_default_date_range",
+      "label": "Predvolený rozsah dátumov",
+      "value": "period=month&compare=previous_year",
+      "default": "period=month&compare=previous_year",
+      "type": "text"
+    },
+    {
+      "id": "woocommerce_date_type",
+      "label": "Typ dátumu",
+      "value": "",
+      "default": null,
+      "type": "select"
+    },
+    {
+      "id": "woocommerce_analytics_scheduled_import",
+      "label": "Updates",
+      "value": "yes",
+      "default": null,
+      "type": "radio"
+    }
+  ],
+  "_payment_gateways": [
+    {
+      "id": "bacs",
+      "title": "Bankový prevod",
+      "enabled": false,
+      "method_title": "Bankový prevod",
+      "description": "Platbu pošlite prevodom na náš bankový účet. Ako variabilný symbol použite číslo"
+    },
+    {
+      "id": "cheque",
+      "title": "Platby šekom",
+      "enabled": false,
+      "method_title": "Platby šekom",
+      "description": "Prosím pošlite váš šek na meno obchodu, ulicu, mesto, štát, PSČ."
+    },
+    {
+      "id": "cod",
+      "title": "Dobierka",
+      "enabled": false,
+      "method_title": "Dobierka",
+      "description": "Platba v hotovosti pri prebratí zásielky."
+    }
+  ],
+  "_shipping_zones": [
+    {
+      "id": 0,
+      "name": "Lokácie, ktoré nie sú pokryté vo vašich ostatných zónach",
+      "order": 0,
+      "locations": [],
+      "methods": []
+    }
+  ],
+  "_shipping_options": [
+    {
+      "id": "woocommerce_enable_shipping_calc",
+      "label": "Kalkulácia",
+      "description": "Povoliť výpočet ceny dopravy na stránke košíka",
+      "type": "checkbox",
+      "default": "yes",
+      "tip": "This feature is not available when using the <a href=\"https://woocommerce.com/document/woocommerce-store-editing/customizing-cart-and-checkout/\">Cart and checkout blocks</a>. Shipping will be calculated at checkout.",
+      "value": "yes",
+      "_links": {
+        "self": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping/woocommerce_enable_shipping_calc",
+            "targetHints": {
+              "allow": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH"
+              ]
+            }
+          }
+        ],
+        "collection": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping"
+          }
+        ]
+      }
+    },
+    {
+      "id": "woocommerce_shipping_cost_requires_address",
+      "label": "",
+      "description": "Nezobrazovať ceny prepravy bez zadania adresy",
+      "type": "checkbox",
+      "default": "no",
+      "value": "no",
+      "_links": {
+        "self": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping/woocommerce_shipping_cost_requires_address",
+            "targetHints": {
+              "allow": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH"
+              ]
+            }
+          }
+        ],
+        "collection": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping"
+          }
+        ]
+      }
+    },
+    {
+      "id": "woocommerce_shipping_hide_rates_when_free",
+      "label": "",
+      "description": "Skryť ceny dopravy, keď je k dispozícii doprava zdarma",
+      "type": "checkbox",
+      "default": "no",
+      "value": "no",
+      "_links": {
+        "self": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping/woocommerce_shipping_hide_rates_when_free",
+            "targetHints": {
+              "allow": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH"
+              ]
+            }
+          }
+        ],
+        "collection": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping"
+          }
+        ]
+      }
+    },
+    {
+      "id": "woocommerce_ship_to_destination",
+      "label": "Doručovacia adresa",
+      "description": "Tu nastavíte ktorá dodacia adresa bude predvolená.",
+      "type": "radio",
+      "default": "billing",
+      "options": {
+        "shipping": "Prednastavené na zákazníkovú dodaciu adresu",
+        "billing": "Prednastavené na zákazníkovú fakturačnú adresu",
+        "billing_only": "Vynútiť odosielanie na fakturačnú adresu"
+      },
+      "tip": "Tu nastavíte ktorá dodacia adresa bude predvolená.",
+      "value": "billing",
+      "_links": {
+        "self": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping/woocommerce_ship_to_destination",
+            "targetHints": {
+              "allow": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH"
+              ]
+            }
+          }
+        ],
+        "collection": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping"
+          }
+        ]
+      }
+    },
+    {
+      "id": "woocommerce_shipping_debug_mode",
+      "label": "Režim ladenia",
+      "description": "Povoliť režim ladenia",
+      "type": "checkbox",
+      "default": "no",
+      "tip": "Povoliť Režim ladenia dopravy pre zobrazenie príslušných zón dopravy a vypnutie medzipamäte pre doručovacie sadzby.",
+      "value": "no",
+      "_links": {
+        "self": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping/woocommerce_shipping_debug_mode",
+            "targetHints": {
+              "allow": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH"
+              ]
+            }
+          }
+        ],
+        "collection": [
+          {
+            "href": "https://cms.growmedica.cz/wp-json/wc/v3/settings/shipping"
+          }
+        ]
+      }
+    }
+  ],
+  "_wc_admin_key_options": {
+    "woocommerce_coming_soon": "no",
+    "woocommerce_store_pages_only": "no",
+    "woocommerce_private_link": "no",
+    "woocommerce_allowed_countries": "all",
+    "woocommerce_ship_to_countries": "",
+    "woocommerce_default_country": "SK",
+    "woocommerce_currency": "EUR",
+    "woocommerce_calc_taxes": "no",
+    "woocommerce_prices_include_tax": "no",
+    "woocommerce_email_from_address": "info@growmedica.sk",
+    "woocommerce_email_from_name": false
+  }
+}

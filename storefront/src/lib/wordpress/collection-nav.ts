@@ -18,6 +18,7 @@ import type {
 import { getWooCategories } from './categories'
 import { getWooProducts } from './products'
 import { isWooMockMode, getMockWooCategories, getMockWooProducts } from './mock'
+import { getSeoTaxonomyFeaturedProducts, getSeoTaxonomyNavItems } from '@/lib/seo-taxonomy'
 
 export type { NavCollectionItem, CollectionView, CollectionListOptions }
 
@@ -75,6 +76,7 @@ async function fetchCategoryCounts(): Promise<Map<string, number>> {
 }
 
 export async function getWooNavCollectionItems(): Promise<NavCollectionItem[]> {
+  if (!isWooMockMode()) return getSeoTaxonomyNavItems()
   const counts = await fetchCategoryCounts()
 
   const items: NavCollectionItem[] = []
@@ -147,6 +149,9 @@ export async function getWooCategoryFeaturedProducts(
   handle: string,
   count = 3,
 ): Promise<ProductListItem[]> {
+  if (!isWooMockMode() && handle.includes('/')) {
+    return getSeoTaxonomyFeaturedProducts(handle, count)
+  }
   const slug = normalizeCategorySlug(handle) as MainCategory | null
   if (!slug || slug === 'ostatne') return []
 

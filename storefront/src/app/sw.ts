@@ -22,6 +22,10 @@ const filteredDefaultCache = defaultCache.filter((entry) => {
   return !cacheName || !OVERRIDDEN_CACHE_NAMES.has(cacheName)
 })
 
+function isDashboardPath(pathname: string): boolean {
+  return pathname === '/dashboard' || pathname.startsWith('/dashboard/')
+}
+
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
@@ -32,7 +36,13 @@ const serwist = new Serwist({
   },
   runtimeCaching: [
     {
-      matcher: ({ request, sameOrigin }) => sameOrigin && request.mode === 'navigate',
+      matcher: ({ url }) =>
+        url.pathname.startsWith('/api/dashboard') || isDashboardPath(url.pathname),
+      handler: new NetworkOnly(),
+    },
+    {
+      matcher: ({ request, sameOrigin, url }) =>
+        sameOrigin && request.mode === 'navigate' && !isDashboardPath(url.pathname),
       handler: new NetworkFirst({
         cacheName: PAGES_CACHE_NAME.html,
         networkTimeoutSeconds: 5,
@@ -60,13 +70,15 @@ const serwist = new Serwist({
       {
         url: '/offline.html',
         matcher({ request }) {
-          return request.mode === 'navigate'
+          const pathname = new URL(request.url).pathname
+          return request.mode === 'navigate' && !isDashboardPath(pathname)
         },
       },
       {
         url: '/offline',
         matcher({ request }) {
-          return request.mode === 'navigate'
+          const pathname = new URL(request.url).pathname
+          return request.mode === 'navigate' && !isDashboardPath(pathname)
         },
       },
     ],
@@ -74,6 +86,10 @@ const serwist = new Serwist({
 })
 
 serwist.setCatchHandler(async ({ request }) => {
+  const pathname = new URL(request.url).pathname
+  if (isDashboardPath(pathname) || pathname.startsWith('/api/dashboard')) {
+    return fetch(request)
+  }
   if (request.mode === 'navigate') {
     return (
       (await serwist.matchPrecache('/offline.html')) ??

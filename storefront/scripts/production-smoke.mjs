@@ -41,7 +41,12 @@ async function main() {
   console.log(`Preview URL: ${previewUrl}`)
   console.log(`CMS_PROVIDER: ${cmsProvider}`)
 
-  if (cmsProvider === 'shopify' && !shopifyMock) {
+  const isRemotePreview = /^https?:\/\/(www\.)?growmedica\.cz/i.test(previewUrl)
+
+  // Live production: only hit public www endpoints (no local :8080 Woo curl).
+  if (isRemotePreview) {
+    console.log('→ Remote production smoke (skip local Woo/Shopify curl)')
+  } else if (cmsProvider === 'shopify' && !shopifyMock) {
     const shopify = spawnSync('node', ['scripts/shopify-smoke-test.mjs'], {
       cwd: root,
       stdio: 'inherit',
@@ -65,7 +70,7 @@ async function main() {
     console.log('→ Skipping WooCommerce curl (WOO_MOCK_MODE or non-WP provider)')
   }
 
-  const endpoints = ['/api/products', '/kolekcie', '/produkty']
+  const endpoints = ['/api/products', '/kolekcie', '/produkty', '/kontakt']
   for (const endpoint of endpoints) {
     const url = `${previewUrl}${endpoint}`
     console.log(`→ GET ${url}`)
@@ -75,6 +80,20 @@ async function main() {
       process.exit(1)
     }
     console.log(`✅ ${endpoint} HTTP ${res.status}`)
+  }
+
+  // Catalog SoT check on production
+  if (isRemotePreview) {
+    const productsUrl = `${previewUrl}/api/products?limit=1`
+    console.log(`→ catalog probe ${productsUrl}`)
+    const res = await fetch(productsUrl, { redirect: 'follow' })
+    const json = await res.json()
+    const id = json?.products?.[0]?.id ?? ''
+    if (!String(id).includes('woocommerce') && !String(id).includes('shopify')) {
+      console.error('❌ Unexpected product id shape:', id)
+      process.exit(1)
+    }
+    console.log('✅ catalog product id:', String(id).slice(0, 48))
   }
 
   const revalidateSecret =
@@ -93,10 +112,18 @@ async function main() {
     console.log(`→ POST ${revalidateUrl.replace(revalidateSecret, '<secret>')}`)
     const rev = await fetch(revalidateUrl, { method: 'POST' })
     if (!rev.ok) {
-      console.error(`❌ Revalidate returned HTTP ${rev.status}`)
-      process.exit(1)
+      // Local env secret often differs from Vercel production secret — warn only on remote.
+      if (isRemotePreview && rev.status === 401) {
+        console.warn(
+          `⚠️ Revalidate HTTP 401 (local WORDPRESS_REVALIDATION_SECRET ≠ Vercel). Public endpoints OK.`,
+        )
+      } else {
+        console.error(`❌ Revalidate returned HTTP ${rev.status}`)
+        process.exit(1)
+      }
+    } else {
+      console.log('✅ ISR revalidate endpoint reachable')
     }
-    console.log('✅ ISR revalidate endpoint reachable')
   }
 
   console.log('\n✅ Production smoke passed')

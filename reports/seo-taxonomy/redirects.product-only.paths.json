@@ -1,0 +1,3259 @@
+{
+  "phase": "product-only-v1",
+  "count": 463,
+  "skipped": 1,
+  "skippedBreakdown": {
+    "hold": 1
+  },
+  "note": "Path-only. Destination uses storefront /produkty/{handle}, not /sk/produkty/. Category redirects deferred.",
+  "redirects": [
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-bio-coriolus-100-g-vitalne-huby-v-prasku/749",
+      "destination": "/produkty/mycomedica-bio-coriolus-100-g",
+      "permanent": true,
+      "objectId": "749",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-bio-polyporus-100-g-vitalne-huby-v-prasku/750",
+      "destination": "/produkty/mycomedica-bio-polyporus-100-g",
+      "permanent": true,
+      "objectId": "750",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/balicky-zdravia/produkt/mycomedica-reishi-pro-a-hericium-pro-pack-4ks/744",
+      "destination": "/produkty/mycomedica-reishi-pro-a-hericium-pro",
+      "permanent": true,
+      "objectId": "744",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-nordic-pure-omega-ceto3-tekuta-forma-250-ml/742",
+      "destination": "/produkty/calivita-nordic-pure-omega-ceto3",
+      "permanent": true,
+      "objectId": "742",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-organic-noni-2-x-946-ml-organicka-stava-noni/739",
+      "destination": "/produkty/calivita-organic-noni-2-x-946-ml",
+      "permanent": true,
+      "objectId": "739",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-2x-collagen-lemmon-7200-mg-s-darcekom-vitamin-c/734",
+      "destination": "/produkty/zeen-2x-collagen-lemmon-7200-mg-s-darcekom-vitamin-c",
+      "permanent": true,
+      "objectId": "734",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-2x-collagen-pure-6000-mg-30-dennych-davok-s-darcekom-viaminom-c/736",
+      "destination": "/produkty/zeen-2x-collagen-pure-6000-mg-30-dennych-davokcs-darekom-viamnom-c",
+      "permanent": true,
+      "objectId": "736",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-c-pure-liquid-c-pls-forte-240-ml/733",
+      "destination": "/produkty/calivita-vitamin-c-pure-liquid-c-forte",
+      "permanent": true,
+      "objectId": "733",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-nocny-krem-skin-essence-night-45-ml/727",
+      "destination": "/produkty/energy-nocny-krm-skin-essence-night",
+      "permanent": true,
+      "objectId": "727",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-pletove-serum-rejuve-serum-15-ml/728",
+      "destination": "/produkty/energy-pletove-srum-rejuve-serum",
+      "permanent": true,
+      "objectId": "728",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-pletove-serum-visage-serum-15-ml/730",
+      "destination": "/produkty/energy-pletove-srum-visage-serum",
+      "permanent": true,
+      "objectId": "730",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-pletova-voda-visage-water-140-ml/731",
+      "destination": "/produkty/energy-pletova-voda-visage-water",
+      "permanent": true,
+      "objectId": "731",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-pletova-voda-balance-water-140-ml/732",
+      "destination": "/produkty/energy-pletova-voda-balance-water",
+      "permanent": true,
+      "objectId": "732",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-detox-pre-pecen-a-cievy-60-kapsul/723",
+      "destination": "/produkty/zeen-detox-pre-pecen-a-cievy",
+      "permanent": true,
+      "objectId": "723",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-imunita-trio-60-kapsul/724",
+      "destination": "/produkty/zeen-imunita-trio",
+      "permanent": true,
+      "objectId": "724",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-spanok-60-kapsul/725",
+      "destination": "/produkty/zeen-spanok",
+      "permanent": true,
+      "objectId": "725",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-denny-krem-skin-essence-day-45-ml/726",
+      "destination": "/produkty/energy-denny-krem-skin-essence-day",
+      "permanent": true,
+      "objectId": "726",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycoflex-90-rastlinnych-kapsul/716",
+      "destination": "/produkty/mycomedica-mycoflex-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "716",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycosomat-90-rastlinnych-kapsul/717",
+      "destination": "/produkty/mycomedica-mycosomat-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "717",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycoprosten-90-rastlinnych-kapsul/718",
+      "destination": "/produkty/mycomedica-mycoprosten-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "718",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycodetox-120-rastlinnych-kapsul/719",
+      "destination": "/produkty/mycomedica-mycodetox-120-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "719",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycosleep-90-g-prasku-30-davok/720",
+      "destination": "/produkty/mycomedica-mycosleep-90-g-prasku-30-davok",
+      "permanent": true,
+      "objectId": "720",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycogastro-90-g-prasku-30-davok/721",
+      "destination": "/produkty/mycomedica-mycogastro-90-g-prasku-30-davok",
+      "permanent": true,
+      "objectId": "721",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycomeno-90-rastlinnych-kapsul/722",
+      "destination": "/produkty/mycomedica-mycomeno-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "722",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/prirodne-pripravky/produkt/mycomedica-auricularia-90-rastlinnych-kapsul/712",
+      "destination": "/produkty/mycomedica-auricularia-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "712",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/prirodne-pripravky/produkt/mycomedica-hliva-90-rastlinnych-kapsul/713",
+      "destination": "/produkty/mycomedica-hliva-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "713",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-enoki-90-rastlinnych-kapsul/714",
+      "destination": "/produkty/mycomedica-enoki-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "714",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-coprinus-90-rastlinnych-kapsul/715",
+      "destination": "/produkty/mycomedica-coprinus-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "715",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycobalance-90-rastlinnych-kapsul/711",
+      "destination": "/produkty/mycomedica-mycobalance-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "711",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-agarikon-90-rastlinnych-kapsul/709",
+      "destination": "/produkty/mycomedica-agarikon-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "709",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-curcumin-120-rastlinnych-kapsul/710",
+      "destination": "/produkty/mycomedica-curcumin-120-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "710",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-agarikon-pro-90-rastlinnych-kapsul/705",
+      "destination": "/produkty/mycomedica-agarikon-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "705",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-enoki-pro-90-rastlinnych-kapsul/706",
+      "destination": "/produkty/mycomedica-enoki-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "706",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-coprinus-pro-90-rastlinnych-kapsul/707",
+      "destination": "/produkty/mycomedica-coprinus-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "707",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-cordyceps-50-25-90-rastlinnych-kapsul/708",
+      "destination": "/produkty/mycomedica-cordyceps-50-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "708",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-mydlo-cytosan-100-g/704",
+      "destination": "/produkty/energy-mydlo-cytosan",
+      "permanent": true,
+      "objectId": "704",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/starostlivost-o-zuby/produkt/energy-zubna-pasta-diamond-100-ml/701",
+      "destination": "/produkty/energy-zubna-pasta-diamond",
+      "permanent": true,
+      "objectId": "701",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/starostlivost-o-zuby/produkt/energy-zubna-pasta-silix-100-ml/703",
+      "destination": "/produkty/energy-zubna-pasta-silix",
+      "permanent": true,
+      "objectId": "703",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/starostlivost-o-zuby/produkt/energy-zubna-pasta-balsamio-100-ml/702",
+      "destination": "/produkty/energy-zubna-pasta-balsamio",
+      "permanent": true,
+      "objectId": "702",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/calivita-gelovy-krem-organiccare-elixir-30-ml/691",
+      "destination": "/produkty/calivita-gelovy-krm-organiccare-elixir",
+      "permanent": true,
+      "objectId": "691",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/starostlivost-o-zuby/produkt/calivita-zubna-pasta-organicare-fresh-lemon-herbal-toothpaste-75-ml/692",
+      "destination": "/produkty/calivita-zubna-pasta-organicare-fresh-lemon-herbal-toothpaste",
+      "permanent": true,
+      "objectId": "692",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/vlasova-kozmentika/produkt/calivita-kondicioner-organicare-hair-conditioner-200-ml/693",
+      "destination": "/produkty/calivita-kondicioner-organicare-hair-conditioner",
+      "permanent": true,
+      "objectId": "693",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/calivita-balzam-organicare-rescue-gel-60-ml/694",
+      "destination": "/produkty/calivita-balzam-organicare-rescue-gel",
+      "permanent": true,
+      "objectId": "694",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/vlasova-kozmentika/produkt/calivita-sampon-organicare-shampoo-200-ml/695",
+      "destination": "/produkty/calivita-sampon-organicare-shampoo",
+      "permanent": true,
+      "objectId": "695",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/vlasova-kozmentika/produkt/calivita-sampon-silk-and-shine-shampoo-250-ml/696",
+      "destination": "/produkty/calivita-sampon-silk-shine-shampoo",
+      "permanent": true,
+      "objectId": "696",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/starostlivost-o-zuby/produkt/calivita-zubna-kefka-organicare-modra/697",
+      "destination": "/produkty/calivita-zubna-kefka-organicare-modra",
+      "permanent": true,
+      "objectId": "697",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/starostlivost-o-zuby/produkt/calivita-zubna-kefka-organicare-ruzova/698",
+      "destination": "/produkty/calivita-zubna-kefka-organicare-ruzova",
+      "permanent": true,
+      "objectId": "698",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/starostlivost-o-zuby/produkt/calivita-zubna-kefka-organicare-zelena/699",
+      "destination": "/produkty/calivita-zubna-kefka-organicare-zelena",
+      "permanent": true,
+      "objectId": "699",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/starostlivost-o-zuby/produkt/calivita-zubna-kefka-organicare-zlta/700",
+      "destination": "/produkty/calivita-zubna-kefka-organicare-zlta",
+      "permanent": true,
+      "objectId": "700",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/detoxikacne-naplaste-calivita-prirodna-ocista-tela-12-ks/689",
+      "destination": "/produkty/detoxikacne-nplaste-calivita-prirodna-oista-tela",
+      "permanent": true,
+      "objectId": "689",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-purebiom-pls-synbioticka-zmes-probiotik-a-prebiotik-pre-zdrave-travenie/690",
+      "destination": "/produkty/calivita-purebiom-synbioticka-zmes-probiotik-a-prebiotik-pre-zdrave-travenie",
+      "permanent": true,
+      "objectId": "690",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-collagen-pure-6000-mg-30-dennych-davok/682",
+      "destination": "/produkty/zeen-collagen-pure-6000-mg-30-dennych-davok",
+      "permanent": true,
+      "objectId": "682",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-beauty-kolagen-premium-249-g/683",
+      "destination": "/produkty/zeen-beauty-kolagen-premium",
+      "permanent": true,
+      "objectId": "683",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-klbovy-kolagen-premium-230g/684",
+      "destination": "/produkty/zeen-klbovy-kolagn-premium",
+      "permanent": true,
+      "objectId": "684",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/zeen-collagen-lemon-7200mg/677",
+      "destination": "/produkty/zeen-collagen-lemon-7200mg",
+      "permanent": true,
+      "objectId": "677",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/ostatne-doplnky-vyzivy/produkt/zeen-odvodnenie-zeny-60-kapsul/678",
+      "destination": "/produkty/zeen-odvodnenie-zeny",
+      "permanent": true,
+      "objectId": "678",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/zeen-keratin-60-kapsul/679",
+      "destination": "/produkty/zeen-keratin",
+      "permanent": true,
+      "objectId": "679",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/produkt/zeen-kyselina-hyaluronova-60-veganskych-kapsul/681",
+      "destination": "/produkty/zeen-kyselina-hyaluronova-60-veganskych-kapsul",
+      "permanent": true,
+      "objectId": "681",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/calivita-organicky-deodorant-organicare-deo-roll-on-50-ml/675",
+      "destination": "/produkty/calivita-organicky-deodorant-organicare-deo-roll",
+      "permanent": true,
+      "objectId": "675",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-ocusan-100-ml/673",
+      "destination": "/produkty/energy-ocusan",
+      "permanent": true,
+      "objectId": "673",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/calivita-anti-ageing-cream-organicare-50-ml/669",
+      "destination": "/produkty/calivita-anti",
+      "permanent": true,
+      "objectId": "669",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/calivita-sprchovy-gel-organicare-bath-and-shower-250-ml/670",
+      "destination": "/produkty/calivita-sprchovy-gel-organicare-bath-shower",
+      "permanent": true,
+      "objectId": "670",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/calivita-telove-mlieko-organicare-body-lotion-250-ml/671",
+      "destination": "/produkty/calivita-telove-mlieko-organicare-body-lotion",
+      "permanent": true,
+      "objectId": "671",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/calivita-telovy-peeling-organicare-body-scrub-200-ml/672",
+      "destination": "/produkty/calivita-telovy-peeling-organicare-body-scrub",
+      "permanent": true,
+      "objectId": "672",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/calivita-aquabelle-regenerating-cream-50-ml/665",
+      "destination": "/produkty/calivita-aquabelle-regenerating-cream",
+      "permanent": true,
+      "objectId": "665",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/produkt/calivita-everymoment-regeneracny-krem-135-g/666",
+      "destination": "/produkty/calivita-everymoment-regeneracny-krem",
+      "permanent": true,
+      "objectId": "666",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/calivita-hand-and-body-lotion-1000-ml/667",
+      "destination": "/produkty/calivita-hand-body-lotion",
+      "permanent": true,
+      "objectId": "667",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/calivita-nourishing-night-cream-50-ml/668",
+      "destination": "/produkty/calivita-nourishing-night-cream",
+      "permanent": true,
+      "objectId": "668",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mystress-90-rastlinnych-kapsul/660",
+      "destination": "/produkty/mycomedica-mystress-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "660",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-visage-rejuve-50-ml/645",
+      "destination": "/produkty/energy-visage-rejuve",
+      "permanent": true,
+      "objectId": "645",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-odlicovaci-olej-visage-oil-100-ml/640",
+      "destination": "/produkty/energy-odlicovaci-olej-visage-oil",
+      "permanent": true,
+      "objectId": "640",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/obchod/produkt/energy-water-balance-50ml/641",
+      "destination": "/produkty/energy-water-balance",
+      "permanent": true,
+      "objectId": "641",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-pletovy-olej-argan-oil-100-ml/642",
+      "destination": "/produkty/energy-pletovy-olej-argan-oil",
+      "permanent": true,
+      "objectId": "642",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-pletovy-olej-almond-oil-100-ml/643",
+      "destination": "/produkty/energy-pletovy-olej-almond-oil",
+      "permanent": true,
+      "objectId": "643",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/pletova-kozmetika/produkt/energy-pletova-maska-visage-balance-50-ml/644",
+      "destination": "/produkty/energy-pletova-maska-visage-balance",
+      "permanent": true,
+      "objectId": "644",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/obchod/produkt/energy-cytosan-sampon-200ml/646",
+      "destination": "/produkty/energy-cytosan-sampon",
+      "permanent": true,
+      "objectId": "646",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/vlasova-kozmentika/produkt/energy-sampon-protektin-180-ml/647",
+      "destination": "/produkty/energy-sampon-protektin",
+      "permanent": true,
+      "objectId": "647",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/vlasova-kozmentika/produkt/energy-sampon-artrin-180ml/648",
+      "destination": "/produkty/energy-sampon-artrin",
+      "permanent": true,
+      "objectId": "648",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/vlasova-kozmentika/produkt/energy-sampon-ruticelit-180ml/649",
+      "destination": "/produkty/energy-sampon-ruticelit",
+      "permanent": true,
+      "objectId": "649",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-prirodny-deodorant-protektin-deo-35-g/655",
+      "destination": "/produkty/energy-prirodny-deodorant-protektin-deo",
+      "permanent": true,
+      "objectId": "655",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-telove-mlieko-caralotion-200-ml/653",
+      "destination": "/produkty/energy-telove-mlieko-caralotion",
+      "permanent": true,
+      "objectId": "653",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/obchod/produkt/energy-droserin-balm-10g/654",
+      "destination": "/produkty/energy-droserin-balm",
+      "permanent": true,
+      "objectId": "654",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/vlasova-kozmentika/produkt/energy-balzam-na-vlasy-nutritive-180ml/652",
+      "destination": "/produkty/energy-balzam-na-vlasy-nutritive",
+      "permanent": true,
+      "objectId": "652",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/obchod/produkt/energy-winter-balm-30g/656",
+      "destination": "/produkty/energy-winter-balm",
+      "permanent": true,
+      "objectId": "656",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-dermaton-oil-100-ml/657",
+      "destination": "/produkty/energy-dermaton-oil",
+      "permanent": true,
+      "objectId": "657",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-dermaton-gel-100-ml/658",
+      "destination": "/produkty/energy-dermaton-gel",
+      "permanent": true,
+      "objectId": "658",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/antioxidanty/produkt/calivita-liver-detox-60-kapsul/621",
+      "destination": "/produkty/calivita-liver-detox",
+      "permanent": true,
+      "objectId": "621",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-b-complex-pls-pure-120-vegetarianskych-kapsul/622",
+      "destination": "/produkty/calivita-b-complex-pure-120-vegetarianskych-kapsul",
+      "permanent": true,
+      "objectId": "622",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vapnik-a-horcik-pure-ca-pls-mg-plus-120-kapsul/623",
+      "destination": "/produkty/calivita-vapnik-a-horck-pure-ca-mg-plus",
+      "permanent": true,
+      "objectId": "623",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-b12-pure-energy-90-kapsul/624",
+      "destination": "/produkty/calivita-vitamin-b12-pure-energy",
+      "permanent": true,
+      "objectId": "624",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-nutrivet-90-tabliet/608",
+      "destination": "/produkty/energy-nutrivet",
+      "permanent": true,
+      "objectId": "608",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-vetbalm-60-ml/609",
+      "destination": "/produkty/energy-vetbalm",
+      "permanent": true,
+      "objectId": "609",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-lama-essence-biorytmicka-kasa-420-g/586",
+      "destination": "/produkty/energy-lama-essence-biorytmicka-kasa",
+      "permanent": true,
+      "objectId": "586",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/kolagen-calivita-riseup-pure-338g/526",
+      "destination": "/produkty/kolagen-calivita-riseup-pure",
+      "permanent": true,
+      "objectId": "526",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-maitake-pro-90-rastlinnych-kapsul/407",
+      "destination": "/produkty/mycomedica-maitake-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "407",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-shiitake-pro-90-rastlinnych-kapsul/408",
+      "destination": "/produkty/mycomedica-shiitake-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "408",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-polyporus-pro-90-rastlinnych-kapsul/409",
+      "destination": "/produkty/mycomedica-polyporus-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "409",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-ohnovec-pro-90-rastlinnych-kapsul/410",
+      "destination": "/produkty/mycomedica-ohnovec-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "410",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-pornatka-pro-90-rastlinnych-kapsul/411",
+      "destination": "/produkty/mycomedica-pornatka-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "411",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-auricularia-pro-90-rastlinnych-kapsul/412",
+      "destination": "/produkty/mycomedica-auricularia-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "412",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-agaricus-pro-90-rastlinnych-kapsul/413",
+      "destination": "/produkty/mycomedica-agaricus-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "413",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-tremella-pro-90-rastlinnych-kapsul/414",
+      "destination": "/produkty/mycomedica-tremella-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "414",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-hericium-pro-90-rastlinnych-kapsul/404",
+      "destination": "/produkty/mycomedica-hericium-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "404",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-hliva-pro-90-rastlinnych-kapsul/405",
+      "destination": "/produkty/mycomedica-hliva-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "405",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-chaga-pro-90-rastlinnych-kapsul/406",
+      "destination": "/produkty/mycomedica-chaga-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "406",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/mycomedica-coriolus-pro-90-rastlinnych-kapsul/403",
+      "destination": "/produkty/mycomedica-coriolus-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "403",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-reishi-pro-90-rastlinnych-kapsul/401",
+      "destination": "/produkty/mycomedica-reishi-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "401",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-cordyceps-pro-90-rastlinnych-kapsul/402",
+      "destination": "/produkty/mycomedica-cordyceps-pro-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "402",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/bio-chlorella-1200-tabliet/398",
+      "destination": "/produkty/bio-chlorella",
+      "permanent": true,
+      "objectId": "398",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/mycomedica-bio-mlady-jacmen-200-g/399",
+      "destination": "/produkty/mycomedica-bio-mlady-jacmeh",
+      "permanent": true,
+      "objectId": "399",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-runa-essence-bioritmycke-smoothie-210-g/394",
+      "destination": "/produkty/energy-runa-essence-bioritmycke-smoothie",
+      "permanent": true,
+      "objectId": "394",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-buddha-essence-biorytmicka-kasa-420-g/395",
+      "destination": "/produkty/energy-buddha-essence-biorytmicka-kasa",
+      "permanent": true,
+      "objectId": "395",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-raw-aguaje-120-kapsul/396",
+      "destination": "/produkty/energy-raw-aguaje",
+      "permanent": true,
+      "objectId": "396",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-qprotect-90-tabliet/389",
+      "destination": "/produkty/calivita-qprotect",
+      "permanent": true,
+      "objectId": "389",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-slim-formula-90-tabliet-znizenie-telesnej-hmotnosti/383",
+      "destination": "/produkty/calivita-slim-formula-90-tabliet",
+      "permanent": true,
+      "objectId": "383",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-stress-management-s-vitamin-b-100-tabliet/384",
+      "destination": "/produkty/calivita-stress-management-s-vitamin-b",
+      "permanent": true,
+      "objectId": "384",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-triple-potency-lecithin-100-makkych-kapsul/385",
+      "destination": "/produkty/calivita-triple-potency-lecithin-100-makkyuh-kapsl",
+      "permanent": true,
+      "objectId": "385",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vein-protex-60-tabliet/386",
+      "destination": "/produkty/calivita-vein-protex",
+      "permanent": true,
+      "objectId": "386",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-virago-90-tabliet-komplex-na-posilnenie-imunity/387",
+      "destination": "/produkty/calivita-virago-90-tabliet",
+      "permanent": true,
+      "objectId": "387",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-white-willow-100-kapsul/388",
+      "destination": "/produkty/calivita-white-willow",
+      "permanent": true,
+      "objectId": "388",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravotne-riesenia/priedusky-a-kasel/produkt/calivita-organicky-etericky-olej-citron-10-ml-ochorenia-dychacich-ciest/390",
+      "destination": "/produkty/calivita-organicky-eterick-olej-citron-10-ml",
+      "permanent": true,
+      "objectId": "390",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/hlava/stres-spanok-nervy/produkt/calivita-organicky-etericky-olej-kadidlo-10-ml-meditacia-mentalna-unava/391",
+      "destination": "/produkty/calivita-organicky-eterick-olej-kadidlo-10-ml",
+      "permanent": true,
+      "objectId": "391",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/hlava/psychicka-pohoda/produkt/calivita-organicky-etericky-olej-levandula-10-ml-upokojenie-tela-a-mysle/392",
+      "destination": "/produkty/calivita-organicky-eterick-olej-levandula-10-ml",
+      "permanent": true,
+      "objectId": "392",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-epsom-caps-90-kapsul-stimulacia-pohybu-criev/369",
+      "destination": "/produkty/calivita-epsom-caps-90-kapsul",
+      "permanent": true,
+      "objectId": "369",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/kolagen-calivita-glamup-pure-330g/371",
+      "destination": "/produkty/kolagen-calivita-glamup-pure",
+      "permanent": true,
+      "objectId": "371",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-immunaid-180-kapsul-podpora-imunity/372",
+      "destination": "/produkty/calivita-immunaid-180-kapsul",
+      "permanent": true,
+      "objectId": "372",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-l-lysine-plus-s-vitaminom-c-60-kapsul/373",
+      "destination": "/produkty/calivita-l-lysine-plus-s-vitaminom-c",
+      "permanent": true,
+      "objectId": "373",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-liveraid-100-kapsul-ochrana-pecene/374",
+      "destination": "/produkty/calivita-liveraid-100-kapsul-ochrana-pecene",
+      "permanent": true,
+      "objectId": "374",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-lutein-plus-60-kapsul-komplexna-ochrana-oci/375",
+      "destination": "/produkty/calivita-lutein-plus-60-kapsul",
+      "permanent": true,
+      "objectId": "375",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-mega-qprotect-90-tabliet-antioxidant/376",
+      "destination": "/produkty/calivita-mega-qprotect-90-tabliet-antioxidant",
+      "permanent": true,
+      "objectId": "376",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-melatonin-180-kapsul-prirodzeny-spanok/377",
+      "destination": "/produkty/calivita-melatonin-180-kapsul",
+      "permanent": true,
+      "objectId": "377",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-oxymax-60-ml-kyslikove-kvapky/378",
+      "destination": "/produkty/calivita-oxymax-60-ml",
+      "permanent": true,
+      "objectId": "378",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/telo/detoxikacia/produkt/calivita-purest-essence-60-tabliet-rovnovaha-ph-organizmu/379",
+      "destination": "/produkty/calivita-purest-essence-60-tabliet",
+      "permanent": true,
+      "objectId": "379",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-samburex-240-ml-tekuty-vyzivovy-doplnok/380",
+      "destination": "/produkty/calivita-samburex-240-ml",
+      "permanent": true,
+      "objectId": "380",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-samburex-pack-4-x-240-ml-tekuty-vyzivovy-doplnok/381",
+      "destination": "/produkty/calivita-samburex-pack-4-x-240-ml",
+      "permanent": true,
+      "objectId": "381",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/krasa/kontrola-hmotnosti-chudnutie/produkt/calivita-shake-one-pure-500-g-rastlinny-proteinovy-prasok-na-chudnutie/382",
+      "destination": "/produkty/calivita-shake-one-pure-500-g",
+      "permanent": true,
+      "objectId": "382",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/hlava/stres-spanok-nervy/produkt/calivita-boostup-30-kapsul-podpora-dusevnej-vykonnosti/362",
+      "destination": "/produkty/calivita-boostup-30-kapsul",
+      "permanent": true,
+      "objectId": "362",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-glamup-500-g-megadavky-kolagenoveho-napoja/363",
+      "destination": "/produkty/calivita-glamup-500-g",
+      "permanent": true,
+      "objectId": "363",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-multivitaminy-beauty-formula-60-kapsul/364",
+      "destination": "/produkty/calivita-multivitaminy-beauty-formula",
+      "permanent": true,
+      "objectId": "364",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-vcelia-materska-kasicka-bee-power-50-kapsul/365",
+      "destination": "/produkty/calivita-vcelia-materska-kaaika-bee-power",
+      "permanent": true,
+      "objectId": "365",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-burn-one-300-g-podpora-metabolizmu/366",
+      "destination": "/produkty/calivita-burn-one-300-g",
+      "permanent": true,
+      "objectId": "366",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-chromium-max-500-100-kapsul-reguluje-chut-do-jedla/367",
+      "destination": "/produkty/calivita-chromium-max-500-100-kapsul",
+      "permanent": true,
+      "objectId": "367",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-energy-and-memory-90-tabliet-zvysuje-energiu/368",
+      "destination": "/produkty/calivita-energy-memory-90-tabliet",
+      "permanent": true,
+      "objectId": "368",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-nordic-pure-omega-3-liquid-250-ml-tekuta-forma-omega-3/361",
+      "destination": "/produkty/calivita-nordic-pure-omega-3-liquid-250-ml",
+      "permanent": true,
+      "objectId": "361",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-c-500-100-tabliet/356",
+      "destination": "/produkty/calivita-vitamin-c-500",
+      "permanent": true,
+      "objectId": "356",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-c-plus-100-tabliet/357",
+      "destination": "/produkty/calivita-vitamin-c-plus",
+      "permanent": true,
+      "objectId": "357",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-vitamin-c-300-plus-120-tabliet/355",
+      "destination": "/produkty/calivita-vitamin-c-300-plus",
+      "permanent": true,
+      "objectId": "355",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-c-1000-pls-30-tabliet/358",
+      "destination": "/produkty/calivita-vitamin-c-1000-mg-plus",
+      "permanent": true,
+      "objectId": "358",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-vitamin-d-kvapky-d-drops-4x30ml-family-pack/359",
+      "destination": "/produkty/calivita-vitamin-d-kvapky-d-drops-4x30ml-family-pack",
+      "permanent": true,
+      "objectId": "359",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-audiron-30-ml/354",
+      "destination": "/produkty/energy-audiron",
+      "permanent": true,
+      "objectId": "354",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-tick-a-tack-50-ml/353",
+      "destination": "/produkty/energy-tick",
+      "permanent": true,
+      "objectId": "353",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-three-kings-50-ml/344",
+      "destination": "/produkty/energy-three-kings",
+      "permanent": true,
+      "objectId": "344",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-spiron-air-10-ml/345",
+      "destination": "/produkty/energy-spiron-air",
+      "permanent": true,
+      "objectId": "345",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-spiron-50-ml/346",
+      "destination": "/produkty/energy-spiron",
+      "permanent": true,
+      "objectId": "346",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-zen-spray-50-ml/347",
+      "destination": "/produkty/energy-zen-spray",
+      "permanent": true,
+      "objectId": "347",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-lavender-10-ml/348",
+      "destination": "/produkty/energy-lavender",
+      "permanent": true,
+      "objectId": "348",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-geranium-10-ml/349",
+      "destination": "/produkty/energy-geranium",
+      "permanent": true,
+      "objectId": "349",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-ylang-ylang-10-ml/350",
+      "destination": "/produkty/energy-ylang-ylang",
+      "permanent": true,
+      "objectId": "350",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-mint-10-ml/351",
+      "destination": "/produkty/energy-mint",
+      "permanent": true,
+      "objectId": "351",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-sweet-orange-10-ml/352",
+      "destination": "/produkty/energy-sweet-orange",
+      "permanent": true,
+      "objectId": "352",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/regeneracne-doplnky/produkt/alpa-krem-gastan-40-g-tazke-nohy-krcove-zily/339",
+      "destination": "/produkty/alpa-krem-gastan-40-g",
+      "permanent": true,
+      "objectId": "339",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-krem-lesana-40-g-bolest-hlavy-nachladnutie/340",
+      "destination": "/produkty/alpa-krem-lesana-40-g",
+      "permanent": true,
+      "objectId": "340",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-herbal-krem-hrejivy-250-ml-masaz-pred-fyzickou-aktivitou/341",
+      "destination": "/produkty/alpa-herbal-krem-hrejivy-250-ml",
+      "permanent": true,
+      "objectId": "341",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-arthrosan-mast-30-ml-prechladnutie-bolesti-chrbtice-svalov/342",
+      "destination": "/produkty/alpa-arthrosan-mast-30-ml",
+      "permanent": true,
+      "objectId": "342",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/regeneracne-doplnky/produkt/alpa-masazny-olej-zakladny-500-ml-kazdodenna-masaz/343",
+      "destination": "/produkty/alpa-masazay-olej-zkladny-500-ml",
+      "permanent": true,
+      "objectId": "343",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-kremy/produkt/aviril-detsky-krem/327",
+      "destination": "/produkty/aviril-detsky-krem",
+      "permanent": true,
+      "objectId": "327",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-oleje/produkt/aviril-detsky-olej-s-azulenom/328",
+      "destination": "/produkty/aviril-detsky-olej-s-azulenom",
+      "permanent": true,
+      "objectId": "328",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-zasypy/produkt/aviril-detsky-zasyp-s-azulenom/329",
+      "destination": "/produkty/aviril-detsky-zasyp-s-azulenom",
+      "permanent": true,
+      "objectId": "329",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-zasypy/produkt/aviril-detsky-zasyp-s-azulenom-vrecko/330",
+      "destination": "/produkty/aviril-detsky-zasyp-s-azulnom-vrecko",
+      "permanent": true,
+      "objectId": "330",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-oleje/produkt/sypsi-detsky-olej/331",
+      "destination": "/produkty/sypsi-detsky-olej",
+      "permanent": true,
+      "objectId": "331",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/pedik-krem-na-nohy-so-vcelim-voskom-100ml/332",
+      "destination": "/produkty/pedik-krem-na-nohy-so-vcelm-voskom",
+      "permanent": true,
+      "objectId": "332",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/pedik-balzam-na-stvrdnutu-pokozku/333",
+      "destination": "/produkty/pedik-balzam-na-stvrdnutu-pokozku",
+      "permanent": true,
+      "objectId": "333",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/pedik-deo-zasyp-na-nohy-100g/334",
+      "destination": "/produkty/pedik-deo-zasyp-na-nohy",
+      "permanent": true,
+      "objectId": "334",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/pedik-zasyp-na-nohy-s-antimikrobialnou-prisadou-100g/335",
+      "destination": "/produkty/pedik-zasyp-na-nohy-s-antimikrobialnou-prisadou",
+      "permanent": true,
+      "objectId": "335",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/starostlivost-o-nohy/produkt/sulfothion-zasyp-so-sirou-100g/336",
+      "destination": "/produkty/sulfothion-zasyp-so-sirou",
+      "permanent": true,
+      "objectId": "336",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/pedik-deo-sprej-do-obuvi-150ml/337",
+      "destination": "/produkty/pedik-deo-sprej-do-obuvi",
+      "permanent": true,
+      "objectId": "337",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/pedik-antiperspirant-sprej-na-nohy-90ml/338",
+      "destination": "/produkty/pedik-antiperspirant-sprej-na-nohy",
+      "permanent": true,
+      "objectId": "338",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-sportstar-masazny-roztok-chladivy-250-ml-masaz/311",
+      "destination": "/produkty/alpa-sportstar-masazny-roztok-chladivy-250-ml",
+      "permanent": true,
+      "objectId": "311",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-sport-gel-210-ml-bolesti-klbov-a-svalov-protizapalovy/312",
+      "destination": "/produkty/alpa-sport-gel-210-ml",
+      "permanent": true,
+      "objectId": "312",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-masazny-olej-sportovy-500-ml-masaz-po-sportovom-vykone/313",
+      "destination": "/produkty/alpa-masazny-oley-portov-500-ml",
+      "permanent": true,
+      "objectId": "313",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-emulzia-zakladna-210-ml-masaz-bolesti-klbov-a-svalov/314",
+      "destination": "/produkty/alpa-emulzia-zakladna-210-ml-masaz-bolesti-lbov-a-svalov",
+      "permanent": true,
+      "objectId": "314",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-emulzia-zakladna-1000-ml-masaz-bolesti-klbov-a-svalov/315",
+      "destination": "/produkty/alpa-emulzia-zakladna-1000-ml-masaz-bolestilkbov-a-svalov",
+      "permanent": true,
+      "objectId": "315",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/obchod/produkt/alpa-masazny-olej-zakladny-500ml/316",
+      "destination": "/produkty/alpa-masazay-olej-zakladny",
+      "permanent": true,
+      "objectId": "316",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-sampony/produkt/batole-detsky-sampon-s-olivovym-olejom/317",
+      "destination": "/produkty/batole-detsky-saypn-s-olivovym-olejom",
+      "permanent": true,
+      "objectId": "317",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-zasypy/produkt/batole-detsky-zasyp-s-extraktom-z-listu-olivovnika/318",
+      "destination": "/produkty/batole-detsky-zasyp-s-extraktom-z-listu-olivovnika",
+      "permanent": true,
+      "objectId": "318",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-sprchove-gely/produkt/batole-detsky-jemny-sprchovaci-gel-s-olivovym-olejom/319",
+      "destination": "/produkty/batole-detsky-jemny-sprchovac-gel-s-olivovym-olejom",
+      "permanent": true,
+      "objectId": "319",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-kremy/produkt/batole-detsky-krem-proti-chladu-s-olivovym-olejom/320",
+      "destination": "/produkty/batole-detsky-krem-proti-chladu-s-olivovym-olejom",
+      "permanent": true,
+      "objectId": "320",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-kremy/produkt/batole-detsky-krem-na-zadocek-s-olivovym-olejom/321",
+      "destination": "/produkty/batole-detsky-krem-na-zadoek-s-olivovym-olejom",
+      "permanent": true,
+      "objectId": "321",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-sprchove-gely/produkt/batole-detske-vlhcene-toaletne-obrusky-s-aloe-vera/322",
+      "destination": "/produkty/batole-detske-vlhcen-toaletne-obrusky-s-eloe-vera",
+      "permanent": true,
+      "objectId": "322",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-kremy/produkt/batole-detsky-krem-s-olivovym-olejom/323",
+      "destination": "/produkty/batole-detsky-krem-s-olivovm-olejom",
+      "permanent": true,
+      "objectId": "323",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-oleje/produkt/batole-detsky-olej-s-olivovym-olejom/324",
+      "destination": "/produkty/batole-detsky-olej-s-olivovym-olejom",
+      "permanent": true,
+      "objectId": "324",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-sprchove-gely/produkt/batole-detsky-kupel-s-olivovym-olejom/325",
+      "destination": "/produkty/batole-detsky-kupe-s-olivovm-olejom",
+      "permanent": true,
+      "objectId": "325",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/detska-kozmetika/detske-zasypy/produkt/batole-detsky-zasyp-s-extraktom-z-listu-olivovnika-vrecko/326",
+      "destination": "/produkty/batole-detsky-zasyp-s-extraktom-z-listu-olivovnika-vrecko",
+      "permanent": true,
+      "objectId": "326",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-herbal-gel-s-kosodrevinou-250-ml-bolesti-chrbtice-sije/299",
+      "destination": "/produkty/alpa-herbal-gel-s-kosodrevinou-250-ml",
+      "permanent": true,
+      "objectId": "299",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-herbal-krem-s-gastanom-250-ml-tazke-a-studene-nohy-fialove-ruky/302",
+      "destination": "/produkty/alpa-herbal-krem-s-gastanom-250-ml",
+      "permanent": true,
+      "objectId": "302",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/obchod/produkt/alpa-herbal-hrejivy-masazny-krem-250-ml/303",
+      "destination": "/produkty/alpa-herbal-hrejivy-masany-krm",
+      "permanent": true,
+      "objectId": "303",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-herbal-gel-250-ml-natiahnute-svaly-zvysenie-krvneho-obehu/301",
+      "destination": "/produkty/alpa-herbal-gel-250-ml",
+      "permanent": true,
+      "objectId": "301",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravotne-riesenia/priedusky-a-kasel/produkt/alpa-herbal-arthrosan-mast-30-ml/304",
+      "destination": "/produkty/alpa-herbal-arthrosan-mast",
+      "permanent": true,
+      "objectId": "304",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-emulzia-hrejiva-210-ml-zvysena-namaha-stuhnute-svalstvo/305",
+      "destination": "/produkty/alpa-emulzia-hrejiva-210-ml-zvyaena-namaha-stuheut-svalstvo",
+      "permanent": true,
+      "objectId": "305",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-sportstar-masazny-roztok-hrejivy-250-ml-masaz/306",
+      "destination": "/produkty/alpa-sportstar-masazny-roztok-hrejivy-250-ml",
+      "permanent": true,
+      "objectId": "306",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-masazny-olej-hrejivy-500-ml-masaz-pred-sportovym-vykonom/307",
+      "destination": "/produkty/alpa-masazny-olyj-hrejiv-500-ml",
+      "permanent": true,
+      "objectId": "307",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-emulzia-hrejiva-1000-ml-zvysena-namaha-stuhnute-svalstvo/308",
+      "destination": "/produkty/alpa-emulzia-hrejiva-1000-ml-zvysena-amaha-stuhnute-svalstvo",
+      "permanent": true,
+      "objectId": "308",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-emulzia-chladiva-1000-ml-prekrvenie-pokozky-regeneracia/309",
+      "destination": "/produkty/alpa-emulzia-chladiva-1000-ml-prekrvenie-pokozky-regeneracia",
+      "permanent": true,
+      "objectId": "309",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-emulzia-chladiva-250-ml-prekvrvenie-pokozky-regeneraccia/310",
+      "destination": "/produkty/alpa-emulzia-chladiva-250-ml-prekvrvenie-pokozky-regeneraccia",
+      "permanent": true,
+      "objectId": "310",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-emulzia-arnika-100-ml-krcove-zily-pomliazdeniny-klby-svaly/298",
+      "destination": "/produkty/alpa-emulzia-arnika-100-ml-krcove-zily-pomlizdenily-kby-svaly",
+      "permanent": true,
+      "objectId": "298",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-konopny-balzam-hrejivy-250-ml/297",
+      "destination": "/produkty/alpa-konopny-balzam-hrejivy",
+      "permanent": true,
+      "objectId": "297",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/regeneracne-doplnky/produkt/alpa-francovka-lesana-liehovy-bylinny-roztok-1l/296",
+      "destination": "/produkty/alpa-francovka-lesana-liehovy-bylinny-roztok",
+      "permanent": true,
+      "objectId": "296",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-hemato-krem-75-ml-revitalizacia-pomliazdenin-a-podliatin/292",
+      "destination": "/produkty/alpa-hemato-krem-75-ml",
+      "permanent": true,
+      "objectId": "292",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-krem-s-emu-olejom-150-ml-reumaticke-a-artriticke-bolesti-klbov/293",
+      "destination": "/produkty/alpa-krem-s-emu-olejom-150-ml",
+      "permanent": true,
+      "objectId": "293",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-konopny-balzam-150-ml-bolesti-chrbta-ekzem-psoriaza/294",
+      "destination": "/produkty/alpa-konopny-balzam-150-ml",
+      "permanent": true,
+      "objectId": "294",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-konopny-balzam-250-ml-bolesti-chrbta-ekzem-psoriaza/295",
+      "destination": "/produkty/alpa-konopny-balzam-250-ml",
+      "permanent": true,
+      "objectId": "295",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/epivet-sampon-citliva-pokozka-repelent-protizapalovo/287",
+      "destination": "/produkty/epivet-sampon",
+      "permanent": true,
+      "objectId": "287",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-tickvet-10-ml/288",
+      "destination": "/produkty/energy-tickvet",
+      "permanent": true,
+      "objectId": "288",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-cytovet-90-tabliet/289",
+      "destination": "/produkty/energy-cytovet",
+      "permanent": true,
+      "objectId": "289",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-probiovet-90-tabliet/290",
+      "destination": "/produkty/energy-probiovet",
+      "permanent": true,
+      "objectId": "290",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-skelevet-135-tabliet/291",
+      "destination": "/produkty/energy-skelevet",
+      "permanent": true,
+      "objectId": "291",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-vitamarin-90-tabliet/284",
+      "destination": "/produkty/energy-vitamarin",
+      "permanent": true,
+      "objectId": "284",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-krem-francovkovy-40g-regeneruje-a-uvolnuje-svalstvo/278",
+      "destination": "/produkty/alpa-krem-francovkovy-40g",
+      "permanent": true,
+      "objectId": "278",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-krem-arnika-40g-krcove-zily-bolesti-noh-a-klbov/279",
+      "destination": "/produkty/alpa-krem-arnika-40g",
+      "permanent": true,
+      "objectId": "279",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-krem-kostihoj-40-g-podliatiny-pomliazdeniny-a-vyrony/280",
+      "destination": "/produkty/alpa-krem-kostihoj-40-g",
+      "permanent": true,
+      "objectId": "280",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/regeneracne-doplnky/produkt/alpa-krem-pamenol-40g-bolesti-hlavy-fyzicka-namaha/281",
+      "destination": "/produkty/alpa-krem-pamenol-40g",
+      "permanent": true,
+      "objectId": "281",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-probiosan-90-kapsul/282",
+      "destination": "/produkty/energy-probiosan",
+      "permanent": true,
+      "objectId": "282",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-peralgin-120-kapsul/283",
+      "destination": "/produkty/energy-peralgin",
+      "permanent": true,
+      "objectId": "283",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-imunosan-90-kapsul/285",
+      "destination": "/produkty/energy-imunosan",
+      "permanent": true,
+      "objectId": "285",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-probiosan-inovum-60-kapsul/286",
+      "destination": "/produkty/energy-probiosan-inovum",
+      "permanent": true,
+      "objectId": "286",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-konopny-gel-100-ml-astroza-artritida-reumatizmus/273",
+      "destination": "/produkty/alpa-konopny-gel-100-ml",
+      "permanent": true,
+      "objectId": "273",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-konsky-balzam-univerzalny-250-ml-rehabilitacia-zlomenin-svalov/274",
+      "destination": "/produkty/alpa-konsky-balzm-univerzalny-250-ml",
+      "permanent": true,
+      "objectId": "274",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-konsky-balzam-hrejivy-250-ml-prekrvenie-pokozky-zapalene-slachy/275",
+      "destination": "/produkty/alpa-konsky-balzm-hrejivy-250-ml",
+      "permanent": true,
+      "objectId": "275",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-ice-gel-250-ml-bolesti-klbov-a-svalov-reumatiske-bolesti/276",
+      "destination": "/produkty/alpa-ice-gel-250-ml",
+      "permanent": true,
+      "objectId": "276",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-krem-masazny-250ml-masaze-relaxacia/277",
+      "destination": "/produkty/alpa-krem-masany-250ml",
+      "permanent": true,
+      "objectId": "277",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-celitin-90-tabliet/272",
+      "destination": "/produkty/energy-celitin",
+      "permanent": true,
+      "objectId": "272",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/regeneracne-doplnky/produkt/alpa-gel-francovkovy-100-ml-masaze-klbov-svalov-a-chrbtice/267",
+      "destination": "/produkty/alpa-gel-francovkovy-100-ml",
+      "permanent": true,
+      "objectId": "267",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-gel-lesana-100-ml-masaze-svalova-unava-reumaticke-bolesti/268",
+      "destination": "/produkty/alpa-gel-lesana-100-ml",
+      "permanent": true,
+      "objectId": "268",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-gel-gastan-100ml-pocit-tazkych-noch-cievny-system/269",
+      "destination": "/produkty/alpa-gel-gastan-100ml",
+      "permanent": true,
+      "objectId": "269",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-gel-klincek-100ml-utlmenie-svalovych-a-reumatickych-bolesti/270",
+      "destination": "/produkty/alpa-gel-klincek-100ml",
+      "permanent": true,
+      "objectId": "270",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-gel-kostihoj-100-ml-podliatiny-pomliazdeniny-a-vyrony/271",
+      "destination": "/produkty/alpa-gel-kostihoj-100-ml",
+      "permanent": true,
+      "objectId": "271",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-fytomineral-100-ml/266",
+      "destination": "/produkty/energy-fytomineral",
+      "permanent": true,
+      "objectId": "266",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-mydlo-drags-imun-100-g/264",
+      "destination": "/produkty/energy-mydlo-drags-imun",
+      "permanent": true,
+      "objectId": "264",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-grepofit-spray-14-ml/265",
+      "destination": "/produkty/energy-grepofit-spray",
+      "permanent": true,
+      "objectId": "265",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-arnika-liehovy-bylinny-roztok-60ml/255",
+      "destination": "/produkty/alpa-francovka-arnika-liehovy-bylinny-roztok",
+      "permanent": true,
+      "objectId": "255",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-gastan-liehovy-bylinny-roztok-60ml/256",
+      "destination": "/produkty/alpa-francovka-gastan-liehovy-bylinny-roztok",
+      "permanent": true,
+      "objectId": "256",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-kostihoj-liehovy-bylinny-roztok-60ml/257",
+      "destination": "/produkty/alpa-francovka-kostihoj-liehovy-bylinny-roztok",
+      "permanent": true,
+      "objectId": "257",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-balneol-profi-1000-ml/258",
+      "destination": "/produkty/energy-balneol-profi",
+      "permanent": true,
+      "objectId": "258",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-mydlo-protektin-100-g/259",
+      "destination": "/produkty/energy-mydlo-protektin",
+      "permanent": true,
+      "objectId": "259",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-mydlo-ruticelit-100-g/260",
+      "destination": "/produkty/energy-mydlo-ruticelit",
+      "permanent": true,
+      "objectId": "260",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-mydlo-cytovital-100-g/261",
+      "destination": "/produkty/energy-mydlo-cytovital",
+      "permanent": true,
+      "objectId": "261",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-mydlo-droserin-100-g/262",
+      "destination": "/produkty/energy-mydlo-droserin",
+      "permanent": true,
+      "objectId": "262",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/kozmetika/telova-kozmetika/produkt/energy-mydlo-artrin-100-g/263",
+      "destination": "/produkty/energy-mydlo-artrin",
+      "permanent": true,
+      "objectId": "263",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-konope-liehovy-bylinny-roztok-60-ml/253",
+      "destination": "/produkty/alpa-francovka-konope-liehovy-bylinny-roztok",
+      "permanent": true,
+      "objectId": "253",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-konope-liehovy-bylinny-roztok-160ml/254",
+      "destination": "/produkty/alpa-francovka-konope-liehovy-bylinny-roztok",
+      "permanent": true,
+      "objectId": "254",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-160-ml/240",
+      "destination": "/produkty/alpa-francovka",
+      "permanent": true,
+      "objectId": "240",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-1l/241",
+      "destination": "/produkty/alpa-francovka",
+      "permanent": true,
+      "objectId": "241",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-lesana-liehovy-bylinny-roztok-60-ml/242",
+      "destination": "/produkty/alpa-francovka-lesana-liehovy-bylinny-roztok",
+      "permanent": true,
+      "objectId": "242",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-lesana-liehovy-bylinny-roztok-160-ml/243",
+      "destination": "/produkty/alpa-francovka-lesana-liehovy-bylinny-roztok",
+      "permanent": true,
+      "objectId": "243",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-droserin-xxl-250-ml/244",
+      "destination": "/produkty/energy-droserin-xxl",
+      "permanent": true,
+      "objectId": "244",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-artrin-professional-500-ml/248",
+      "destination": "/produkty/energy-artrin-professional",
+      "permanent": true,
+      "objectId": "248",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-artrin-xxl-250-ml/247",
+      "destination": "/produkty/energy-artrin-xxl",
+      "permanent": true,
+      "objectId": "247",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-cytovital-xxl-250-ml/249",
+      "destination": "/produkty/energy-cytovital-xxl",
+      "permanent": true,
+      "objectId": "249",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-ruticelit-xxl-250-ml/250",
+      "destination": "/produkty/energy-ruticelit-xxl",
+      "permanent": true,
+      "objectId": "250",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-ruticelit-professional-500-ml/251",
+      "destination": "/produkty/energy-ruticelit-professional",
+      "permanent": true,
+      "objectId": "251",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/alpa-francovka-60-ml/239",
+      "destination": "/produkty/alpa-francovka",
+      "permanent": true,
+      "objectId": "239",
+      "rule": "approved_merged_variant_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-multi-one-30-tabliet/238",
+      "destination": "/produkty/calivita-multi-one",
+      "permanent": true,
+      "objectId": "238",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-super-soya-lecithin-250-makkych-kapsul/237",
+      "destination": "/produkty/calivita-super-soya-lecithin-250-makkych-kupsl",
+      "permanent": true,
+      "objectId": "237",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-strong-bones-250-kapsul-pripravok-s-vapnikom-a-horcikom/236",
+      "destination": "/produkty/calivita-strong-bones-250-kapsul",
+      "permanent": true,
+      "objectId": "236",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-d-lion-kids-90-tabliet/232",
+      "destination": "/produkty/calivita-vitamin-d-lion-kids",
+      "permanent": true,
+      "objectId": "232",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-cytosan-fomentum-gel-100-ml/221",
+      "destination": "/produkty/energy-cytosan-fomentum-gel",
+      "permanent": true,
+      "objectId": "221",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-balneol-100-ml/222",
+      "destination": "/produkty/energy-balneol",
+      "permanent": true,
+      "objectId": "222",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-gynex-30-ml/223",
+      "destination": "/produkty/energy-gynex",
+      "permanent": true,
+      "objectId": "223",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-relaxin-30-ml/224",
+      "destination": "/produkty/energy-relaxin",
+      "permanent": true,
+      "objectId": "224",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/doplnky-vyzivy-pre-deti/produkt/mycobaby-sloni-sirup-podpora-dychania/225",
+      "destination": "/produkty/mycobaby-sloni-sirup",
+      "permanent": true,
+      "objectId": "225",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/doplnky-vyzivy-pre-deti/produkt/mycobaby-draci-sirup-obranyschopnost-organizmu/197",
+      "destination": "/produkty/mycobaby-draci-sirup",
+      "permanent": true,
+      "objectId": "197",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/doplnky-vyzivy-pre-deti/produkt/mycobaby-multi-sirup-obranychopnost-s-vitaminmi-a-mineralmi/198",
+      "destination": "/produkty/mycobaby-multi-sirup",
+      "permanent": true,
+      "objectId": "198",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/volna-cesta-pomaha-traveniu/199",
+      "destination": "/produkty/volna-cesta",
+      "permanent": true,
+      "objectId": "199",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravotne-riesenia/priedusky-a-kasel/produkt/nosovy-vanok-uvolnenie-dychacich-ciest/200",
+      "destination": "/produkty/nosovy-vanok",
+      "permanent": true,
+      "objectId": "200",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/yaomedica-prebudenie-energie-zaludok-a-slezina/201",
+      "destination": "/produkty/yaomedica-prebudenie-energie",
+      "permanent": true,
+      "objectId": "201",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/posilnenie-opory-chronicke-bolesti/204",
+      "destination": "/produkty/posilnenie-opory",
+      "permanent": true,
+      "objectId": "204",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/zavislosti/alkoholizmus/produkt/opity-majster-opica-z-alkoholu/202",
+      "destination": "/produkty/opity-majster",
+      "permanent": true,
+      "objectId": "202",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/yaomedica-uvolnenie-drah-spriechodnenie-drah/203",
+      "destination": "/produkty/yaomedica-uvolnenie-drah",
+      "permanent": true,
+      "objectId": "203",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/zbystrenie-zmyslov-slezina/205",
+      "destination": "/produkty/zbystrenie-zmyslov",
+      "permanent": true,
+      "objectId": "205",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravotne-riesenia/priedusky-a-kasel/produkt/odvedenie-toxinu-prechladnutie/206",
+      "destination": "/produkty/odvedenie-toxinu",
+      "permanent": true,
+      "objectId": "206",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/yaomedica-reishi-50ml/207",
+      "destination": "/produkty/yaomedica-reishi",
+      "permanent": true,
+      "objectId": "207",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravotne-riesenia/zenske-zdravie/produkt/dang-gui-klby-chrupavka-krvny-system/209",
+      "destination": "/produkty/dang-gui",
+      "permanent": true,
+      "objectId": "209",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/chaga-vyzivuje-pecen-oblicky-a-srdce/210",
+      "destination": "/produkty/chaga",
+      "permanent": true,
+      "objectId": "210",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/hericium-travenie-posilnenie-zaludka/211",
+      "destination": "/produkty/hericium",
+      "permanent": true,
+      "objectId": "211",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/hlava/psychicka-pohoda/produkt/maitake-tonizuje-oblicky-a-pecen/212",
+      "destination": "/produkty/maitake",
+      "permanent": true,
+      "objectId": "212",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/hlava/psychicka-pohoda/produkt/jasna-mysel-pamat-mozgova-cinnost/213",
+      "destination": "/produkty/jasna-mysel",
+      "permanent": true,
+      "objectId": "213",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/suche-sny-posilnenie-oblicie-unik-mocu/214",
+      "destination": "/produkty/suche-sny",
+      "permanent": true,
+      "objectId": "214",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/krasa/pokozka/produkt/navrat-mladosti-mladost-dusevna-pohoda/215",
+      "destination": "/produkty/navrat-mladosti",
+      "permanent": true,
+      "objectId": "215",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/krasa/pokozka/produkt/propolis-zlepsuje-stav-koze-a-sliznic/216",
+      "destination": "/produkty/propolis",
+      "permanent": true,
+      "objectId": "216",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/auricularia-susena-100-g-susene-vitalne-huby/191",
+      "destination": "/produkty/auricularia-susena-100-g",
+      "permanent": true,
+      "objectId": "191",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/reishi-susena-100-g-susene-vitalne-huby/192",
+      "destination": "/produkty/reishi-susena-100-g",
+      "permanent": true,
+      "objectId": "192",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/chaga-susena-100-g-susene-vitalne-huby/193",
+      "destination": "/produkty/chaga-susena-100-g",
+      "permanent": true,
+      "objectId": "193",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/hericium-susene-100-g-susene-vitalne-huby/194",
+      "destination": "/produkty/hericium-susene-100-g",
+      "permanent": true,
+      "objectId": "194",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/maitake-susena-100-g-susene-vitalne-huby/195",
+      "destination": "/produkty/maitake-susena-100-g",
+      "permanent": true,
+      "objectId": "195",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/shiitake-susena-100-g-susene-vitalne-huby/196",
+      "destination": "/produkty/shiitake-susena-100-g",
+      "permanent": true,
+      "objectId": "196",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-pornatka-90-rastlinnych-kapsul/170",
+      "destination": "/produkty/mycomedica-pornatka-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "170",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-shiitake-90-rastlinnych-kapsul/171",
+      "destination": "/produkty/mycomedica-shiitake-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "171",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-polyporus-90-rastlinnych-kapsul/172",
+      "destination": "/produkty/mycomedica-polyporus-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "172",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-agaricus-90-rastlinnych-kapsul/173",
+      "destination": "/produkty/mycomedica-agaricus-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "173",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycoslim-90-rastlinnych-kapsul/174",
+      "destination": "/produkty/mycomedica-mycoslim-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "174",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedeica-mycohair-90-rastlinnych-kapsul/175",
+      "destination": "/produkty/mycomedeica-mycohair-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "175",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravotne-riesenia/nadorove-ochorenia/produkt/mycomedica-mycochemo-180-tabliet/176",
+      "destination": "/produkty/mycomedica-mycochemo",
+      "permanent": true,
+      "objectId": "176",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/medoreishi-400-g-imunitny-system/177",
+      "destination": "/produkty/medoreishi-400-g",
+      "permanent": true,
+      "objectId": "177",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/medocomplex-400-g-prirodzena-obranyschopnost/178",
+      "destination": "/produkty/medocomplex-400-g",
+      "permanent": true,
+      "objectId": "178",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/medocordyceps-400-g-rovnovaha-organizmu/179",
+      "destination": "/produkty/medocordyceps-400-g",
+      "permanent": true,
+      "objectId": "179",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/medogastro-400-g-podporuje-rast-svalovej-hmoty/180",
+      "destination": "/produkty/medogastro-400-g",
+      "permanent": true,
+      "objectId": "180",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/medosleep-400-g-kvalitny-spanok/181",
+      "destination": "/produkty/medosleep-400-g",
+      "permanent": true,
+      "objectId": "181",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-bio-cordyceps-100-g-vitalne-huby-v-prasku/182",
+      "destination": "/produkty/mycomedica-bio-cordyceps-100-g",
+      "permanent": true,
+      "objectId": "182",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/bio-auricularia-100-g-vitalne-huby-v-prasku/185",
+      "destination": "/produkty/bio-auricularia-100-g",
+      "permanent": true,
+      "objectId": "185",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/mycomedica-bio-shiitake-100-g-vitalne-huby-v-prasku/183",
+      "destination": "/produkty/mycomedica-bio-shiitake-100-g",
+      "permanent": true,
+      "objectId": "183",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-bio-reishi-100-g-vitalne-huby-v-prasku/184",
+      "destination": "/produkty/mycomedica-bio-reishi-100-g",
+      "permanent": true,
+      "objectId": "184",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-bio-hericium-100-g-vitalne-huby-v-prasku/186",
+      "destination": "/produkty/mycomedica-bio-hericium-100-g",
+      "permanent": true,
+      "objectId": "186",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-bio-chaga-100-g-vitalne-huby-v-prasku/187",
+      "destination": "/produkty/mycomedica-bio-chaga-100-g",
+      "permanent": true,
+      "objectId": "187",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-bio-tremella-100-g-vitalne-huby-v-prasku/188",
+      "destination": "/produkty/mycomedica-bio-tremella-100-g",
+      "permanent": true,
+      "objectId": "188",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-bio-maitake-100-g-vitale-huby-v-prasku/189",
+      "destination": "/produkty/mycomedica-bio-maitake-100-g",
+      "permanent": true,
+      "objectId": "189",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/mycomedica-coriolus-50-25-90-rastlinnych-kapsul/155",
+      "destination": "/produkty/mycomedica-coriolus-50-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "155",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-cordyceps-cs-4-90-kapsul/156",
+      "destination": "/produkty/mycomedica-cordyceps-cs",
+      "permanent": true,
+      "objectId": "156",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-acerola-90-rastlinnych-kapsul/157",
+      "destination": "/produkty/mycomedica-acerola-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "157",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-betaglukan-biocell-90-rastlinnych-kapsul/158",
+      "destination": "/produkty/mycomedica-betaglukan-biocell-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "158",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycocholest-120-prirodnych-kapsul/159",
+      "destination": "/produkty/mycomedica-mycocholest-120-prirodnych-kapsul",
+      "permanent": true,
+      "objectId": "159",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-pestrec-90-rastlinnych-kapsul/160",
+      "destination": "/produkty/mycomedica-pestrec-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "160",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-chaga-90-rastlinnych-kapsul/161",
+      "destination": "/produkty/mycomedica-chaga-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "161",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-chaga-50-25-90-rastlinnych-kapsul/162",
+      "destination": "/produkty/mycomedica-chaga-50-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "162",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-hericium-90-rastlinnych-kapsul/163",
+      "destination": "/produkty/mycomedica-hericium-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "163",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-hericium-50-25-90-rastlinnych-kapsul/164",
+      "destination": "/produkty/mycomedica-hericium-50-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "164",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-maitake-90-rastlinnych-kapsul/165",
+      "destination": "/produkty/mycomedica-maitake-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "165",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-maitake-50-25-90-rastlinnych-kapsul/166",
+      "destination": "/produkty/mycomedica-maitake-50-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "166",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycocomplex-90-rastlinnych-kapsul/167",
+      "destination": "/produkty/mycomedica-mycocomplex-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "167",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-mycoclean-99-g/168",
+      "destination": "/produkty/mycomedica-mycoclean",
+      "permanent": true,
+      "objectId": "168",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-ohnovec-90-rastlinnych-kapsul/169",
+      "destination": "/produkty/mycomedica-ohnovec-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "169",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-mycopulm-90-kapsul/143",
+      "destination": "/produkty/energy-mycopulm",
+      "permanent": true,
+      "objectId": "143",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-mycoren-90-kapsul/144",
+      "destination": "/produkty/energy-mycoren",
+      "permanent": true,
+      "objectId": "144",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/energy-mycohepar-90-kapsul/145",
+      "destination": "/produkty/energy-mycohepar",
+      "permanent": true,
+      "objectId": "145",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-mycocard-90-kapsul/146",
+      "destination": "/produkty/energy-mycocard",
+      "permanent": true,
+      "objectId": "146",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-mycopan-90-kapsul/147",
+      "destination": "/produkty/energy-mycopan",
+      "permanent": true,
+      "objectId": "147",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-skeletin-135-kapsul/148",
+      "destination": "/produkty/energy-skeletin",
+      "permanent": true,
+      "objectId": "148",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-revitae-90-tabliet/149",
+      "destination": "/produkty/energy-revitae",
+      "permanent": true,
+      "objectId": "149",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-vitaflorin-90-kapsul/150",
+      "destination": "/produkty/energy-vitaflorin",
+      "permanent": true,
+      "objectId": "150",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-reishi-90-rastlinnych-kapsul/151",
+      "destination": "/produkty/mycomedica-reishi-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "151",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/mycomedica-reishi-50-25-90-rastlinnych-kapsul/152",
+      "destination": "/produkty/mycomedica-reishi-50-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "152",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/mycomedica-reishi-triterpen-90-rastlinnych-kapsul/153",
+      "destination": "/produkty/mycomedica-reishi-triterpen-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "153",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/mycomecica-coriolus-90-rastlinnych-kapsul/154",
+      "destination": "/produkty/mycomecica-coriolus-90-rastlinnych-kapsul",
+      "permanent": true,
+      "objectId": "154",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-gaja-essence-biorytmicka-kasa-420-g/116",
+      "destination": "/produkty/energy-gaja-essence-biorytmicka-kasa",
+      "permanent": true,
+      "objectId": "116",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-organic-nigella-sativa-100-ml/118",
+      "destination": "/produkty/energy-organic-nigella-sativa",
+      "permanent": true,
+      "objectId": "118",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-organic-sacha-inchi-100-ml/119",
+      "destination": "/produkty/energy-organic-sacha-inchi",
+      "permanent": true,
+      "objectId": "119",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-hawaii-spirulina-200-tabliet/120",
+      "destination": "/produkty/energy-hawaii-spirulina",
+      "permanent": true,
+      "objectId": "120",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-spirulina-barley-200-tabliet/121",
+      "destination": "/produkty/energy-spirulina-barley",
+      "permanent": true,
+      "objectId": "121",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-organic-barley-juice-powder-100-g/122",
+      "destination": "/produkty/energy-organic-barley-juice-powder",
+      "permanent": true,
+      "objectId": "122",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-barley-juice-200-tabliet/123",
+      "destination": "/produkty/energy-barley-juice",
+      "permanent": true,
+      "objectId": "123",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-acai-pure-powder-100-g/124",
+      "destination": "/produkty/energy-acai-pure-powder",
+      "permanent": true,
+      "objectId": "124",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-raw-ambrosia-pieces-100-g/125",
+      "destination": "/produkty/energy-raw-ambrosia-pieces",
+      "permanent": true,
+      "objectId": "125",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-organic-goji-powder-100-g/126",
+      "destination": "/produkty/energy-organic-goji-powder",
+      "permanent": true,
+      "objectId": "126",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-organic-matcha-powder-50-g/127",
+      "destination": "/produkty/energy-organic-matcha-powder",
+      "permanent": true,
+      "objectId": "127",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-organic-sea-berry-powder-100-g/128",
+      "destination": "/produkty/energy-organic-sea-berry-powder",
+      "permanent": true,
+      "objectId": "128",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-organic-maca-120-kapsul/129",
+      "destination": "/produkty/energy-organic-maca",
+      "permanent": true,
+      "objectId": "129",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-taiwan-chlorella-200-tabliet/130",
+      "destination": "/produkty/energy-taiwan-chlorella",
+      "permanent": true,
+      "objectId": "130",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-lapacho-bylinny-caj-105-g/131",
+      "destination": "/produkty/energy-lapacho-bylinny-caj",
+      "permanent": true,
+      "objectId": "131",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-chanca-piedra-bylinny-caj-105-g/132",
+      "destination": "/produkty/energy-chanca-piedra-bylinny-caj",
+      "permanent": true,
+      "objectId": "132",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-uncaria-tomentosa-bylinny-caj-105-g/133",
+      "destination": "/produkty/energy-uncaria-tomentosa-bylinny-caj",
+      "permanent": true,
+      "objectId": "133",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-smilax-officinalis-bylinny-caj-105-g/134",
+      "destination": "/produkty/energy-smilax-officinalis-bylinny-caj",
+      "permanent": true,
+      "objectId": "134",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-tribulus-terrestris-bylinny-caj-105-g/135",
+      "destination": "/produkty/energy-tribulus-terrestris-bylinny-caj",
+      "permanent": true,
+      "objectId": "135",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-maytenus-ilicifolia-bylinny-caj-105-g/136",
+      "destination": "/produkty/energy-maytenus-ilicifolia-bylinny-caj",
+      "permanent": true,
+      "objectId": "136",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-qi-drink-100-g/137",
+      "destination": "/produkty/energy-qi-drink",
+      "permanent": true,
+      "objectId": "137",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-qi-coffee-xxl-200-g/138",
+      "destination": "/produkty/energy-qi-coffee-xxl",
+      "permanent": true,
+      "objectId": "138",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-qi-coffe-100-g/139",
+      "destination": "/produkty/energy-qi-coffe",
+      "permanent": true,
+      "objectId": "139",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-qi-collagen-150-g/140",
+      "destination": "/produkty/energy-qi-collagen",
+      "permanent": true,
+      "objectId": "140",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-qi-drink-xxl-200-g/141",
+      "destination": "/produkty/energy-qi-drink-xxl",
+      "permanent": true,
+      "objectId": "141",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/energy-qi-collagen-xxl-300-g/142",
+      "destination": "/produkty/energy-qi-collagen-xxl",
+      "permanent": true,
+      "objectId": "142",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/calivita-ocean-21-946-ml-alkalizujuce-riasy-a-aloe-vera/93",
+      "destination": "/produkty/calivita-ocean-21-946-ml",
+      "permanent": true,
+      "objectId": "93",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/calivita-organic-noni-946-ml-organicka-stava-noni/95",
+      "destination": "/produkty/calivita-organic-noni-946-ml",
+      "permanent": true,
+      "objectId": "95",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/calivita-polinesian-noni-946-ml-stava-noni/96",
+      "destination": "/produkty/calivita-polinesian-noni-946-ml",
+      "permanent": true,
+      "objectId": "96",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/zdrave-potraviny/produkt/calivita-zenthonic-946-ml-tekute-antioxidanty-s-mangostanou/97",
+      "destination": "/produkty/calivita-zenthonic-946-ml",
+      "permanent": true,
+      "objectId": "97",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-cholestone-90-tabliet/99",
+      "destination": "/produkty/calivita-cholestone",
+      "permanent": true,
+      "objectId": "99",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-coq10-lozenges-30-rozpustnych-tabliet/100",
+      "destination": "/produkty/calivita-coq10-lozenges-30-rozpustnych-tabliet",
+      "permanent": true,
+      "objectId": "100",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-garlic-max-100-gelovych-kapsul/101",
+      "destination": "/produkty/calivita-garlic-max-100-gelovych-kapsul",
+      "permanent": true,
+      "objectId": "101",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-mega-coq10-plus-60-kapsul/102",
+      "destination": "/produkty/calivita-mega-coq10-plus",
+      "permanent": true,
+      "objectId": "102",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-omega-3-concentrate-100-makkych-kapsul/103",
+      "destination": "/produkty/calivita-omega-3-concentrate-100-makkych-kupsl",
+      "permanent": true,
+      "objectId": "103",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-resveratrol-plus-60-kapsul/104",
+      "destination": "/produkty/calivita-resveratrol-plus",
+      "permanent": true,
+      "objectId": "104",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-super-coq10-plus-120-kapsul/105",
+      "destination": "/produkty/calivita-super-coq10-plus",
+      "permanent": true,
+      "objectId": "105",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-evening-primrose-oil-100-makkych-kapsul/106",
+      "destination": "/produkty/calivita-evening-primrose-oil-100-makkych-uapsl",
+      "permanent": true,
+      "objectId": "106",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-alkalizujuci-pripravok-green-care-240-tabliet/107",
+      "destination": "/produkty/calivita-alkalizujuci-pripravok-green-care",
+      "permanent": true,
+      "objectId": "107",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-liquid-chlorophyl-473-ml-prirodny-rastlinny-vytazok/108",
+      "destination": "/produkty/calivita-liquid-chlorophyl-473-ml-prirodny-rasylinn-vytaok",
+      "permanent": true,
+      "objectId": "108",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-oregano-oil-30-ml-antioxidant-a-antiparazitika/109",
+      "destination": "/produkty/calivita-oregano-oil-30-ml",
+      "permanent": true,
+      "objectId": "109",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-panax-ginseng-100-tabliet-zensenovy-pripravok/110",
+      "destination": "/produkty/calivita-panax-ginseng-100-tabliet",
+      "permanent": true,
+      "objectId": "110",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-super-soya-lecithin-100-makkych-kapsul/111",
+      "destination": "/produkty/calivita-super-soya-lecithin-100-makkych-kupsl",
+      "permanent": true,
+      "objectId": "111",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-pro-stp-60-kapsul-ochrana-prostaty/112",
+      "destination": "/produkty/calivita-pro-stp-60-kapsul",
+      "permanent": true,
+      "objectId": "112",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-pure-yucca-100-kapsul-detoxikacna-juka-antioxidant/113",
+      "destination": "/produkty/calivita-pure-yucca-100-kapsul-detoxikacna-juka",
+      "permanent": true,
+      "objectId": "113",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-rhodiolin-120-kapsul-antistresovy-pripravok-pls-zinok/114",
+      "destination": "/produkty/calivita-rhodiolin-120-kapsul",
+      "permanent": true,
+      "objectId": "114",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-urx-60-tabliet-proti-mocovym-problemom-pls-vitamin-c/115",
+      "destination": "/produkty/calivita-urx-60-tabliet",
+      "permanent": true,
+      "objectId": "115",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-magnesium-ca-mg-s-vitaminom-d-a-k-30-tabliet/83",
+      "destination": "/produkty/calivita-magnesium-ca-mg-s-vitaminom-d-a-k",
+      "permanent": true,
+      "objectId": "83",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-calcium-magnesium-plus-100-kapsul/84",
+      "destination": "/produkty/calivita-calcium-magnesium-plus",
+      "permanent": true,
+      "objectId": "84",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-curcuma-pro-60-tabliet-doplnok-s-kurkumou/85",
+      "destination": "/produkty/calivita-curcuma-pro-60-tabliet",
+      "permanent": true,
+      "objectId": "85",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-joint-protex-90-tabliet-komplexna-ochrana-klbov/86",
+      "destination": "/produkty/calivita-joint-protex-90-tabliet",
+      "permanent": true,
+      "objectId": "86",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-joint-protex-forte-90-tabliet-komplexna-ochrana-klbov/87",
+      "destination": "/produkty/calivita-joint-protex-forte-90-tabliet",
+      "permanent": true,
+      "objectId": "87",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-power-booster-90-tabliet-podpora-prirodzeneho-rastu/88",
+      "destination": "/produkty/calivita-power-booster-90-tabliet",
+      "permanent": true,
+      "objectId": "88",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-riseup-multiactive-collagen-480g-napoj-na-ochranu-klbov/89",
+      "destination": "/produkty/calivita-riseup-multiactive-collagen-480g",
+      "permanent": true,
+      "objectId": "89",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-strong-bones-100-kapsul-pripravok-s-vapnikom-a-horcikom/91",
+      "destination": "/produkty/calivita-strong-bones-100-kapsul",
+      "permanent": true,
+      "objectId": "91",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-ac-zymes-100-kapsul-bakterie-lactobacillus-acidophilus/75",
+      "destination": "/produkty/calivita-ac-zymes-100-kapsul",
+      "permanent": true,
+      "objectId": "75",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-ac-zymes-plus-60-kapsul/76",
+      "destination": "/produkty/calivita-ac",
+      "permanent": true,
+      "objectId": "76",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-acidophilus-100-kapsul-bakterie-lactobacillus-acidophilus-pls-vlaknina/77",
+      "destination": "/produkty/calivita-acidophilus-100-kapsul",
+      "permanent": true,
+      "objectId": "77",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-digestive-enzymes-100-tabliet-podpora-traviaceho-systemu/78",
+      "destination": "/produkty/calivita-digestive-enzymes-100-tabliet",
+      "permanent": true,
+      "objectId": "78",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vlaknina-nopalin-200-tabliet/79",
+      "destination": "/produkty/calivita-vlaknina-nopalin",
+      "permanent": true,
+      "objectId": "79",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-paraprotex-100-tabliet/80",
+      "destination": "/produkty/calivita-paraprotex",
+      "permanent": true,
+      "objectId": "80",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-probio-balance-60-zuvacich-tabliet-prospesne-bakterie/81",
+      "destination": "/produkty/calivita-probio-balance-60-zuvacich-tabliet",
+      "permanent": true,
+      "objectId": "81",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-pure-inulin-198-5-g-stopercentna-prirodna-vlaknina/82",
+      "destination": "/produkty/calivita-pure-inulin-198-5-g",
+      "permanent": true,
+      "objectId": "82",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-multivitamin-pre-tehodne-new-life-120-tabliet/69",
+      "destination": "/produkty/calivita-multivitamin-pre-tehodne-new-life",
+      "permanent": true,
+      "objectId": "69",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-pre-steps-daily-60-ml-vitamin-pre-najmensich/70",
+      "destination": "/produkty/calivita-pre-steps-daily-60-ml",
+      "permanent": true,
+      "objectId": "70",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-multivitamin-vital-0-90-tabliet/71",
+      "destination": "/produkty/calivita-multivitamin-vital-0",
+      "permanent": true,
+      "objectId": "71",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-multivitamin-vital-a-90-tabliet/72",
+      "destination": "/produkty/calivita-multivitamin-vital-a",
+      "permanent": true,
+      "objectId": "72",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-multivitamin-vital-ab-90-tabliet/73",
+      "destination": "/produkty/calivita-multivitamin-vital-ab",
+      "permanent": true,
+      "objectId": "73",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-multivitamin-vital-b-90-tabliet/74",
+      "destination": "/produkty/calivita-multivitamin-vital-b",
+      "permanent": true,
+      "objectId": "74",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-multivitamin-full-spectrum-90-tabliet/68",
+      "destination": "/produkty/calivita-multivitamin-full-spectrum",
+      "permanent": true,
+      "objectId": "68",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-mega-b-complex-100-tabliet/65",
+      "destination": "/produkty/calivita-mega-b",
+      "permanent": true,
+      "objectId": "65",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/webshop/zdravotne-ciele/kozne-reakcie/odreniny-popaleniny/produkt/calivita-herbaid-pls-300-ml-prva-pomoc-pre-celu-rodinu/53",
+      "destination": "/produkty/calivita-herbaid-300-ml",
+      "permanent": true,
+      "objectId": "53",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-chelated-zinc-100-tabliet-organicky-zinok/54",
+      "destination": "/produkty/calivita-chelated-zinc-100-tabliet",
+      "permanent": true,
+      "objectId": "54",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-zelezo-iron-plus-s-vitaminom-c-100-tabliet/55",
+      "destination": "/produkty/calivita-zelezo-iron-plus-s-vitaminom-c",
+      "permanent": true,
+      "objectId": "55",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-magnesium-magnezi-b6-90-tabliet/56",
+      "destination": "/produkty/calivita-magnesium-magnezi-b6",
+      "permanent": true,
+      "objectId": "56",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-mega-zinc-100-tabliet-zinok-pre-zdravu-pokozku-a-vlasy/57",
+      "destination": "/produkty/calivita-mega-zinc-100-tabliet-zinok-pre-zdravu-pokozku-a-vlasy",
+      "permanent": true,
+      "objectId": "57",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/mineraly-calivita-power-mins-komplex-mineralov-100-tabliet/58",
+      "destination": "/produkty/mineraly-calivita-power-mins-komplex-mineralov",
+      "permanent": true,
+      "objectId": "58",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-pro-selenium-60-tabliet-pripravok-so-selenom/59",
+      "destination": "/produkty/calivita-pro-selenium-60-tabliet",
+      "permanent": true,
+      "objectId": "59",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-b-complex-30-tabliet/60",
+      "destination": "/produkty/calivita-b-complex",
+      "permanent": true,
+      "objectId": "60",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-beta-caroteneprovitamin-vitaminu-a-100-makkych-kapsul/61",
+      "destination": "/produkty/calivita-beta-caroteneprovitamin-vitaminu-a-100-makkch-kapsul",
+      "permanent": true,
+      "objectId": "61",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/calivita-vitamin-c-1000-mg-plus-100-tabliet/62",
+      "destination": "/produkty/calivita-vitamin-c-1000-mg-plus",
+      "permanent": true,
+      "objectId": "62",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-c-lion-kids-90-tabliet/63",
+      "destination": "/produkty/calivita-vitamin-c-lion-kids",
+      "permanent": true,
+      "objectId": "63",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-d-kvapky-d-drops-30-ml/64",
+      "destination": "/produkty/calivita-vitamin-d-kvapky-d",
+      "permanent": true,
+      "objectId": "64",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-d-60-tabliet/66",
+      "destination": "/produkty/calivita-vitamin-d",
+      "permanent": true,
+      "objectId": "66",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-vitamin-e-100-makkych-kapsul/67",
+      "destination": "/produkty/calivita-vitamin-e-100-makkch-kapsul",
+      "permanent": true,
+      "objectId": "67",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-renovet-30-ml/41",
+      "destination": "/produkty/energy-renovet",
+      "permanent": true,
+      "objectId": "41",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-korovet-30-ml/42",
+      "destination": "/produkty/energy-korovet",
+      "permanent": true,
+      "objectId": "42",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-regavet-30-ml/43",
+      "destination": "/produkty/energy-regavet",
+      "permanent": true,
+      "objectId": "43",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-gynevet-30-ml/44",
+      "destination": "/produkty/energy-gynevet",
+      "permanent": true,
+      "objectId": "44",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-kingvet-30-ml/45",
+      "destination": "/produkty/energy-kingvet",
+      "permanent": true,
+      "objectId": "45",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-etovet-30-ml/46",
+      "destination": "/produkty/energy-etovet",
+      "permanent": true,
+      "objectId": "46",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-imunovet-30-ml/47",
+      "destination": "/produkty/energy-imunovet",
+      "permanent": true,
+      "objectId": "47",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-annovet-30-ml/48",
+      "destination": "/produkty/energy-annovet",
+      "permanent": true,
+      "objectId": "48",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-omegavet-30-ml/49",
+      "destination": "/produkty/energy-omegavet",
+      "permanent": true,
+      "objectId": "49",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-fytovet-30-ml/50",
+      "destination": "/produkty/energy-fytovet",
+      "permanent": true,
+      "objectId": "50",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-audivet-30-ml/51",
+      "destination": "/produkty/energy-audivet",
+      "permanent": true,
+      "objectId": "51",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-cannabivet-30-ml/52",
+      "destination": "/produkty/energy-cannabivet",
+      "permanent": true,
+      "objectId": "52",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-virovet-30-ml/39",
+      "destination": "/produkty/energy-virovet",
+      "permanent": true,
+      "objectId": "39",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-offtusin-60-tabliet/34",
+      "destination": "/produkty/energy-offtusin",
+      "permanent": true,
+      "objectId": "34",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-cistus-complex-30-ml/35",
+      "destination": "/produkty/energy-cistus-complex",
+      "permanent": true,
+      "objectId": "35",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-grepofit-drops-30-ml/36",
+      "destination": "/produkty/energy-grepofit-drops",
+      "permanent": true,
+      "objectId": "36",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-grepofit-nosol-aqua-20-ml/38",
+      "destination": "/produkty/energy-grepofit-nosol-aqua",
+      "permanent": true,
+      "objectId": "38",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-drags-imun-30-ml/31",
+      "destination": "/produkty/energy-drags-imun",
+      "permanent": true,
+      "objectId": "31",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-grepofit-135-kapsul/32",
+      "destination": "/produkty/energy-grepofit",
+      "permanent": true,
+      "objectId": "32",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/doplnky-vyzivy/produkt/calivita-gummy-kids-100-gumovych-multivitaminov/33",
+      "destination": "/produkty/calivita-gummy-kids-100-gumovych-multivitaminov",
+      "permanent": true,
+      "objectId": "33",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-cytosan-inovum-90-kapsul/28",
+      "destination": "/produkty/energy-cytosan-inovum",
+      "permanent": true,
+      "objectId": "28",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-betafit-90-kapsul/29",
+      "destination": "/produkty/energy-betafit",
+      "permanent": true,
+      "objectId": "29",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-flavocel-150-tabliet/30",
+      "destination": "/produkty/energy-flavocel",
+      "permanent": true,
+      "objectId": "30",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-droserin-50-ml/24",
+      "destination": "/produkty/energy-droserin",
+      "permanent": true,
+      "objectId": "24",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/pre-zvierata/produkt/energy-cytosan-90-kapsul/27",
+      "destination": "/produkty/energy-cytosan",
+      "permanent": true,
+      "objectId": "27",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-annona-muricata-30-ml/23",
+      "destination": "/produkty/energy-annona-muricata",
+      "permanent": true,
+      "objectId": "23",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-cytovital-50ml/25",
+      "destination": "/produkty/energy-cytovital",
+      "permanent": true,
+      "objectId": "25",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-ruticelit-50-ml/26",
+      "destination": "/produkty/energy-ruticelit",
+      "permanent": true,
+      "objectId": "26",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-stimaral-30-ml/21",
+      "destination": "/produkty/energy-stimaral",
+      "permanent": true,
+      "objectId": "21",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-tribulus-terestris-30-ml/22",
+      "destination": "/produkty/energy-tribulus-terestris",
+      "permanent": true,
+      "objectId": "22",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-protektin-50-ml/19",
+      "destination": "/produkty/energy-protektin",
+      "permanent": true,
+      "objectId": "19",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-artrin-50-ml/20",
+      "destination": "/produkty/energy-artrin",
+      "permanent": true,
+      "objectId": "20",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-renol-30-ml/14",
+      "destination": "/produkty/energy-renol",
+      "permanent": true,
+      "objectId": "14",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-vironal-30-ml/15",
+      "destination": "/produkty/energy-vironal",
+      "permanent": true,
+      "objectId": "15",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-regalen-30-ml/18",
+      "destination": "/produkty/energy-regalen",
+      "permanent": true,
+      "objectId": "18",
+      "rule": "permanent_server_redirect"
+    },
+    {
+      "source": "/sk/hlavna-stranka/zdravie/produkt/energy-korolen-30-ml/17",
+      "destination": "/produkty/energy-korolen",
+      "permanent": true,
+      "objectId": "17",
+      "rule": "permanent_server_redirect"
+    }
+  ],
+  "skippedSamples": [
+    {
+      "reason": "hold",
+      "handle": "bio-polyporus-prasok-100g-odvodhuje-organizmus",
+      "source": "/sk/hlavna-stranka/zdravie/produkt/bio-polyporus-prasok-100g-odvodnuje-organizmus/190"
+    }
+  ]
+}

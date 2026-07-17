@@ -83,7 +83,7 @@ export const BRAND_COPY = {
       'Balíčky zdravia GrowMedica.cz — overené kombinácie doplnkov pre imunitu, spánok, šport, krásu a ďalšie ciele za zvýhodnené ceny.',
     cart: 'Nákupný košík s vybranými biomedicínskymi supplementmi.',
     contact:
-      'Kontaktujte nás — GrowMedica s.r.o., BELLOVA 6, KOŠICE. E-mail: info@growmedica.cz',
+      'Kontaktujte nás — GrowMedica s.r.o., Bellova 3455/6, 040 01 Košice - Staré Mesto. IČO: 56 455 143. E-mail: info@growmedica.cz',
   },
 } as const
 

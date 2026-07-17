@@ -19,8 +19,13 @@ export function buildCanonicalPageUrl(pathname = '/', siteUrl = SITE_URL): strin
   return path === '/' ? siteUrl : `${siteUrl}${path}`
 }
 
-function buildLocaleHref(pageUrl: string, locale: string): string {
-  return `${pageUrl}?lang=${locale}`
+function buildLocaleHref(pageUrl: string, locale: string, siteUrl = SITE_URL): string {
+  // Root must be `https://host/` before query for valid hreflang (PSI SEO).
+  // Compare against the *passed* siteUrl (tests/CI inject custom base).
+  const root = siteUrl.replace(/\/$/, '')
+  const normalized =
+    pageUrl === root || pageUrl === `${root}/` ? `${root}/` : pageUrl
+  return `${normalized}?lang=${locale}`
 }
 
 export type HreflangLink = { hrefLang: string; href: string }
@@ -34,7 +39,7 @@ export function buildHreflangLinks(pathname = '/', siteUrl = SITE_URL): Hreflang
   ]
   return entries.map(([hrefLang, locale]) => ({
     hrefLang,
-    href: buildLocaleHref(pageUrl, locale),
+    href: buildLocaleHref(pageUrl, locale, siteUrl),
   }))
 }
 
@@ -58,6 +63,23 @@ export const DEFAULT_METADATA: Metadata = {
     siteName: SITE_NAME,
     type: 'website',
     locale: OG_LOCALE_MAP[DEFAULT_LOCALE],
+    url: SITE_URL,
+    title: BRAND_COPY.siteTitle,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: '/android-chrome-512x512.png',
+        width: 512,
+        height: 512,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: BRAND_COPY.siteTitle,
+    description: SITE_DESCRIPTION,
+    images: ['/android-chrome-512x512.png'],
   },
   robots: {
     index: true,
@@ -190,6 +212,11 @@ export function getOrganizationJsonLd() {
     description: BRAND_COPY.heroSubtitle,
     slogan: BRAND_COPY.heroSubtitleShort,
   }
+}
+
+/** Escape JSON for safe embedding in <script type="application/ld+json">. */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c')
 }
 
 export function getBundlesPageMetadata(): Metadata {

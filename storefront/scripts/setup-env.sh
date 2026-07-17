@@ -70,7 +70,7 @@ prompt_revalidation_secret() {
 }
 
 prompt_api_version() {
-  local default="2025-01"
+  local default="2026-07"
   while true; do
     read -r -p "SHOPIFY_API_VERSION [$default]: " val
     val="${val:-$default}"
@@ -78,7 +78,7 @@ prompt_api_version() {
       SHOPIFY_API_VERSION="$val"
       return 0
     fi
-    echo "Chyba: format musi byt YYYY-MM (napr. 2025-01)."
+    echo "Chyba: format musi byt YYYY-MM (napr. 2026-07)."
   done
 }
 

@@ -1,6 +1,6 @@
 /**
  * Shopify TypeScript Types
- * Based on Shopify Storefront API 2025-01
+ * Based on Shopify Storefront API 2026-07
  */
 
 // ─── Money ───────────────────────────────────────────────────────────────────

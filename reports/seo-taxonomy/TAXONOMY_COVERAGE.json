@@ -1,0 +1,16 @@
+{
+  "wooHost": "cms.growmedica.cz",
+  "wooProductCount": 557,
+  "wooCategoryCount": 34,
+  "ready": 459,
+  "hold": 1,
+  "readyMatchedBySlug": 459,
+  "readyMissingOnWoo": [],
+  "credentialSource": "wordpress-production.local.env (WORKS with cms.growmedica.cz)",
+  "credentialNote": ".env.local points to localhost:8080 — override host+keys for dry-run",
+  "suggestedDryRunEnv": {
+    "WORDPRESS_BASE_URL": "https://cms.growmedica.cz",
+    "WOO_FROM": "repo-root wordpress-production.local.env"
+  },
+  "suggestedCommand": "cd storefront && set -a && source ../wordpress-production.local.env && set +a && node scripts/import-shopify-to-woo.mjs --taxonomy-only --dry-run"
+}

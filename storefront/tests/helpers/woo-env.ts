@@ -14,5 +14,5 @@ export const wooTestEnv: Record<string, string> = {
   DASHBOARD_AGENT_SECRET:
     process.env.DASHBOARD_AGENT_SECRET ?? 'mock-dashboard-agent-secret-123456',
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://127.0.0.1:5557',
-  NEXT_PUBLIC_DEFAULT_LOCALE: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'sk',
+  NEXT_PUBLIC_DEFAULT_LOCALE: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'cs',
 }

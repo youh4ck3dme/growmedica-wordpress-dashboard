@@ -16,6 +16,11 @@ export type AgentToolName =
   | 'bulk_update_prices'
   | 'export_catalog_csv'
   | 'get_integration_status'
+  | 'apply_product_copy'
+  | 'apply_product_seo'
+  | 'update_inventory'
+  | 'list_orders'
+  | 'get_order'
 
 export type AgentAction = {
   tool: AgentToolName
@@ -39,4 +44,10 @@ export type AuditEntry = {
   status: 'ok' | 'error' | 'dry_run'
   summary: string
   args_hash: string
+}
+
+export type MistralToolCall = {
+  id: string
+  name: AgentToolName
+  arguments: Record<string, unknown>
 }

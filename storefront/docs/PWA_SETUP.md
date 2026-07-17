@@ -57,7 +57,7 @@ yarn start
 # Tests: manifest validation, offline route, sw.js presence
 yarn test:pwa
 
-# Expected: 7/7 tests pass
+# Expected: 20/20 tests pass
 ```
 
 ## Testing PWA Features

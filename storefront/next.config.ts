@@ -2,12 +2,18 @@ import { spawnSync } from 'node:child_process'
 import type { NextConfig } from 'next'
 import withSerwistInit from '@serwist/next'
 import { getLegacyRedirectEntries } from './src/lib/category-map'
+import { getSeoTaxonomyRedirects } from './src/lib/seo-taxonomy-redirects'
 import { getDashboardOrigin } from './src/lib/dashboard'
 
 const categoryRedirects = getLegacyRedirectEntries().map(({ source, destination }) => ({
   source,
   destination,
   permanent: true,
+}))
+const seoTaxonomyRedirects = getSeoTaxonomyRedirects().map(({ source, destination }) => ({
+  source,
+  destination,
+  statusCode: 301 as const,
 }))
 
 const revision =
@@ -34,6 +40,9 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_DIST_DIR || '.next',
+  poweredByHeader: false,
+  compress: true,
   images: {
     remotePatterns: [
       {
@@ -89,6 +98,7 @@ const nextConfig: NextConfig = {
   // Legacy PHP URL redirects
   async redirects() {
     return [
+      ...seoTaxonomyRedirects,
       ...categoryRedirects,
       {
         source: '/produkt/:slug',

@@ -1,13 +1,16 @@
 /**
- * Headless WooCommerce cart — cookie session BFF mapped to Shopify Cart shape.
+ * Headless WooCommerce cart — serverless-safe cookie payload (no in-memory Map).
+ * Cart id cookie value is `woo-cart-v1.<base64url(json)>.<hmac>` so any instance can restore it.
  */
 
+import { createHmac, timingSafeEqual } from 'node:crypto'
 import { validateWordPressEnv } from './env'
 import { getWooProductBySlug } from './products'
 import type { Cart, CartLine, Money } from '@/lib/shopify/types'
 
 const CART_COOKIE_NAME = 'growmedical_cart_id'
-const WOO_CART_PREFIX = 'woo-cart-'
+const WOO_CART_PREFIX = 'woo-cart-v1.'
+const MAX_COOKIE_PAYLOAD_BYTES = 3500
 
 export const CART_COOKIE = CART_COOKIE_NAME
 
@@ -23,12 +26,112 @@ type WooCartSession = {
   items: WooCartItem[]
 }
 
-const sessions = new Map<string, WooCartSession>()
+type PayloadV1 = {
+  v: 1
+  items: WooCartItem[]
+}
+
+function cartSigningSecret(): string {
+  const secret =
+    process.env.CART_SIGNING_SECRET?.trim() ||
+    process.env.WORDPRESS_REVALIDATION_SECRET?.trim() ||
+    process.env.DASHBOARD_AGENT_SECRET?.trim() ||
+    process.env.SHOPIFY_REVALIDATION_SECRET?.trim()
+
+  if (secret) return secret
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'Cart signing secret missing — set CART_SIGNING_SECRET or WORDPRESS_REVALIDATION_SECRET',
+    )
+  }
+
+  return 'growmedica-dev-cart-secret'
+}
+
+function signPayload(payloadB64: string): string {
+  return createHmac('sha256', cartSigningSecret()).update(payloadB64).digest('base64url').slice(0, 22)
+}
+
+function safeEqual(a: string, b: string): boolean {
+  try {
+    const ba = Buffer.from(a)
+    const bb = Buffer.from(b)
+    if (ba.length !== bb.length) return false
+    return timingSafeEqual(ba, bb)
+  } catch {
+    return false
+  }
+}
+
+/** Encode session items into a portable cart id (stored in the cookie). */
+export function encodeWooCartSession(items: WooCartItem[]): string {
+  const payload: PayloadV1 = { v: 1, items }
+  const payloadB64 = Buffer.from(JSON.stringify(payload), 'utf8').toString('base64url')
+  if (payloadB64.length > MAX_COOKIE_PAYLOAD_BYTES) {
+    throw new Error('Cart is too large to store in cookie')
+  }
+  const sig = signPayload(payloadB64)
+  return `${WOO_CART_PREFIX}${payloadB64}.${sig}`
+}
+
+/** Decode cart id cookie back into a session (null if invalid / legacy). */
+export function decodeWooCartSession(cartId: string | null | undefined): WooCartSession | null {
+  if (!cartId) return null
+  const trimmed = cartId.trim()
+  if (!trimmed.startsWith(WOO_CART_PREFIX)) return null
+
+  const rest = trimmed.slice(WOO_CART_PREFIX.length)
+  const dot = rest.lastIndexOf('.')
+  if (dot <= 0) return null
+
+  const payloadB64 = rest.slice(0, dot)
+  const sig = rest.slice(dot + 1)
+  if (!payloadB64 || !sig || !safeEqual(signPayload(payloadB64), sig)) {
+    return null
+  }
+
+  try {
+    const json = Buffer.from(payloadB64, 'base64url').toString('utf8')
+    const data = JSON.parse(json) as PayloadV1
+    if (data.v !== 1 || !Array.isArray(data.items)) return null
+    const items = data.items
+      .filter(
+        (item) =>
+          item &&
+          typeof item.productId === 'number' &&
+          typeof item.slug === 'string' &&
+          typeof item.quantity === 'number' &&
+          item.quantity > 0 &&
+          typeof item.variantId === 'string',
+      )
+      .map((item) => ({
+        productId: item.productId,
+        slug: item.slug,
+        quantity: Math.min(Math.floor(item.quantity), 99),
+        variantId: item.variantId,
+      }))
+    const id = encodeWooCartSession(items)
+    return { id, items }
+  } catch {
+    return null
+  }
+}
+
+function persistSession(items: WooCartItem[]): WooCartSession {
+  const id = encodeWooCartSession(items)
+  return { id, items }
+}
 
 export function getCartIdFromCookieHeader(cookieHeader: string | null): string | null {
   if (!cookieHeader) return null
   const match = cookieHeader.match(new RegExp(`${CART_COOKIE_NAME}=([^;]+)`))
-  return match?.[1] ?? null
+  if (!match?.[1]) return null
+  try {
+    return decodeURIComponent(match[1])
+  } catch {
+    return match[1]
+  }
 }
 
 function parseVariantProductId(variantId: string): number {
@@ -50,22 +153,56 @@ function money(amount: number): Money {
   return { amount: amount.toFixed(2), currencyCode: 'EUR' }
 }
 
-function getSession(cartId: string): WooCartSession | null {
-  return sessions.get(cartId) ?? null
+function cmsCheckoutBase(): string {
+  const env = validateWordPressEnv()
+  // Live cms has /kosik (cart) page; /checkout is 404 until Woo pages are created.
+  return env.WORDPRESS_BASE_URL.replace(/\/$/, '')
 }
 
-function createSessionId(): string {
-  return `${WOO_CART_PREFIX}${crypto.randomUUID()}`
+/**
+ * Build CMS checkout URL that seeds ALL cart lines via mu-plugin `gm_cart`.
+ * Single-line carts keep classic Woo `add-to-cart` (works without mu-plugin).
+ * Multi-line requires `wordpress/mu-plugins/growmedica-checkout-seed.php` on CMS.
+ */
+export function buildWooCheckoutUrl(items: Array<{ productId: number; quantity: number }>): string {
+  const base = cmsCheckoutBase()
+  const normalized = items
+    .filter((item) => item.productId > 0 && item.quantity > 0)
+    .map((item) => ({
+      productId: item.productId,
+      quantity: Math.min(Math.floor(item.quantity), 99),
+    }))
+
+  if (normalized.length === 0) return `${base}/kosik/`
+
+  if (normalized.length === 1) {
+    const params = new URLSearchParams()
+    params.set('add-to-cart', String(normalized[0].productId))
+    params.set('quantity', String(normalized[0].quantity))
+    return `${base}/kontrola-objednavky/?${params.toString()}`
+  }
+
+  const seed = normalized.map((item) => `${item.productId}:${item.quantity}`).join(',')
+  const params = new URLSearchParams()
+  params.set('gm_cart', seed)
+  return `${base}/?${params.toString()}`
+}
+
+function buildCheckoutUrl(items: WooCartItem[]): string {
+  return buildWooCheckoutUrl(items)
 }
 
 async function buildCart(session: WooCartSession): Promise<Cart> {
-  const env = validateWordPressEnv()
+  const products = await Promise.all(
+    session.items.map((item) => getWooProductBySlug(item.slug)),
+  )
+
   const lines: CartLine[] = []
   let subtotal = 0
 
-  for (const item of session.items) {
-    const product = await getWooProductBySlug(item.slug)
-    if (!product) continue
+  session.items.forEach((item, index) => {
+    const product = products[index]
+    if (!product) return
 
     const unitPrice = parseFloat(product.priceRange.minVariantPrice.amount)
     const lineTotal = unitPrice * item.quantity
@@ -90,16 +227,11 @@ async function buildCart(session: WooCartSession): Promise<Cart> {
         subtotalAmount: money(lineTotal),
       },
     })
-  }
-
-  const checkoutParams = session.items
-    .map((item) => `add-to-cart=${item.productId}&quantity=${item.quantity}`)
-    .join('&')
-  const checkoutUrl = `${env.WORDPRESS_BASE_URL.replace(/\/$/, '')}/checkout${checkoutParams ? `?${checkoutParams}` : ''}`
+  })
 
   return {
     id: session.id,
-    checkoutUrl,
+    checkoutUrl: buildCheckoutUrl(session.items),
     totalQuantity: session.items.reduce((sum, item) => sum + item.quantity, 0),
     lines: { edges: lines.map((node) => ({ node })) },
     cost: {
@@ -112,7 +244,7 @@ async function buildCart(session: WooCartSession): Promise<Cart> {
 }
 
 export async function getWooCart(cartId: string): Promise<Cart | null> {
-  const session = getSession(cartId)
+  const session = decodeWooCartSession(cartId)
   if (!session) return null
   return buildCart(session)
 }
@@ -120,91 +252,92 @@ export async function getWooCart(cartId: string): Promise<Cart | null> {
 export async function createWooCart(
   lines: Array<{ merchandiseId: string; quantity: number }>,
 ): Promise<Cart> {
-  const id = createSessionId()
-  const session: WooCartSession = { id, items: [] }
-  sessions.set(id, session)
-
+  let items: WooCartItem[] = []
   for (const line of lines) {
-    await addToWooCart(id, [line])
+    items = await mergeLine(items, line.merchandiseId, line.quantity)
+  }
+  return buildCart(persistSession(items))
+}
+
+async function mergeLine(
+  items: WooCartItem[],
+  merchandiseId: string,
+  quantity: number,
+): Promise<WooCartItem[]> {
+  const { productId, product } = await resolveProductByVariantId(merchandiseId)
+  if (!product) {
+    throw new Error('Merchandise not found')
   }
 
-  return (await getWooCart(id))!
+  const next = items.map((item) => ({ ...item }))
+  const existing = next.find((item) => item.productId === productId)
+  if (existing) {
+    existing.quantity = Math.min(existing.quantity + quantity, 99)
+  } else {
+    next.push({
+      productId,
+      slug: product.handle ?? `product-${productId}`,
+      quantity: Math.min(quantity, 99),
+      variantId: merchandiseId,
+    })
+  }
+  return next
 }
 
 export async function addToWooCart(
   cartId: string,
   lines: Array<{ merchandiseId: string; quantity: number }>,
 ): Promise<Cart> {
-  let session = getSession(cartId)
-  if (!session) {
-    session = { id: cartId, items: [] }
-    sessions.set(cartId, session)
-  }
+  const session = decodeWooCartSession(cartId)
+  let items = session?.items ? session.items.map((i) => ({ ...i })) : []
 
   for (const line of lines) {
-    const { productId, product } = await resolveProductByVariantId(line.merchandiseId)
-    if (!product) {
-      throw new Error('Merchandise not found')
-    }
-
-    const existing = session.items.find((item) => item.productId === productId)
-    if (existing) {
-      existing.quantity += line.quantity
-    } else {
-      session.items.push({
-        productId,
-        slug: product?.handle ?? `product-${productId}`,
-        quantity: line.quantity,
-        variantId: line.merchandiseId,
-      })
-    }
+    items = await mergeLine(items, line.merchandiseId, line.quantity)
   }
 
-  return buildCart(session)
+  return buildCart(persistSession(items))
 }
 
 export async function updateWooCartLines(
   cartId: string,
   lines: Array<{ id: string; quantity: number }>,
 ): Promise<Cart> {
-  const session = getSession(cartId)
+  const session = decodeWooCartSession(cartId)
   if (!session) throw new Error('Cart not found')
+
+  let items = session.items.map((i) => ({ ...i }))
 
   for (const line of lines) {
     const productId = Number(line.id.replace('woo-line-', ''))
-    const item = session.items.find((i) => i.productId === productId)
-    if (!item) continue
     if (line.quantity <= 0) {
-      session.items = session.items.filter((i) => i.productId !== productId)
+      items = items.filter((i) => i.productId !== productId)
     } else {
-      item.quantity = line.quantity
+      const item = items.find((i) => i.productId === productId)
+      if (item) item.quantity = Math.min(Math.floor(line.quantity), 99)
     }
   }
 
-  return buildCart(session)
+  return buildCart(persistSession(items))
 }
 
 export async function removeWooCartLines(cartId: string, lineIds: string[]): Promise<Cart> {
-  const session = getSession(cartId)
+  const session = decodeWooCartSession(cartId)
   if (!session) throw new Error('Cart not found')
 
   const removeIds = new Set(lineIds.map((id) => Number(id.replace('woo-line-', ''))))
-  session.items = session.items.filter((item) => !removeIds.has(item.productId))
-
-  return buildCart(session)
+  const items = session.items.filter((item) => !removeIds.has(item.productId))
+  return buildCart(persistSession(items))
 }
 
 export async function updateWooCartDiscountCodes(
   cartId: string,
   _discountCodes: string[],
 ): Promise<Cart> {
-  const session = getSession(cartId)
+  const session = decodeWooCartSession(cartId)
   if (!session) throw new Error('Cart not found')
   return buildCart(session)
 }
 
 export function getWooCheckoutUrl(productId: number, quantity = 1): string {
-  const env = validateWordPressEnv()
-  const base = env.WORDPRESS_BASE_URL.replace(/\/$/, '')
-  return `${base}/checkout/?add-to-cart=${productId}&quantity=${quantity}`
+  return buildWooCheckoutUrl([{ productId, quantity }])
 }

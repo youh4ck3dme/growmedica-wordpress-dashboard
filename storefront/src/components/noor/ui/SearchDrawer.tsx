@@ -11,15 +11,9 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { useT } from '@/components/i18n/LocaleProvider'
+import { useProductSearch } from '@/hooks/useProductSearch'
 import { getProductUrl } from '@/lib/utils'
-
-interface SearchProduct {
-  handle: string
-  title: string
-  vendor: string | null
-  availableForSale: boolean
-  priceLabel: string
-}
 
 interface SearchDrawerContextValue {
   open: boolean
@@ -52,16 +46,15 @@ export function useSearchDrawer(): SearchDrawerContextValue {
 }
 
 function SearchDrawerPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useT()
   const titleId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState<SearchProduct[]>([])
-  const [loading, setLoading] = useState(false)
+  const { products: results, loading } = useProductSearch(query, open)
 
   useEffect(() => {
     if (!open) {
       setQuery('')
-      setResults([])
       return
     }
 
@@ -79,39 +72,6 @@ function SearchDrawerPanel({ open, onClose }: { open: boolean; onClose: () => vo
     }
   }, [open, onClose])
 
-  useEffect(() => {
-    if (!open) return
-
-    const trimmed = query.trim()
-    if (trimmed.length < 2) {
-      setResults([])
-      setLoading(false)
-      return
-    }
-
-    const controller = new AbortController()
-    const timer = window.setTimeout(async () => {
-      setLoading(true)
-      try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(trimmed)}`, {
-          signal: controller.signal,
-        })
-        if (!res.ok) throw new Error('search failed')
-        const data = (await res.json()) as { products: SearchProduct[] }
-        setResults(data.products)
-      } catch (err) {
-        if ((err as Error).name !== 'AbortError') setResults([])
-      } finally {
-        setLoading(false)
-      }
-    }, 280)
-
-    return () => {
-      controller.abort()
-      window.clearTimeout(timer)
-    }
-  }, [query, open])
-
   if (!open) return null
 
   return (
@@ -119,7 +79,7 @@ function SearchDrawerPanel({ open, onClose }: { open: boolean; onClose: () => vo
       <button
         type="button"
         className="noor-search-drawer__backdrop"
-        aria-label="Zavrieť vyhľadávanie"
+        aria-label={t('search.closeSuggestions')}
         onClick={onClose}
       />
       <aside
@@ -130,13 +90,13 @@ function SearchDrawerPanel({ open, onClose }: { open: boolean; onClose: () => vo
       >
         <div className="noor-search-drawer__header">
           <h2 id={titleId} className="noor-search-drawer__title">
-            Vyhľadávanie
+            {t('search.title')}
           </h2>
           <button
             type="button"
             className="noor-search-drawer__close"
             onClick={onClose}
-            aria-label="Zavrieť"
+            aria-label={t('search.closeSuggestions')}
           >
             ×
           </button>
@@ -144,7 +104,7 @@ function SearchDrawerPanel({ open, onClose }: { open: boolean; onClose: () => vo
 
         <div className="noor-search-drawer__body">
           <label htmlFor="noor-search-input" className="sr-only">
-            Hľadať produkty
+            {t('home.searchAria')}
           </label>
           <input
             ref={inputRef}
@@ -152,17 +112,18 @@ function SearchDrawerPanel({ open, onClose }: { open: boolean; onClose: () => vo
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Hľadať produkty, značky…"
+            placeholder={t('search.placeholder')}
             className="noor-input noor-search-drawer__input"
             autoComplete="off"
+            enterKeyHint="search"
           />
 
           {loading ? (
-            <p className="noor-search-drawer__hint">Hľadám…</p>
+            <p className="noor-search-drawer__hint">{t('search.loading')}</p>
           ) : query.trim().length < 2 ? (
-            <p className="noor-search-drawer__hint">Zadajte aspoň 2 znaky</p>
+            <p className="noor-search-drawer__hint">{t('search.minChars')}</p>
           ) : results.length === 0 ? (
-            <p className="noor-search-drawer__hint">Nič sme nenašli</p>
+            <p className="noor-search-drawer__hint">{t('search.noHits')}</p>
           ) : (
             <ul className="noor-search-drawer__results">
               {results.map((product) => (
@@ -176,7 +137,7 @@ function SearchDrawerPanel({ open, onClose }: { open: boolean; onClose: () => vo
                     <span className="noor-search-drawer__result-meta">
                       {product.vendor ? `${product.vendor} · ` : ''}
                       {product.priceLabel}
-                      {!product.availableForSale ? ' · Vypredané' : ''}
+                      {!product.availableForSale ? ` · ${t('search.soldOut')}` : ''}
                     </span>
                   </Link>
                 </li>
@@ -190,7 +151,7 @@ function SearchDrawerPanel({ open, onClose }: { open: boolean; onClose: () => vo
               className="noor-search-drawer__all"
               onClick={onClose}
             >
-              Zobraziť všetky výsledky
+              {t('search.viewAll')}
             </Link>
           ) : null}
         </div>

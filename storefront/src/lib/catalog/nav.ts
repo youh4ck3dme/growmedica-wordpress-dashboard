@@ -35,3 +35,16 @@ export async function getCategoryFeaturedProducts(handle: string, count = 3) {
   }
   return getShopifyCategoryFeatured(handle, count)
 }
+
+/** One-shot mega-menu payload — avoids N sequential featured fetches in HeaderShell. */
+export async function getMegaMenuCategories(featuredCount = 3) {
+  const collections = await getNavCollectionItems()
+  const withProducts = collections.filter((c) => c.productCount > 0)
+
+  return Promise.all(
+    withProducts.map(async (cat) => ({
+      ...cat,
+      featuredProducts: await getCategoryFeaturedProducts(cat.handle, featuredCount),
+    })),
+  )
+}

@@ -82,7 +82,7 @@ function validateShopifyEnv(): ShopifyEnv {
   const result = shopifyEnvSchema.safeParse({
     SHOPIFY_STORE_DOMAIN: readShopifyStoreDomain(),
     SHOPIFY_STOREFRONT_ACCESS_TOKEN: readShopifyStorefrontToken(),
-    SHOPIFY_API_VERSION: readEnv('SHOPIFY_API_VERSION') ?? '2025-01',
+    SHOPIFY_API_VERSION: readEnv('SHOPIFY_API_VERSION') ?? '2026-07',
   })
 
   if (!result.success) {

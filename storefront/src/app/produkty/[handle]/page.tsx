@@ -15,7 +15,7 @@ import {
   getProductCompositionHtml,
   getAllProductHandlesForSitemap,
 } from '@/lib/catalog/products'
-import { getProductMetadata, getProductJsonLd, getBreadcrumbJsonLd } from '@/lib/seo'
+import { getProductMetadata, getProductJsonLd, getBreadcrumbJsonLd, serializeJsonLd } from '@/lib/seo'
 import { getCollectionUrl } from '@/lib/utils'
 import { getCategoryDefinition, resolveCategory } from '@/lib/category-map'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
@@ -76,11 +76,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(productJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
 
       <div className="py-8 lg:py-12">
