@@ -82,13 +82,15 @@ Keď user pýta Packeta, debetnú kartu (Stripe), SuperFaktúru, GoPay alebo DPD
 
 - **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** — centrálny hub (kde získať / kam vložiť)
 - SuperFaktúra detail: [docs/SUPERFAKTURA_SETUP.md](./docs/SUPERFAKTURA_SETUP.md)
+- SuperFaktúra majiteľ (2a–2k): [majitel.md](./majitel.md#2-superfaktúra--automatické-faktúry)
+- SuperFaktúra API pattern: [docs/reference/superfaktura-api-pattern.md](./docs/reference/superfaktura-api-pattern.md)
 - Shopify Admin: [storefront/docs/poznamky-agent.md](./storefront/docs/poznamky-agent.md)
 
 Nikdy necommituj merchant secrets.
 
 ### Ďalší vývoj (priorita)
 
-1. Live = Woo na www (`CMS_PROVIDER=wordpress`). Zostáva: E2E nákup, SuperFaktúra API, Stripe/GoPay, Packeta/DPD, sklad. Detail: [STATUS.md](./STATUS.md) · [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
+1. Live = Woo na www (`CMS_PROVIDER=wordpress`). Zostáva: E2E nákup, SuperFaktúra majiteľ **2a–2j**, Stripe/GoPay, Packeta/DPD, sklad. Detail: [STATUS.md](./STATUS.md) · [majitel.md](./majitel.md) · [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
 2. Dashboard Agent tools — rozšírenie `src/lib/dashboard-agent/tools.ts`
 3. ISR webhooks — `wordpress/mu-plugins/growmedica-revalidate.php`
 4. Import katalógu — `yarn import:categories` + `yarn import:products`

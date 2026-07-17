@@ -13,6 +13,8 @@
 | Prevádzka | [OPERATIONS.md](./OPERATIONS.md) |
 | Firma / IBAN | [vzorfirma.md](./vzorfirma.md) |
 | SuperFaktúra detail | [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) |
+| SuperFaktúra majiteľ (2a–2k) | [../majitel.md](../majitel.md#2-superfaktúra--automatické-faktúry) |
+| SuperFaktúra API pattern | [reference/superfaktura-api-pattern.md](./reference/superfaktura-api-pattern.md) |
 | Shopify Admin (legacy) | [../storefront/docs/poznamky.md](../storefront/docs/poznamky.md) |
 | Deploy checklist | [../PRODUCTION_CHECKLIST.md](../PRODUCTION_CHECKLIST.md) |
 | Lokálne secrets (gitignored) | `wordpress-production.local.env`, `storefront/.env.local` |
@@ -26,7 +28,7 @@
 
 | Integrácia | Plugin na cms | Stav | Čaká na teba |
 |------------|---------------|------|----------------|
-| **SuperFaktúra** (faktúry) | SuperFaktúra WooCommerce **1.53.2** ✅ | defaults BACS/COD ✅ | API e-mail + key + company_id |
+| **SuperFaktúra** (faktúry) | SuperFaktúra WooCommerce **1.53.2** ✅ | defaults + smoke skript ✅ · api_* ⏳ | Registrácia + API (**majitel 2a–2j**) |
 | **Stripe** (debetná/kreditná karta) | WooCommerce Stripe Gateway ✅ | brána **off** | publishable + secret (test/live) |
 | **GoPay** | gopay-gateway ✅ | brána **off** | merchant ID + client credentials |
 | **Packeta** | Packeta **2.3.1** ✅ | flat rate OK · mapa API ❌ | API password + odosielateľ |
@@ -42,25 +44,24 @@ Shop **už predáva** cez BACS + COD bez položiek vyššie.
 ## 1. SuperFaktúra (PDF faktúry / proforma)
 
 **Prečo:** automatické doklady z Woo objednávok.  
-**Detail:** [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md)
+**Detail:** [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) · API vzor: [reference/superfaktura-api-pattern.md](./reference/superfaktura-api-pattern.md)
 
-### Kroky (ty)
+### Kroky (ty) — detail s odškrtávacími bodmi
 
-1. Prihlás sa: https://moja.superfaktura.sk/  
-2. **Nástroje → API** (`/api_access`) — skopíruj:
-   - **API e-mail** (rovnaký ako login do SF)
-   - **API key**
-   - **Company ID** (ak máš viac firiem)
-3. Vlož do CMS:  
-   https://cms.growmedica.cz/wp-admin/admin.php?page=wc-settings&tab=superfaktura  
-   - Version: **SuperFaktura.sk**  
-   - Sandbox: **off**  
-4. Klikni **Test API connection** → OK.
+Kompletný ľudský checklist: **[majitel.md §2 — body 2a–2k](../majitel.md#2-superfaktúra--automatické-faktúry)**.
+
+Skrátene:
+
+1. **Zaregistruj / prihlás** účet: https://moja.superfaktura.sk/ (firma GrowMedica s.r.o.; Premium/trial s API).  
+2. **Nástroje → API** — API e-mail, API key, Company ID.  
+3. CMS SuperFaktúra tab → Version SK, Sandbox off → Uložiť → **Test API**.  
+4. Napíš agentovi „API vložené, otestuj“.
 
 ### Agent po tvojom kroku
 
 - Overí `GET /wp-json/growmedica/v1/sf-status` (`api_key_set: true`)
-- Smoke: test order BACS → proforma / faktúra
+- `./scripts/smoke-superfaktura-30.sh` (30× full green)
+- Smoke: 1× test order BACS → proforma / faktúra
 - Reinstall defaults: `./scripts/install-superfaktura-cms.sh`
 
 ### Už nastavené agentom
@@ -69,6 +70,7 @@ Shop **už predáva** cez BACS + COD bez položiek vyššie.
 - BACS: proforma `on-hold` → faktúra `processing` (paid)  
 - COD: faktúra `processing` (nie paid)  
 - Firemné polia na checkoute, retry API, prevent concurrency  
+- Infra smoke 30/30 (`ALLOW_WITHOUT_API=1`) — full green čaká na API  
 
 **Nikdy:** API key do gitu / Vercel / chatu v plain commit.
 
@@ -188,7 +190,7 @@ Po úspešnom setup **neukladaj** merchant secrets do README, STATUS ani OPERATI
 ## Rýchly checklist (majiteľ)
 
 ```
-[ ] SuperFaktúra API (e-mail + key + company_id) + Test connection
+[ ] SuperFaktúra 2a–2j (majitel.md) + Test connection → agent „API vložené“
 [ ] Stripe test keys → enable → test card
 [ ] (voliteľne) Stripe live
 [ ] (voliteľne) GoPay

@@ -49,11 +49,11 @@ Lokálne secrets: gitignored `wordpress-production.local.env`, `storefront/.env.
 - [x] E-mail footer + SK subjects  
 - [x] SMTP  
 - [x] terms_page_id (VOP)  
-- [ ] SuperFaktúra API (e-mail + key + company_id)  
+- [ ] SuperFaktúra — majiteľ **2a–2j** ([majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry)) · plugin+defaults ✅ · api_* ⏳  
 - [ ] Stripe / GoPay keys (karty)  
 - [ ] Packeta / DPD API  
 
-**Všetky merchant kroky (kde získať / kam vložiť):** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)  
+**Všetky merchant kroky:** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md) · **ľudsky:** [majitel.md](./majitel.md)  
 Firma: [docs/vzorfirma.md](./docs/vzorfirma.md) · SuperFaktúra: [docs/SUPERFAKTURA_SETUP.md](./docs/SUPERFAKTURA_SETUP.md)
 
 ---

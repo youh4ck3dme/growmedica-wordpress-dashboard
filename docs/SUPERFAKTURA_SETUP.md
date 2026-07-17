@@ -11,15 +11,24 @@ Zip archívy (gitignored): `docs/plugins/woocommerce-superfaktura-1.53.2.zip`
 
 ---
 
-## Stav (agent)
+## Stav (2026-07-17)
 
-| Krok | Stav |
-|------|------|
-| Stiahnutie zip + lokálny extract | ✅ `docs/plugins/` + `wordpress-data/wp-content/plugins/` |
-| Inštalácia + aktivácia na cms | ✅ `woocommerce-superfaktura` 1.53.2 **active** |
-| Odporúčané defaulty (bez secrets) | ✅ Code Snippet *GrowMedica SuperFaktura defaults* |
-| API e-mail / API key / Company ID | ⏳ **ty** (Tools → API v SuperFaktúre) |
-| Smoke: test order → faktúra | ⏳ po API credentials |
+| Krok | Stav | Kto |
+|------|------|-----|
+| Plugin `woocommerce-superfaktura` **1.53.2** active | ✅ | agent |
+| Defaults BACS/COD + retry + concurrency (Code Snippet) | ✅ re-applied | agent |
+| Status REST `GET /wp-json/growmedica/v1/sf-status` | ✅ | agent |
+| Smoke skript `scripts/smoke-superfaktura-30.sh` | ✅ | agent |
+| Smoke 30× infra (`ALLOW_WITHOUT_API=1`) | ✅ **30/30** | agent |
+| API pattern referencia `docs/reference/` | ✅ | agent |
+| **Registrácia SF + API e-mail/key/company_id v Woo** | ⏳ | **majiteľ** ([majitel.md §2](../majitel.md#2-superfaktúra--automatické-faktúry) body **2a–2j**) |
+| Full smoke 30× (`api_*_set: true`) | ⏳ | agent po „API vložené“ |
+| 1× BACS test order → proforma v SF | ⏳ | agent + majiteľ kontrola **2k** |
+
+**Aktuálny live `sf-status` (bez secrets):** `plugin_active: true`, `lang: sk`, `sandbox: false`, `defaults_applied: true`, **`api_email_set: false`**, **`api_key_set: false`**.
+
+**Neinštalovať:** custom CPT plugin `newprojekt-faktury` z iCloud `su-fakktura` — produkcia = len oficiálny Woo plugin.
+
 
 ---
 
@@ -70,34 +79,26 @@ wp --path=growmedica.cz/sub/cms plugin install ./woocommerce-superfaktura-1.53.2
 
 ---
 
-## 3. API credentials (povinné na tvojej strane)
+## 3. API credentials (povinné — majiteľ)
 
-Skrátená kópia v handoff hub: [MERCHANT_KEYS.md § SuperFaktúra](./MERCHANT_KEYS.md#1-superfaktúra-pdf-faktúry--proforma).
+Ľudský checklist s drobnými úlohami **2a–2k:** **[majitel.md §2](../majitel.md#2-superfaktúra--automatické-faktúry)**.
 
-1. Prihlás sa do [moja.superfaktura.sk](https://moja.superfaktura.sk/)  
-   (firma je SK — **SuperFaktura.sk**, nie `.cz`, pokiaľ nemáte CZ účet).  
-2. **Nástroje → API** (`/api_access`) — skopíruj:
-   - **API e-mail** (login e-mail do SF)
-   - **API kľúč**
-   - **Company ID** (ak máš viac firiem v účte)
-3. CMS: **WooCommerce → Nastavenia → SuperFaktúra** (tab Authorization):
+Skrátene (tech):
+
+1. Registrácia / login: [moja.superfaktura.sk](https://moja.superfaktura.sk/) (firma SK — **SuperFaktura.sk**).  
+2. **Nástroje → API** — API e-mail, API kľúč, Company ID.  
+3. CMS: **WooCommerce → Nastavenia → SuperFaktúra**:
    - Version: **SuperFaktura.sk**
-   - Sandbox: **off** (produkcia)
+   - Sandbox: **off**
    - API Email / API Key / Company ID
-4. Klikni **Test API connection** — musí byť OK.
-5. Voliteľne: Logo ID, Bank Account ID (z SF profilu).
+4. **Test API connection** — musí byť OK.  
+5. Agentovi: „API vložené, otestuj“.
 
 **Nikdy** nedávaj API key do gitu, do `STATUS.md` ani do Vercel env.  
-Voliteľný lokálny mirror (gitignored): `wordpress-production.local.env`:
-
-```bash
-# len poznámka pre ops — plugin číta options v WP, nie tieto env
-# SUPERFAKTURA_API_EMAIL=...
-# SUPERFAKTURA_API_KEY=...
-# SUPERFAKTURA_COMPANY_ID=...
-```
+Voliteľný lokálny mirror (gitignored): `wordpress-production.local.env` (len ops poznámka — plugin číta WP options).
 
 Vyžaduje **Premium** (alebo trial) účet SuperFaktúry s API prístupom.
+
 
 ---
 
@@ -133,6 +134,22 @@ export WORDPRESS_BASE_URL=https://cms.growmedica.cz
 curl -sS -u "$WORDPRESS_ADMIN_USER:$WORDPRESS_APP_PASSWORD" \
   "$WORDPRESS_BASE_URL/wp-json/growmedica/v1/sf-status" | python3 -m json.tool
 ```
+
+### 30× stability smoke
+
+```bash
+set -a; source wordpress-production.local.env; set +a
+export WORDPRESS_BASE_URL=https://cms.growmedica.cz
+./scripts/smoke-superfaktura-30.sh
+```
+
+Vyžaduje `api_email_set` + `api_key_set`. Kým majiteľ nevloží API:
+
+```bash
+ALLOW_WITHOUT_API=1 ./scripts/smoke-superfaktura-30.sh   # plugin + defaults only
+```
+
+API pattern referencia (nie CPT plugin): [reference/superfaktura-api-pattern.md](./reference/superfaktura-api-pattern.md)
 
 Očakávané po plnej konfigurácii:
 

@@ -35,7 +35,7 @@ Odškrtávaj:
 ### Priorita 1 — urob čo najskôr
 
 - [ ] **1. Manuálny test nákupu** (over, že ti príde e-mail a objednávka v adminu)
-- [ ] **2. SuperFaktúra API** (automatické faktúry / zálohové)
+- [ ] **2. SuperFaktúra** — registrácia + API (drobné body **2a–2k** nižšie v §2)
 - [ ] **3. Telefónne číslo** na web (ak ho chceš zverejniť)
 
 ### Priorita 2 — platby kartou a doprava „na mapu“
@@ -76,25 +76,43 @@ Odškrtávaj:
 
 **Prečo:** zálohové a ostré PDF faktúry z každej objednávky.
 
+**Áno — musíš sa registrovať** na [moja.superfaktura.sk](https://moja.superfaktura.sk/) pod firmou GrowMedica s.r.o. (bez účtu + API kľúča plugin na cms faktúry nevytvorí). Často treba **Premium / trial s API**.
+
 | | |
 |--|--|
 | **Čo potrebuješ** | API e-mail, API kľúč, Company ID |
-| **Kde to získaš** | https://moja.superfaktura.sk/ → **Nástroje → API** (menu Tools / API access) |
+| **Kde to získaš** | https://moja.superfaktura.sk/ → **Nástroje → API** |
 | **Kam to vložíš** | https://cms.growmedica.cz/wp-admin/admin.php?page=wc-settings&tab=superfaktura |
-| **Nastavenie** | Version = **SuperFaktura.sk** · Sandbox = **vypnuté** · potom **Test API connection** |
+| **Nastavenie** | Version = **SuperFaktura.sk** · Sandbox = **vypnuté** · **Test API connection** |
 
-**Kroky bodovo:**
+### Stav (2026-07-17) — čo už agent spravil vs. čo ostáva tebe
 
-1. Prihlás sa do SuperFaktúry (účet firmy GrowMedica s.r.o.).  
-2. Choď do **Nástroje → API**.  
-3. Skopíruj: **e-mail**, **API key**, **Company ID** (ak ho ukazuje).  
-4. Otvor odkaz CMS vyššie (WooCommerce → Nastavenia → SuperFaktúra).  
-5. Vlož údaje → **Uložiť** → **Test API connection** musí byť zelené / OK.  
+| | Stav |
+|--|------|
+| Plugin SuperFaktúra WooCommerce **1.53.2** na cms | ✅ aktívny |
+| Predvolené pravidlá (BACS / COD, retry, concurrency) | ✅ nastavené |
+| Stabilita endpointu `sf-status` (30×) | ✅ infra OK (bez API kľúča) |
+| **Registrácia účtu SuperFaktúra + API kľúč** | ⏳ **ty** |
+| Test API connection v Woo | ⏳ **ty** |
+| Ostrá faktúra z testovej objednávky | ⏳ po API (agent overí) |
 
-**Poznámka:** často treba **Premium** (alebo trial) účet SuperFaktúry s API.  
-**Nikdy** nedávaj API kľúč do e-mailu verejne ani do GitHubu — stačí ho vložiť do CMS, alebo napísať agentovi „hotovo, otestuj“.
+### Drobné úlohy — odškrtávaj po poradí
 
-Detail pre tech: [docs/SUPERFAKTURA_SETUP.md](./docs/SUPERFAKTURA_SETUP.md)
+- [ ] **2a.** Založ / otvor účet na https://moja.superfaktura.sk/ (firma **GrowMedica s.r.o.**, SK — nie CZ účet).  
+- [ ] **2b.** Over plán: **Premium** alebo **trial s API** (free často API nemá).  
+- [ ] **2c.** Vo firme SuperFaktúry doplň údaje ako v [docs/vzorfirma.md](./docs/vzorfirma.md): názov, adresa, IČO, DIČ, IBAN.  
+- [ ] **2d.** Choď na **Nástroje → API** (`/api_access`).  
+- [ ] **2e.** Skopíruj: **API e-mail** (login), **API key**, **Company ID** (ak je viac firiem).  
+- [ ] **2f.** Otvor CMS: [WooCommerce → Nastavenia → SuperFaktúra](https://cms.growmedica.cz/wp-admin/admin.php?page=wc-settings&tab=superfaktura).  
+- [ ] **2g.** Nastav: Version = **SuperFaktura.sk**, Sandbox = **off**.  
+- [ ] **2h.** Vlož e-mail + key (+ company id) → **Uložiť**.  
+- [ ] **2i.** Klikni **Test API connection** → musí byť OK / zelené.  
+- [ ] **2j.** Napíš agentovi vetu: **„API vložené, otestuj“**.  
+- [ ] **2k.** (Po agente) skontroluj v SuperFaktúre, či z testovej BACS objednávky prišla **zálohová** / faktúra.
+
+**Nikdy** nedávaj API kľúč do e-mailu verejne ani do GitHubu — len do CMS, alebo agentovi „hotovo“.
+
+**Tech docs:** [docs/SUPERFAKTURA_SETUP.md](./docs/SUPERFAKTURA_SETUP.md) · [docs/reference/superfaktura-api-pattern.md](./docs/reference/superfaktura-api-pattern.md) · [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md#1-superfaktúra-pdf-faktúry--proforma)
 
 ---
 
@@ -304,7 +322,7 @@ Po nastavení **nemusíš** posielať kópie kľúčov ešte raz — stačí „
 ```text
 MAJITEĽ — GrowMedica checklist
 [ ] Test nákup BACS na www.growmedica.cz
-[ ] SuperFaktúra: API e-mail + key (+ company id) → Woo SuperFaktúra → Test OK
+[ ] SuperFaktúra 2a–2j: registrácia → API → Woo tab → Test OK → „API vložené, otestuj“
 [ ] Telefón na web: +___
 [ ] Stripe: test keys → Woo Payments
 [ ] Packeta: API heslo + odosielateľ

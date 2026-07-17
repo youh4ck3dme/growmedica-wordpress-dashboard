@@ -31,10 +31,10 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 | Košík | ✅ cookie BFF → cms checkout |
 | Platby | ✅ BACS + COD · ⬜ Stripe/GoPay (karty) |
 | Doprava SK | ✅ flat rates · ⬜ Packeta/DPD map API |
-| Faktúry | ✅ SuperFaktúra plugin · ⬜ API key (ty) |
+| Faktúry | ✅ SuperFaktúra plugin · ⬜ API (**[majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry)** body 2a–2j) |
 | Firma / e-maily | ✅ [docs/vzorfirma.md](./docs/vzorfirma.md) |
 | **Merchant API (ty)** | **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** — Packeta, karta, SF, GoPay, DPD |
-| **Majiteľ (ľudsky)** | **[majitel.md](./majitel.md)** — checklist čo dodať a kde to získať |
+| **Majiteľ (ľudsky)** | **[majitel.md](./majitel.md)** — checklist čo dodať a kde to získať (SF: **2a–2k**) |
 
 ## Quick start
 
