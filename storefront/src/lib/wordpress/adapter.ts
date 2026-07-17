@@ -4,6 +4,7 @@
  */
 
 import type { Money, Product, ProductListItem, ShopifyImage } from '@/lib/shopify/types'
+import { getDeepestVisibleProductType } from '@/lib/product-facets'
 import type { WooCategory, WooProduct } from './types'
 
 const DEFAULT_CURRENCY = 'EUR'
@@ -23,6 +24,35 @@ function toImage(image: WooProduct['images'][number] | undefined): ShopifyImage 
   }
 }
 
+function metaString(product: WooProduct, key: string): string | null {
+  const entry = product.meta_data?.find((m) => m.key === key)
+  if (entry == null || entry.value == null) return null
+  const value = String(entry.value).trim()
+  return value.length > 0 ? value : null
+}
+
+/**
+ * Real manufacturer/brand — never Woo tags[0] (often barcode / SKU noise).
+ * Prefer Shopify import meta, then Brands for Woo, then safe default.
+ */
+export function resolveWooVendor(product: WooProduct): string {
+  const fromMeta =
+    metaString(product, '_shopify_vendor') ||
+    metaString(product, 'shopify_vendor') ||
+    metaString(product, '_vendor')
+  if (fromMeta) return fromMeta
+
+  const brand = product.brands?.[0]?.name?.trim()
+  if (brand) return brand
+
+  return 'GrowMedica'
+}
+
+/** Prefer deepest category name for "Forma / Kategória" facet (last term is usually leaf). */
+export function resolveWooProductType(product: WooProduct): string {
+  return getDeepestVisibleProductType(product.categories.map((category) => category.name))
+}
+
 export function wooProductToListItem(product: WooProduct): ProductListItem {
   const featuredImage = toImage(product.images[0])
   const price = toMoney(product.price)
@@ -32,8 +62,8 @@ export function wooProductToListItem(product: WooProduct): ProductListItem {
     id: `gid://woocommerce/Product/${product.id}`,
     handle: product.slug,
     title: product.name,
-    vendor: product.tags[0]?.name ?? 'GrowMedica',
-    productType: product.categories[0]?.name ?? '',
+    vendor: resolveWooVendor(product),
+    productType: resolveWooProductType(product),
     tags: product.tags.map((tag) => tag.name),
     availableForSale: product.stock_status === 'instock',
     priceRange: {

@@ -76,11 +76,21 @@ Ak user dá Admin token alebo chce Nexus/Shopify zápis:
 4. Po úspechu pripomeň Nexus env na [growmedica-nexus.lovable.app/admin](https://growmedica-nexus.lovable.app/admin) — mimo tohto repa
 5. Nikdy nedávaj `shpat_` do `SHOPIFY_STOREFRONT_ACCESS_TOKEN`
 
+### Merchant API (user handoff)
+
+Keď user pýta Packeta, debetnú kartu (Stripe), SuperFaktúru, GoPay alebo DPD — čítaj a aktualizuj:
+
+- **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** — centrálny hub (kde získať / kam vložiť)
+- SuperFaktúra detail: [docs/SUPERFAKTURA_SETUP.md](./docs/SUPERFAKTURA_SETUP.md)
+- Shopify Admin: [storefront/docs/poznamky-agent.md](./storefront/docs/poznamky-agent.md)
+
+Nikdy necommituj merchant secrets.
+
 ### Ďalší vývoj (priorita)
 
-1. Live = Woo na www (`CMS_PROVIDER=wordpress`). Zostáva: E2E nákup, Stripe/GoPay, Packeta/DPD API, sklad. Detail: [STATUS.md](./STATUS.md)
+1. Live = Woo na www (`CMS_PROVIDER=wordpress`). Zostáva: E2E nákup, SuperFaktúra API, Stripe/GoPay, Packeta/DPD, sklad. Detail: [STATUS.md](./STATUS.md) · [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
 2. Dashboard Agent tools — rozšírenie `src/lib/dashboard-agent/tools.ts`
 3. ISR webhooks — `wordpress/mu-plugins/growmedica-revalidate.php`
 4. Import katalógu — `yarn import:categories` + `yarn import:products`
 
-**Bez UI zmien.** Pozri [../TODO.md](../TODO.md).
+**Bez UI zmien.** Pozri [TODO.md](./TODO.md).

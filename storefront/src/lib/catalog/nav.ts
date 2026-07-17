@@ -39,10 +39,14 @@ export async function getCategoryFeaturedProducts(handle: string, count = 3) {
 /** One-shot mega-menu payload — avoids N sequential featured fetches in HeaderShell. */
 export async function getMegaMenuCategories(featuredCount = 3) {
   const collections = await getNavCollectionItems()
-  const withProducts = collections.filter((c) => c.productCount > 0)
+  // Keep full SK tree tops even when productCount is 0 (parity with growmedica.sk).
+  // Still skip empty leaf-only nodes that have no children and no products.
+  const forMenu = collections.filter(
+    (c) => c.productCount > 0 || (c.children && c.children.length > 0) || c.handle.length > 0,
+  )
 
   return Promise.all(
-    withProducts.map(async (cat) => ({
+    forMenu.map(async (cat) => ({
       ...cat,
       featuredProducts: await getCategoryFeaturedProducts(cat.handle, featuredCount),
     })),

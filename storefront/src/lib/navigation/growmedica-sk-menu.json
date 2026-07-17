@@ -1,0 +1,1008 @@
+{
+  "source": "https://growmedica.sk main menu #nav 2026-07-17",
+  "note": "Product category tree from growmedica.sk #nav. href uses /kategorie/{path}; skPath=original SK slug; path may be aliased to SEO freeze.",
+  "items": [
+    {
+      "label": "BALÍČKY ZDRAVIA",
+      "path": "balicky-zdravia",
+      "children": [],
+      "skPath": "balicky-zdravia"
+    },
+    {
+      "label": "ZDRAVOTNÉ RIEŠENIA",
+      "path": "zdravotne-riesenia",
+      "children": [
+        {
+          "label": "Imunita",
+          "path": "zdravotne-riesenia/imunita",
+          "children": [],
+          "skPath": "zdravotne-riesenia/imunita"
+        },
+        {
+          "label": "Alergie a Ekzémy",
+          "path": "zdravotne-riesenia/alergie-a-ekzemy",
+          "children": [],
+          "skPath": "zdravotne-riesenia/alergie-a-ekzemy"
+        },
+        {
+          "label": "Detox",
+          "path": "zdravotne-riesenia/detox",
+          "children": [],
+          "skPath": "zdravotne-riesenia/detox"
+        },
+        {
+          "label": "Oči",
+          "path": "zdravotne-riesenia/oci",
+          "children": [],
+          "skPath": "zdravotne-riesenia/oci"
+        },
+        {
+          "label": "Podpora pri strese",
+          "path": "zdravotne-riesenia/podpora-pri-strese",
+          "children": [],
+          "skPath": "zdravotne-riesenia/podpora-pri-strese"
+        },
+        {
+          "label": "Spánok",
+          "path": "zdravotne-riesenia/spanok",
+          "children": [],
+          "skPath": "zdravotne-riesenia/spanok"
+        },
+        {
+          "label": "Chudnutie",
+          "path": "zdravotne-riesenia/chudnutie",
+          "children": [],
+          "skPath": "zdravotne-riesenia/chudnutie"
+        },
+        {
+          "label": "Krása",
+          "path": "zdravotne-riesenia/krasa",
+          "children": [],
+          "skPath": "zdravotne-riesenia/krasa"
+        },
+        {
+          "label": "Fyzická výkonnosť",
+          "path": "zdravotne-riesenia/fyzicka-vykonnost",
+          "children": [],
+          "skPath": "zdravotne-riesenia/fyzicka-vykonnost"
+        },
+        {
+          "label": "Kosti, kĺby a svaly",
+          "path": "zdravotne-riesenia/kosti-klby-a-svaly",
+          "children": [],
+          "skPath": "zdravotne-riesenia/kosti-klby-a-svaly"
+        },
+        {
+          "label": "Mozog a Pamäť",
+          "path": "zdravotne-riesenia/mozog-a-pamat",
+          "children": [],
+          "skPath": "zdravotne-riesenia/mozog-a-pamat"
+        },
+        {
+          "label": "Psychické zdravie",
+          "path": "zdravotne-riesenia/psychicke-zdravie",
+          "children": [],
+          "skPath": "zdravotne-riesenia/psychicke-zdravie"
+        },
+        {
+          "label": "Trávenie",
+          "path": "zdravotne-riesenia/travenie",
+          "children": [],
+          "skPath": "zdravotne-riesenia/travenie"
+        },
+        {
+          "label": "Priedušky a Kašeľ",
+          "path": "zdravotne-riesenia/priedusky-a-kasel",
+          "children": [],
+          "skPath": "zdravotne-riesenia/priedusky-a-kasel"
+        },
+        {
+          "label": "Ženské zdravie",
+          "path": "zdravotne-riesenia/zenske-zdravie",
+          "children": [],
+          "skPath": "zdravotne-riesenia/zenske-zdravie"
+        },
+        {
+          "label": "Tehotenstvo a dojčenie",
+          "path": "zdravotne-riesenia/tehotenstvo-a-dojcenie",
+          "children": [],
+          "skPath": "zdravotne-riesenia/tehotenstvo-a-dojcenie"
+        },
+        {
+          "label": "Mužské zdravie",
+          "path": "zdravotne-riesenia/muzske-zdravie",
+          "children": [],
+          "skPath": "zdravotne-riesenia/muzske-zdravie"
+        },
+        {
+          "label": "Srdce a Pečeň",
+          "path": "zdravotne-riesenia/srdce-a-pecen",
+          "children": [],
+          "skPath": "zdravotne-riesenia/srdce-a-pecen"
+        },
+        {
+          "label": "Obličky a Močové cesty",
+          "path": "zdravotne-riesenia/oblicky-a-mocove-cesty",
+          "children": [],
+          "skPath": "zdravotne-riesenia/oblicky-a-mocove-cesty"
+        },
+        {
+          "label": "Nádorové ochorenia",
+          "path": "zdravotne-riesenia/nadorove-ochorenia",
+          "children": [],
+          "skPath": "zdravotne-riesenia/nadorove-ochorenia"
+        }
+      ],
+      "skPath": "zdravotne-riesenia"
+    },
+    {
+      "label": "MYKOLOGICKÉ PRODUKTY",
+      "path": "mykologicke-produkty",
+      "children": [
+        {
+          "label": "Vitálne huby",
+          "path": "mykologicke-produkty/vitalne-huby",
+          "children": [
+            {
+              "label": "Reishi",
+              "path": "mykologicke-produkty/vitalne-huby/reishi",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby/reishi"
+            },
+            {
+              "label": "Cordyceps",
+              "path": "mykologicke-produkty/vitalne-huby/cordyceps",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby/cordyceps"
+            },
+            {
+              "label": "Coriolus",
+              "path": "mykologicke-produkty/vitalne-huby/coriolus",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby/coriolus"
+            },
+            {
+              "label": "Chaga",
+              "path": "mykologicke-produkty/vitalne-huby/chaga",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby/chaga"
+            },
+            {
+              "label": "Maitake",
+              "path": "mykologicke-produkty/vitalne-huby/maitake",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby/maitake"
+            },
+            {
+              "label": "Hericium",
+              "path": "mykologicke-produkty/vitalne-huby/hericium",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby/hericium"
+            },
+            {
+              "label": "Shiitake",
+              "path": "mykologicke-produkty/vitalne-huby/shiitake",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby/shiitake"
+            },
+            {
+              "label": "Ostatné Vitálne huby",
+              "path": "mykologicke-produkty/vitalne-huby/ostatne-vitalne-huby",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby/ostatne-vitalne-huby"
+            }
+          ],
+          "skPath": "mykologicke-produkty/vitalne-huby"
+        },
+        {
+          "label": "Vitálne huby a Byliny",
+          "path": "mykologicke-produkty/vitalne-huby-a-byliny",
+          "children": [
+            {
+              "label": "Huby a Bylinky",
+              "path": "mykologicke-produkty/vitalne-huby-a-byliny/huby-a-bylinky",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby-a-byliny/huby-a-bylinky"
+            },
+            {
+              "label": "Sušené huby a byliny",
+              "path": "mykologicke-produkty/vitalne-huby-a-byliny/susene-huby-a-byliny",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby-a-byliny/susene-huby-a-byliny"
+            },
+            {
+              "label": "Huby v prášku",
+              "path": "mykologicke-produkty/vitalne-huby-a-byliny/huby-v-prasku",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby-a-byliny/huby-v-prasku"
+            },
+            {
+              "label": "Hubové medy",
+              "path": "mykologicke-produkty/vitalne-huby-a-byliny/hubove-medy",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby-a-byliny/hubove-medy"
+            },
+            {
+              "label": "Tinktúry",
+              "path": "mykologicke-produkty/vitalne-huby-a-byliny/tinktury",
+              "children": [],
+              "skPath": "mykologicke-produkty/vitalne-huby-a-byliny/tinktury"
+            }
+          ],
+          "skPath": "mykologicke-produkty/vitalne-huby-a-byliny"
+        }
+      ],
+      "skPath": "mykologicke-produkty"
+    },
+    {
+      "label": "DOPLNKY VÝŽIVY",
+      "path": "doplnky-vyzivy",
+      "children": [
+        {
+          "label": "Vitamíny",
+          "path": "doplnky-vyzivy/vitaminy",
+          "children": [
+            {
+              "label": "Multivitamíny",
+              "path": "doplnky-vyzivy/vitaminy/multivitaminy",
+              "children": [],
+              "skPath": "doplnky-vyzivy/vitaminy/multivitaminy"
+            },
+            {
+              "label": "Vitamín A",
+              "path": "doplnky-vyzivy/vitaminy/vitamin-a",
+              "children": [],
+              "skPath": "doplnky-vyzivy/vitaminy/vitamin-a"
+            },
+            {
+              "label": "Vitamín B",
+              "path": "doplnky-vyzivy/vitaminy/vitamin-b",
+              "children": [],
+              "skPath": "doplnky-vyzivy/vitaminy/vitamin-b"
+            },
+            {
+              "label": "Vitamín C",
+              "path": "doplnky-vyzivy/vitaminy/vitamin-c",
+              "children": [],
+              "skPath": "doplnky-vyzivy/vitaminy/vitamin-c"
+            },
+            {
+              "label": "Vitamín D",
+              "path": "doplnky-vyzivy/vitaminy/vitamin-d",
+              "children": [],
+              "skPath": "doplnky-vyzivy/vitaminy/vitamin-d"
+            },
+            {
+              "label": "Vitamín E",
+              "path": "doplnky-vyzivy/vitaminy/vitamin-e",
+              "children": [],
+              "skPath": "doplnky-vyzivy/vitaminy/vitamin-e"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/vitaminy"
+        },
+        {
+          "label": "Minerály",
+          "path": "doplnky-vyzivy/mineraly",
+          "children": [
+            {
+              "label": "Multiminerály",
+              "path": "doplnky-vyzivy/mineraly/multimineraly",
+              "children": [],
+              "skPath": "doplnky-vyzivy/mineraly/multimineraly"
+            },
+            {
+              "label": "Horčík / Magnézium",
+              "path": "doplnky-vyzivy/mineraly/horcik-magnezium",
+              "children": [],
+              "skPath": "doplnky-vyzivy/mineraly/horcik-magnezium"
+            },
+            {
+              "label": "Vápnik",
+              "path": "doplnky-vyzivy/mineraly/vapnik",
+              "children": [],
+              "skPath": "doplnky-vyzivy/mineraly/vapnik"
+            },
+            {
+              "label": "Železo",
+              "path": "doplnky-vyzivy/mineraly/zelezo",
+              "children": [],
+              "skPath": "doplnky-vyzivy/mineraly/zelezo"
+            },
+            {
+              "label": "Zinok",
+              "path": "doplnky-vyzivy/mineraly/zinok",
+              "children": [],
+              "skPath": "doplnky-vyzivy/mineraly/zinok"
+            },
+            {
+              "label": "Selén",
+              "path": "doplnky-vyzivy/mineraly/selen",
+              "children": [],
+              "skPath": "doplnky-vyzivy/mineraly/selen"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/mineraly"
+        },
+        {
+          "label": "Trávenie a Mikrobióm",
+          "path": "doplnky-vyzivy/travenie-a-mikrobiom",
+          "children": [
+            {
+              "label": "Probiotiká a Prebiotiká",
+              "path": "doplnky-vyzivy/travenie-a-mikrobiom/probiotika-a-prebiotika",
+              "children": [],
+              "skPath": "doplnky-vyzivy/travenie-a-mikrobiom/probiotika-a-prebiotika"
+            },
+            {
+              "label": "Tráviace enzýmy",
+              "path": "doplnky-vyzivy/travenie-a-mikrobiom/traviace-enzymy",
+              "children": [],
+              "skPath": "doplnky-vyzivy/travenie-a-mikrobiom/traviace-enzymy"
+            },
+            {
+              "label": "Vláknina",
+              "path": "doplnky-vyzivy/travenie-a-mikrobiom/vlaknina",
+              "children": [],
+              "skPath": "doplnky-vyzivy/travenie-a-mikrobiom/vlaknina"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/travenie-a-mikrobiom"
+        },
+        {
+          "label": "Kolagén a Pohyb",
+          "path": "doplnky-vyzivy/kolagen-a-pohyb",
+          "children": [
+            {
+              "label": "Kolagén na krásu",
+              "path": "doplnky-vyzivy/kolagen-a-pohyb/kolagen-na-krasu",
+              "children": [],
+              "skPath": "doplnky-vyzivy/kolagen-a-pohyb/kolagen-na-krasu"
+            },
+            {
+              "label": "Kolagén na kĺby",
+              "path": "doplnky-vyzivy/kolagen-a-pohyb/kolagen-na-klby",
+              "children": [],
+              "skPath": "doplnky-vyzivy/kolagen-a-pohyb/kolagen-na-klby"
+            },
+            {
+              "label": "Kĺbová výživa",
+              "path": "doplnky-vyzivy/kolagen-a-pohyb/klbova-vyziva",
+              "children": [],
+              "skPath": "doplnky-vyzivy/kolagen-a-pohyb/klbova-vyziva"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/kolagen-a-pohyb"
+        },
+        {
+          "label": "Antioxidanty",
+          "path": "doplnky-vyzivy/antioxidanty",
+          "children": [
+            {
+              "label": "Prírodné antioxidanty",
+              "path": "doplnky-vyzivy/antioxidanty/prirodne-antioxidanty",
+              "children": [],
+              "skPath": "doplnky-vyzivy/antioxidanty/prirodne-antioxidanty"
+            },
+            {
+              "label": "CoQ10",
+              "path": "doplnky-vyzivy/antioxidanty/coq10",
+              "children": [],
+              "skPath": "doplnky-vyzivy/antioxidanty/coq10"
+            },
+            {
+              "label": "SuperOvocie",
+              "path": "doplnky-vyzivy/antioxidanty/superovocie",
+              "children": [],
+              "skPath": "doplnky-vyzivy/antioxidanty/superovocie"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/antioxidanty"
+        },
+        {
+          "label": "Prírodná podpora a Byliny",
+          "path": "doplnky-vyzivy/prirodna-podpora-a-byliny",
+          "children": [
+            {
+              "label": "Vitálne huby",
+              "path": "doplnky-vyzivy/prirodna-podpora-a-byliny/vitalne-huby",
+              "children": [],
+              "skPath": "doplnky-vyzivy/prirodna-podpora-a-byliny/vitalne-huby"
+            },
+            {
+              "label": "Bylinné prípravky",
+              "path": "doplnky-vyzivy/prirodna-podpora-a-byliny/bylinne-pripravky",
+              "children": [],
+              "skPath": "doplnky-vyzivy/prirodna-podpora-a-byliny/bylinne-pripravky"
+            },
+            {
+              "label": "Antiparazitiká",
+              "path": "doplnky-vyzivy/prirodna-podpora-a-byliny/antiparazitika",
+              "children": [],
+              "skPath": "doplnky-vyzivy/prirodna-podpora-a-byliny/antiparazitika"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/prirodna-podpora-a-byliny"
+        },
+        {
+          "label": "Omega 3",
+          "path": "doplnky-vyzivy/omega-3",
+          "children": [
+            {
+              "label": "Tekuté Omega 3",
+              "path": "doplnky-vyzivy/omega-3/tekute-omega-3",
+              "children": [],
+              "skPath": "doplnky-vyzivy/omega-3/tekute-omega-3"
+            },
+            {
+              "label": "Kapsule Omega 3",
+              "path": "doplnky-vyzivy/omega-3/kapsule-omega-3",
+              "children": [],
+              "skPath": "doplnky-vyzivy/omega-3/kapsule-omega-3"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/omega-3"
+        },
+        {
+          "label": "Doplnky výživy pre Deti",
+          "path": "doplnky-vyzivy/doplnky-vyzivy-pre-deti",
+          "children": [
+            {
+              "label": "Vitamíny",
+              "path": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/vitaminy",
+              "children": [],
+              "skPath": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/vitaminy"
+            },
+            {
+              "label": "Minerály",
+              "path": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/mineraly",
+              "children": [],
+              "skPath": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/mineraly"
+            },
+            {
+              "label": "Probiotiká",
+              "path": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/probiotika",
+              "children": [],
+              "skPath": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/probiotika"
+            },
+            {
+              "label": "Bylinky",
+              "path": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/bylinky",
+              "children": [],
+              "skPath": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/bylinky"
+            },
+            {
+              "label": "Omega 3",
+              "path": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/omega-3",
+              "children": [],
+              "skPath": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/omega-3"
+            },
+            {
+              "label": "Sirupy",
+              "path": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/sirupy",
+              "children": [],
+              "skPath": "doplnky-vyzivy/doplnky-vyzivy-pre-deti/sirupy"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/doplnky-vyzivy-pre-deti"
+        },
+        {
+          "label": "Diéty",
+          "path": "doplnky-vyzivy/diety-a-stravovanie",
+          "children": [
+            {
+              "label": "Bez GMO",
+              "path": "doplnky-vyzivy/diety-a-stravovanie/bez-gmo",
+              "children": [],
+              "skPath": "doplnky-vyzivy/diety/bez-gmo"
+            },
+            {
+              "label": "Vegan",
+              "path": "doplnky-vyzivy/diety-a-stravovanie/veganske",
+              "children": [],
+              "skPath": "doplnky-vyzivy/diety/vegan"
+            },
+            {
+              "label": "Vegetarian",
+              "path": "doplnky-vyzivy/diety-a-stravovanie/vegetarianske",
+              "children": [],
+              "skPath": "doplnky-vyzivy/diety/vegetarian"
+            },
+            {
+              "label": "Keto",
+              "path": "doplnky-vyzivy/diety-a-stravovanie/keto",
+              "children": [],
+              "skPath": "doplnky-vyzivy/diety/keto"
+            },
+            {
+              "label": "Paleo",
+              "path": "doplnky-vyzivy/diety-a-stravovanie/paleo",
+              "children": [],
+              "skPath": "doplnky-vyzivy/diety/paleo"
+            },
+            {
+              "label": "Bez Laktózy",
+              "path": "doplnky-vyzivy/diety-a-stravovanie/bez-laktozy",
+              "children": [],
+              "skPath": "doplnky-vyzivy/diety/bez-laktozy"
+            }
+          ],
+          "skPath": "doplnky-vyzivy/diety"
+        }
+      ],
+      "skPath": "doplnky-vyzivy"
+    },
+    {
+      "label": "ZDRAVIE",
+      "path": "zdravie",
+      "children": [
+        {
+          "label": "Prírodné prípravky",
+          "path": "zdravie/prirodne-pripravky",
+          "children": [
+            {
+              "label": "Bioinformačné prípravky",
+              "path": "zdravie/prirodne-pripravky/bioinformacne-pripravky",
+              "children": [],
+              "skPath": "zdravie/prirodne-pripravky/bioinformacne-pripravky"
+            },
+            {
+              "label": "Bioinformačné krémy",
+              "path": "zdravie/prirodne-pripravky/bioinformacne-kremy",
+              "children": [],
+              "skPath": "zdravie/prirodne-pripravky/bioinformacne-kremy"
+            },
+            {
+              "label": "Humátové prípravky",
+              "path": "zdravie/prirodne-pripravky/humatove-pripravky",
+              "children": [],
+              "skPath": "zdravie/prirodne-pripravky/humatove-pripravky"
+            },
+            {
+              "label": "Prírodné prípravky a spreje",
+              "path": "zdravie/prirodne-pripravky/prirodne-pripravky-a-spreje",
+              "children": [],
+              "skPath": "zdravie/prirodne-pripravky/prirodne-pripravky-a-spreje"
+            },
+            {
+              "label": "Prírodné mydlá",
+              "path": "zdravie/prirodne-pripravky/prirodne-mydla",
+              "children": [],
+              "skPath": "zdravie/prirodne-pripravky/prirodne-mydla"
+            }
+          ],
+          "skPath": "zdravie/prirodne-pripravky"
+        },
+        {
+          "label": "Ostatné prípravky",
+          "path": "zdravie/ostatne-pripravky",
+          "children": [
+            {
+              "label": "Antiseptické prípravky",
+              "path": "zdravie/ostatne-pripravky/antisepticke-pripravky",
+              "children": [],
+              "skPath": "zdravie/ostatne-pripravky/antisepticke-pripravky"
+            },
+            {
+              "label": "Aromaterapia",
+              "path": "zdravie/ostatne-pripravky/aromaterapia",
+              "children": [],
+              "skPath": "zdravie/ostatne-pripravky/aromaterapia"
+            },
+            {
+              "label": "Tinktúry",
+              "path": "zdravie/ostatne-pripravky/tinktury",
+              "children": [],
+              "skPath": "zdravie/ostatne-pripravky/tinktury"
+            }
+          ],
+          "skPath": "zdravie/ostatne-pripravky"
+        },
+        {
+          "label": "Zdravé potraviny",
+          "path": "zdravie/zdrave-potraviny",
+          "children": [
+            {
+              "label": "Zelené a SuperPotraviny",
+              "path": "zdravie/zdrave-potraviny/zelene-a-superpotraviny",
+              "children": [],
+              "skPath": "zdravie/zdrave-potraviny/zelene-a-superpotraviny"
+            },
+            {
+              "label": "Zelené a SuperOleje",
+              "path": "zdravie/zdrave-potraviny/zelene-a-superpotraviny",
+              "children": [],
+              "skPath": "zdravie/zdrave-potraviny/zelene-a-superoleje"
+            },
+            {
+              "label": "Kaše a Smoothie",
+              "path": "zdravie/zdrave-potraviny/kase-a-smoothie",
+              "children": [],
+              "skPath": "zdravie/zdrave-potraviny/kase-a-smoothie"
+            },
+            {
+              "label": "Sušené huby",
+              "path": "zdravie/zdrave-potraviny/susene-huby",
+              "children": [],
+              "skPath": "zdravie/zdrave-potraviny/susene-huby"
+            },
+            {
+              "label": "Medy & Sladidlá",
+              "path": "zdravie/zdrave-potraviny/medy-and-sladidla",
+              "children": [],
+              "skPath": "zdravie/zdrave-potraviny/medy-and-sladidla"
+            }
+          ],
+          "skPath": "zdravie/zdrave-potraviny"
+        },
+        {
+          "label": "Zdravé nápoje",
+          "path": "zdravie/zdrave-napoje",
+          "children": [
+            {
+              "label": "Bylinné čaje",
+              "path": "zdravie/zdrave-napoje/bylinne-caje",
+              "children": [],
+              "skPath": "zdravie/zdrave-napoje/bylinne-caje"
+            },
+            {
+              "label": "SuperOvocie",
+              "path": "zdravie/zdrave-napoje/superovocie",
+              "children": [],
+              "skPath": "zdravie/zdrave-napoje/superovocie"
+            },
+            {
+              "label": "Terapeutické nápoje",
+              "path": "zdravie/zdrave-napoje/terapeuticke-napoje",
+              "children": [],
+              "skPath": "zdravie/zdrave-napoje/terapeuticke-napoje"
+            }
+          ],
+          "skPath": "zdravie/zdrave-napoje"
+        },
+        {
+          "label": "Regeneračné doplnky",
+          "path": "zdravie/regeneracne-doplnky",
+          "children": [
+            {
+              "label": "Liehové a bylinné roztoky",
+              "path": "zdravie/regeneracne-doplnky/liehove-a-bylinne-roztoky",
+              "children": [],
+              "skPath": "zdravie/regeneracne-doplnky/liehove-a-bylinne-roztoky"
+            },
+            {
+              "label": "Regeneračné krémy",
+              "path": "zdravie/regeneracne-doplnky/regeneracne-kremy",
+              "children": [],
+              "skPath": "zdravie/regeneracne-doplnky/regeneracne-kremy"
+            },
+            {
+              "label": "Regeneračné balzamy a oleje",
+              "path": "zdravie/regeneracne-doplnky/regeneracne-balzamy-a-oleje",
+              "children": [],
+              "skPath": "zdravie/regeneracne-doplnky/regeneracne-balzamy-a-oleje"
+            },
+            {
+              "label": "Regeneračné gély a emulzie",
+              "path": "zdravie/regeneracne-doplnky/regeneracne-gely-a-emulzie",
+              "children": [],
+              "skPath": "zdravie/regeneracne-doplnky/regeneracne-gely-a-emulzie"
+            }
+          ],
+          "skPath": "zdravie/regeneracne-doplnky"
+        }
+      ],
+      "skPath": "zdravie"
+    },
+    {
+      "label": "KOZMETIKA",
+      "path": "kozmetika",
+      "children": [
+        {
+          "label": "Pleťová kozmetika",
+          "path": "kozmetika/pletova-kozmetika",
+          "children": [
+            {
+              "label": "Odličovanie a čistenie pleti",
+              "path": "kozmetika/pletova-kozmetika/odlicovanie-a-cistenie-pleti",
+              "children": [],
+              "skPath": "kozmetika/pletova-kozmetika/odlicovanie-a-cistenie-pleti"
+            },
+            {
+              "label": "Pleťové vody",
+              "path": "kozmetika/pletova-kozmetika/pletove-vody",
+              "children": [],
+              "skPath": "kozmetika/pletova-kozmetika/pletove-vody"
+            },
+            {
+              "label": "Pleťové séra",
+              "path": "kozmetika/pletova-kozmetika/pletove-sera",
+              "children": [],
+              "skPath": "kozmetika/pletova-kozmetika/pletove-sera"
+            },
+            {
+              "label": "Denné krémy",
+              "path": "kozmetika/pletova-kozmetika/denne-kremy",
+              "children": [],
+              "skPath": "kozmetika/pletova-kozmetika/denne-kremy"
+            },
+            {
+              "label": "Nočné krémy",
+              "path": "kozmetika/pletova-kozmetika/nocne-kremy",
+              "children": [],
+              "skPath": "kozmetika/pletova-kozmetika/nocne-kremy"
+            },
+            {
+              "label": "Pleťové masky",
+              "path": "kozmetika/pletova-kozmetika/pletove-masky",
+              "children": [],
+              "skPath": "kozmetika/pletova-kozmetika/pletove-masky"
+            },
+            {
+              "label": "Pleťové oleje",
+              "path": "kozmetika/pletova-kozmetika/pletove-oleje",
+              "children": [],
+              "skPath": "kozmetika/pletova-kozmetika/pletove-oleje"
+            }
+          ],
+          "skPath": "kozmetika/pletova-kozmetika"
+        },
+        {
+          "label": "Telová kozmetika",
+          "path": "kozmetika/telova-kozmetika",
+          "children": [
+            {
+              "label": "Telové oleje a gély",
+              "path": "kozmetika/telova-kozmetika/telove-oleje-a-gely",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/telove-oleje-a-gely"
+            },
+            {
+              "label": "Telové krémy",
+              "path": "kozmetika/telova-kozmetika/telove-kremy",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/telove-kremy"
+            },
+            {
+              "label": "Telové mlieka",
+              "path": "kozmetika/telova-kozmetika/telove-mlieka",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/telove-mlieka"
+            },
+            {
+              "label": "Sprchové gély",
+              "path": "kozmetika/telova-kozmetika/sprchove-gely",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/sprchove-gely"
+            },
+            {
+              "label": "Telový peeling",
+              "path": "kozmetika/telova-kozmetika/telovy-peeling",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/telovy-peeling"
+            },
+            {
+              "label": "Deodoranty",
+              "path": "kozmetika/telova-kozmetika/deodoranty",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/deodoranty"
+            },
+            {
+              "label": "Prírodné mydlá",
+              "path": "kozmetika/telova-kozmetika/prirodne-mydla",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/prirodne-mydla"
+            },
+            {
+              "label": "Starostlivosť o ruky",
+              "path": "kozmetika/telova-kozmetika/starostlivost-o-ruky",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/starostlivost-o-ruky"
+            },
+            {
+              "label": "Starostlivosť o nohy",
+              "path": "kozmetika/telova-kozmetika/starostlivost-o-nohy",
+              "children": [],
+              "skPath": "kozmetika/telova-kozmetika/starostlivost-o-nohy"
+            }
+          ],
+          "skPath": "kozmetika/telova-kozmetika"
+        },
+        {
+          "label": "Vlasová kozmentika",
+          "path": "kozmetika/vlasova-kozmetika",
+          "children": [
+            {
+              "label": "Šampóny",
+              "path": "kozmetika/vlasova-kozmetika/sampony",
+              "children": [],
+              "skPath": "kozmetika/vlasova-kozmentika/sampony"
+            },
+            {
+              "label": "Kondicionéry",
+              "path": "kozmetika/vlasova-kozmetika/kondicionery",
+              "children": [],
+              "skPath": "kozmetika/vlasova-kozmentika/kondicionery"
+            }
+          ],
+          "skPath": "kozmetika/vlasova-kozmentika"
+        },
+        {
+          "label": "Starostlivosť o zuby",
+          "path": "kozmetika/starostlivost-o-zuby",
+          "children": [
+            {
+              "label": "Zubné kefky",
+              "path": "kozmetika/starostlivost-o-zuby/zubne-kefky",
+              "children": [],
+              "skPath": "kozmetika/starostlivost-o-zuby/zubne-kefky"
+            },
+            {
+              "label": "Zubné pasty",
+              "path": "kozmetika/starostlivost-o-zuby/zubne-pasty",
+              "children": [],
+              "skPath": "kozmetika/starostlivost-o-zuby/zubne-pasty"
+            }
+          ],
+          "skPath": "kozmetika/starostlivost-o-zuby"
+        },
+        {
+          "label": "Detská kozmetika",
+          "path": "kozmetika/detska-kozmetika",
+          "children": [
+            {
+              "label": "Detské šampóny",
+              "path": "kozmetika/detska-kozmetika/detske-sampony",
+              "children": [],
+              "skPath": "kozmetika/detska-kozmetika/detske-sampony"
+            },
+            {
+              "label": "Detské sprchové gély",
+              "path": "kozmetika/detska-kozmetika/detske-sprchove-gely",
+              "children": [],
+              "skPath": "kozmetika/detska-kozmetika/detske-sprchove-gely"
+            },
+            {
+              "label": "Detské krémy",
+              "path": "kozmetika/detska-kozmetika/detske-kremy",
+              "children": [],
+              "skPath": "kozmetika/detska-kozmetika/detske-kremy"
+            },
+            {
+              "label": "Detské oleje",
+              "path": "kozmetika/detska-kozmetika/detske-oleje",
+              "children": [],
+              "skPath": "kozmetika/detska-kozmetika/detske-oleje"
+            },
+            {
+              "label": "Detské zásypy",
+              "path": "kozmetika/detska-kozmetika/detske-zasypy",
+              "children": [],
+              "skPath": "kozmetika/detska-kozmetika/detske-zasypy"
+            }
+          ],
+          "skPath": "kozmetika/detska-kozmetika"
+        }
+      ],
+      "skPath": "kozmetika"
+    },
+    {
+      "label": "PRE ZVIERATÁ",
+      "path": "pre-zvierata",
+      "children": [
+        {
+          "label": "Zdravotné prípravky",
+          "path": "pre-zvierata/zdravotne-pripravky",
+          "children": [
+            {
+              "label": "Bylinné koncentráty",
+              "path": "pre-zvierata/zdravotne-pripravky/bylinne-koncentraty",
+              "children": [],
+              "skPath": "pre-zvierata/zdravotne-pripravky/bylinne-koncentraty"
+            },
+            {
+              "label": "Mykologické prípravky",
+              "path": "pre-zvierata/zdravotne-pripravky/mykologicke-pripravky",
+              "children": [],
+              "skPath": "pre-zvierata/zdravotne-pripravky/mykologicke-pripravky"
+            },
+            {
+              "label": "Prírodné prípravky",
+              "path": "pre-zvierata/zdravotne-pripravky/prirodne-pripravky",
+              "children": [],
+              "skPath": "pre-zvierata/zdravotne-pripravky/prirodne-pripravky"
+            },
+            {
+              "label": "Kozmetické prípravky",
+              "path": "pre-zvierata/zdravotne-pripravky/kozmeticke-pripravky",
+              "children": [],
+              "skPath": "pre-zvierata/zdravotne-pripravky/kozmeticke-pripravky"
+            }
+          ],
+          "skPath": "pre-zvierata/zdravotne-pripravky"
+        },
+        {
+          "label": "Zvieracie riešenia",
+          "path": "pre-zvierata/zvieracie-riesenia",
+          "children": [
+            {
+              "label": "Metabolizmus",
+              "path": "pre-zvierata/zvieracie-riesenia/metabolizmus",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/metabolizmus"
+            },
+            {
+              "label": "Imunita",
+              "path": "pre-zvierata/zvieracie-riesenia/imunita",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/imunita"
+            },
+            {
+              "label": "Hormonálne riešenia",
+              "path": "pre-zvierata/zvieracie-riesenia/hormonalne-riesenia",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/hormonalne-riesenia"
+            },
+            {
+              "label": "Trávenie",
+              "path": "pre-zvierata/zvieracie-riesenia/travenie",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/travenie"
+            },
+            {
+              "label": "Podpora pečene a srdca",
+              "path": "pre-zvierata/zvieracie-riesenia/podpora-pecene-a-srdca",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/podpora-pecene-a-srdca"
+            },
+            {
+              "label": "Nádorové ochorenia",
+              "path": "pre-zvierata/zvieracie-riesenia/nadorove-ochorenia",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/nadorove-ochorenia"
+            },
+            {
+              "label": "Psychická pohoda",
+              "path": "pre-zvierata/zvieracie-riesenia/psychicka-pohoda",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/psychicka-pohoda"
+            },
+            {
+              "label": "Obličky a močové cesty",
+              "path": "pre-zvierata/zvieracie-riesenia/oblicky-a-mocove-cesty",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/oblicky-a-mocove-cesty"
+            },
+            {
+              "label": "Pohybový aparát",
+              "path": "pre-zvierata/zvieracie-riesenia/pohybovy-aparat",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/pohybovy-aparat"
+            },
+            {
+              "label": "Koža a Alergie",
+              "path": "pre-zvierata/zvieracie-riesenia/koza-a-alergie",
+              "children": [],
+              "skPath": "pre-zvierata/zvieracie-riesenia/koza-a-alergie"
+            }
+          ],
+          "skPath": "pre-zvierata/zvieracie-riesenia"
+        }
+      ],
+      "skPath": "pre-zvierata"
+    }
+  ],
+  "pathAliases": {
+    "doplnky-vyzivy/diety": "doplnky-vyzivy/diety-a-stravovanie",
+    "doplnky-vyzivy/diety/bez-gmo": "doplnky-vyzivy/diety-a-stravovanie/bez-gmo",
+    "doplnky-vyzivy/diety/bez-laktozy": "doplnky-vyzivy/diety-a-stravovanie/bez-laktozy",
+    "doplnky-vyzivy/diety/keto": "doplnky-vyzivy/diety-a-stravovanie/keto",
+    "doplnky-vyzivy/diety/paleo": "doplnky-vyzivy/diety-a-stravovanie/paleo",
+    "doplnky-vyzivy/diety/vegan": "doplnky-vyzivy/diety-a-stravovanie/veganske",
+    "doplnky-vyzivy/diety/vegetarian": "doplnky-vyzivy/diety-a-stravovanie/vegetarianske",
+    "kozmetika/vlasova-kozmentika": "kozmetika/vlasova-kozmetika",
+    "kozmetika/vlasova-kozmentika/kondicionery": "kozmetika/vlasova-kozmetika/kondicionery",
+    "kozmetika/vlasova-kozmentika/sampony": "kozmetika/vlasova-kozmetika/sampony",
+    "zdravie/zdrave-potraviny/zelene-a-superoleje": "zdravie/zdrave-potraviny/zelene-a-superpotraviny"
+  }
+}

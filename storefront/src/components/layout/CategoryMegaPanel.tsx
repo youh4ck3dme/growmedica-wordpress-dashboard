@@ -69,6 +69,44 @@ export default function CategoryMegaPanel({
             )
           })}
         </ul>
+        {/* Subcategories of active top-level item — same tree as growmedica.sk */}
+        {active.children && active.children.length > 0 && (
+          <div className="mt-3 border-t border-(--color-border) pt-3">
+            <p className="px-2 pb-1.5 text-[0.65rem] font-semibold uppercase tracking-widest text-(--color-text-muted)">
+              {active.title}
+            </p>
+            <ul className="space-y-0.5">
+              {active.children.map((child) => (
+                <li key={child.handle}>
+                  <Link
+                    href={child.href}
+                    className="mega-menu-list-item"
+                    onClick={onNavigate}
+                  >
+                    <span className="mega-menu-list-label">{child.title}</span>
+                  </Link>
+                  {child.children && child.children.length > 0 && (
+                    <ul className="ml-3 mt-0.5 space-y-0.5 border-l border-(--color-border) pl-2">
+                      {child.children.map((grand) => (
+                        <li key={grand.handle}>
+                          <Link
+                            href={grand.href}
+                            className="mega-menu-list-item text-sm"
+                            onClick={onNavigate}
+                          >
+                            <span className="mega-menu-list-label font-medium normal-case tracking-normal">
+                              {grand.title}
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <Link
           href="/kolekcie"
           className="mega-menu-all-link"

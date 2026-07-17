@@ -24,10 +24,13 @@ export default function Header({ megaMenuCategories = [] }: HeaderProps) {
 
   const [wishlistCount, setWishlistCount] = useState(0)
 
-  const categoryLinks = megaMenuCategories.map((c) => ({
+  type MobileCat = { href: string; label: string; children?: MobileCat[] }
+  const mapCat = (c: MegaMenuCategory): MobileCat => ({
     href: c.href,
-    label: c.menuLabel,
-  }))
+    label: c.menuLabel || c.title,
+    children: c.children?.map((child) => mapCat(child as MegaMenuCategory)),
+  })
+  const categoryLinks = megaMenuCategories.map(mapCat)
 
   useEffect(() => {
     async function fetchCartCount() {

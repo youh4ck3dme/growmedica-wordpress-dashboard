@@ -7,6 +7,7 @@ import type { ProductListItem } from '@/lib/shopify/types'
 import { ProductCard } from './ProductCard'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
+import { getProductEffectLabels, normalizeProductTypeFacet } from '@/lib/product-facets'
 import { cn } from '@/lib/utils'
 
 interface FilterableProductListProps {
@@ -52,6 +53,11 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     setPriceRange([priceLimits.min, priceLimits.max])
   }, [priceLimits])
 
+  const effectLabelsByProductId = useMemo(
+    () => new Map(initialProducts.map((product) => [product.id, getProductEffectLabels(product.tags)])),
+    [initialProducts],
+  )
+
   // Extract unique facets from loaded products
   const facets = useMemo(() => {
     const vendors = new Set<string>()
@@ -60,14 +66,10 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
 
     for (const p of initialProducts) {
       if (p.vendor) vendors.add(p.vendor)
-      if (p.productType) types.add(p.productType)
-      if (p.tags) {
-        for (const t of p.tags) {
-          // Skip internal tags like Shopify bundles
-          if (t !== 'health-bundle' && !t.startsWith('bundle-category:')) {
-            tags.add(t)
-          }
-        }
+      const productType = normalizeProductTypeFacet(p.productType)
+      if (productType) types.add(productType)
+      for (const effect of effectLabelsByProductId.get(p.id) ?? []) {
+        tags.add(effect)
       }
     }
 
@@ -76,7 +78,7 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
       types: Array.from(types).sort(),
       tags: Array.from(tags).sort(),
     }
-  }, [initialProducts])
+  }, [effectLabelsByProductId, initialProducts])
 
   // Apply filters and sorting
   const filteredProducts = useMemo(() => {
@@ -106,12 +108,17 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
 
     // 4. Product Type Filter
     if (selectedTypes.size > 0) {
-      result = result.filter((p) => selectedTypes.has(p.productType))
+      result = result.filter((p) => {
+        const productType = normalizeProductTypeFacet(p.productType)
+        return productType ? selectedTypes.has(productType) : false
+      })
     }
 
-    // 5. Tags Filter
+    // 5. Controlled effect taxonomy filter
     if (selectedTags.size > 0) {
-      result = result.filter((p) => p.tags.some((tag) => selectedTags.has(tag)))
+      result = result.filter((p) =>
+        (effectLabelsByProductId.get(p.id) ?? []).some((effect) => selectedTags.has(effect)),
+      )
     }
 
     // Sort result
@@ -124,7 +131,16 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     }
 
     return result
-  }, [initialProducts, searchQuery, priceRange, selectedVendors, selectedTypes, selectedTags, sortBy])
+  }, [
+    effectLabelsByProductId,
+    initialProducts,
+    searchQuery,
+    priceRange,
+    selectedVendors,
+    selectedTypes,
+    selectedTags,
+    sortBy,
+  ])
 
   // Toggle handlers
   const toggleVendor = (vendor: string) => {
@@ -176,11 +192,11 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
   }
 
   const getTypeCount = (type: string) => {
-    return initialProducts.filter((p) => p.productType === type).length
+    return initialProducts.filter((p) => normalizeProductTypeFacet(p.productType) === type).length
   }
 
   const getTagCount = (tag: string) => {
-    return initialProducts.filter((p) => p.tags.includes(tag)).length
+    return initialProducts.filter((p) => effectLabelsByProductId.get(p.id)?.includes(tag)).length
   }
 
   // Filter form JSX
@@ -311,7 +327,7 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
       {facets.types.length > 0 && (
         <div className="border-t border-(--color-border) pt-4">
           <h4 className="text-xs font-semibold text-(--color-text) uppercase tracking-wider mb-3">Forma / Kategória</h4>
-          <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+          <div className="space-y-2">
             {facets.types.map((type) => {
               const active = selectedTypes.has(type)
               const count = getTypeCount(type)

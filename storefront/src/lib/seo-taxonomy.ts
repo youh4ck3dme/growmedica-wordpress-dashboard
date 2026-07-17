@@ -4,6 +4,10 @@ import type { ProductListItem } from '@/lib/shopify/types'
 import { getWooCategories } from '@/lib/wordpress/categories'
 import { getWooProducts } from '@/lib/wordpress/products'
 import type { WooCategory } from '@/lib/wordpress/types'
+import skMenuData from '@/lib/navigation/growmedica-sk-menu.json'
+
+const SK_MENU_PATH_ALIASES: Record<string, string> =
+  (skMenuData as { pathAliases?: Record<string, string> }).pathAliases ?? {}
 
 export type FrozenCategory = (typeof taxonomy.categories)[number]
 
@@ -16,7 +20,13 @@ function normalizedName(value: string): string {
 }
 
 export function getFrozenCategoryByPath(path: string): FrozenCategory | null {
-  return bySkPath.get(path.replace(/^\/+|\/+$/g, '')) ?? null
+  const clean = path.replace(/^\/+|\/+$/g, '')
+  const direct = bySkPath.get(clean)
+  if (direct) return direct
+  // growmedica.sk menu path aliases (typos / shorter slugs)
+  const aliased = SK_MENU_PATH_ALIASES[clean]
+  if (aliased && aliased !== clean) return bySkPath.get(aliased) ?? null
+  return null
 }
 
 export function getFrozenCategoryAncestors(category: FrozenCategory): FrozenCategory[] {
@@ -147,7 +157,7 @@ export async function getSeoTaxonomyCollectionView(
 }
 
 export async function getSeoTaxonomyFeaturedProducts(path: string, count = 3): Promise<ProductListItem[]> {
-  const category = getFrozenCategoryByPath(path)
+  const category = getFrozenCategoryByPath(path) // includes SK menu path aliases
   if (!category) return []
   const wooCategory = (await buildWooCategoryMap()).get(category.categoryId)
   if (!wooCategory) return []

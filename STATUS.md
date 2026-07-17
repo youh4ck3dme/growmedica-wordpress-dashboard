@@ -1,10 +1,11 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-17 (security + multi-SKU checkout)  
+**Aktualizované:** 2026-07-17 (agent-done: snippets, SF, ISR sync, smoke)  
 **Branch:** `feat/dashboard-agent-v2`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 
-**Prevádzka / endpointy / env:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)
+**Prevádzka / endpointy / env:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)  
+**Merchant API (ty):** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
 
 ---
 
@@ -13,47 +14,55 @@
 | Oblasť | Stav |
 |--------|------|
 | Next + Woo katalóg na www | ✅ |
-| Cookie košík, checkout cms | ✅ multi-SKU cez `gm_cart` mu-plugin |
+| Cookie košík, checkout cms | ✅ multi-SKU `gm_cart` (Code Snippet active) |
 | Firma, VOP, GDPR, IBAN, e-maily, SMTP | ✅ |
 | BACS + COD, doprava SK s cenami, free od 50 € | ✅ |
-| Test order REST (BACS + DPD 3,90 → cancel) | ✅ opakovane |
-| ISR revalidate snippet | ✅ header-only secret |
-| Dokumentácia STATUS / OPERATIONS / TODO | ✅ |
+| Test order REST (BACS → cancel) | ✅ order #1263 cancelled |
+| ISR revalidate | ✅ snippet + CMS option + Vercel secret zosynchronizované + prod redeploy |
+| Dokumentácia STATUS / OPERATIONS / MERCHANT_KEYS | ✅ |
 | Git clean + secrets mimo gitu | ✅ |
 | Security hardening (XSS, live-write AND, CORS, CI) | ✅ 2026-07-17 |
 | Fake telefón skrytý (kým nedáš reálne číslo) | ✅ |
 | Duplicitná DPD plugin metóda bez ceny vypnutá | ✅ |
 | Audit skladu (qty 50 ≈ fiktívne) | ✅ [reports/STOCK_AUDIT.md](./reports/STOCK_AUDIT.md) |
+| **SuperFaktúra WooCommerce 1.53.2** | ✅ active + BACS/COD defaults · API key ešte ty |
+| CMS snippets redeploy | ✅ checkout seed + CORS + ISR (2026-07-17) |
+| Production smoke www | ✅ `/api/products` Woo gid |
 
 **Shop ide predávať cez bankový prevod a dobierku** bez Stripe/Packeta API.
+
+> **mu-plugins na disk (SSH):** ekvivalent beží ako **Code Snippets** na cms. Fyzické PHP súbory v `wp-content/mu-plugins/` sú voliteľné, ak máš SSH.
 
 ---
 
 ## Čo vie spraviť len ty (nie agent)
 
+> **Pre majiteľa (ľudsky, body):** **[majitel.md](./majitel.md)**  
+> **Tech hub (Packeta · karta · SF · GoPay · DPD):** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
+
 | # | Úloha | Prečo agent nemôže |
 |---|--------|---------------------|
-| 0 | **Nasadiť mu-plugins na cms** (`growmedica-checkout-seed.php`, CORS, revalidate) | prístup na produkčný WP filesystem |
 | 1 | **Manuálny nákup v prehliadači** (1× + 2× SKU BACS) | potvrdenie UX + e-mail v tvojej schránke |
 | 2 | **Reálne telefónne číslo** | neexistuje v dátach — daj ho a doplníme |
-| 3 | **Stripe** API keys (test/live) | merchant účet |
-| 4 | **GoPay** merchant | merchant účet |
-| 5 | **Packeta** API + odosielateľ | merchant účet |
-| 6 | **DPD** API zmluva | merchant účet |
+| 3 | **Stripe** API keys (test/live) — debetná/kreditná karta | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#2-stripe-debetná--kreditná-karta) |
+| 4 | **GoPay** merchant | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#3-gopay) |
+| 5 | **Packeta** API + odosielateľ | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#4-packeta-zásielkovňa) |
+| 6 | **DPD** API zmluva | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#5-dpd) |
 | 7 | **Reálny sklad** (CSV/qty) | 397 produktov má falošných 50 ks |
 | 8 | **Plné VOP** právnik | právny text |
 | 9 | **IČ DPH / DPH 20 %** | účtovné rozhodnutie |
-| 10 | **Zrušiť Shopify** | po tvojom schválení (po stabilite) |
+| 10 | **SuperFaktúra API** (e-mail + key + company_id) | [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#1-superfaktúra-pdf-faktúry--proforma) · [detail](./docs/SUPERFAKTURA_SETUP.md) |
+| 11 | **Zrušiť Shopify** | po tvojom schválení (po stabilite) |
 
 ---
 
 ## Odporúčané poradie pre teba
 
 1. Otvor www → 1 produkt → košík → cms checkout → BACS → skontroluj e-mail.  
-2. Pošli **telefón** (ak máš).  
-3. Doplň **Stripe** (alebo GoPay).  
-4. Daj **sklad** (Excel sku/qty) — agent vie bulk update.  
-5. Packeta/DPD keď máš API.
+2. **SuperFaktúra API** ([MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#1-superfaktúra-pdf-faktúry--proforma)).  
+3. **Stripe test** (karty) → potom Packeta/DPD.  
+4. Pošli **telefón** (ak máš).  
+5. Daj **sklad** (Excel sku/qty) — agent vie bulk update.
 
 ---
 

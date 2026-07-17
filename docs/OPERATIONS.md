@@ -220,12 +220,24 @@ Diagnostika: [../storefront/docs/DIAGNOSTICS.md](../storefront/docs/DIAGNOSTICS.
 | [STATUS.md](../STATUS.md) | Čo je hotové / čo robiť |
 | [TODO.md](../TODO.md) | Checklist |
 | [PRODUCTION_CHECKLIST.md](../PRODUCTION_CHECKLIST.md) | Deploy |
+| **[MERCHANT_KEYS.md](./MERCHANT_KEYS.md)** | **Packeta · Stripe · SuperFaktúra · GoPay · DPD (ty)** |
 | [vzorfirma.md](./vzorfirma.md) | IČO DIČ IBAN |
+| [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) | SuperFaktúra Woo plugin + API |
 | [storefront/docs/DEVELOPMENT.md](../storefront/docs/DEVELOPMENT.md) | Vývoj + freeze |
 | [storefront/docs/WOO_CART.md](../storefront/docs/WOO_CART.md) | Košík |
 | [storefront/docs/WP_WEBHOOKS.md](../storefront/docs/WP_WEBHOOKS.md) | Revalidate |
 | [storefront/.env.example](../storefront/.env.example) | Zoznam env kľúčov |
 
+### SuperFaktúra (fakturácia)
+
+| | |
+|--|--|
+| Plugin | `woocommerce-superfaktura` 1.53.2 na cms (active) |
+| Admin | `cms…/wp-admin/admin.php?page=wc-settings&tab=superfaktura` |
+| Status API | `GET /wp-json/growmedica/v1/sf-status` (App Password) |
+| Reinstall | `./scripts/install-superfaktura-cms.sh` |
+| Docs | [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) |
+
 ---
 
-*Aktualizované: 2026-07-16*
+*Aktualizované: 2026-07-17*
