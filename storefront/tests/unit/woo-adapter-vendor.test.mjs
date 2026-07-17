@@ -56,6 +56,7 @@ describe('adapter source contract', () => {
     assert.match(src, /resolveWooVendor/)
     assert.match(src, /_shopify_vendor/)
     assert.doesNotMatch(src, /vendor:\s*product\.tags\[0\]/)
+    assert.match(src, /getDeepestVisibleProductType/)
   })
 
   it('Forma/Kategória facet list is fully expanded (no max-h-48 scroll)', () => {

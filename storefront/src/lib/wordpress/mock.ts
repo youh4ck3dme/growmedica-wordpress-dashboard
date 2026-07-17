@@ -38,7 +38,10 @@ function mockWooProduct(slug: string, categorySlug: string, index: number): WooP
     stock_status: 'instock',
     stock_quantity: 50,
     categories: [{ id: 1, name: categorySlug, slug: categorySlug }],
-    tags: [{ id: 1, name: '00037', slug: '00037' }],
+    tags: [
+      { id: 1, name: '00037', slug: '00037' },
+      { id: 2, name: 'podpora imunity', slug: 'podpora-imunity' },
+    ],
     images: [{ id: 1, src: '/logo-icon.svg', name: slug, alt: slug }],
     attributes: [],
     meta_data: [{ key: '_shopify_vendor', value: 'MycoMedica' }],

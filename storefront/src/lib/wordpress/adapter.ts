@@ -4,6 +4,7 @@
  */
 
 import type { Money, Product, ProductListItem, ShopifyImage } from '@/lib/shopify/types'
+import { getDeepestVisibleProductType } from '@/lib/product-facets'
 import type { WooCategory, WooProduct } from './types'
 
 const DEFAULT_CURRENCY = 'EUR'
@@ -49,8 +50,7 @@ export function resolveWooVendor(product: WooProduct): string {
 
 /** Prefer deepest category name for "Forma / Kategória" facet (last term is usually leaf). */
 export function resolveWooProductType(product: WooProduct): string {
-  if (!product.categories?.length) return ''
-  return product.categories[product.categories.length - 1]?.name ?? ''
+  return getDeepestVisibleProductType(product.categories.map((category) => category.name))
 }
 
 export function wooProductToListItem(product: WooProduct): ProductListItem {

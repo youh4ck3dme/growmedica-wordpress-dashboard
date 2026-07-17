@@ -10,6 +10,7 @@ const LOGIN_PAGE_PATH = path.join(REPO_ROOT, 'storefront/src/app/prihlasenie/pag
 const PROFILE_PAGE_PATH = path.join(REPO_ROOT, 'storefront/src/app/profil/page.tsx')
 
 const FILTER_LIST_PATH = path.join(REPO_ROOT, 'storefront/src/components/product/FilterableProductList.tsx')
+const PRODUCT_FACETS_PATH = path.join(REPO_ROOT, 'storefront/src/lib/product-facets.ts')
 const WISHLIST_BTN_PATH = path.join(REPO_ROOT, 'storefront/src/components/product/WishlistButton.tsx')
 const REVIEWS_PATH = path.join(REPO_ROOT, 'storefront/src/components/product/ProductReviews.tsx')
 
@@ -32,7 +33,15 @@ test.describe('Customer Experience Features - Static Integrity Tests', () => {
     expect(filterContent).toContain('selectedTags')
     expect(filterContent).toContain('sortBy')
     expect(filterContent).toContain('clearAllFilters')
+    expect(filterContent).toContain('getProductEffectLabels')
+    expect(filterContent).toContain('normalizeProductTypeFacet')
+    expect(filterContent).not.toContain('p.tags.some((tag) => selectedTags.has(tag))')
     expect(filterContent).toMatch(/Forma \/ Kategória<\/h4>\s*<div className="space-y-2">/)
+
+    expect(existsSync(PRODUCT_FACETS_PATH)).toBe(true)
+    const facetsContent = readFileSync(PRODUCT_FACETS_PATH, 'utf8')
+    expect(facetsContent).toContain('PRODUCT_EFFECT_TAXONOMY')
+    expect(facetsContent).toContain('PRODUCT_TYPE_DENYLIST')
   })
 
   test('2. Wishlist - Srdiečka a stránka obľúbených', () => {
