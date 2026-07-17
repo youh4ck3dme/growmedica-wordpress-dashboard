@@ -14,8 +14,18 @@ function isDashboardPath(pathname: string): boolean {
   return pathname === '/dashboard' || pathname.startsWith('/dashboard/')
 }
 
+const HOLD_PRODUCT_LEGACY_PATH =
+  '/sk/hlavna-stranka/zdravie/produkt/bio-polyporus-prasok-100g-odvodnuje-organizmus/190'
+const HOLD_PRODUCT_TARGET_PATH = '/produkty/bio-polyporus-prasok-100g-odvodhuje-organizmus'
+
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
+
+  // Next custom routes omit this single frozen HOLD redirect from the build manifest.
+  // Preserve the legacy URL without importing or modifying the HOLD product in Woo.
+  if (pathname === HOLD_PRODUCT_LEGACY_PATH) {
+    return NextResponse.redirect(new URL(HOLD_PRODUCT_TARGET_PATH, request.url), 301)
+  }
 
   if (isDashboardPath(pathname)) {
     const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value ?? null
