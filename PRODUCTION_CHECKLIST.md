@@ -49,10 +49,12 @@ Lokálne secrets: gitignored `wordpress-production.local.env`, `storefront/.env.
 - [x] E-mail footer + SK subjects  
 - [x] SMTP  
 - [x] terms_page_id (VOP)  
-- [ ] Stripe / GoPay keys  
+- [ ] SuperFaktúra API (e-mail + key + company_id)  
+- [ ] Stripe / GoPay keys (karty)  
 - [ ] Packeta / DPD API  
 
-Firma: [docs/vzorfirma.md](./docs/vzorfirma.md)
+**Všetky merchant kroky (kde získať / kam vložiť):** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)  
+Firma: [docs/vzorfirma.md](./docs/vzorfirma.md) · SuperFaktúra: [docs/SUPERFAKTURA_SETUP.md](./docs/SUPERFAKTURA_SETUP.md)
 
 ---
 
@@ -101,7 +103,9 @@ Import späť do Woo: `storefront/scripts/import-shopify-to-woo.mjs`
 
 ## Súvisiace
 
+- [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md) — Packeta / karta / SuperFaktúra / GoPay / DPD  
 - [TODO.md](./TODO.md)  
+- [STATUS.md](./STATUS.md)  
 - [reports/REMAINING_WORK_NOW.md](./reports/REMAINING_WORK_NOW.md)  
-- [reports/EMAIL_TEMPLATES.md](./reports/EMAIL_TEMPLATES.md)  
 - [storefront/docs/WOO_CART.md](./storefront/docs/WOO_CART.md)  
+

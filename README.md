@@ -29,9 +29,11 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 |--|--|
 | Katalóg | ✅ Woo (`CMS_PROVIDER=wordpress`) |
 | Košík | ✅ cookie BFF → cms checkout |
-| Platby | ✅ BACS + COD · ⬜ Stripe/GoPay |
+| Platby | ✅ BACS + COD · ⬜ Stripe/GoPay (karty) |
 | Doprava SK | ✅ flat rates · ⬜ Packeta/DPD map API |
+| Faktúry | ✅ SuperFaktúra plugin · ⬜ API key (ty) |
 | Firma / e-maily | ✅ [docs/vzorfirma.md](./docs/vzorfirma.md) |
+| **Merchant API (ty)** | **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** — Packeta, karta, SF, GoPay, DPD |
 
 ## Quick start
 
@@ -110,6 +112,8 @@ growmedica-wordpress-dashboard/
 ├── STATUS.md                 # ← čo je live a čo robiť
 ├── TODO.md
 ├── PRODUCTION_CHECKLIST.md
+├── docs/MERCHANT_KEYS.md     # ← Packeta / karta / SuperFaktúra / GoPay (ty)
+├── docs/SUPERFAKTURA_SETUP.md
 ├── docs/vzorfirma.md         # firma / banka
 ├── reports/                  # aktuálne reporty (+ seo-taxonomy/)
 │   └── archive/              # historické plány
@@ -127,11 +131,14 @@ growmedica-wordpress-dashboard/
 |----------|--|
 | [STATUS.md](./STATUS.md) | **Hlavný stav + backlog** |
 | [docs/OPERATIONS.md](./docs/OPERATIONS.md) | **Endpointy, env, prevádzka** |
+| **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** | **Packeta · Stripe/karta · SuperFaktúra · GoPay · DPD — čo dávaš ty** |
+| [docs/SUPERFAKTURA_SETUP.md](./docs/SUPERFAKTURA_SETUP.md) | SuperFaktúra inštalácia + API |
 | [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) | Deploy / env / smoke |
 | [docs/vzorfirma.md](./docs/vzorfirma.md) | IČO, DIČ, IBAN |
 | [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) | Vývoj + freeze |
 | [storefront/docs/WOO_CART.md](./storefront/docs/WOO_CART.md) | Košík |
 | [storefront/docs/I18N.md](./storefront/docs/I18N.md) | CS/SK/EN/DE |
+| [storefront/docs/poznamky.md](./storefront/docs/poznamky.md) | Shopify Admin / Nexus (legacy) |
 | [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md) | Lokálny WP |
 | [AGENTS.md](./AGENTS.md) | Pravidlá pre AI |
 | [reports/seo-taxonomy/FINAL_STATUS.md](./reports/seo-taxonomy/FINAL_STATUS.md) | SEO taxonomy status |

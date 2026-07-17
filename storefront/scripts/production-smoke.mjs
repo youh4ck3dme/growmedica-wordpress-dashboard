@@ -108,9 +108,22 @@ async function main() {
       `⚠️ Skipping ISR revalidate — set ${cmsProvider === 'shopify' ? 'SHOPIFY_REVALIDATION_SECRET' : 'WORDPRESS_REVALIDATION_SECRET'} (production value from Vercel)`,
     )
   } else {
-    const revalidateUrl = `${previewUrl}/api/revalidate?secret=${encodeURIComponent(revalidateSecret)}&tag=${revalidateTag}`
-    console.log(`→ POST ${revalidateUrl.replace(revalidateSecret, '<secret>')}`)
-    const rev = await fetch(revalidateUrl, { method: 'POST' })
+    // Prefer header secret (CMS ISR snippet + production fail-closed path); query as fallback.
+    const revalidateUrl = `${previewUrl}/api/revalidate`
+    console.log(`→ POST ${revalidateUrl} (header x-revalidation-secret, tag=${revalidateTag})`)
+    let rev = await fetch(revalidateUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-revalidation-secret': revalidateSecret,
+      },
+      body: JSON.stringify({ tag: revalidateTag }),
+    })
+    if (!rev.ok && rev.status === 401) {
+      const q = `${revalidateUrl}?secret=${encodeURIComponent(revalidateSecret)}&tag=${revalidateTag}`
+      console.log(`→ POST ${q.replace(revalidateSecret, '<secret>')} (query fallback)`)
+      rev = await fetch(q, { method: 'POST' })
+    }
     if (!rev.ok) {
       // Local env secret often differs from Vercel production secret — warn only on remote.
       if (isRemotePreview && rev.status === 401) {

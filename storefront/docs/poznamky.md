@@ -2,7 +2,9 @@
 
 E-shop na [growmedica.cz](https://www.growmedica.cz) číta katalóg cez tokenless Storefront API. Admin onboard/inventory flow používa serverové Dev Dashboard credentials: `SHOPIFY_CLIENT_ID` + `SHOPIFY_CLIENT_SECRET`; skripty si z nich vyžiadajú krátkodobý access token. Legacy `SHOPIFY_ADMIN_ACCESS_TOKEN` (`shpat_…`) ostáva iba fallback.
 
-> Pre AI agenta: [poznamky-agent.md](./poznamky-agent.md) · `yarn shopify:admin-onboard --json` · strojový runbook: [poznamky-agent.json](./poznamky-agent.json)
+> **Woo merchant API (Packeta, Stripe/karta, SuperFaktúra, GoPay, DPD)** — nie Shopify:  
+> **[docs/MERCHANT_KEYS.md](../../docs/MERCHANT_KEYS.md)**  
+> Pre AI agenta (Shopify): [poznamky-agent.md](./poznamky-agent.md) · `yarn shopify:admin-onboard --json` · [poznamky-agent.json](./poznamky-agent.json)
 
 ## Overený stav — 16. júl 2026
 
