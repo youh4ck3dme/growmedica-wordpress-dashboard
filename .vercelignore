@@ -1,0 +1,27 @@
+# Keep CLI uploads under 100MB — Root Directory is storefront/
+node_modules
+**/node_modules
+.next
+**/.next
+.next-*
+**/.next-*
+out
+**/out
+wordpress-data
+.git
+**/.git
+*.pack
+**/*.pack
+playwright-report
+**/playwright-report
+test-results
+**/test-results
+.turbo
+**/.turbo
+coverage
+**/coverage
+dist
+**/dist
+*.log
+**/*.log
+.DS_Store
