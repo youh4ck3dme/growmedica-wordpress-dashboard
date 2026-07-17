@@ -90,6 +90,11 @@ Wenn Sie für den Haushalt kaufen, trennen Sie Produkte für Erwachsene und Kind
 
 Haben Sie einen Favoriten, lesen Sie die Hinweise am Ende des Etiketts noch einmal. Nicht aus Angst, sondern um zu wissen, wann Sie pausieren: Übelkeit, allergische Reaktion, Medikamentenwechsel, Schwangerschaft. Ein fairer Shop ermöglicht Rückgaben laut AGB für ungeöffnete Ware im gesetzlichen Fenster — am besten wählt man jedoch nicht in Eile.
 
+
+Für SEO und Leser hilft es, wenn Artikel und Kategorien dieselbe Sprache sprechen: klares H1, Meta-Description mit Nutzen ohne Heilversprechen, interne Links zu Blattkategorien und Produktkarten mit lesbarer Deklaration. Rank Math (oder ein vergleichbares Plugin) bewertet das Focus Keyword leichter, wenn es natürlich in Titel, erstem Absatz und URL vorkommt. Wichtig ist, den Text nicht mit Keyword-Stuffing zu überladen — verständliche Variationen (Nahrungsergänzungsmittel / Vitamine / Supplements) und Absätze zu „wie wählen“, „worauf achten“ und „wann zur Fachperson“ reichen.
+
+Zum Schluss eine einfache Prüfung vor dem Absenden der Bestellung: Ich verstehe die Zusammensetzung, ich schaffe die Dosis, ich kenne die Kosten pro Tag, es gibt keinen Konflikt mit Medikamenten oder besonderem Status, und ich kaufe nicht aus Angst. Wenn alle fünf Punkte stimmen, ist der Kauf technisch und menschlich in Ordnung. Wenn nicht, warten Sie — der Shop und die Präparate sind auch morgen noch da.
+
 ---
 
 **Heading budget:** H1×1 · H2×3 · H3×3 · H4×3  

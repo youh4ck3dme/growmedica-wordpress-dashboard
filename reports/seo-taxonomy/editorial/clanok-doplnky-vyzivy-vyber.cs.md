@@ -90,6 +90,11 @@ Pokud nakupujete pro domácnost, oddělte produkty pro dospělé a pro děti. Sd
 
 Když už máte favorita, přečtěte si ještě jednou upozornění na konci etikety. Ne proto, abyste se báli, ale abyste věděli, kdy produkt odložit: nevolnost, alergická reakce, změna medikace, těhotenství. Férový e-shop vám umožní produkt vrátit podle obchodních podmínek, pokud je neotevřený a v zákonné lhůtě — ale nejlepší je nevybírat ve spěchu.
 
+
+Pro SEO i pro čtenáře je užitečné, když článek i kategorie mluví stejným jazykem: jasné H1, meta description s přínosem a bez léčebných slibů, interní odkazy na listové kategorie a produktové karty s čitelným složením. Rank Math (nebo obdobný plugin) pak snadněji vyhodnotí focus keyword, pokud je přirozeně v titulku, prvním odstavci i v URL. Důležité je nepřetěžovat text opakováním klíčových slov — stačí srozumitelná variace (doplňky stravy / doplňky výživy / vitamíny) a kvalitní odstavce, které odpovídají na otázky „jak vybrat“, „na co si dát pozor“ a „kdy jít za odborníkem“.
+
+Na závěr si zapamatujte jednoduchou kontrolu před odesláním objednávky: rozumím složení, zvládnu dávku, vím cenu za den, nekoliduje to s léky nebo zvláštním stavem, a nekupuji ze strachu. Pokud na všech pět bodů odpovíte ano, je nákup technicky i lidsky v pořádku. Pokud ne, počkejte — e-shop i doplňky stravy budou k dispozici i zítra.
+
 ---
 
 **Heading budget:** H1×1 · H2×3 · H3×3 · H4×3  
