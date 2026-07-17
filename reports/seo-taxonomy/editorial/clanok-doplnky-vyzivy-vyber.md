@@ -44,13 +44,11 @@ Pri bylinách a extraktoch sledujte, či je uvedené, z akej časti rastliny pro
 
 Okrem účinnej zložky si všímajte aj to, čo produkt **neobsahuje**, ak na to máte dôvod: laktózu, lepok, želatínu, umelé farbivá. Absencia nejakej zložky však sama o sebe nerobí produkt kvalitným — stále potrebujete jasnú dávku a zmysluplný cieľ.
 
-### Kedy doplnok dáva zmysel a kedy je lepší pauza
-
-Doplnok má najväčší zmysel, keď máte jasný dôvod: nízky príjem určitej živiny, špecifickú životnú fázu, odporúčanie odborníka, alebo transparentný cieľ (napríklad doplnenie bielkovín v prášku pri vyššom tréningovom objeme). Naopak, ak kupujete „niečo proti všetkému“, rýchlo skončíte s poličkou poloprázdnych balení a s pocitom, že „doplnky nefungujú“ — hoci ste vlastne nikdy nemali plán.
+**Kedy doplnok dáva zmysel a kedy je lepší pauza.** Doplnok má najväčší zmysel, keď máte jasný dôvod: nízky príjem určitej živiny, špecifickú životnú fázu, odporúčanie odborníka, alebo transparentný cieľ (napríklad doplnenie bielkovín v prášku pri vyššom tréningovom objeme). Naopak, ak kupujete „niečo proti všetkému“, rýchlo skončíte s poličkou poloprázdnych balení a s pocitom, že „doplnky nefungujú“ — hoci ste vlastne nikdy nemali plán.
 
 Pauza je rozumná, keď neviete, čo už užívate, keď sa liečite a nechcete riskovať interakcie, alebo keď ste ešte neurobili základ. E-shop má slúžiť ako nástroj výberu, nie ako náhrada za vyšetrenie. Ak máte dlhú únavu, nevysvetlené ťažkosti, silné bolesti alebo podozrenie na ochorenie, najprv hľadajte lekára. Doplnok môže prísť neskôr ako podpora, nie ako prvá a jediná odpoveď.
 
-Praktický kompromis pre bežného človeka: jeden dobre zvolený produkt na 8–12 týždňov, zapisované užívanie, a až potom hodnotenie, či má zmysel pokračovať. Bez tohto rámca sa z nákupu stáva zbierka nádejí namiesto rutiny.
+Praktický kompromis pre bežného človeka: jeden dobre zvolený produkt na 8–12 týždňov, zapisované užívanie, a až potom hodnotenie, či má zmysel pokračovať. Bez tohto rámca sa z nákupu stáva zbierka nádejí namiesto rutiny. Ak po dvanástich týždňoch nevidíte zmysel v rutine (nie nutne v „zázraku“), je fajn produkt vysadiť a prehodnotiť cieľ — namiesto automatického predĺženia predplatného alebo ďalšieho balenia „pre istotu“.
 
 ## Ako postaviť osobný výber: od cieľa k produktu
 
@@ -101,6 +99,8 @@ Problematický marketing používa absolútne slová (vždy, nikdy, 100 %), urge
 Pred nákupom si overte päť bodov: (1) cieľ v jednej vete, (2) dávku a formu, ktorú dokážete dodržať, (3) cenu za deň, (4) upozornenia na etikete, (5) či nekolidujete s liekmi, tehotenstvom, vekom dieťaťa alebo iným špeciálnym stavom. Ak niektorý bod chýba, doplňte ho skôr, než zaplatíte. Košík počká. Zdravý úsudok je lacnejší než vrátenie balíka, sklamanie a pocit, že ste kúpili sľub namiesto produktu.
 
 Na záver jedna praktická veta, ktorú si môžete uložiť: **najlepší doplnok je ten, ktorého zloženie rozumiete, dávku dodržíte a ktorý nepotrebujete obhajovať zázračným príbehom.** Ak sa pri výbere vrátište k tejto vete, ušetríte čas aj peniaze — a e-shop využijete ako nástroj, nie ako nahradu za starostlivosť o seba a o odbornú radu, keď ju treba.
+
+Ak chcete ísť ešte o krok ďalej, spravte si jednu stranu poznámok: cieľ, aktuálne lieky, alergie, rozpočet na mesiac a zoznam toho, čo už doma máte. S touto stránkou je nákup rýchlejší, porovnanie férové a riziko duplicít nižšie. Práve táto „nudná“ príprava je často tým, čo odlišuje spokojného zákazníka od človeka, ktorý po treťom balení stráca trpezlivosť. Doplnky výživy majú miesto v modernom životnom štýle — ale len vtedy, keď ich vyberáte rovnako triezvo ako iné rozhodnutia o peňazoch a o zdraví.
 
 ---
 
