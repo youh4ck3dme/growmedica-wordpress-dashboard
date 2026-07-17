@@ -71,3 +71,19 @@ Full item list: `storefront/IMPORT_SHOPIFY_TO_WOO_REPORT.json` (gitignored? chec
 | `reports/seo-taxonomy/WOO_PREFLIGHT_HINT.json` | credential probe summary (no secrets) |
 | `reports/seo-taxonomy/TAXONOMY_COVERAGE.json` | READY↔Woo slug coverage |
 | `reports/seo-taxonomy/AGENT_HANDOFF.md` | this file |
+
+
+## Post-check GREEN (live)
+
+Invariant after parent+name match fix:
+
+- categoriesExisting **75** / wouldCreate **0**
+- productsUnchanged **459** / wouldUpdate **0**
+- errors **0**
+
+Live write already applied earlier (70 creates + 459 updates). Do not re-run live taxonomy write.
+
+## Redirects
+
+See `REDIRECT_HANDOFF.md` + `redirects.product-only.paths.json`.
+**Do not** use raw `/sk/kategorie/*` targets on current storefront.
