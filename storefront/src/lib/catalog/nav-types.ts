@@ -11,6 +11,12 @@ export type NavCollectionItem = {
   children?: NavCollectionItem[]
 }
 
+export function shouldIncludeMegaMenuCollection(
+  collection: Pick<NavCollectionItem, 'productCount' | 'children'>,
+): boolean {
+  return collection.productCount > 0 || Boolean(collection.children?.length)
+}
+
 export type CollectionView = {
   handle: string
   title: string
