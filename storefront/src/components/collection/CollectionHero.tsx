@@ -6,6 +6,8 @@ interface CollectionHeroProps {
   title: string
   description: string | null
   productCount: number
+  /** Woo category image — preferred over static mega-menu WebP fallback */
+  imageUrl?: string | null
 }
 
 export default function CollectionHero({
@@ -13,8 +15,9 @@ export default function CollectionHero({
   title,
   description,
   productCount,
+  imageUrl,
 }: CollectionHeroProps) {
-  const bannerSrc = getMegaMenuBannerSrc(handle)
+  const bannerSrc = imageUrl || getMegaMenuBannerSrc(handle)
   const countLabel =
     productCount === 1
       ? '1 produkt'

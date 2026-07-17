@@ -13,6 +13,8 @@ import {
 import { getCollectionMetadata } from '@/lib/seo'
 import { getRequestLocale } from '@/lib/i18n/server'
 import { t } from '@/lib/i18n/translate'
+import { getWooCategoryBySlug } from '@/lib/wordpress/categories'
+import { isWordPressCms } from '@/lib/cms'
 
 export const revalidate = 3600
 
@@ -97,6 +99,8 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
   const page = listOptions.page ?? 1
   const productCount = view.totalOnPage
+  const wooCategory = isWordPressCms() ? await getWooCategoryBySlug(handle) : null
+  const imageUrl = wooCategory?.image?.src ?? null
 
   return (
     <div className="py-8 lg:py-12">
@@ -116,6 +120,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
           title={view.title}
           description={view.description}
           productCount={productCount}
+          imageUrl={imageUrl}
         />
 
         <Suspense fallback={null}>
