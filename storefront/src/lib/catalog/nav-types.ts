@@ -7,6 +7,8 @@ export type NavCollectionItem = {
   icon?: string
   menuLabel: string
   source: 'shopify' | 'catalog'
+  /** Woo product category image (thumbnail) when available */
+  imageUrl?: string | null
   /** Nested children when menu mirrors growmedica.sk hierarchy */
   children?: NavCollectionItem[]
 }

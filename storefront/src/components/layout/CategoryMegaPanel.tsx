@@ -38,7 +38,7 @@ export default function CategoryMegaPanel({
         ? `${active.productCount} produkty`
         : `${active.productCount} produktov`
 
-  const bannerSrc = getMegaMenuBannerSrc(active.handle)
+  const bannerSrc = active.imageUrl || getMegaMenuBannerSrc(active.handle)
 
   return (
     <div className="mega-menu-grid">

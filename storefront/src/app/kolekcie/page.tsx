@@ -61,7 +61,8 @@ export default async function KolekciePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {collections.map((collection) => {
-              const bannerSrc = getMegaMenuBannerSrc(collection.handle)
+              const bannerSrc =
+                collection.imageUrl || getMegaMenuBannerSrc(collection.handle)
 
               return (
                 <Link
