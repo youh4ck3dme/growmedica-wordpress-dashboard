@@ -7,6 +7,8 @@ export type NavCollectionItem = {
   icon?: string
   menuLabel: string
   source: 'shopify' | 'catalog'
+  /** Nested children when menu mirrors growmedica.sk hierarchy */
+  children?: NavCollectionItem[]
 }
 
 export type CollectionView = {

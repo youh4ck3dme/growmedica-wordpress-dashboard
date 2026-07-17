@@ -10,11 +10,13 @@ import { ThemeSearch } from '@/components/ui/ThemeSearch'
 import type { NavLinkItem } from '@/lib/navigation/primary-nav'
 import { shouldHideThemeSwitcher } from '@/lib/theme/storefront-theme'
 
+type MobileCategoryLink = NavLinkItem & { children?: MobileCategoryLink[] }
+
 interface MobileNavProps {
   isOpen: boolean
   onClose: () => void
   primaryLinks: NavLinkItem[]
-  categoryLinks: NavLinkItem[]
+  categoryLinks: MobileCategoryLink[]
 }
 
 export default function MobileNav({
@@ -116,11 +118,43 @@ export default function MobileNav({
                     <Link
                       href={link.href}
                       onClick={onClose}
-                      className="flex items-center px-3 py-2.5 text-sm font-medium text-(--color-text-muted) rounded-lg hover:bg-(--color-primary-light) hover:text-(--color-primary-dark) transition-colors"
+                      className="flex items-center px-3 py-2.5 text-sm font-semibold text-(--color-text) rounded-lg hover:bg-(--color-primary-light) hover:text-(--color-primary-dark) transition-colors"
                       style={{ fontFamily: 'Montserrat, sans-serif' }}
                     >
                       {link.label}
                     </Link>
+                    {link.children && link.children.length > 0 && (
+                      <ul className="ml-2 mt-0.5 space-y-0.5 border-l border-(--color-border) pl-2">
+                        {link.children.map((child) => (
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              onClick={onClose}
+                              className="flex items-center px-2 py-1.5 text-sm font-medium text-(--color-text-muted) rounded-lg hover:bg-(--color-primary-light) hover:text-(--color-primary-dark) transition-colors"
+                              style={{ fontFamily: 'Montserrat, sans-serif' }}
+                            >
+                              {child.label}
+                            </Link>
+                            {child.children && child.children.length > 0 && (
+                              <ul className="ml-2 mt-0.5 space-y-0.5 border-l border-(--color-border) pl-2">
+                                {child.children.map((grand) => (
+                                  <li key={grand.href}>
+                                    <Link
+                                      href={grand.href}
+                                      onClick={onClose}
+                                      className="flex items-center px-2 py-1 text-xs font-medium text-(--color-text-muted) rounded-lg hover:bg-(--color-primary-light) hover:text-(--color-primary-dark) transition-colors"
+                                      style={{ fontFamily: 'Montserrat, sans-serif' }}
+                                    >
+                                      {grand.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 ))}
               </ul>
