@@ -32,6 +32,7 @@ test.describe('Customer Experience Features - Static Integrity Tests', () => {
     expect(filterContent).toContain('selectedTags')
     expect(filterContent).toContain('sortBy')
     expect(filterContent).toContain('clearAllFilters')
+    expect(filterContent).toMatch(/Forma \/ Kategória<\/h4>\s*<div className="space-y-2">/)
   })
 
   test('2. Wishlist - Srdiečka a stránka obľúbených', () => {

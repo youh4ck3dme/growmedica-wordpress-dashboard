@@ -311,7 +311,7 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
       {facets.types.length > 0 && (
         <div className="border-t border-(--color-border) pt-4">
           <h4 className="text-xs font-semibold text-(--color-text) uppercase tracking-wider mb-3">Forma / Kategória</h4>
-          <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+          <div className="space-y-2">
             {facets.types.map((type) => {
               const active = selectedTypes.has(type)
               const count = getTypeCount(type)

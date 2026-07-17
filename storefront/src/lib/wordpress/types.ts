@@ -22,6 +22,12 @@ export interface WooCategory {
   image: WooImage | null
 }
 
+export interface WooMetaDatum {
+  id?: number
+  key: string
+  value: unknown
+}
+
 export interface WooProduct {
   id: number
   name: string
@@ -47,6 +53,10 @@ export interface WooProduct {
     slug: string
     options: string[]
   }>
+  /** Present on REST product payloads when the key is not protected */
+  meta_data?: WooMetaDatum[]
+  /** Optional Brands for WooCommerce extension */
+  brands?: Array<{ id: number; name: string; slug: string }>
   date_modified_gmt: string
 }
 
