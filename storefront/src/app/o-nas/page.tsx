@@ -5,10 +5,8 @@ import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = buildPageMetadata(
-  'O nás',
-  BRAND_COPY.pageDescriptions.about,
-)
+export const metadata: Metadata = buildPageMetadata('O nás',
+  BRAND_COPY.pageDescriptions.about, '/o-nas')
 
 export default function AboutPage() {
   return (

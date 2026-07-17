@@ -9,7 +9,7 @@ import { getRequestLocale } from '@/lib/i18n/server'
 import { t } from '@/lib/i18n/translate'
 
 export const metadata: Metadata = {
-  ...buildPageMetadata('Vyhľadávanie', BRAND_COPY.pageDescriptions.search),
+  ...buildPageMetadata('Vyhľadávanie', BRAND_COPY.pageDescriptions.search, '/vyhladavanie'),
   robots: { index: false },
 }
 

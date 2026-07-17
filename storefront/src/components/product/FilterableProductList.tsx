@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { m, AnimatePresence } from 'framer-motion'
 import { Filter, X, Search, ChevronDown, Check, SlidersHorizontal } from 'lucide-react'
 import type { ProductListItem } from '@/lib/shopify/types'
@@ -8,6 +9,11 @@ import { ProductCard } from './ProductCard'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { getProductEffectLabels, normalizeProductTypeFacet } from '@/lib/product-facets'
+import {
+  buildProductFilterSearchParams,
+  parseProductFilterSearchParams,
+  productFilterSearchParamsEqual,
+} from '@/lib/product-filter-url'
 import { cn } from '@/lib/utils'
 
 interface FilterableProductListProps {
@@ -23,12 +29,11 @@ const SORT_OPTIONS = [
 ]
 
 export function FilterableProductList({ initialProducts, initialQuery = '' }: FilterableProductListProps) {
-  const [searchQuery, setSearchQuery] = useState(initialQuery)
-  const [selectedVendors, setSelectedVendors] = useState<Set<string>>(new Set())
-  const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set())
-  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
-  const [sortBy, setSortBy] = useState('BEST_SELLING')
-  
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const skipUrlWrite = useRef(false)
+
   // Calculate price boundaries from initial products
   const priceLimits = useMemo(() => {
     if (initialProducts.length === 0) return { min: 0, max: 100 }
@@ -45,13 +50,74 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     }
   }, [initialProducts])
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([priceLimits.min, priceLimits.max])
+  const urlState = useMemo(
+    () => parseProductFilterSearchParams(searchParams),
+    [searchParams],
+  )
+
+  const [searchQuery, setSearchQuery] = useState(() => urlState.q || initialQuery)
+  const [selectedVendors, setSelectedVendors] = useState<Set<string>>(
+    () => new Set(urlState.vendors),
+  )
+  const [selectedTypes, setSelectedTypes] = useState<Set<string>>(() => new Set(urlState.types))
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set(urlState.effects))
+  const [sortBy, setSortBy] = useState(() => urlState.sort || 'BEST_SELLING')
+  const [priceRange, setPriceRange] = useState<[number, number]>(() => [
+    urlState.priceMin ?? priceLimits.min,
+    urlState.priceMax ?? priceLimits.max,
+  ])
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
 
-  // Reset price range slider if limits change (e.g. initial products load)
+  // Hydrate from URL (back/forward, shared links)
   useEffect(() => {
-    setPriceRange([priceLimits.min, priceLimits.max])
-  }, [priceLimits])
+    const next = parseProductFilterSearchParams(searchParams)
+    skipUrlWrite.current = true
+    setSearchQuery(next.q || initialQuery)
+    setSelectedVendors(new Set(next.vendors))
+    setSelectedTypes(new Set(next.types))
+    setSelectedTags(new Set(next.effects))
+    setSortBy(next.sort || 'BEST_SELLING')
+    setPriceRange([
+      next.priceMin ?? priceLimits.min,
+      next.priceMax ?? priceLimits.max,
+    ])
+  }, [searchParams, initialQuery, priceLimits.min, priceLimits.max])
+
+  // Write filters to URL (replace — no history spam)
+  useEffect(() => {
+    if (skipUrlWrite.current) {
+      skipUrlWrite.current = false
+      return
+    }
+    const next = buildProductFilterSearchParams(
+      {
+        q: searchQuery,
+        vendors: [...selectedVendors],
+        types: [...selectedTypes],
+        effects: [...selectedTags],
+        sort: sortBy,
+        priceMin: priceRange[0],
+        priceMax: priceRange[1],
+      },
+      { priceLimits },
+    )
+    if (productFilterSearchParamsEqual(next, new URLSearchParams(searchParams.toString()))) {
+      return
+    }
+    const qs = next.toString()
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
+  }, [
+    searchQuery,
+    selectedVendors,
+    selectedTypes,
+    selectedTags,
+    sortBy,
+    priceRange,
+    priceLimits,
+    pathname,
+    router,
+    searchParams,
+  ])
 
   const effectLabelsByProductId = useMemo(
     () => new Map(initialProducts.map((product) => [product.id, getProductEffectLabels(product.tags)])),
@@ -288,7 +354,7 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
       {facets.vendors.length > 0 && (
         <div className="border-t border-(--color-border) pt-4">
           <h4 className="text-xs font-semibold text-(--color-text) uppercase tracking-wider mb-3">Výrobca</h4>
-          <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+          <div className="space-y-2">
             {facets.vendors.map((vendor) => {
               const active = selectedVendors.has(vendor)
               const count = getVendorCount(vendor)

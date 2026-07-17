@@ -35,8 +35,13 @@ test.describe('Customer Experience Features - Static Integrity Tests', () => {
     expect(filterContent).toContain('clearAllFilters')
     expect(filterContent).toContain('getProductEffectLabels')
     expect(filterContent).toContain('normalizeProductTypeFacet')
+    expect(filterContent).toContain('parseProductFilterSearchParams')
+    expect(filterContent).toContain('buildProductFilterSearchParams')
+    expect(filterContent).toContain('useSearchParams')
     expect(filterContent).not.toContain('p.tags.some((tag) => selectedTags.has(tag))')
     expect(filterContent).toMatch(/Forma \/ Kategória<\/h4>\s*<div className="space-y-2">/)
+    expect(filterContent).toMatch(/Výrobca<\/h4>\s*<div className="space-y-2">/)
+    expect(filterContent).not.toContain('max-h-40 overflow-y-auto')
 
     expect(existsSync(PRODUCT_FACETS_PATH)).toBe(true)
     const facetsContent = readFileSync(PRODUCT_FACETS_PATH, 'utf8')

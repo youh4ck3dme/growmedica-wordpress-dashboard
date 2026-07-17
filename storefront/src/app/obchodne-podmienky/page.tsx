@@ -4,7 +4,7 @@ import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { COMPANY } from '@/lib/company'
 import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = buildPageMetadata('Obchodné podmienky')
+export const metadata: Metadata = buildPageMetadata('Obchodné podmienky', undefined, '/obchodne-podmienky')
 
 export default function ObchodnePodmienky() {
   return (

@@ -8,7 +8,7 @@ import { getFaqItems, t } from '@/lib/i18n/translate'
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale()
-  return buildPageMetadata(t('faq.title', locale))
+  return buildPageMetadata(t('faq.title', locale), undefined, '/faq')
 }
 
 export default async function FAQ() {

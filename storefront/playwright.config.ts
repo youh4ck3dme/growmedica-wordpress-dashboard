@@ -76,7 +76,8 @@ const playwrightWebServer = {
   command: `node scripts/ensure-dev-port.mjs ${playwrightDevPort} && node scripts/playwright-dev.mjs ${playwrightDevPort}`,
   url: playwrightDevUrl,
   reuseExistingServer: !process.env.CI,
-  timeout: 120_000,
+  // Local Mac / CI can be slow to boot Next; avoid false integrity failures.
+  timeout: 180_000,
   env: playwrightEnv,
 };
 

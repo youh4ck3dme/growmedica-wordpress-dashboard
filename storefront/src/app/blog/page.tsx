@@ -5,10 +5,8 @@ import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = buildPageMetadata(
-  'Blog',
-  BRAND_COPY.pageDescriptions.blog,
-)
+export const metadata: Metadata = buildPageMetadata('Blog',
+  BRAND_COPY.pageDescriptions.blog, '/blog')
 
 export default function BlogPage() {
   return (

@@ -11,7 +11,7 @@ import { getRequestLocale } from '@/lib/i18n/server'
 import { t } from '@/lib/i18n/translate'
 
 export const metadata: Metadata = {
-  ...buildPageMetadata('Košík', BRAND_COPY.pageDescriptions.cart),
+  ...buildPageMetadata('Košík', BRAND_COPY.pageDescriptions.cart, '/kosik'),
   robots: { index: false },
 }
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Container } from '@/components/ui/Container'
 import { FilterableProductList } from '@/components/product/FilterableProductList'
 import { getProductsAccumulated } from '@/lib/catalog/products'
@@ -11,6 +12,7 @@ export const revalidate = 3600
 export const metadata: Metadata = buildPageMetadata(
   'Produkty',
   BRAND_COPY.pageDescriptions.products,
+  '/produkty',
 )
 
 interface SearchParams {
@@ -50,7 +52,9 @@ export default async function ProduktyPage({ searchParams }: ProductsPageProps) 
           </p>
         </div>
 
-        <FilterableProductList initialProducts={products} initialQuery={query} />
+        <Suspense fallback={<p className="text-sm text-(--color-text-muted)">Načítavam filtre…</p>}>
+          <FilterableProductList initialProducts={products} initialQuery={query} />
+        </Suspense>
       </Container>
     </div>
   )

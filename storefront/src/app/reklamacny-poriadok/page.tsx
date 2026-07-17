@@ -4,7 +4,7 @@ import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { COMPANY } from '@/lib/company'
 import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = buildPageMetadata('Reklamačný poriadok')
+export const metadata: Metadata = buildPageMetadata('Reklamačný poriadok', undefined, '/reklamacny-poriadok')
 
 export default function ReklamacnyPoriadok() {
   return (
