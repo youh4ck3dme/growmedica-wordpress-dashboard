@@ -1,11 +1,12 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-17 (main @ post PR #6/#7 + agent A–Z hardening)  
+**Aktualizované:** 2026-07-17 (SuperFaktúra: defaults + 30× infra smoke; API čaká na majiteľa)  
 **Branch:** `main`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 
 **Prevádzka / endpointy / env:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)  
-**Merchant API (ty):** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
+**Merchant API (ty):** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)  
+**Majiteľ (ľudský checklist):** [majitel.md](./majitel.md) · SuperFaktúra drobné úlohy **2a–2k**
 
 ---
 
@@ -25,7 +26,7 @@
 | Fake telefón skrytý (kým nedáš reálne číslo) | ✅ |
 | Duplicitná DPD plugin metóda bez ceny vypnutá | ✅ |
 | Audit skladu (qty 50 ≈ fiktívne) | ✅ [reports/STOCK_AUDIT.md](./reports/STOCK_AUDIT.md) |
-| **SuperFaktúra WooCommerce 1.53.2** | ✅ active + BACS/COD defaults · API key ešte ty |
+| **SuperFaktúra WooCommerce 1.53.2** | ✅ active + BACS/COD defaults re-applied 2026-07-17 · **API key ešte majiteľ** · smoke 30/30 infra (`ALLOW_WITHOUT_API=1`) |
 | CMS snippets redeploy | ✅ checkout seed + CORS + ISR (2026-07-17) |
 | Production smoke www | ✅ `/api/products` Woo gid |
 | Facets vendor/type/effect | ✅ controlled taxonomy + URL query sync |
@@ -55,7 +56,7 @@
 | 7 | **Reálny sklad** (CSV/qty) | 397 produktov má falošných 50 ks |
 | 8 | **Plné VOP** právnik | právny text |
 | 9 | **IČ DPH / DPH 20 %** | účtovné rozhodnutie |
-| 10 | **SuperFaktúra API** (e-mail + key + company_id) | [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#1-superfaktúra-pdf-faktúry--proforma) · [detail](./docs/SUPERFAKTURA_SETUP.md) |
+| 10 | **SuperFaktúra** — registrácia + API (body **2a–2j** v majitel.md) | [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) · [SUPERFAKTURA_SETUP](./docs/SUPERFAKTURA_SETUP.md) |
 | 11 | **Zrušiť Shopify** | po tvojom schválení (po stabilite) |
 
 ---
@@ -63,7 +64,8 @@
 ## Odporúčané poradie pre teba
 
 1. Otvor www → 1 produkt → košík → cms checkout → BACS → skontroluj e-mail.  
-2. **SuperFaktúra API** ([MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#1-superfaktúra-pdf-faktúry--proforma)).  
+2. **SuperFaktúra** — drobné body **2a–2j** v [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) (registrácia → API → Woo → Test → „API vložené, otestuj“).  
+   Po vložení agent: `./scripts/smoke-superfaktura-30.sh` + BACS proforma · tech: [SUPERFAKTURA_SETUP](./docs/SUPERFAKTURA_SETUP.md).  
 3. **Stripe test** (karty) → potom Packeta/DPD.  
 4. Pošli **telefón** (ak máš).  
 5. Daj **sklad** (Excel sku/qty) — agent vie bulk update.

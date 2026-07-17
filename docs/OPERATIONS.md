@@ -233,11 +233,14 @@ Diagnostika: [../storefront/docs/DIAGNOSTICS.md](../storefront/docs/DIAGNOSTICS.
 | | |
 |--|--|
 | Plugin | `woocommerce-superfaktura` 1.53.2 na cms (active) |
+| Defaults | Code Snippet BACS/COD · `defaults_applied: true` |
 | Admin | `cms…/wp-admin/admin.php?page=wc-settings&tab=superfaktura` |
 | Status API | `GET /wp-json/growmedica/v1/sf-status` (App Password) |
+| Smoke 30× | `./scripts/smoke-superfaktura-30.sh` (full) · `ALLOW_WITHOUT_API=1` (infra ✅ 30/30) |
+| API credentials | ⏳ majiteľ **2a–2j** → potom full smoke + BACS proforma |
 | Reinstall | `./scripts/install-superfaktura-cms.sh` |
-| Docs | [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) |
+| Docs | [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) · [reference/superfaktura-api-pattern.md](./reference/superfaktura-api-pattern.md) · majiteľ **2a–2k:** [../majitel.md](../majitel.md#2-superfaktúra--automatické-faktúry) |
 
 ---
 
-*Aktualizované: 2026-07-17*
+*Aktualizované: 2026-07-17 (SF: infra smoke hotový, API čaká majiteľa)*
