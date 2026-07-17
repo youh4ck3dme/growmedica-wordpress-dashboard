@@ -34,6 +34,7 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 | Faktúry | ✅ SuperFaktúra plugin · ⬜ API key (ty) |
 | Firma / e-maily | ✅ [docs/vzorfirma.md](./docs/vzorfirma.md) |
 | **Merchant API (ty)** | **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** — Packeta, karta, SF, GoPay, DPD |
+| **Majiteľ (ľudsky)** | **[majitel.md](./majitel.md)** — checklist čo dodať a kde to získať |
 
 ## Quick start
 
@@ -130,8 +131,9 @@ growmedica-wordpress-dashboard/
 | Dokument | |
 |----------|--|
 | [STATUS.md](./STATUS.md) | **Hlavný stav + backlog** |
+| **[majitel.md](./majitel.md)** | **Pre majiteľa: čo dodať, kde získať, kam vložiť** |
 | [docs/OPERATIONS.md](./docs/OPERATIONS.md) | **Endpointy, env, prevádzka** |
-| **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** | **Packeta · Stripe/karta · SuperFaktúra · GoPay · DPD — čo dávaš ty** |
+| **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** | **Packeta · Stripe/karta · SuperFaktúra · GoPay · DPD — tech handoff** |
 | [docs/SUPERFAKTURA_SETUP.md](./docs/SUPERFAKTURA_SETUP.md) | SuperFaktúra inštalácia + API |
 | [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) | Deploy / env / smoke |
 | [docs/vzorfirma.md](./docs/vzorfirma.md) | IČO, DIČ, IBAN |

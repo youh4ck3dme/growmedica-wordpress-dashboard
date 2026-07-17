@@ -37,8 +37,8 @@
 
 ## Čo vie spraviť len ty (nie agent)
 
-> **Hub (Packeta · karta · SuperFaktúra · GoPay · DPD):**  
-> **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)** — kde získať kľúče a kam ich vložiť.
+> **Pre majiteľa (ľudsky, body):** **[majitel.md](./majitel.md)**  
+> **Tech hub (Packeta · karta · SF · GoPay · DPD):** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
 
 | # | Úloha | Prečo agent nemôže |
 |---|--------|---------------------|

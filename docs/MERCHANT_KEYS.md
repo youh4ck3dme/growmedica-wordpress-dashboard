@@ -3,8 +3,12 @@
 **Účel:** jedno miesto pre všetky integrácie, kde agent **nemôže** ísť ďalej bez tvojich credentials.  
 **Bez secrets v gite.** Sem patria len *kde získať* a *kam vložiť*. Heslá/API keys len do CMS adminu alebo gitignored env.
 
+> **Ľudský checklist pre majiteľa (odporúčané čítať prvé):**  
+> **[../majitel.md](../majitel.md)**
+
 | Súvisiace | |
 |-----------|--|
+| Majiteľ (prehľad) | [../majitel.md](../majitel.md) |
 | Stav / backlog | [../STATUS.md](../STATUS.md) · [../TODO.md](../TODO.md) |
 | Prevádzka | [OPERATIONS.md](./OPERATIONS.md) |
 | Firma / IBAN | [vzorfirma.md](./vzorfirma.md) |

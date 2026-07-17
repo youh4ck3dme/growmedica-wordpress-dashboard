@@ -23,7 +23,7 @@
 
 ## Zostáva na teba
 
-> Všetky merchant kľúče na jednom mieste: **[docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)**
+> Pre majiteľa (ľudsky): **[majitel.md](./majitel.md)** · tech: [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
 
 - [ ] Manuálny E2E nákup v prehliadači (1 SKU + 2 SKU)  
 - [ ] Telefón (reálne číslo)  
