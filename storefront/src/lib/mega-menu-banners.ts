@@ -1,7 +1,6 @@
-import type { MainCategory } from '@/lib/category-map'
-
 /** Category handles with a shipped WebP hero banner in /public/images/mega-menu/ */
 export const MEGA_MENU_BANNER_HANDLES = [
+  // Legacy MainCategory SEO slugs
   'vitaminy-mineraly',
   'proteiny',
   'imunita',
@@ -16,7 +15,10 @@ export const MEGA_MENU_BANNER_HANDLES = [
   'detox-pecen',
   'spanok-stres',
   'specialna-vyziva',
-] as const satisfies readonly MainCategory[]
+  // Synthetic SK navigation roots without a matching Woo category image.
+  'zdravotne-riesenia',
+  'mykologicke-produkty',
+] as const
 
 export type MegaMenuBannerHandle = (typeof MEGA_MENU_BANNER_HANDLES)[number]
 
