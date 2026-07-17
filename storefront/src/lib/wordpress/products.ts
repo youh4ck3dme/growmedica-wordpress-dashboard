@@ -45,8 +45,14 @@ export async function getWooProducts(options: GetWooProductsOptions = {}) {
 
   let categoryId: string | undefined
   if (category) {
-    const cat = await getWooCategoryBySlug(category)
-    categoryId = cat ? String(cat.id) : undefined
+    // Accept numeric Woo term ID directly (preferred after taxonomy import;
+    // WP may suffix category slugs when names collide).
+    if (/^\d+$/.test(category)) {
+      categoryId = category
+    } else {
+      const cat = await getWooCategoryBySlug(category)
+      categoryId = cat ? String(cat.id) : undefined
+    }
   }
 
   const result = await wooFetchPaginated<WooProduct>({

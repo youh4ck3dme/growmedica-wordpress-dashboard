@@ -83,7 +83,16 @@ Invariant after parent+name match fix:
 
 Live write already applied earlier (70 creates + 459 updates). Do not re-run live taxonomy write.
 
-## Redirects
+## Redirects (Codex in progress)
 
-See `REDIRECT_HANDOFF.md` + `redirects.product-only.paths.json`.
-**Do not** use raw `/sk/kategorie/*` targets on current storefront.
+Storefront now wires:
+- `src/lib/seo-taxonomy-redirects.ts` → `next.config.ts` (`...seoTaxonomyRedirects`)
+- `src/lib/seo-taxonomy.ts` + `src/app/kategorie/[...path]/page.tsx`
+- destinations strip `/sk|cs|en|de` → `/produkty/*` and `/kategorie/*`
+
+Parallel fixes applied:
+- **HOLD** product skipped as redirect destination
+- category product queries use **Woo term ID** (not slug) after WP suffixing
+- integrity: `tests/integrity/seo-taxonomy-redirects.spec.ts`
+
+See also `REDIRECT_HANDOFF.md`.

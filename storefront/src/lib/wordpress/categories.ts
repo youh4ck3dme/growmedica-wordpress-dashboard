@@ -13,7 +13,7 @@ export const getWooCategories = cache(async (): Promise<WooCategory[]> => {
     path: '/products/categories',
     params: {
       per_page: 100,
-      hide_empty: true,
+      hide_empty: false,
       orderby: 'name',
       order: 'asc',
     },

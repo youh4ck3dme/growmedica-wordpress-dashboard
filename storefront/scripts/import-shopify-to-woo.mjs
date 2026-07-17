@@ -292,6 +292,9 @@ function collectRequiredCategories(taxonomy, readyRows) {
 async function ensureTaxonomyCategories(taxonomy, readyRows) {
   const existing = await wooGetAll('/products/categories', { per_page: 100 })
   const byParentAndSlug = new Map(existing.map((category) => [`${category.parent || 0}:${category.slug}`, category.id]))
+  const byParentAndName = new Map(
+    existing.map((category) => [`${category.parent || 0}:${String(category.name).trim().toLocaleLowerCase('sk')}`, category.id]),
+  )
   const categoryIdToWooId = new Map()
   const required = collectRequiredCategories(taxonomy, readyRows)
   const created = []
@@ -304,7 +307,11 @@ async function ensureTaxonomyCategories(taxonomy, readyRows) {
     }
     const slug = taxonomyCategorySlug(category)
     const key = `${parentWooId || 0}:${slug}`
-    const existingId = byParentAndSlug.get(key)
+    const name = category.labels?.sk || category.segment
+    const nameKey = `${parentWooId || 0}:${String(name).trim().toLocaleLowerCase('sk')}`
+    // WordPress term slugs are globally unique and may be suffixed automatically.
+    // Parent + display name remains stable for this frozen hierarchy.
+    const existingId = byParentAndName.get(nameKey) || byParentAndSlug.get(key)
     if (existingId) {
       categoryIdToWooId.set(category.categoryId, existingId)
       reused.push({ categoryId: category.categoryId, wooId: existingId, path: category.sourcePath })
@@ -319,12 +326,16 @@ async function ensureTaxonomyCategories(taxonomy, readyRows) {
     }
     try {
       const createdCategory = await wooPost('/products/categories', {
-        name: category.labels?.sk || category.segment,
+        name,
         slug,
         parent: parentWooId || 0,
       })
       categoryIdToWooId.set(category.categoryId, createdCategory.id)
       byParentAndSlug.set(`${createdCategory.parent || 0}:${createdCategory.slug}`, createdCategory.id)
+      byParentAndName.set(
+        `${createdCategory.parent || 0}:${String(createdCategory.name).trim().toLocaleLowerCase('sk')}`,
+        createdCategory.id,
+      )
       created.push({ categoryId: category.categoryId, wooId: createdCategory.id, path: category.sourcePath, parentWooId, slug: createdCategory.slug })
       console.log(`category created: ${category.sourcePath} (#${createdCategory.id})`)
       await sleep(200)
