@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "article-rankmath-1.0.0",
+  "status": "EDITORIAL_REVIEW",
+  "slug": "ako-vybrat-doplnky-vyzivy-prakticky-sprievodca",
+  "files": {
+    "sk": "clanok-doplnky-vyzivy-vyber.md",
+    "cs": "clanok-doplnky-vyzivy-vyber.cs.md",
+    "en": "clanok-doplnky-vyzivy-vyber.en.md",
+    "de": "clanok-doplnky-vyzivy-vyber.de.md"
+  },
+  "headingBudget": { "h1": 1, "h2": 3, "h3": 3, "h4": 3 },
+  "locales": {
+    "sk": {
+      "rankMath": {
+        "focusKeyword": "doplnky výživy",
+        "additionalKeywords": [
+          "doplnky stravy",
+          "ako vybrať vitamíny",
+          "zloženie doplnku",
+          "doplnky stravy eshop",
+          "výber doplnkov výživy"
+        ],
+        "seoTitle": "Ako vybrať doplnky výživy bez prázdnych sľubov | GrowMedica",
+        "metaDescription": "Praktický sprievodca výberom doplnkov stravy: etiketa, dávka, bezpečnosť a časté chyby. Bez zázračných sľubov — férový nákup na GrowMedica.",
+        "pillarContent": true,
+        "robots": { "index": true, "follow": true, "maxImagePreview": "large" },
+        "canonicalUrl": "https://www.growmedica.cz/blog/ako-vybrat-doplnky-vyzivy-prakticky-sprievodca",
+        "schemaType": "Article",
+        "articleType": "BlogPosting"
+      },
+      "openGraph": {
+        "ogTitle": "Ako vybrať doplnky výživy bez prázdnych sľubov",
+        "ogDescription": "Etiketa, dávka, YMYL bezpečnosť a časté chyby pri nákupe doplnkov stravy — prakticky a bez marketingových sľubov.",
+        "ogType": "article"
+      },
+      "twitter": {
+        "twitterCard": "summary_large_image",
+        "twitterTitle": "Ako vybrať doplnky výživy bez prázdnych sľubov",
+        "twitterDescription": "Praktický sprievodca: zloženie, dávka, bezpečnosť. Doplnky stravy nie sú lieky."
+      },
+      "metaTags": [
+        { "name": "description", "content": "Praktický sprievodca výberom doplnkov stravy: etiketa, dávka, bezpečnosť a časté chyby. Bez zázračných sľubov — férový nákup na GrowMedica." },
+        { "name": "keywords", "content": "doplnky výživy, doplnky stravy, ako vybrať vitamíny, zloženie doplnku, GrowMedica" },
+        { "name": "robots", "content": "index, follow, max-image-preview:large" },
+        { "name": "author", "content": "GrowMedica editorial" },
+        { "property": "article:section", "content": "Zdravie a výživa" },
+        { "property": "article:tag", "content": "doplnky výživy" },
+        { "property": "article:tag", "content": "doplnky stravy" }
+      ]
+    },
+    "cs": {
+      "rankMath": {
+        "focusKeyword": "doplňky stravy",
+        "additionalKeywords": [
+          "doplňky výživy",
+          "jak vybrat vitamíny",
+          "složení doplňku",
+          "doplňky stravy eshop",
+          "výběr doplňků stravy"
+        ],
+        "seoTitle": "Jak vybrat doplňky stravy bez prázdných slibů | GrowMedica",
+        "metaDescription": "Praktický průvodce výběrem doplňků stravy: etiketa, dávka, bezpečnost a časté chyby. Bez zázračných slibů — férový nákup na GrowMedica.",
+        "pillarContent": true,
+        "robots": { "index": true, "follow": true, "maxImagePreview": "large" },
+        "canonicalUrl": "https://www.growmedica.cz/blog/ako-vybrat-doplnky-vyzivy-prakticky-sprievodca?lang=cs",
+        "schemaType": "Article",
+        "articleType": "BlogPosting"
+      },
+      "openGraph": {
+        "ogTitle": "Jak vybrat doplňky stravy bez prázdných slibů",
+        "ogDescription": "Etiketa, dávka, YMYL bezpečnost a časté chyby při nákupu doplňků stravy — prakticky a bez marketingových slibů.",
+        "ogType": "article"
+      },
+      "twitter": {
+        "twitterCard": "summary_large_image",
+        "twitterTitle": "Jak vybrat doplňky stravy bez prázdných slibů",
+        "twitterDescription": "Praktický průvodce: složení, dávka, bezpečnost. Doplňky stravy nejsou léky."
+      },
+      "metaTags": [
+        { "name": "description", "content": "Praktický průvodce výběrem doplňků stravy: etiketa, dávka, bezpečnost a časté chyby. Bez zázračných slibů — férový nákup na GrowMedica." },
+        { "name": "keywords", "content": "doplňky stravy, doplňky výživy, jak vybrat vitamíny, složení doplňku, GrowMedica" },
+        { "name": "robots", "content": "index, follow, max-image-preview:large" },
+        { "name": "author", "content": "GrowMedica editorial" },
+        { "property": "article:section", "content": "Zdraví a výživa" },
+        { "property": "article:tag", "content": "doplňky stravy" }
+      ]
+    },
+    "en": {
+      "rankMath": {
+        "focusKeyword": "food supplements",
+        "additionalKeywords": [
+          "dietary supplements",
+          "how to choose vitamins",
+          "supplement label",
+          "buy food supplements",
+          "supplement shopping guide"
+        ],
+        "seoTitle": "How to choose food supplements without empty promises | GrowMedica",
+        "metaDescription": "A practical guide to choosing food supplements: labels, dosage, safety and common mistakes. No miracle claims — fair shopping at GrowMedica.",
+        "pillarContent": true,
+        "robots": { "index": true, "follow": true, "maxImagePreview": "large" },
+        "canonicalUrl": "https://www.growmedica.cz/blog/ako-vybrat-doplnky-vyzivy-prakticky-sprievodca?lang=en",
+        "schemaType": "Article",
+        "articleType": "BlogPosting"
+      },
+      "openGraph": {
+        "ogTitle": "How to choose food supplements without empty promises",
+        "ogDescription": "Labels, dosage, YMYL safety and common buying mistakes — practical guidance without miracle marketing.",
+        "ogType": "article"
+      },
+      "twitter": {
+        "twitterCard": "summary_large_image",
+        "twitterTitle": "How to choose food supplements without empty promises",
+        "twitterDescription": "Practical guide: composition, dose, safety. Food supplements are not medicines."
+      },
+      "metaTags": [
+        { "name": "description", "content": "A practical guide to choosing food supplements: labels, dosage, safety and common mistakes. No miracle claims — fair shopping at GrowMedica." },
+        { "name": "keywords", "content": "food supplements, dietary supplements, how to choose vitamins, supplement label, GrowMedica" },
+        { "name": "robots", "content": "index, follow, max-image-preview:large" },
+        { "name": "author", "content": "GrowMedica editorial" },
+        { "property": "article:section", "content": "Health and nutrition" },
+        { "property": "article:tag", "content": "food supplements" }
+      ]
+    },
+    "de": {
+      "rankMath": {
+        "focusKeyword": "Nahrungsergänzungsmittel",
+        "additionalKeywords": [
+          "Nahrungsergänzung kaufen",
+          "Vitamine auswählen",
+          "Inhaltsstoffe Supplement",
+          "Supplement Ratgeber",
+          "Nahrungsergänzung Guide"
+        ],
+        "seoTitle": "Nahrungsergänzungsmittel wählen ohne leere Versprechen | GrowMedica",
+        "metaDescription": "Praxis-Ratgeber zur Auswahl von Nahrungsergänzungsmitteln: Etikett, Dosis, Sicherheit und typische Fehler. Ohne Wunderversprechen — fair shoppen bei GrowMedica.",
+        "pillarContent": true,
+        "robots": { "index": true, "follow": true, "maxImagePreview": "large" },
+        "canonicalUrl": "https://www.growmedica.cz/blog/ako-vybrat-doplnky-vyzivy-prakticky-sprievodca?lang=de",
+        "schemaType": "Article",
+        "articleType": "BlogPosting"
+      },
+      "openGraph": {
+        "ogTitle": "Nahrungsergänzungsmittel wählen ohne leere Versprechen",
+        "ogDescription": "Etikett, Dosis, YMYL-Sicherheit und häufige Fehler beim Kauf — praktisch und ohne Marketing-Wunder.",
+        "ogType": "article"
+      },
+      "twitter": {
+        "twitterCard": "summary_large_image",
+        "twitterTitle": "Nahrungsergänzungsmittel wählen ohne leere Versprechen",
+        "twitterDescription": "Praxis-Guide: Zusammensetzung, Dosis, Sicherheit. Nahrungsergänzungsmittel sind keine Arzneimittel."
+      },
+      "metaTags": [
+        { "name": "description", "content": "Praxis-Ratgeber zur Auswahl von Nahrungsergänzungsmitteln: Etikett, Dosis, Sicherheit und typische Fehler. Ohne Wunderversprechen — fair shoppen bei GrowMedica." },
+        { "name": "keywords", "content": "Nahrungsergänzungsmittel, Vitamine auswählen, Inhaltsstoffe Supplement, Supplement Ratgeber, GrowMedica" },
+        { "name": "robots", "content": "index, follow, max-image-preview:large" },
+        { "name": "author", "content": "GrowMedica editorial" },
+        { "property": "article:section", "content": "Gesundheit und Ernährung" },
+        { "property": "article:tag", "content": "Nahrungsergänzungsmittel" }
+      ]
+    }
+  },
+  "internalLinks": {
+    "sk": [
+      "/kategorie/doplnky-vyzivy",
+      "/kategorie/doplnky-vyzivy/vitaminy/vitamin-c",
+      "/kategorie/doplnky-vyzivy/ostatne-doplnky-vyzivy/kolagen",
+      "/produkty"
+    ]
+  },
+  "rankMathScoreHints": [
+    "Focus keyword in SEO title (near start), H1, first 10% of content, meta description, URL slug",
+    "Meta description 140–160 chars with focus keyword + benefit + brand",
+    "Use 1 H1; keep H2–H4 budget (max 3 each) for clean outline",
+    "Add 2–4 internal links to /kategorie and /produkty",
+    "Include disclaimer for YMYL (food supplements are not medicines)",
+    "Set schema Article/BlogPosting + Organization",
+    "OG + Twitter cards filled from openGraph/twitter blocks"
+  ]
+}
