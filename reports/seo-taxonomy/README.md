@@ -103,3 +103,12 @@ Zmazať alebo revertnúť `reports/seo-taxonomy/`. Ostatné súbory projektu ned
 |--------|-------|--------|
 | `1.0.0` | 2026-07-16 | Prvý pavúk (199+14 cats, 464 products, 663 redirects) |
 | `1.1.0` | 2026-07-16/17 | Live catalog match, `wooImportProducts` 459 READY + 1 HOLD, manual reviews closed, freeze policy |
+
+## Dry-run helper (CMS)
+
+```bash
+./scripts/run-taxonomy-dry-run.sh
+```
+
+Uses `wordpress-production.local.env` Woo keys + `https://cms.growmedica.cz`.  
+Do **not** only override `WORDPRESS_BASE_URL` while keeping localhost keys from `.env.local` (→ 401).
