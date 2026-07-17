@@ -12,6 +12,19 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 
 ## Stav (skrátka)
 
+| Oblasť | Stav |
+|---|---|
+| Storefront UI (Next.js 15, PWA, AI) | ✅ |
+| Geo-lokalizácia UI (CS / SK / EN / DE) | ✅ |
+| WordPress/WooCommerce integrácia | ✅ `CMS_PROVIDER=wordpress` |
+| Unified catalog provider | ✅ `src/lib/catalog/` |
+| Košík + checkout BFF | ✅ WooCommerce session |
+| Dashboard → WP admin iframe | ✅ `/dashboard` |
+| ISR webhooks | ✅ mu-plugin + `/api/revalidate` |
+| Playwright Woo testy | ✅ `yarn test:woo:integrity` |
+| SEO taxonomy + redirects | ✅ `/kategorie`, freeze 1.1.0 |
+| Shopify integrácia | 🟡 Legacy rollback (`CMS_PROVIDER=shopify`) |
+
 | | |
 |--|--|
 | Katalóg | ✅ Woo (`CMS_PROVIDER=wordpress`) |
@@ -37,12 +50,39 @@ WORDPRESS_BASE_URL=https://cms.growmedica.cz
 WOO_CONSUMER_KEY=ck_...
 WOO_CONSUMER_SECRET=cs_...
 WORDPRESS_REVALIDATION_SECRET=...
+NEXT_PUBLIC_DASHBOARD_URL=https://cms.growmedica.cz/wp-admin
 NEXT_PUBLIC_SITE_URL=https://www.growmedica.cz
+NEXT_PUBLIC_DEFAULT_LOCALE=cs
 ```
 
 Secrets **nikdy do gitu** — len `.env.local` / `wordpress-production.local.env`.
 
-### Shopify (legacy rollback)
+### i18n (CS / SK / EN / DE)
+
+UI texty sa prekladajú podľa geo / cookie / `Accept-Language`. URL slugy (`/produkty`, `/kolekcie`) sa nemenia.
+
+| Priorita | Zdroj |
+|----------|--------|
+| 1 | `?lang=cs\|sk\|en\|de` (nastaví cookie, redirect) |
+| 2 | Cookie `growmedica_locale` (30 dní) |
+| 3 | `x-vercel-ip-country` (CZ→cs, SK→sk, DE/AT/CH→de, ostatné→en) |
+| 4 | `Accept-Language` (`cs` pred `sk`) |
+| 5 | `NEXT_PUBLIC_DEFAULT_LOCALE` (fallback: `cs`) |
+
+Prepínač v headeri ukazuje **len aktuálny locale**; po kliknutí dropdown CS / SK / EN / DE.
+
+Detailná dokumentácia: [storefront/docs/I18N.md](./storefront/docs/I18N.md)
+
+### Lokálny WordPress (Docker)
+
+```bash
+docker compose up -d
+# http://localhost:8080/wp-admin
+```
+
+Pozri [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md).
+
+### Shopify režim (legacy rollback)
 
 ```bash
 CMS_PROVIDER=shopify
@@ -71,13 +111,13 @@ growmedica-wordpress-dashboard/
 ├── TODO.md
 ├── PRODUCTION_CHECKLIST.md
 ├── docs/vzorfirma.md         # firma / banka
-├── reports/                  # aktuálne reporty
+├── reports/                  # aktuálne reporty (+ seo-taxonomy/)
 │   └── archive/              # historické plány
 ├── storefront/               # Next.js app
 │   ├── src/lib/catalog/      # unified CMS
 │   ├── src/lib/wordpress/    # Woo client + cart
 │   └── src/lib/shopify/      # rollback / import
-├── wordpress/mu-plugins/     # CORS + revalidate (zdroj)
+├── wordpress/mu-plugins/     # CORS + revalidate + checkout seed
 └── scripts/                  # CMS setup
 ```
 
@@ -94,6 +134,7 @@ growmedica-wordpress-dashboard/
 | [storefront/docs/I18N.md](./storefront/docs/I18N.md) | CS/SK/EN/DE |
 | [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md) | Lokálny WP |
 | [AGENTS.md](./AGENTS.md) | Pravidlá pre AI |
+| [reports/seo-taxonomy/FINAL_STATUS.md](./reports/seo-taxonomy/FINAL_STATUS.md) | SEO taxonomy status |
 
 ## Zakázané
 
