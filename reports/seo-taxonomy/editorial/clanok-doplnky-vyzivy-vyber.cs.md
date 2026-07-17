@@ -81,6 +81,15 @@ Ověřte pět bodů: (1) cíl v jedné větě, (2) dávku a formu, (3) cenu za d
 
 Na závěr: **nejlepší doplněk je ten, jehož složení rozumíte, dávku dodržíte a který nepotřebujete obhajovat zázračným příběhem.** Doplňky stravy mají místo v moderním životním stylu — ale jen když je vybíráte stejně střízlivě jako jiná rozhodnutí o penězích a o zdraví. Udělejte si jednu stranu poznámek (cíl, léky, alergie, rozpočet, co už doma máte) a nákup bude rychlejší i férovější.
 
+
+Při srovnání produktů v e-shopu si navíc všímejte dostupnosti a logistiky: doplněk, který „zrovna není skladem“ a má nejasný termín naskladnění, se do rutiny hůř zařazuje. Stejně tak pomáhá číst počet denních dávek v balení a to, jestli balení vydrží měsíc, nebo jen dva týdny při doporučené dávce. Tyto detaily nejsou marketing — jsou to provozní rozhodnutí, která rozhodují, jestli nákup dává ekonomický smysl.
+
+Další praktická vrstva je interakce s jídlem. Některé doplňky je vhodnější užívat s jídlem, jiné nalačno podle výrobce. Pokud to na etiketě není, hledejte popis v detailu produktu nebo se zeptejte. Špatné načasování často nesouvisí s „nekvalitou“, ale s tím, že se dávka špatně zařadila do dne. Proto je lepší zvolit formu, která sedí do vašeho režimu (ráno s kávou, večer s večeří, prášek do smoothie), než honit ideální, ale neuskutečnitelný plán.
+
+Pokud nakupujete pro domácnost, oddělte produkty pro dospělé a pro děti. Sdílená polička bez popisků vede k chybám v dávkování. U zvířat platí totéž: lidské doplňky nejsou automaticky vhodné pro psy nebo kočky. Kategorie „pro zvířata“ v katalogu existuje proto, aby se tyto světy nemíchaly.
+
+Když už máte favorita, přečtěte si ještě jednou upozornění na konci etikety. Ne proto, abyste se báli, ale abyste věděli, kdy produkt odložit: nevolnost, alergická reakce, změna medikace, těhotenství. Férový e-shop vám umožní produkt vrátit podle obchodních podmínek, pokud je neotevřený a v zákonné lhůtě — ale nejlepší je nevybírat ve spěchu.
+
 ---
 
 **Heading budget:** H1×1 · H2×3 · H3×3 · H4×3  

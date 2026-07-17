@@ -81,6 +81,15 @@ Check five points: (1) a one-sentence goal, (2) a dose and format you can keep, 
 
 Finally: **the best supplement is the one whose composition you understand, whose dose you can keep, and which you do not need to defend with a miracle story.** Food supplements have a place in modern life — when you choose them as carefully as other decisions about money and health. Keep a one-page note (goal, medicines, allergies, budget, what you already own) and shopping becomes faster and fairer.
 
+
+When comparing products online, also check stock and logistics: a supplement that is “currently unavailable” with no clear restock date is harder to build into a routine. Count daily servings per pack and whether the pack lasts a month or only two weeks at the recommended dose. These details are operational, not marketing — and they decide whether the purchase makes economic sense.
+
+Another practical layer is timing with food. Some supplements are better with a meal, others as directed on an empty stomach. If the label is unclear, check the product detail page or ask. Poor timing is often not “bad quality” but a dose that never fitted the day. Choose a format that matches your routine (morning with coffee, evening with dinner, powder in a smoothie) rather than an ideal plan you will abandon.
+
+If you shop for a household, separate adult and children’s products. A shared shelf without labels invites dosing mistakes. The same applies to pets: human supplements are not automatically suitable for dogs or cats. A dedicated “for animals” category exists so those worlds do not mix.
+
+Once you have a favourite, re-read the warnings at the bottom of the label. Not to create fear, but to know when to pause: nausea, allergic reaction, medication changes, pregnancy. A fair shop allows returns under its policy for unopened items within the legal window — but the best approach is not to choose in a rush.
+
 ---
 
 **Heading budget:** H1×1 · H2×3 · H3×3 · H4×3  

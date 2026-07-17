@@ -81,6 +81,15 @@ Prüfen Sie fünf Punkte: (1) Ziel in einem Satz, (2) Dosis und Form, die Sie ha
 
 Zum Schluss: **Das beste Supplement ist jenes, dessen Zusammensetzung Sie verstehen, dessen Dosis Sie einhalten und das Sie nicht mit einer Wundergeschichte verteidigen müssen.** Nahrungsergänzungsmittel haben einen Platz im modernen Alltag — wenn Sie sie so nüchtern wählen wie andere Entscheidungen zu Geld und Gesundheit. Eine Notizseite (Ziel, Medikamente, Allergien, Budget, was Sie schon besitzen) macht den Einkauf schneller und fairer.
 
+
+Beim Online-Vergleich achten Sie zusätzlich auf Verfügbarkeit und Logistik: Ein Supplement, das „gerade nicht lagernd“ ist und kein klares Nachlieferdatum hat, lässt sich schlechter in eine Routine einbauen. Zählen Sie Tagesportionen pro Packung und ob die Packung bei der empfohlenen Dosis einen Monat oder nur zwei Wochen hält. Das sind Betriebsfragen, kein Marketing — und sie entscheiden, ob der Kauf wirtschaftlich sinnvoll ist.
+
+Eine weitere Praxis-Ebene ist die Einnahme mit oder ohne Mahlzeit. Manche Präparate eignen sich besser zum Essen, andere laut Hersteller nüchtern. Wenn das Etikett unklar ist, prüfen Sie die Produktdetailseite oder fragen Sie nach. Schlechtes Timing hängt oft nicht an „schlechter Qualität“, sondern an einer Dosis, die nie in den Tag passte. Wählen Sie eine Form, die zu Ihrer Routine passt (morgens zum Kaffee, abends zum Essen, Pulver im Smoothie), statt eines idealen Plans, den Sie nicht halten.
+
+Wenn Sie für den Haushalt kaufen, trennen Sie Produkte für Erwachsene und Kinder. Ein gemeinsames Regal ohne Beschriftung führt zu Dosierungsfehlern. Für Tiere gilt dasselbe: Menschliche Supplements sind nicht automatisch für Hunde oder Katzen geeignet. Eine eigene Kategorie „für Tiere“ existiert, damit diese Welten nicht vermischt werden.
+
+Haben Sie einen Favoriten, lesen Sie die Hinweise am Ende des Etiketts noch einmal. Nicht aus Angst, sondern um zu wissen, wann Sie pausieren: Übelkeit, allergische Reaktion, Medikamentenwechsel, Schwangerschaft. Ein fairer Shop ermöglicht Rückgaben laut AGB für ungeöffnete Ware im gesetzlichen Fenster — am besten wählt man jedoch nicht in Eile.
+
 ---
 
 **Heading budget:** H1×1 · H2×3 · H3×3 · H4×3  
