@@ -1,4 +1,4 @@
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 import { ProductCard } from './ProductCard'
 import { EmptyState } from '@/components/ui/EmptyState'
 

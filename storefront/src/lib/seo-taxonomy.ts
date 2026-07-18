@@ -1,6 +1,6 @@
 import taxonomy from '../../../reports/seo-taxonomy/growmedica-seo-menu-tree.json'
 import type { CollectionListOptions, CollectionView, NavCollectionItem } from '@/lib/catalog/nav-types'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 import { getWooCategories } from '@/lib/wordpress/categories'
 import { getWooProducts } from '@/lib/wordpress/products'
 import type { WooCategory } from '@/lib/wordpress/types'

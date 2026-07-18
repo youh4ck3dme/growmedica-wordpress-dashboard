@@ -1,6 +1,6 @@
 /**
- * Shopify TypeScript Types
- * Based on Shopify Storefront API 2026-07
+ * Storefront catalog TypeScript types (legacy Shopify Storefront shape).
+ * WooCommerce adapter maps into these shapes for UI/catalog code.
  */
 
 // ─── Money ───────────────────────────────────────────────────────────────────

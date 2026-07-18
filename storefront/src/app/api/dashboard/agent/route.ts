@@ -7,6 +7,7 @@ import { runDashboardAgent } from '@/lib/dashboard-agent/agentOrchestrator'
 const agentInputSchema = z.object({
   command: z.string().min(1).max(4000),
   conversation_id: z.string().max(128).optional(),
+  mode: z.enum(['assist', 'plan', 'monitor']).optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -17,8 +18,8 @@ export async function POST(request: NextRequest) {
   try {
     const ip = getClientIp(request)
     const body = await request.json()
-    const { command, conversation_id } = agentInputSchema.parse(body)
-    const result = await runDashboardAgent({ command, conversation_id, ip })
+    const { command, conversation_id, mode } = agentInputSchema.parse(body)
+    const result = await runDashboardAgent({ command, conversation_id, mode, ip })
     return NextResponse.json(result)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Agent request failed'

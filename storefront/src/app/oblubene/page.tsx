@@ -5,7 +5,7 @@ import { Container } from '@/components/ui/Container'
 import { ProductCard } from '@/components/product/ProductCard'
 import { SlidersHorizontal, Heart, ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 import { Skeleton } from '@/components/ui/Skeleton'
 
 export default function WishlistPage() {

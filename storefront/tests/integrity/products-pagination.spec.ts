@@ -4,7 +4,7 @@ import * as path from 'path'
 
 test.describe('Products catalog pagination', () => {
   test('/produkty fetches the full catalog for client-side filtering', async () => {
-    const productsLibPath = path.join(process.cwd(), 'src/lib/shopify/products.ts')
+    const productsLibPath = path.join(process.cwd(), 'src/lib/catalog/products.ts')
     expect(fs.existsSync(productsLibPath)).toBe(true)
     const libContent = fs.readFileSync(productsLibPath, 'utf8')
     expect(libContent).toContain('getProductsAccumulated')
@@ -35,7 +35,7 @@ test.describe('Products catalog pagination', () => {
   })
 
   test('/api/products uses capped catalog and direct handle lookups', async () => {
-    const productsLibPath = path.join(process.cwd(), 'src/lib/shopify/products.ts')
+    const productsLibPath = path.join(process.cwd(), 'src/lib/catalog/products.ts')
     const libContent = fs.readFileSync(productsLibPath, 'utf8')
     expect(libContent).toContain('PRODUCTS_PAGE_SIZE')
     expect(libContent).toContain('pages')

@@ -55,8 +55,9 @@ export default function ObchodnePodmienky() {
 
               <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">3. Cena a platba</h2>
               <p>
-                Ceny sú uvedené vrátane DPH, ak nie je uvedené inak. Platba je možná kartou online, bankovým
-                prevodom na účet predávajúceho, dobierkou alebo inými spôsobmi uvedenými v pokladni.
+                Predávajúci nie je platcom DPH; ceny sú uvedené bez DPH, ak nie je uvedené inak. Platba je možná
+                kartou online, bankovým prevodom na účet predávajúceho, dobierkou alebo inými spôsobmi uvedenými
+                v pokladni.
               </p>
 
               <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">4. Dodanie tovaru</h2>

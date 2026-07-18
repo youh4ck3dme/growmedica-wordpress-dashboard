@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { getCart, updateCartLines, removeCartLines, CART_COOKIE } from '@/lib/catalog/cart'
-import { isWordPressCms } from '@/lib/cms'
-import { normalizeShopifyCartId } from '@/lib/shopify/cart'
 
 // Helper to compute total cart item count
 function getCartCount(cart: { lines?: { edges?: Array<{ node: { quantity?: number } }> } }) {
@@ -18,7 +16,7 @@ function clearCartCookie(response: NextResponse) {
   return response
 }
 
-/** Resolve cart id for the active CMS; drop corrupt Shopify cookies. */
+/** Resolve Woo cart id from cookie; drop garbage values. */
 function resolveCartId(rawCartId: string | undefined): {
   cartId: string | null
   shouldClearCookie: boolean
@@ -27,16 +25,11 @@ function resolveCartId(rawCartId: string | undefined): {
     return { cartId: null, shouldClearCookie: false }
   }
 
-  if (isWordPressCms()) {
-    const trimmed = rawCartId.trim()
-    if (!trimmed || trimmed === 'undefined' || trimmed === 'null') {
-      return { cartId: null, shouldClearCookie: true }
-    }
-    return { cartId: trimmed, shouldClearCookie: false }
+  const trimmed = rawCartId.trim()
+  if (!trimmed || trimmed === 'undefined' || trimmed === 'null') {
+    return { cartId: null, shouldClearCookie: true }
   }
-
-  const cartId = normalizeShopifyCartId(rawCartId)
-  return { cartId, shouldClearCookie: !cartId }
+  return { cartId: trimmed, shouldClearCookie: false }
 }
 
 export async function GET() {
@@ -86,21 +79,17 @@ export async function PUT(request: NextRequest) {
     }
 
     const cart = await updateCartLines(cartId, [{ id: lineId, quantity }])
-
     const response = NextResponse.json({
       count: getCartCount(cart),
       cart,
     })
-    // Woo cart id is a signed payload that changes with each mutation — always refresh cookie.
-    if (isWordPressCms() && cart?.id) {
-      response.cookies.set(CART_COOKIE, cart.id, {
-        maxAge: 60 * 60 * 24 * 7,
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-      })
-    }
+    response.cookies.set(CART_COOKIE, cart.id, {
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+    })
     return response
   } catch (error) {
     console.error('[Cart API] PUT error:', error)
@@ -110,11 +99,10 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const lineId = searchParams.get('lineId')
+    const { lineId } = (await request.json()) as { lineId?: string }
 
     if (!lineId) {
-      return NextResponse.json({ error: 'lineId query parameter is required' }, { status: 400 })
+      return NextResponse.json({ error: 'lineId is required' }, { status: 400 })
     }
 
     const cookieStore = await cookies()
@@ -125,23 +113,20 @@ export async function DELETE(request: NextRequest) {
     }
 
     const cart = await removeCartLines(cartId, [lineId])
-
     const response = NextResponse.json({
       count: getCartCount(cart),
       cart,
     })
-    if (isWordPressCms() && cart?.id) {
-      response.cookies.set(CART_COOKIE, cart.id, {
-        maxAge: 60 * 60 * 24 * 7,
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-      })
-    }
+    response.cookies.set(CART_COOKIE, cart.id, {
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+    })
     return response
   } catch (error) {
     console.error('[Cart API] DELETE error:', error)
-    return NextResponse.json({ error: 'Failed to remove item from cart' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to remove cart line' }, { status: 500 })
   }
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { Product, ProductVariant } from '@/lib/shopify/types'
+import type { Product, ProductVariant } from '@/lib/catalog/types'
 import { cn } from '@/lib/utils'
 import { useStorefrontTheme } from '@/components/theme/StorefrontThemeProvider'
 

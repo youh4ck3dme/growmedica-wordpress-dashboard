@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-import type { Cart } from '@/lib/shopify/types'
+import type { Cart } from '@/lib/catalog/types'
 import { useT } from '@/components/i18n/LocaleProvider'
 
 interface InteractiveCartProps {

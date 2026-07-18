@@ -74,29 +74,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>
-    const topic = request.headers.get('x-shopify-topic') ?? ''
     const revalidated: string[] = []
 
-    if (topic.startsWith('products/')) {
-      revalidateTag('products')
-      revalidated.push('products')
-      const handle = (body as { handle?: string }).handle
-      if (handle) {
-        revalidateTag(`product-${handle}`)
-        revalidated.push(`product-${handle}`)
-      }
-    }
-
-    if (topic.startsWith('collections/')) {
-      revalidateTag('collections')
-      revalidated.push('collections')
-      const handle = (body as { handle?: string }).handle
-      if (handle) {
-        revalidateTag(`collection-${handle}`)
-        revalidated.push(`collection-${handle}`)
-      }
-    }
-
+    // Shopify webhook topics no longer accepted — Woo tags only.
     const wooTag = (body as { tag?: string }).tag
     if (typeof wooTag === 'string' && wooTag) {
       revalidated.push(...revalidateWooTag(wooTag))

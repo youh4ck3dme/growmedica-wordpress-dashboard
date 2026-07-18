@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 import {
   getShopifySizedImageUrl,
   PRODUCT_CARD_IMAGE_SIZES,
-} from '@/lib/shopify/image-url'
+} from '@/lib/catalog/image-url'
 import { getProductUrl } from '@/lib/utils'
 import { Price } from '@/components/ui/Price'
 import { WishlistButton } from '@/components/product/WishlistButton'

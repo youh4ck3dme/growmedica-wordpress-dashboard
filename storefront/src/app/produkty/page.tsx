@@ -5,7 +5,7 @@ import { FilterableProductList } from '@/components/product/FilterableProductLis
 import { getProductsAccumulated } from '@/lib/catalog/products'
 import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 
 export const revalidate = 3600
 

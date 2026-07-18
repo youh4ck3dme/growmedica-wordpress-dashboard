@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import * as fs from 'fs'
 import * as path from 'path'
 
-test.describe('Mock Shopify cart API', () => {
+test.describe('Woo cart API (mock)', () => {
   test('POST /api/cart/add preserves existing carts on add failures', async ({ request }) => {
     const routePath = path.join(process.cwd(), 'src/app/api/cart/add/route.ts')
     expect(fs.existsSync(routePath)).toBe(true)

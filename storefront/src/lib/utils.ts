@@ -2,7 +2,7 @@
  * Utility functions
  */
 
-import type { Money } from './shopify/types'
+import type { Money } from './catalog/types'
 
 // ─── Price formatting ─────────────────────────────────────────────────────────
 

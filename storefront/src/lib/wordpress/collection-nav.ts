@@ -9,7 +9,7 @@ import {
   type MainCategory,
 } from '@/lib/category-map'
 import { getCollectionUrl } from '@/lib/utils'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 import type {
   CollectionListOptions,
   CollectionView,

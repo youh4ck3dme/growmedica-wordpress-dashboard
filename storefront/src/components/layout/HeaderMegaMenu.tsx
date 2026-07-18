@@ -6,7 +6,7 @@ import CategoryMegaPanel from '@/components/layout/CategoryMegaPanel'
 import { useHoverIntent } from '@/hooks/useHoverIntent'
 import { useT } from '@/components/i18n/LocaleProvider'
 import type { NavCollectionItem } from '@/lib/catalog/nav'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 
 export type MegaMenuCategory = NavCollectionItem & {
   featuredProducts?: ProductListItem[]

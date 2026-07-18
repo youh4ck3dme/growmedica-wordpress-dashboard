@@ -1,6 +1,6 @@
 import { getNavCategories } from '@/lib/category-map'
 import { getProducts } from '@/lib/catalog/products'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 import type { AiProductSummary } from '@/lib/ai/schemas'
 
 export type AiProductContext = {

@@ -2,8 +2,6 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { z } from 'zod'
 import { createCart, addToCart, getCart, CART_COOKIE } from '@/lib/catalog/cart'
-import { isWordPressCms } from '@/lib/cms'
-import { normalizeShopifyCartId } from '@/lib/shopify/cart'
 
 const addSchema = z.object({
   variantId: z.string().min(1),
@@ -12,11 +10,8 @@ const addSchema = z.object({
 
 function resolveExistingCartId(raw: string | undefined): string | null {
   if (!raw?.trim() || raw === 'undefined' || raw === 'null') return null
-  if (isWordPressCms()) {
-    // Woo cart id is a signed cookie payload (woo-cart-v1.…); do not run Shopify normalizer.
-    return raw.trim()
-  }
-  return normalizeShopifyCartId(raw)
+  // Woo cart id is a signed cookie payload (woo-cart-v1.…).
+  return raw.trim()
 }
 
 function setCartCookie(response: NextResponse, cartId: string) {

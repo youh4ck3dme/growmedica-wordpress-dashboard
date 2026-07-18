@@ -10,4 +10,4 @@ export type {
   Cart,
   Money,
   ShopifyImage,
-} from '@/lib/shopify/types'
+} from '@/lib/catalog/types'

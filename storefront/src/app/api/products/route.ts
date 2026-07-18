@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getProductByHandle, getProductsAccumulated } from '@/lib/catalog/products'
-import type { Product, ProductListItem } from '@/lib/shopify/types'
+import type { Product, ProductListItem } from '@/lib/catalog/types'
 
 const MAX_HANDLES = 50
 const MAX_PAGE_SIZE = 100

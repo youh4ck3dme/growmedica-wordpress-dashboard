@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type { Money } from '@/lib/shopify/types'
+import type { Money } from '@/lib/catalog/types'
 import { Price } from '@/components/ui/Price'
 import { Button } from '@/components/ui/Button'
 

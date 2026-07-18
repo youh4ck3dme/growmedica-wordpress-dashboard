@@ -2,13 +2,14 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import BrandPageHeader from '@/components/ui/BrandPageHeader'
-import { BundleGrid } from '@/components/bundle/BundleGrid'
+import { BundleCatalog } from '@/components/bundle/BundleCatalog'
 import { BRAND_COPY } from '@/lib/brand'
 import { HEALTH_BUNDLE_CATALOG } from '@/lib/bundles/catalog'
 import { getBundleProducts } from '@/lib/catalog/products'
 import {
   getBreadcrumbJsonLd,
   getBundleCatalogItemListJsonLd,
+  getBundleProductJsonLd,
   getBundlesPageMetadata,
   serializeJsonLd,
 } from '@/lib/seo'
@@ -40,10 +41,10 @@ export default async function BalickyPage() {
   let productsByHandle = new Map<string, Awaited<ReturnType<typeof getBundleProducts>>[number]>()
 
   try {
-    const shopifyBundles = await getBundleProducts(100)
-    productsByHandle = mapProductsByBundleSlug(shopifyBundles)
+    const bundleProducts = await getBundleProducts(100)
+    productsByHandle = mapProductsByBundleSlug(bundleProducts)
   } catch {
-    // Shopify not configured
+    // Catalog backend unreachable
   }
 
   const liveCount = productsByHandle.size
@@ -54,6 +55,10 @@ export default async function BalickyPage() {
   const itemListJsonLd = getBundleCatalogItemListJsonLd(
     HEALTH_BUNDLE_CATALOG.map((bundle) => ({ name: bundle.name, slug: bundle.slug })),
   )
+  const bundleProductJsonLds = HEALTH_BUNDLE_CATALOG.flatMap((bundle) => {
+    const product = productsByHandle.get(bundle.slug)
+    return product ? [{ slug: bundle.slug, jsonLd: getBundleProductJsonLd(bundle, product) }] : []
+  })
 
   return (
     <>
@@ -65,6 +70,13 @@ export default async function BalickyPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemListJsonLd) }}
       />
+      {bundleProductJsonLds.map(({ slug, jsonLd }) => (
+        <script
+          key={slug}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+        />
+      ))}
 
       <div className="py-10 lg:py-16 bg-(--color-bg) min-h-[70vh]">
         <Container>
@@ -93,8 +105,7 @@ export default async function BalickyPage() {
             <div className="mb-8 rounded-xl border border-(--color-border) bg-(--color-surface) p-4 text-sm text-(--color-text-muted)">
               <p>
                 Katalóg obsahuje <strong>{HEALTH_BUNDLE_CATALOG.length} navrhovaných balíčkov</strong>.
-                Produktové stránky sa zobrazia automaticky po vytvorení v Shopify s tagom{' '}
-                <code className="text-(--color-text)">balicek-zdravia</code> a handle{' '}
+                Produktové stránky sa zobrazia automaticky po vytvorení vo WooCommerce s handle{' '}
                 <code className="text-(--color-text)">balicek-{'{slug}'}</code>.
               </p>
               <p className="mt-2">
@@ -108,7 +119,7 @@ export default async function BalickyPage() {
             </div>
           )}
 
-          <BundleGrid productsByHandle={productsByHandle} />
+          <BundleCatalog bundles={HEALTH_BUNDLE_CATALOG} productsByHandle={productsByHandle} />
         </Container>
       </div>
     </>

@@ -7,7 +7,7 @@ import { DEFAULT_LOCALE, HREFLANG_MAP, OG_LOCALE_MAP } from '@/lib/i18n/config'
 import { SUPPORTED_LOCALES } from '@/lib/i18n/types'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
 import { BRAND_COPY } from './brand'
-import type { Product, Collection } from './shopify/types'
+import type { Product, ProductListItem, Collection } from './catalog/types'
 
 const SITE_NAME = BRAND_COPY.siteName
 const SITE_URL = resolvePublicSiteUrl()
@@ -305,5 +305,38 @@ export function getBundleCatalogItemListJsonLd(
       name: bundle.name,
       url: `${SITE_URL}/balicky#${bundle.slug}`,
     })),
+  }
+}
+
+/** Product/Offer JSON-LD for a bundle that has a real WooCommerce product behind it. */
+export function getBundleProductJsonLd(bundle: { name: string; slug: string; items: readonly string[] }, product: ProductListItem) {
+  const variant = product.variants.edges[0]?.node
+  const price = variant?.price ?? product.priceRange.minVariantPrice
+  const currency = price?.currencyCode ?? 'EUR'
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: `Balíček: ${bundle.name}`,
+    description: `Balíček GrowMedica — obsahuje: ${bundle.items.join(', ')}.`,
+    url: `${SITE_URL}/balicky#${bundle.slug}`,
+    image: product.featuredImage ? [product.featuredImage.url] : undefined,
+    brand: {
+      '@type': 'Brand',
+      name: SITE_NAME,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: price?.amount,
+      priceCurrency: currency,
+      url: `${SITE_URL}/balicky#${bundle.slug}`,
+      availability: product.availableForSale
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      seller: {
+        '@type': 'Organization',
+        name: SITE_NAME,
+      },
+    },
   }
 }

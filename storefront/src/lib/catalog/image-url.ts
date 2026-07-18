@@ -5,9 +5,9 @@ export const PRODUCT_CARD_IMAGE_SIZES =
   '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 260px'
 
 /**
- * Request a resized asset from Shopify CDN before Next.js image optimizer.
+ * Request a resized CDN asset before Next.js image optimizer (Shopify CDN width param; noop for others).
  */
-export function getShopifySizedImageUrl(url: string, width: number = PRODUCT_CARD_IMAGE_WIDTH): string {
+export function getSizedImageUrl(url: string, width: number = PRODUCT_CARD_IMAGE_WIDTH): string {
   try {
     const parsed = new URL(url)
     parsed.searchParams.set('width', String(width))
@@ -16,3 +16,6 @@ export function getShopifySizedImageUrl(url: string, width: number = PRODUCT_CAR
     return url
   }
 }
+
+/** @deprecated Use getSizedImageUrl */
+export const getShopifySizedImageUrl = getSizedImageUrl

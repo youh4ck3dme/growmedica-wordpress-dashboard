@@ -1,5 +1,5 @@
 
-import type { Money } from '@/lib/shopify/types'
+import type { Money } from '@/lib/catalog/types'
 import { formatMoney, getDiscountPercentage } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 

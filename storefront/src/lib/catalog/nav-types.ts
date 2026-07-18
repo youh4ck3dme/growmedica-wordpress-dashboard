@@ -6,7 +6,7 @@ export type NavCollectionItem = {
   productCount: number
   icon?: string
   menuLabel: string
-  source: 'shopify' | 'catalog'
+  source: 'catalog'
   /** Woo product category image (thumbnail) when available */
   imageUrl?: string | null
   /** Nested children when menu mirrors growmedica.sk hierarchy */
@@ -23,9 +23,9 @@ export type CollectionView = {
   handle: string
   title: string
   description: string | null
-  products: import('@/lib/shopify/types').ProductListItem[]
+  products: import('@/lib/catalog/types').ProductListItem[]
   availableVendors: string[]
-  source: 'shopify' | 'catalog'
+  source: 'catalog'
   page: number
   hasNextPage: boolean
   hasPreviousPage: boolean

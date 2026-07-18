@@ -17,9 +17,11 @@ import AuditLogPanel from '@/components/dashboard/agent/AuditLogPanel'
 import CommandBar from '@/components/dashboard/agent/CommandBar'
 import IntegrationStatus from '@/components/dashboard/agent/IntegrationStatus'
 import { dashboardFetch } from '@/lib/dashboard-agent/clientAuth'
-import type { AgentRunResult } from '@/lib/dashboard-agent/types'
+import type { AgentMode, AgentRunResult } from '@/lib/dashboard-agent/types'
+import { AGENT_MODES, isAgentMode } from '@/lib/dashboard-agent/types'
 
 const CONVERSATION_STORAGE_KEY = 'growmedica_dashboard_agent_conversation_id'
+const AGENT_MODE_STORAGE_KEY = 'growmedica_dashboard_agent_mode'
 
 export default function DashboardShell() {
   const { t } = useLocale()
@@ -33,6 +35,7 @@ export default function DashboardShell() {
   const [isLoading, setIsLoading] = useState(false)
   const [agentError, setAgentError] = useState<string | null>(null)
   const [auditRefreshKey, setAuditRefreshKey] = useState(0)
+  const [agentMode, setAgentMode] = useState<AgentMode>('assist')
 
   useEffect(() => {
     void checkDashboardSession().then((ok) => {
@@ -49,15 +52,23 @@ export default function DashboardShell() {
         : ''
     if (stored) {
       setConversationId(stored)
-      return
+    } else {
+      const generated =
+        typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `dash-${Math.random().toString(36).slice(2, 12)}`
+      setConversationId(generated)
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(CONVERSATION_STORAGE_KEY, generated)
+      }
     }
-    const generated =
-      typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-        ? crypto.randomUUID()
-        : `dash-${Math.random().toString(36).slice(2, 12)}`
-    setConversationId(generated)
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(CONVERSATION_STORAGE_KEY, generated)
+
+    const storedMode =
+      typeof window !== 'undefined'
+        ? window.localStorage.getItem(AGENT_MODE_STORAGE_KEY)?.trim() ?? ''
+        : ''
+    if (isAgentMode(storedMode)) {
+      setAgentMode(storedMode)
     }
   }, [])
 
@@ -68,6 +79,13 @@ export default function DashboardShell() {
       setSessionReady(true)
     }
     return ok
+  }
+
+  const changeAgentMode = (mode: AgentMode) => {
+    setAgentMode(mode)
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(AGENT_MODE_STORAGE_KEY, mode)
+    }
   }
 
   const runCommand = async (command: string) => {
@@ -87,6 +105,7 @@ export default function DashboardShell() {
         body: JSON.stringify({
           command,
           conversation_id: conversationId || undefined,
+          mode: agentMode,
         }),
       })
 
@@ -123,6 +142,13 @@ export default function DashboardShell() {
     setSelectedHandle(handle)
     setActiveView('product-detail')
   }
+
+  const modeHintKey =
+    agentMode === 'plan'
+      ? 'dashboard.agentMode.planHint'
+      : agentMode === 'monitor'
+        ? 'dashboard.agentMode.monitorHint'
+        : 'dashboard.agentMode.assistHint'
 
   if (checkingSession) {
     return (
@@ -185,6 +211,44 @@ export default function DashboardShell() {
             </Link>
           </div>
           <IntegrationStatus sessionReady={sessionReady} />
+
+          <div className="space-y-2" data-testid="dashboard-agent-mode">
+            <p className="text-xs font-medium uppercase tracking-wide text-(--color-text-muted)">
+              {t('dashboard.agentMode.label')}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {AGENT_MODES.map((mode) => {
+                const active = agentMode === mode
+                const labelKey =
+                  mode === 'assist'
+                    ? 'dashboard.agentMode.assist'
+                    : mode === 'plan'
+                      ? 'dashboard.agentMode.plan'
+                      : 'dashboard.agentMode.monitor'
+                return (
+                  <button
+                    key={mode}
+                    type="button"
+                    disabled={isLoading}
+                    onClick={() => changeAgentMode(mode)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition disabled:opacity-50 ${
+                      active
+                        ? 'border-(--color-primary) bg-(--color-primary) text-white'
+                        : 'border-(--color-border) bg-(--color-surface) text-(--color-text-muted) hover:border-(--color-primary) hover:text-(--color-text)'
+                    }`}
+                    data-testid={`dashboard-agent-mode-${mode}`}
+                    aria-pressed={active}
+                  >
+                    {t(labelKey)}
+                  </button>
+                )
+              })}
+            </div>
+            <p className="text-xs text-(--color-text-muted)" data-testid="dashboard-agent-mode-hint">
+              {t(modeHintKey)}
+            </p>
+          </div>
+
           <CommandBar disabled={isLoading || !sessionReady} onSubmit={runCommand} />
           {agentError && (
             <p className="text-sm text-red-600" data-testid="dashboard-agent-error">

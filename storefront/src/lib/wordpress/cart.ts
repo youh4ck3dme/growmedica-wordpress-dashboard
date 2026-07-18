@@ -6,7 +6,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { validateWordPressEnv } from './env'
 import { getWooProductBySlug } from './products'
-import type { Cart, CartLine, Money } from '@/lib/shopify/types'
+import type { Cart, CartLine, Money } from '@/lib/catalog/types'
 
 const CART_COOKIE_NAME = 'growmedical_cart_id'
 const WOO_CART_PREFIX = 'woo-cart-v1.'
@@ -35,8 +35,7 @@ function cartSigningSecret(): string {
   const secret =
     process.env.CART_SIGNING_SECRET?.trim() ||
     process.env.WORDPRESS_REVALIDATION_SECRET?.trim() ||
-    process.env.DASHBOARD_AGENT_SECRET?.trim() ||
-    process.env.SHOPIFY_REVALIDATION_SECRET?.trim()
+    process.env.DASHBOARD_AGENT_SECRET?.trim()
 
   if (secret) return secret
 

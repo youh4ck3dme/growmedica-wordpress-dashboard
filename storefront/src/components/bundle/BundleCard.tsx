@@ -1,11 +1,49 @@
 import {
+  Activity,
+  Apple,
+  Bone,
+  Brain,
+  CalendarDays,
+  Droplet,
+  FlaskConical,
+  Flame,
+  Heart,
+  Leaf,
+  Moon,
+  Package,
+  Pill,
+  Shield,
+  Sparkles,
+  type LucideIcon,
+} from 'lucide-react'
+import {
+  BUNDLE_CATEGORY_BENEFITS,
   BUNDLE_CATEGORY_LABELS,
-  getBundleProductHandle,
+  isHighlightedBundle,
   type HealthBundle,
 } from '@/lib/bundles/catalog'
 import { getProductUrl } from '@/lib/utils'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 import { BundleAddToCart } from '@/components/bundle/BundleAddToCart'
+
+const CATEGORY_ICONS: Record<HealthBundle['category'], LucideIcon> = {
+  imunita: Shield,
+  'spanok-stres': Moon,
+  'sportova-vyziva': Activity,
+  regeneracia: Flame,
+  'klby-pohyb': Bone,
+  'srdce-cievy': Heart,
+  travenie: Leaf,
+  'detox-pecen': Droplet,
+  'krasa-pokozka': Sparkles,
+  'vitaminy-mineraly': Pill,
+  proteiny: Flame,
+  aminokyseliny: FlaskConical,
+  'specialna-vyziva': Brain,
+  'zdrave-potraviny': Apple,
+  sezonne: CalendarDays,
+  ostatne: Package,
+}
 
 interface BundleCardProps {
   bundle: HealthBundle
@@ -23,6 +61,9 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
     compareAt &&
     parseFloat(compareAt.amount) > parseFloat(price!.amount)
 
+  const CategoryIcon = CATEGORY_ICONS[bundle.category]
+  const highlighted = isHighlightedBundle(bundle.slug)
+
   return (
     <article
       className="bundle-card liquid-glass liquid-glass--heavy"
@@ -31,8 +72,19 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
       data-bundle-slug={bundle.slug}
       data-has-shopify-product={product ? 'true' : 'false'}
     >
-      <span className="bundle-card__badge">−{bundle.discountPercent} %</span>
+      <div className="bundle-card__badges">
+        <span className="bundle-card__badge">−{bundle.discountPercent} %</span>
+        {highlighted && (
+          <span className="bundle-card__badge bundle-card__badge--highlight">Odporúčame</span>
+        )}
+      </div>
+
+      <div className="bundle-card__icon" aria-hidden="true">
+        <CategoryIcon size={22} strokeWidth={1.75} />
+      </div>
+
       <h3 className="bundle-card__title">{bundle.name}</h3>
+      <p className="bundle-card__benefit">{BUNDLE_CATEGORY_BENEFITS[bundle.category]}</p>
       <ul className="bundle-card__items">
         {bundle.items.map((item) => (
           <li key={item}>{item}</li>
@@ -55,9 +107,7 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
             {price!.amount} €
           </span>
         ) : (
-          <span className="text-xs font-semibold text-(--color-text-muted)">
-            SKU: {getBundleProductHandle(bundle.slug)}
-          </span>
+          <span className="bundle-card__soon">Čoskoro dostupné</span>
         )}
       </div>
 

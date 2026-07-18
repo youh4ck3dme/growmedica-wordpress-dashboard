@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { ProductVariant } from '@/lib/shopify/types'
+import type { ProductVariant } from '@/lib/catalog/types'
 import { Button } from '@/components/ui/Button'
 import { useThemeToast } from '@/components/ui/ThemeToast'
 

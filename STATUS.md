@@ -1,10 +1,11 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-18 (SuperFaktúra go-live verify + API/BACS skripty; API stále majiteľ)  
+**Aktualizované:** 2026-07-18 (Shopify runtime removed — Woo + Next only; SuperFaktúra API stále majiteľ)  
 **Branch:** `main`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 
 **Prevádzka / endpointy / env:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)  
+**Firebase Auth CLI (Nexus Google Sign-In):** [docs/FIREBASE_CLI.md](./docs/FIREBASE_CLI.md)  
 **Merchant API (ty):** [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)  
 **Majiteľ (ľudský checklist):** [majitel.md](./majitel.md) · SuperFaktúra drobné úlohy **2a–2k**
 
@@ -34,8 +35,9 @@
 | Canonical listing pages | ✅ `buildPageMetadata(..., pathname)` |
 | Mega-menu empty leaves | ✅ PR #7 |
 | Vendor audit 460 | ✅ [reports/VENDOR_AUDIT.md](./reports/VENDOR_AUDIT.md) |
+| **Shopify runtime removed** | ✅ catalog/cart/nav Woo-only · `src/lib/shopify` deleted · dashboard Admin → WP |
 
-**Shop ide predávať cez bankový prevod a dobierku** bez Stripe/Packeta API.
+**Shop ide predávať cez bankový prevod a dobierku** bez Stripe/Packeta/Shopify API.
 
 > **mu-plugins na disk (SSH):** ekvivalent beží ako **Code Snippets** na cms. Fyzické PHP súbory v `wp-content/mu-plugins/` sú voliteľné, ak máš SSH.
 
@@ -58,7 +60,7 @@
 | 8 | **Plné VOP** právnik | právny text |
 | 9 | **IČ DPH / DPH 20 %** | účtovné rozhodnutie |
 | 10 | **SuperFaktúra** — registrácia + API (body **2a–2j** v majitel.md) | [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) · [SUPERFAKTURA_SETUP](./docs/SUPERFAKTURA_SETUP.md) |
-| 11 | **Zrušiť Shopify** | po tvojom schválení (po stabilite) |
+| 11 | ~~Zrušiť Shopify~~ | ✅ storefront runtime removed 2026-07-18 (admin = WP only) |
 
 ---
 
@@ -76,11 +78,11 @@
 ## Architektúra (live)
 
 ```
-www.growmedica.cz (Next/Vercel, CMS_PROVIDER=wordpress)
+www.growmedica.cz (Next/Vercel, Woo only)
         → Woo REST → cms.growmedica.cz
 ```
 
-Shopify = len import/rollback.
+Shopify runtime **odstránený** zo storefrontu. Offline import skripty (`import:shopify-to-woo`) môžu ostať v `scripts/` pre históriu — nie sú v runtime path.
 
 ---
 

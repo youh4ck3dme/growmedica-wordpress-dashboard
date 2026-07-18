@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { authorizeDashboardRequest } from '@/lib/dashboard-agent/auth'
 import { getCmsProvider } from '@/lib/cms'
-import { isShopifyAdminConfigured } from '@/lib/shopify/admin'
-import { isShopifyMockMode } from '@/lib/shopify/mock'
 import { isWooMockMode } from '@/lib/wordpress/mock'
 
 /** Public probe — minimal surface for uptime checks. */
@@ -14,16 +12,16 @@ export async function GET(request: NextRequest) {
   const cms = getCmsProvider()
   const mistralMock = process.env.MISTRAL_MOCK_MODE === '1'
   const wooMock = isWooMockMode()
-  const shopifyMock = isShopifyMockMode()
 
   return NextResponse.json({
     ok: true,
     cms_provider: cms,
     mistral: mistralMock ? 'mock' : process.env.MISTRAL_API_KEY ? 'configured' : 'missing',
-    catalog: wooMock || shopifyMock ? 'mock' : 'live',
-    shopify_admin: isShopifyAdminConfigured() ? 'configured' : 'missing',
+    catalog: wooMock ? 'mock' : 'live',
+    shopify: 'removed',
+    admin: 'wordpress',
     write_mode:
-      wooMock || shopifyMock || mistralMock
+      wooMock || mistralMock
         ? 'dry_run_only'
         : process.env.DASHBOARD_ALLOW_LIVE_WRITES === '1'
           ? 'live_writes_allowed'

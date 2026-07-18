@@ -24,7 +24,7 @@ import {
   resolveInitialTheme,
   STORAGE_KEY,
 } from '@/lib/theme/storefront-theme'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 
 const SupplementFinder = dynamic(
   () =>

@@ -1,6 +1,6 @@
 import { BundleCard } from '@/components/bundle/BundleCard'
 import { HEALTH_BUNDLE_CATALOG, type HealthBundle } from '@/lib/bundles/catalog'
-import type { ProductListItem } from '@/lib/shopify/types'
+import type { ProductListItem } from '@/lib/catalog/types'
 
 interface BundleGridProps {
   bundles?: readonly HealthBundle[]
