@@ -5,23 +5,15 @@ const isPwaProductionTest = !!process.env.PWA_PRODUCTION_TEST;
 const isNoorDemoTest = process.env.NOOR_DEMO_TEST === '1';
 /**
  * Mock-only for local integrity/e2e webServer — never requires a running WordPress.
- * - default / yarn test:integrity → Shopify mock
- * - CMS_PROVIDER=wordpress (yarn test:woo:integrity) → Woo mock fixtures
+ * Default = Woo mock (Shopify runtime removed).
  */
-const isWooTest = process.env.CMS_PROVIDER === 'wordpress';
 const playwrightDevPort = process.env.PLAYWRIGHT_DEV_PORT ?? '5557';
 const playwrightDevUrl = `http://127.0.0.1:${playwrightDevPort}`;
 
-const shopifyTestEnv: Record<string, string> = {
-  CMS_PROVIDER: 'shopify',
-  SHOPIFY_MOCK_MODE: '1',
+const defaultTestEnv: Record<string, string> = {
+  ...wooTestEnv,
+  CMS_PROVIDER: 'wordpress',
   WOO_MOCK_MODE: '1',
-  SHOPIFY_STORE_DOMAIN: process.env.SHOPIFY_STORE_DOMAIN ?? 'mock-store.myshopify.com',
-  SHOPIFY_STOREFRONT_ACCESS_TOKEN:
-    process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ?? 'mock-storefront-token',
-  SHOPIFY_API_VERSION: process.env.SHOPIFY_API_VERSION ?? '2026-07',
-  SHOPIFY_REVALIDATION_SECRET:
-    process.env.SHOPIFY_REVALIDATION_SECRET ?? 'mock-revalidation-secret-123456',
   MISTRAL_MOCK_MODE: '1',
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY ?? 'mock-mistral-api-key',
   MISTRAL_MODEL: process.env.MISTRAL_MODEL ?? 'mistral-large-latest',
@@ -30,7 +22,7 @@ const shopifyTestEnv: Record<string, string> = {
   DASHBOARD_AGENT_SECRET:
     process.env.DASHBOARD_AGENT_SECRET ?? 'mock-dashboard-agent-secret-123456',
   NEXT_PUBLIC_DASHBOARD_URL:
-    process.env.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://growmedica-nexus.lovable.app/admin',
+    process.env.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://cms.growmedica.cz/wp-admin',
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? playwrightDevUrl,
   // Integrity/e2e assert indexable SEO paths; production soft-launch defaults noindex ON.
   SITE_NOINDEX: process.env.SITE_NOINDEX ?? '0',
@@ -38,38 +30,32 @@ const shopifyTestEnv: Record<string, string> = {
 };
 
 if (isNoorDemoTest) {
-  shopifyTestEnv.NEXT_PUBLIC_DEFAULT_THEME = 'noor';
-  shopifyTestEnv.NEXT_PUBLIC_HIDE_THEME_SWITCHER = '1';
+  defaultTestEnv.NEXT_PUBLIC_DEFAULT_THEME = 'noor';
+  defaultTestEnv.NEXT_PUBLIC_HIDE_THEME_SWITCHER = '1';
 }
 
 const dashboardTestUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL?.trim();
 if (dashboardTestUrl) {
-  shopifyTestEnv.NEXT_PUBLIC_DASHBOARD_URL = dashboardTestUrl;
-  wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL = dashboardTestUrl;
-} else {
-  wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL =
-    wooTestEnv.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://growmedica-nexus.lovable.app/admin';
+  defaultTestEnv.NEXT_PUBLIC_DASHBOARD_URL = dashboardTestUrl;
 }
 
-// Default integrity = Shopify mock (no WP). Woo mock only when explicitly requested.
-const playwrightEnv = isWooTest
-  ? { ...wooTestEnv, WOO_MOCK_MODE: '1', SHOPIFY_MOCK_MODE: '1', MISTRAL_MOCK_MODE: '1' }
-  : shopifyTestEnv;
+const playwrightEnv = defaultTestEnv;
 
 const requestedSpecFiles = process.argv.filter((arg) => arg.endsWith('.spec.ts'));
 const unitOnlySpecPatterns = [
-  'shopify-live.spec.ts',
+  'shopify-removed.spec.ts',
   'seo-alternates.spec.ts',
   'copy-quality.spec.ts',
   'i18n-detect.spec.ts',
   'cart-id.spec.ts',
+  'collection-nav-pagination.spec.ts',
+  'site-noindex.spec.ts',
 ];
 const onlyLiveOrUnitSpecs =
   requestedSpecFiles.length > 0 &&
   requestedSpecFiles.every(
     (arg) =>
       arg.includes('/live/') ||
-      arg.includes('shopify-live.spec.ts') ||
       unitOnlySpecPatterns.some((pattern) => arg.includes(pattern)),
   );
 const skipWebServer =
@@ -113,22 +99,13 @@ export default defineConfig({
     {
       name: 'integrity',
       testMatch: /integrity\/(?!live\/).*\.spec\.ts/,
-      testIgnore: isWooTest
-        ? [
-            '**/pwa.spec.ts',
-            '**/revalidation.spec.ts',
-            '**/live/**',
-            '**/mobile-iphone-layout.spec.ts',
-            // requires local WP :8080 — not needed when production is SoT
-            '**/wordpress-local.spec.ts',
-          ]
-        : [
-            '**/pwa.spec.ts',
-            '**/woo-*.spec.ts',
-            '**/live/**',
-            '**/mobile-iphone-layout.spec.ts',
-            '**/wordpress-local.spec.ts',
-          ],
+      testIgnore: [
+        '**/pwa.spec.ts',
+        '**/live/**',
+        '**/mobile-iphone-layout.spec.ts',
+        // requires local WP :8080 — not needed when production is SoT
+        '**/wordpress-local.spec.ts',
+      ],
       use: { browserName: 'chromium', ...devices['Desktop Chrome'] },
     },
     {

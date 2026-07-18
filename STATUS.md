@@ -1,6 +1,6 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-18 (Shopify runtime removed — Woo + Next only; SuperFaktúra API stále majiteľ)  
+**Aktualizované:** 2026-07-18 (Shopify fully cleaned (runtime + scripts + CLI) — Woo + Next only; SuperFaktúra API stále majiteľ)  
 **Branch:** `main`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 
@@ -35,7 +35,7 @@
 | Canonical listing pages | ✅ `buildPageMetadata(..., pathname)` |
 | Mega-menu empty leaves | ✅ PR #7 |
 | Vendor audit 460 | ✅ [reports/VENDOR_AUDIT.md](./reports/VENDOR_AUDIT.md) |
-| **Shopify runtime removed** | ✅ catalog/cart/nav Woo-only · `src/lib/shopify` deleted · dashboard Admin → WP |
+| **Shopify fully cleaned (runtime + scripts + CLI)** | ✅ catalog/cart/nav Woo-only · `src/lib/shopify` deleted · dashboard Admin → WP |
 
 **Shop ide predávať cez bankový prevod a dobierku** bez Stripe/Packeta/Shopify API.
 

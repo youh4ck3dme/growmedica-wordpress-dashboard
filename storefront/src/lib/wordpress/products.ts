@@ -3,7 +3,7 @@ import { wooProductToListItem, wooProductToProduct } from './adapter'
 import { isWooMockMode, getMockWooProducts, getMockWooProductBySlug } from './mock'
 import { getWooCategoryBySlug } from './categories'
 import type { MainCategory } from '@/lib/category-map'
-import type { Product, ProductListItem } from '@/lib/shopify/types'
+import type { Product, ProductListItem } from '@/lib/catalog/types'
 import type { WooProduct } from './types'
 
 interface GetWooProductsOptions {

@@ -373,7 +373,7 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
                           : "border-gray-300 bg-white group-hover:border-(--color-primary)"
                       )}
                     >
-                      {active && <Check className="h-3 w-3 stroke-[3]" />}
+                      {active && <Check className="h-3 w-3 stroke-3" />}
                     </div>
                     <span className={cn("text-gray-700 transition-colors", active && "text-(--color-primary) font-semibold")}>
                       {vendor}
@@ -412,7 +412,7 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
                           : "border-gray-300 bg-white group-hover:border-(--color-primary)"
                       )}
                     >
-                      {active && <Check className="h-3 w-3 stroke-[3]" />}
+                      {active && <Check className="h-3 w-3 stroke-3" />}
                     </div>
                     <span className={cn("text-gray-700 transition-colors", active && "text-(--color-primary) font-semibold")}>
                       {type}

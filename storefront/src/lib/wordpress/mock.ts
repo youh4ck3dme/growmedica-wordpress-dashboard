@@ -1,5 +1,5 @@
 import { getNavCategories } from '@/lib/category-map'
-import type { Product, ProductListItem } from '@/lib/shopify/types'
+import type { Product, ProductListItem } from '@/lib/catalog/types'
 import { wooProductToListItem, wooProductToProduct } from './adapter'
 import type { WooCategory, WooProduct } from './types'
 

@@ -12,7 +12,7 @@ export interface Money {
 
 // ─── Image ───────────────────────────────────────────────────────────────────
 
-export interface ShopifyImage {
+export interface CatalogImage {
   id?: string
   url: string
   altText: string | null
@@ -37,7 +37,7 @@ export interface ProductVariant {
   sku: string | null
   /** Present only when Storefront token has `unauthenticated_read_product_inventory`. */
   quantityAvailable?: number | null
-  image: ShopifyImage | null
+  image: CatalogImage | null
 }
 
 // ─── Product ─────────────────────────────────────────────────────────────────
@@ -74,10 +74,10 @@ export interface Product {
   }
   images: {
     edges: Array<{
-      node: ShopifyImage
+      node: CatalogImage
     }>
   }
-  featuredImage: ShopifyImage | null
+  featuredImage: CatalogImage | null
   seo: {
     title: string | null
     description: string | null
@@ -107,7 +107,7 @@ export interface ProductListItem {
     minVariantPrice: Money
     maxVariantPrice: Money
   }
-  featuredImage: ShopifyImage | null
+  featuredImage: CatalogImage | null
   variants: {
     edges: Array<{
       node: Pick<ProductVariant, 'id' | 'title' | 'availableForSale' | 'selectedOptions' | 'price' | 'compareAtPrice'>
@@ -123,7 +123,7 @@ export interface Collection {
   title: string
   description: string
   descriptionHtml: string
-  image: ShopifyImage | null
+  image: CatalogImage | null
   seo: {
     title: string | null
     description: string | null
@@ -144,7 +144,7 @@ export interface CartLine {
       id: string
       handle: string
       title: string
-      featuredImage: ShopifyImage | null
+      featuredImage: CatalogImage | null
     }
   }
   cost: {

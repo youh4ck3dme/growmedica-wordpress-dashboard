@@ -1,14 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-# Push Shopify env vars to Vercel from a local env file (never commit real values).
+# Push WooCommerce / storefront env vars to Vercel from a local env file (never commit real values).
 # Usage: ENV_FILE=.env.local ./add-vercel-env.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE="${ENV_FILE:-$SCRIPT_DIR/.env.local}"
 
 echo "===================================================="
-echo "Configure Vercel environment variables (from env file)"
+echo "Configure Vercel environment variables (Woo only)"
 echo "===================================================="
 
 if ! command -v vercel &> /dev/null; then
@@ -28,13 +28,11 @@ set -a
 source "$ENV_FILE"
 set +a
 
-SHOPIFY_STORE_DOMAIN="${SHOPIFY_STORE_DOMAIN:-${NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN:-}}"
-SHOPIFY_STOREFRONT_ACCESS_TOKEN="${SHOPIFY_STOREFRONT_ACCESS_TOKEN:-${NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN:-}}"
-
 REQUIRED_VARS=(
-  SHOPIFY_STORE_DOMAIN
-  SHOPIFY_STOREFRONT_ACCESS_TOKEN
-  SHOPIFY_REVALIDATION_SECRET
+  WORDPRESS_BASE_URL
+  WOO_CONSUMER_KEY
+  WOO_CONSUMER_SECRET
+  WORDPRESS_REVALIDATION_SECRET
 )
 
 for var in "${REQUIRED_VARS[@]}"; do
@@ -60,12 +58,25 @@ add_env_var() {
   done
 }
 
-add_env_var "SHOPIFY_STORE_DOMAIN" "$SHOPIFY_STORE_DOMAIN"
-add_env_var "SHOPIFY_STOREFRONT_ACCESS_TOKEN" "$SHOPIFY_STOREFRONT_ACCESS_TOKEN"
-add_env_var "SHOPIFY_REVALIDATION_SECRET" "$SHOPIFY_REVALIDATION_SECRET"
+add_env_var "WORDPRESS_BASE_URL" "$WORDPRESS_BASE_URL"
+add_env_var "WOO_CONSUMER_KEY" "$WOO_CONSUMER_KEY"
+add_env_var "WOO_CONSUMER_SECRET" "$WOO_CONSUMER_SECRET"
+add_env_var "WORDPRESS_REVALIDATION_SECRET" "$WORDPRESS_REVALIDATION_SECRET"
 
 if [[ -n "${NEXT_PUBLIC_SITE_URL:-}" ]]; then
   add_env_var "NEXT_PUBLIC_SITE_URL" "$NEXT_PUBLIC_SITE_URL"
+fi
+if [[ -n "${SITE_NOINDEX:-}" ]]; then
+  add_env_var "SITE_NOINDEX" "$SITE_NOINDEX"
+fi
+if [[ -n "${NEXT_PUBLIC_SITE_NOINDEX:-}" ]]; then
+  add_env_var "NEXT_PUBLIC_SITE_NOINDEX" "$NEXT_PUBLIC_SITE_NOINDEX"
+fi
+if [[ -n "${MISTRAL_API_KEY:-}" ]]; then
+  add_env_var "MISTRAL_API_KEY" "$MISTRAL_API_KEY"
+fi
+if [[ -n "${DASHBOARD_AGENT_SECRET:-}" ]]; then
+  add_env_var "DASHBOARD_AGENT_SECRET" "$DASHBOARD_AGENT_SECRET"
 fi
 
 echo "===================================================="

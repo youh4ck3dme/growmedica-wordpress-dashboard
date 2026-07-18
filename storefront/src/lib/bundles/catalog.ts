@@ -1,6 +1,6 @@
 import type { MainCategory } from '@/lib/category-map'
 
-export const BUNDLE_SHOPIFY_TAG = 'balicek-zdravia'
+export const BUNDLE_CATALOG_TAG = 'balicek-zdravia'
 
 export type BundleSize = 'mini' | 'standard' | 'plus' | 'premium'
 
@@ -30,7 +30,7 @@ function bundle(
   return { id, slug, name, category, items, discountPercent, size, disclaimer }
 }
 
-/** 63 curated health bundles — map items to real Shopify SKUs in Admin */
+/** Curated health bundles — item handles map to Woo product slugs */
 export const HEALTH_BUNDLE_CATALOG: readonly HealthBundle[] = [
   // Imunita (5)
   bundle(1, 'imunitny-stit-basic', 'Imunitný Štít Basic', 'imunita', ['Vitamín C 1000 mg', 'Vitamín D3 2000 IU', 'Zinok'], 10, 'standard'),
@@ -151,7 +151,7 @@ export function getFeaturedBundles(count = 6): HealthBundle[] {
   return HEALTH_BUNDLE_CATALOG.slice(0, count)
 }
 
-/** Suggested Shopify product handle prefix: balicek-{slug} */
+/** Suggested product handle prefix: balicek-{slug} */
 export function getBundleProductHandle(slug: string): string {
   return `balicek-${slug}`
 }
@@ -173,4 +173,35 @@ export const BUNDLE_CATEGORY_LABELS: Record<HealthBundle['category'], string> = 
   'zdrave-potraviny': 'Zdravé potraviny',
   sezonne: 'Sezónne & životné',
   ostatne: 'Ostatné',
+}
+
+/** One-line benefit copy per category, shown on bundle cards. */
+export const BUNDLE_CATEGORY_BENEFITS: Record<HealthBundle['category'], string> = {
+  imunita: 'Posilnite obranyschopnosť organizmu.',
+  'spanok-stres': 'Pomôže s uvoľnením a kvalitným spánkom.',
+  'sportova-vyziva': 'Podpora výkonu a rastu svalov.',
+  regeneracia: 'Rýchlejšia regenerácia po záťaži.',
+  'klby-pohyb': 'Podpora pohyblivosti a zdravých kĺbov.',
+  'srdce-cievy': 'Podpora srdca a cievneho systému.',
+  travenie: 'Podpora zdravého trávenia.',
+  'detox-pecen': 'Podpora prirodzeného detoxu tela.',
+  'krasa-pokozka': 'Krása a pevnosť pokožky zvnútra.',
+  'vitaminy-mineraly': 'Denný základ vitamínov a minerálov.',
+  proteiny: 'Stavebné látky pre rast svalov.',
+  aminokyseliny: 'Podpora regenerácie a výkonu.',
+  'specialna-vyziva': 'Prírodná podpora energie a fokusu.',
+  'zdrave-potraviny': 'Kvalitná výživa do každodenného jedálnička.',
+  sezonne: 'Šité na mieru vašej životnej situácii.',
+  ostatne: 'Vyvážená kombinácia pre vaše zdravie.',
+}
+
+/** Bundles highlighted with an "Odporúčame" badge on /balicky. */
+export const HIGHLIGHTED_BUNDLE_SLUGS: ReadonlySet<string> = new Set([
+  'growmedica-komplet',
+  'imunitny-stit-plus',
+  'starter-fitness',
+])
+
+export function isHighlightedBundle(slug: string): boolean {
+  return HIGHLIGHTED_BUNDLE_SLUGS.has(slug)
 }

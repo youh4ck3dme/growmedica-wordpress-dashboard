@@ -15,6 +15,10 @@ export const COMPANY = {
   ico: '56 455 143',
   icoDigits: '56455143',
   dic: '2122314975',
+  /** Empty until VAT registration; DIČ ≠ IČ DPH. */
+  icDph: '',
+  /** Interim: non-VAT payer until accountant confirms otherwise. */
+  vatPayer: false,
   email: 'info@growmedica.cz',
   /** Prázdne = nezobrazovať falošné číslo (doplň reálne a deploy). */
   phoneDisplay: '',

@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { ProductListItem } from '@/lib/catalog/types'
 import {
-  getShopifySizedImageUrl,
+  getSizedImageUrl,
   PRODUCT_CARD_IMAGE_SIZES,
 } from '@/lib/catalog/image-url'
 import { getProductUrl } from '@/lib/utils'
@@ -28,7 +28,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     ? Math.round((1 - parseFloat(price.amount) / parseFloat(compareAtPrice!.amount)) * 100)
     : 0
 
-  const imageSrc = image ? getShopifySizedImageUrl(image.url) : '/images/product-placeholder.svg'
+  const imageSrc = image ? getSizedImageUrl(image.url) : '/images/product-placeholder.svg'
 
   return (
     <article className="product-card noor-product-card group" aria-label={product.title}>

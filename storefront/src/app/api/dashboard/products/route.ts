@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { authorizeDashboardRequest } from '@/lib/dashboard-agent/auth'
 import { getProducts } from '@/lib/catalog/products'
-import { shopifyAdminRemovedResponse } from '@/lib/dashboard/shopify-removed'
+import { legacyAdminRemovedResponse } from '@/lib/dashboard/legacy-admin-removed'
 
 /** List products from Woo catalog (read-only). Writes → WP admin. */
 export async function GET(request: NextRequest) {
@@ -26,5 +26,5 @@ export async function PUT(request: NextRequest) {
   if (!authorizeDashboardRequest(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  return shopifyAdminRemovedResponse()
+  return legacyAdminRemovedResponse()
 }

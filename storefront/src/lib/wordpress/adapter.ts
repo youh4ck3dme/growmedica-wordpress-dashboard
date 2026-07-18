@@ -3,7 +3,7 @@
  * so UI components can migrate incrementally.
  */
 
-import type { Money, Product, ProductListItem, ShopifyImage } from '@/lib/shopify/types'
+import type { Money, Product, ProductListItem, CatalogImage } from '@/lib/catalog/types'
 import { getDeepestVisibleProductType } from '@/lib/product-facets'
 import type { WooCategory, WooProduct } from './types'
 
@@ -13,7 +13,7 @@ function toMoney(amount: string): Money {
   return { amount: amount || '0', currencyCode: DEFAULT_CURRENCY }
 }
 
-function toImage(image: WooProduct['images'][number] | undefined): ShopifyImage | null {
+function toImage(image: WooProduct['images'][number] | undefined): CatalogImage | null {
   if (!image) return null
   return {
     id: String(image.id),

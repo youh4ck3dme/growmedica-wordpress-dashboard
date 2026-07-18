@@ -9,5 +9,5 @@ export type {
   Collection,
   Cart,
   Money,
-  ShopifyImage,
+  CatalogImage,
 } from '@/lib/catalog/types'

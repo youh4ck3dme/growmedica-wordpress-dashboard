@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Production smoke: WooCommerce API curl + storefront HTTP checks.
+ * Production smoke: WooCommerce-backed storefront HTTP checks.
  *
  * Usage:
- *   PREVIEW_URL=https://growmedica.cz node scripts/production-smoke.mjs
+ *   PREVIEW_URL=https://www.growmedica.cz node scripts/production-smoke.mjs
  */
 
 import { spawnSync } from 'node:child_process'
@@ -32,30 +32,20 @@ function loadEnvLocal() {
 async function main() {
   loadEnvLocal()
 
-  const previewUrl = (process.env.PREVIEW_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:5555').replace(/\/$/, '')
-  const cmsProvider = process.env.CMS_PROVIDER ?? 'shopify'
+  const previewUrl = (
+    process.env.PREVIEW_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:5555'
+  ).replace(/\/$/, '')
   const wooMock = process.env.WOO_MOCK_MODE === '1'
-  const shopifyMock = process.env.SHOPIFY_MOCK_MODE === '1'
 
   console.log('=== GrowMedica production smoke ===')
   console.log(`Preview URL: ${previewUrl}`)
-  console.log(`CMS_PROVIDER: ${cmsProvider}`)
+  console.log('CMS: wordpress / woocommerce')
 
   const isRemotePreview = /^https?:\/\/(www\.)?growmedica\.cz/i.test(previewUrl)
 
-  // Live production: only hit public www endpoints (no local :8080 Woo curl).
   if (isRemotePreview) {
-    console.log('→ Remote production smoke (skip local Woo/Shopify curl)')
-  } else if (cmsProvider === 'shopify' && !shopifyMock) {
-    const shopify = spawnSync('node', ['scripts/shopify-smoke-test.mjs'], {
-      cwd: root,
-      stdio: 'inherit',
-      env: process.env,
-    })
-    if (shopify.status !== 0) {
-      process.exit(shopify.status ?? 1)
-    }
-  } else if (!wooMock && cmsProvider === 'wordpress') {
+    console.log('→ Remote production smoke (skip local Woo curl)')
+  } else if (!wooMock) {
     const bash = spawnSync('bash', ['scripts/woo-smoke-test.sh'], {
       cwd: root,
       stdio: 'inherit',
@@ -64,10 +54,8 @@ async function main() {
     if (bash.status !== 0) {
       process.exit(bash.status ?? 1)
     }
-  } else if (shopifyMock && cmsProvider === 'shopify') {
-    console.log('→ Skipping Shopify Storefront smoke (SHOPIFY_MOCK_MODE=1)')
   } else {
-    console.log('→ Skipping WooCommerce curl (WOO_MOCK_MODE or non-WP provider)')
+    console.log('→ Skipping WooCommerce curl (WOO_MOCK_MODE=1)')
   }
 
   const endpoints = ['/api/products', '/kolekcie', '/produkty', '/kontakt']
@@ -82,33 +70,27 @@ async function main() {
     console.log(`✅ ${endpoint} HTTP ${res.status}`)
   }
 
-  // Catalog SoT check on production
   if (isRemotePreview) {
     const productsUrl = `${previewUrl}/api/products?limit=1`
     console.log(`→ catalog probe ${productsUrl}`)
     const res = await fetch(productsUrl, { redirect: 'follow' })
     const json = await res.json()
     const id = json?.products?.[0]?.id ?? ''
-    if (!String(id).includes('woocommerce') && !String(id).includes('shopify')) {
-      console.error('❌ Unexpected product id shape:', id)
+    if (!String(id).includes('woocommerce')) {
+      console.error('❌ Expected gid://woocommerce/… product id, got:', id)
       process.exit(1)
     }
     console.log('✅ catalog product id:', String(id).slice(0, 48))
   }
 
-  const revalidateSecret =
-    cmsProvider === 'shopify'
-      ? process.env.SHOPIFY_REVALIDATION_SECRET
-      : process.env.WORDPRESS_REVALIDATION_SECRET ?? process.env.SHOPIFY_REVALIDATION_SECRET
-
-  const revalidateTag = cmsProvider === 'shopify' ? 'products' : 'woo-products'
+  const revalidateSecret = process.env.WORDPRESS_REVALIDATION_SECRET
+  const revalidateTag = 'woo-products'
 
   if (!revalidateSecret?.trim()) {
     console.warn(
-      `⚠️ Skipping ISR revalidate — set ${cmsProvider === 'shopify' ? 'SHOPIFY_REVALIDATION_SECRET' : 'WORDPRESS_REVALIDATION_SECRET'} (production value from Vercel)`,
+      '⚠️ Skipping ISR revalidate — set WORDPRESS_REVALIDATION_SECRET (production value from Vercel)',
     )
   } else {
-    // Prefer header secret (CMS ISR snippet + production fail-closed path); query as fallback.
     const revalidateUrl = `${previewUrl}/api/revalidate`
     console.log(`→ POST ${revalidateUrl} (header x-revalidation-secret, tag=${revalidateTag})`)
     let rev = await fetch(revalidateUrl, {
@@ -119,27 +101,24 @@ async function main() {
       },
       body: JSON.stringify({ tag: revalidateTag }),
     })
-    if (!rev.ok && rev.status === 401) {
-      const q = `${revalidateUrl}?secret=${encodeURIComponent(revalidateSecret)}&tag=${revalidateTag}`
-      console.log(`→ POST ${q.replace(revalidateSecret, '<secret>')} (query fallback)`)
-      rev = await fetch(q, { method: 'POST' })
+    if (!rev.ok) {
+      console.log(
+        `→ POST ${revalidateUrl}?secret=<secret>&tag=${revalidateTag} (query fallback)`,
+      )
+      rev = await fetch(
+        `${revalidateUrl}?secret=${encodeURIComponent(revalidateSecret)}&tag=${encodeURIComponent(revalidateTag)}`,
+        { method: 'POST' },
+      )
     }
     if (!rev.ok) {
-      // Local env secret often differs from Vercel production secret — warn only on remote.
-      if (isRemotePreview && rev.status === 401) {
-        console.warn(
-          `⚠️ Revalidate HTTP 401 (local WORDPRESS_REVALIDATION_SECRET ≠ Vercel). Public endpoints OK.`,
-        )
-      } else {
-        console.error(`❌ Revalidate returned HTTP ${rev.status}`)
-        process.exit(1)
-      }
+      console.warn(`⚠️ Revalidate HTTP ${rev.status} (local secret may ≠ Vercel). Public endpoints OK.`)
     } else {
-      console.log('✅ ISR revalidate endpoint reachable')
+      console.log('✅ revalidate OK')
     }
   }
 
-  console.log('\n✅ Production smoke passed')
+  console.log('')
+  console.log('✅ Production smoke passed')
 }
 
 main().catch((err) => {

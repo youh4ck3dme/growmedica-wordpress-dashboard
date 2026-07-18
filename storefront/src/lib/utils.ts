@@ -44,9 +44,9 @@ export function getCollectionUrl(handle: string): string {
 
 /**
  * Resize Shopify CDN image URL
- * @example getSizedShopifyImage('https://cdn.shopify.com/...image.jpg', 800, 800)
+ * @example getSizedCatalogImage('https://cdn.shopify.com/...image.jpg', 800, 800)
  */
-export function getSizedShopifyImage(
+export function getSizedCatalogImage(
   url: string,
   width: number,
   height?: number

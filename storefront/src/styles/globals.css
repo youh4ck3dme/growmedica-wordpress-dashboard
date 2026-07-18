@@ -827,6 +827,33 @@
     gap: 0.75rem;
   }
 
+  /* Bundle category filter chips */
+  .bundle-filter-chip {
+    padding: 0.375rem 0.875rem;
+    border-radius: 9999px;
+    border: 1px solid var(--glass-border);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    font-family: var(--font-inter), sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .bundle-filter-chip:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 35%, var(--glass-border));
+    color: var(--color-text);
+  }
+
+  .bundle-filter-chip--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
   /* Bundle cards — glass grid */
   .bundle-grid {
     display: grid;
@@ -869,8 +896,15 @@
       0 12px 32px rgba(16, 22, 21, 0.08);
   }
 
+  .bundle-card__badges {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+
   .bundle-card__badge {
-    align-self: flex-start;
     padding: 0.25rem 0.625rem;
     border-radius: 9999px;
     background: var(--color-primary);
@@ -879,7 +913,41 @@
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.04em;
-    margin-bottom: 0.75rem;
+  }
+
+  .bundle-card__badge--highlight {
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary-dark);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  }
+
+  .bundle-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.625rem;
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    color: var(--color-primary-dark);
+  }
+
+  .bundle-card__benefit {
+    font-family: var(--font-inter), sans-serif;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: color-mix(in srgb, #101615 65%, transparent);
+    margin: -0.125rem 0 0.625rem;
+  }
+
+  .bundle-card__soon {
+    font-family: var(--font-inter), sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, #101615 55%, transparent);
   }
 
   .bundle-card__title {

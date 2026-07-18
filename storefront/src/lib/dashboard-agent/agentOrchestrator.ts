@@ -4,9 +4,19 @@ import { mistralChatCompleteWithTools } from '@/lib/ai/mistralHttp'
 import { appendConversationMessages, getConversationMessages } from './conversationMemory'
 import { logToolExecution } from './auditLog'
 import { MISTRAL_TOOL_SCHEMAS } from './mistralTools'
-import { ADMIN_AGENT_SYSTEM_PROMPT } from './prompts/admin-agent'
+import { getAdminAgentSystemPrompt } from './prompts/admin-agent'
 import { executeAgentTool, inferToolsFromCommand } from './tools'
-import type { AgentAction, AgentMessage, AgentRunResult, AgentToolName } from './types'
+import type {
+  AgentAction,
+  AgentMessage,
+  AgentMode,
+  AgentRunResult,
+  AgentToolName,
+} from './types'
+import { isAgentWriteTool } from './types'
+import { applyModeConstraints } from './modeConstraints'
+
+export { applyModeConstraints } from './modeConstraints'
 
 const MISTRAL_SUMMARY_TIMEOUT_MS = 30_000
 const MISTRAL_TOOL_TIMEOUT_MS = 30_000
@@ -33,8 +43,18 @@ function isKnownTool(name: string): name is AgentToolName {
   return MISTRAL_TOOL_SCHEMAS.some((tool) => tool.function.name === name)
 }
 
-function buildReplyFromActions(command: string, actions: AgentAction[]): string {
+function toolSchemasForMode(mode: AgentMode) {
+  if (mode === 'monitor') {
+    return MISTRAL_TOOL_SCHEMAS.filter((schema) => !isAgentWriteTool(schema.function.name as AgentToolName))
+  }
+  return MISTRAL_TOOL_SCHEMAS
+}
+
+function buildReplyFromActions(command: string, actions: AgentAction[], mode: AgentMode): string {
   if (actions.length === 0) {
+    if (mode === 'monitor') {
+      return 'Režim Monitor (read-only). Nerozpoznal som read akciu, alebo požiadavka vyžadovala zápis. Skúste napr.: „Súhrn katalógu“, „Stav integrácie“, „Zobraz produkty“.'
+    }
     return 'Nerozpoznal som konkrétnu akciu. Skúste napr.: „Zobraz produkty“, „Súhrn katalógu“, „Export CSV“, „Stav integrácie“.'
   }
 
@@ -100,7 +120,14 @@ function buildReplyFromActions(command: string, actions: AgentAction[]): string 
     return `✅ ${action.tool} dokončené.`
   })
 
-  return `Príkaz: „${command}“\n\n${parts.join('\n')}`
+  const modeNote =
+    mode === 'plan'
+      ? '\n\n📋 Režim Plan: zápisy sú dry-run. Pre live zápis prepnite na Assist a potvrďte.'
+      : mode === 'monitor'
+        ? '\n\n👁 Režim Monitor: len čítanie.'
+        : ''
+
+  return `Príkaz: „${command}“\n\n${parts.join('\n')}${modeNote}`
 }
 
 function mapMistralError(error: unknown): string {
@@ -116,26 +143,28 @@ function mapMistralError(error: unknown): string {
 async function planToolsWithMistral(
   command: string,
   history: AgentMessage[],
+  mode: AgentMode,
 ): Promise<Array<{ tool: AgentToolName; args: Record<string, unknown> }>> {
   if (process.env.MISTRAL_MOCK_MODE === '1') {
-    return inferToolsFromCommand(command)
+    return applyModeConstraints(mode, inferToolsFromCommand(command))
   }
 
   const { MISTRAL_API_KEY, MISTRAL_MODEL } = getMistralEnv()
+  const systemPrompt = getAdminAgentSystemPrompt(mode)
 
   const result = await withTimeout(
     mistralChatCompleteWithTools({
       apiKey: MISTRAL_API_KEY,
       model: MISTRAL_MODEL,
       messages: [
-        { role: 'system', content: ADMIN_AGENT_SYSTEM_PROMPT },
+        { role: 'system', content: systemPrompt },
         ...history.slice(-6).map((m) => ({
           role: m.role as 'user' | 'assistant',
           content: m.content,
         })),
         { role: 'user', content: command },
       ],
-      tools: MISTRAL_TOOL_SCHEMAS,
+      tools: toolSchemasForMode(mode),
       toolChoice: 'auto',
       temperature: 0.1,
     }),
@@ -152,20 +181,22 @@ async function planToolsWithMistral(
       args: call.arguments,
     }))
 
-  if (planned.length > 0) return planned
-  return inferToolsFromCommand(command)
+  if (planned.length > 0) return applyModeConstraints(mode, planned)
+  return applyModeConstraints(mode, inferToolsFromCommand(command))
 }
 
 async function summarizeWithMistral(
   command: string,
   actions: AgentAction[],
   history: AgentMessage[],
+  mode: AgentMode,
 ): Promise<string> {
   if (process.env.MISTRAL_MOCK_MODE === '1') {
-    return buildReplyFromActions(command, actions)
+    return buildReplyFromActions(command, actions, mode)
   }
 
   const { MISTRAL_API_KEY, MISTRAL_MODEL } = getMistralEnv()
+  const systemPrompt = getAdminAgentSystemPrompt(mode)
 
   try {
     const content = await withTimeout(
@@ -173,14 +204,14 @@ async function summarizeWithMistral(
         apiKey: MISTRAL_API_KEY,
         model: MISTRAL_MODEL,
         messages: [
-          { role: 'system', content: ADMIN_AGENT_SYSTEM_PROMPT },
+          { role: 'system', content: systemPrompt },
           ...history.slice(-6).map((m) => ({
             role: m.role as 'user' | 'assistant',
             content: m.content,
           })),
           {
             role: 'user',
-            content: `Príkaz: ${command}\nVýsledky nástrojov: ${JSON.stringify(actions).slice(0, 3000)}\nZhrň stručne po slovensky.`,
+            content: `Príkaz: ${command}\nRežim: ${mode}\nVýsledky nástrojov: ${JSON.stringify(actions).slice(0, 3000)}\nZhrň stručne po slovensky. Ak bol dry_run, jasne povedz že zápis neprebehol.`,
           },
         ],
         temperature: 0.3,
@@ -190,20 +221,22 @@ async function summarizeWithMistral(
     )
 
     if (content.trim()) return content.trim()
-    return buildReplyFromActions(command, actions)
+    return buildReplyFromActions(command, actions, mode)
   } catch (error) {
     console.warn('[dashboard-agent] Mistral summary failed:', error)
-    return buildReplyFromActions(command, actions)
+    return buildReplyFromActions(command, actions, mode)
   }
 }
 
 export async function runDashboardAgent(input: {
   command: string
   conversation_id?: string
+  mode?: AgentMode
   ip: string
 }): Promise<AgentRunResult> {
   const conversationId = input.conversation_id ?? newConversationId()
   const command = input.command.trim()
+  const mode: AgentMode = input.mode ?? 'assist'
   if (!command) throw new Error('command is required')
 
   try {
@@ -211,10 +244,10 @@ export async function runDashboardAgent(input: {
     let planned: Array<{ tool: AgentToolName; args: Record<string, unknown> }>
 
     try {
-      planned = await planToolsWithMistral(command, history)
+      planned = await planToolsWithMistral(command, history, mode)
     } catch (error) {
       console.warn('[dashboard-agent] Mistral tool planning failed, using regex fallback:', error)
-      planned = inferToolsFromCommand(command)
+      planned = applyModeConstraints(mode, inferToolsFromCommand(command))
     }
 
     const actions: AgentAction[] = []
@@ -228,18 +261,18 @@ export async function runDashboardAgent(input: {
         tool: plan.tool,
         args: plan.args,
         status: action.status,
-        summary: `${plan.tool} → ${action.status}`,
+        summary: `${plan.tool} → ${action.status} [${mode}]`,
       })
     }
 
-    const reply = await summarizeWithMistral(command, actions, history)
+    const reply = await summarizeWithMistral(command, actions, history, mode)
 
     appendConversationMessages(conversationId, [
       { role: 'user', content: command },
       { role: 'assistant', content: reply },
     ])
 
-    return { conversation_id: conversationId, reply, actions }
+    return { conversation_id: conversationId, reply, actions, mode }
   } catch (error) {
     throw new Error(mapMistralError(error))
   }
