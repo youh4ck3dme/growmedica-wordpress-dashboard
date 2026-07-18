@@ -15,7 +15,9 @@ export const MEGA_MENU_BANNER_HANDLES = [
   'detox-pecen',
   'spanok-stres',
   'specialna-vyziva',
-  // Synthetic SK navigation roots without a matching Woo category image.
+  // Synthetic SK navigation roots without a matching Woo category image (static WebP only).
+  // Remaining SK roots (balicky-zdravia, doplnky-vyzivy, zdravie, kozmetika, pre-zvierata)
+  // use Woo CMS imageUrl on /kolekcie cards and /kategorie heroes — no static asset required.
   'zdravotne-riesenia',
   'mykologicke-produkty',
 ] as const

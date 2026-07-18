@@ -89,6 +89,7 @@ export default async function SeoCategoryPage({ params, searchParams }: PageProp
           title={view.title}
           description={view.description}
           productCount={view.totalOnPage}
+          imageUrl={view.imageUrl}
         />
         <Suspense fallback={null}>
           <CollectionToolbar vendors={view.availableVendors} totalOnPage={view.totalOnPage} />

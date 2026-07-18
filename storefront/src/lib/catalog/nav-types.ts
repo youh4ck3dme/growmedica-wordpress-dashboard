@@ -30,6 +30,8 @@ export type CollectionView = {
   hasNextPage: boolean
   hasPreviousPage: boolean
   totalOnPage: number
+  /** Woo category image (leaf, else nearest ancestor with image) */
+  imageUrl?: string | null
 }
 
 export type CollectionListOptions = {

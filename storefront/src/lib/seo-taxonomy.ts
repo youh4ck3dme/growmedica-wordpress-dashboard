@@ -79,6 +79,50 @@ function descendantCount(categoryId: string, wooMap: Map<string, WooCategory>): 
   return total
 }
 
+/** Prefer leaf Woo image; walk up to root so /kategorie heroes match /kolekcie cards. */
+function resolveWooCategoryImageUrl(
+  category: FrozenCategory,
+  wooMap: Map<string, WooCategory>,
+): string | null {
+  let cursor: FrozenCategory | undefined = category
+  while (cursor) {
+    const src = wooMap.get(cursor.categoryId)?.image?.src
+    if (src) return src
+    cursor = cursor.parentId ? byId.get(cursor.parentId) : undefined
+  }
+  return null
+}
+
+/**
+ * Same resolution order as sk-menu-nav (slug path → leaf → root → name).
+ * Ensures /kolekcie card imageUrl and /kategorie hero stay in sync.
+ */
+async function resolveCategoryImageUrlBySlug(
+  path: string,
+  categoryLabel: string,
+): Promise<string | null> {
+  const clean = path.replace(/^\/+|\/+$/g, '')
+  const parts = clean.split('/').filter(Boolean)
+  const leaf = parts[parts.length - 1] ?? clean
+  const root = parts[0] ?? clean
+  const woo = await getWooCategories()
+  const imageBySlug = new Map<string, string>()
+  const imageByName = new Map<string, string>()
+  for (const cat of woo) {
+    const src = cat.image?.src
+    if (!src) continue
+    imageBySlug.set(cat.slug, src)
+    imageByName.set(normalizedName(cat.name), src)
+  }
+  return (
+    imageBySlug.get(clean) ??
+    imageBySlug.get(leaf) ??
+    imageBySlug.get(root) ??
+    imageByName.get(normalizedName(categoryLabel)) ??
+    null
+  )
+}
+
 export async function getSeoTaxonomyNavItems(): Promise<NavCollectionItem[]> {
   const wooMap = await buildWooCategoryMap()
   return categories
@@ -114,8 +158,12 @@ export async function getSeoTaxonomyCollectionView(
   const category = getFrozenCategoryByPath(path)
   if (!category) return null
   const page = Math.max(1, options.page ?? 1)
-  const wooCategory = (await buildWooCategoryMap()).get(category.categoryId)
+  const wooMap = await buildWooCategoryMap()
+  const wooCategory = wooMap.get(category.categoryId)
   const seo = getFrozenCategorySeo(category.categoryId)
+  const imageUrl =
+    resolveWooCategoryImageUrl(category, wooMap) ??
+    (await resolveCategoryImageUrlBySlug(path, category.labels.sk))
 
   if (!wooCategory) {
     return {
@@ -129,6 +177,7 @@ export async function getSeoTaxonomyCollectionView(
       hasNextPage: false,
       hasPreviousPage: false,
       totalOnPage: 0,
+      imageUrl,
     }
   }
 
@@ -153,6 +202,7 @@ export async function getSeoTaxonomyCollectionView(
     hasNextPage: result.pageInfo.hasNextPage,
     hasPreviousPage: page > 1,
     totalOnPage: products.length,
+    imageUrl,
   }
 }
 
