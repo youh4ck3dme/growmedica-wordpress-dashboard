@@ -49,7 +49,7 @@ Lokálne secrets: gitignored `wordpress-production.local.env`, `storefront/.env.
 - [x] E-mail footer + SK subjects  
 - [x] SMTP  
 - [x] terms_page_id (VOP)  
-- [ ] SuperFaktúra — majiteľ **2a–2j** ([majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry)) · plugin+defaults ✅ · api_* ⏳  
+- [ ] SuperFaktúra — majiteľ **2a–2j** ([majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry)) · plugin+defaults+skripty ✅ · CMS firma overená ✅ · api_* ⏳ · [verify](./reports/SUPERFAKTURA_GO_LIVE_VERIFY.md)  
 - [ ] Stripe / GoPay keys (karty)  
 - [ ] Packeta / DPD API  
 
@@ -106,6 +106,6 @@ Import späť do Woo: `storefront/scripts/import-shopify-to-woo.mjs`
 - [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md) — Packeta / karta / SuperFaktúra / GoPay / DPD  
 - [TODO.md](./TODO.md)  
 - [STATUS.md](./STATUS.md)  
-- [reports/REMAINING_WORK_NOW.md](./reports/REMAINING_WORK_NOW.md)  
+- [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md) — čo dorobiť  
 - [storefront/docs/WOO_CART.md](./storefront/docs/WOO_CART.md)  
 

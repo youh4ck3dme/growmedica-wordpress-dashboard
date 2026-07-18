@@ -2,7 +2,8 @@
 
 **Pre koho:** majiteľ firmy / prevádzkovateľ e-shopu (nie developer).  
 **Jazyk:** jednoduché body — *čo*, *kde získaš*, *kam vložiť* / *komu poslať*.  
-**Dátum:** 2026-07-17  
+**Dátum:** 2026-07-18  
+**Súhrn čo dorobiť:** [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md)
 
 | Odkaz | |
 |-------|--|
@@ -85,27 +86,42 @@ Odškrtávaj:
 | **Kam to vložíš** | https://cms.growmedica.cz/wp-admin/admin.php?page=wc-settings&tab=superfaktura |
 | **Nastavenie** | Version = **SuperFaktura.sk** · Sandbox = **vypnuté** · **Test API connection** |
 
-### Stav (2026-07-17) — čo už agent spravil vs. čo ostáva tebe
+### Stav (2026-07-18) — čo už agent spravil vs. čo ostáva tebe
 
 | | Stav |
 |--|------|
 | Plugin SuperFaktúra WooCommerce **1.53.2** na cms | ✅ aktívny |
 | Predvolené pravidlá (BACS / COD, retry, concurrency) | ✅ nastavené |
 | Stabilita endpointu `sf-status` (30×) | ✅ infra OK (bez API kľúča) |
+| CMS firma / IBAN / BACS = [vzorfirma.md](./docs/vzorfirma.md) | ✅ overené live 2026-07-18 |
+| Skripty API + BACS smoke | ✅ `set-superfaktura-api-from-env.sh` · `smoke-superfaktura-bacs-order.sh` |
 | **Registrácia účtu SuperFaktúra + API kľúč** | ⏳ **ty** |
 | Test API connection v Woo | ⏳ **ty** |
-| Ostrá faktúra z testovej objednávky | ⏳ po API (agent overí) |
+| Ostrá faktúra z testovej objednávky | ⏳ po API (agent: `smoke-superfaktura-bacs-order.sh`) |
+
+**Profil do SuperFaktúry (2c) — skopíruj:**
+
+```
+GrowMedica s.r.o.
+Bellova 3455 / 6
+040 01 Košice - Staré Mesto
+IČO: 56 455 143 · DIČ: 2122314975 · IČ DPH: (prázdne — neplatca)
+IBAN: SK48 0200 0000 0050 3517 2956 · BIC: SUBASKBX
+```
+
+Detail overenia: [reports/SUPERFAKTURA_GO_LIVE_VERIFY.md](./reports/SUPERFAKTURA_GO_LIVE_VERIFY.md).
 
 ### Drobné úlohy — odškrtávaj po poradí
 
 - [ ] **2a.** Založ / otvor účet na https://moja.superfaktura.sk/ (firma **GrowMedica s.r.o.**, SK — nie CZ účet).  
 - [ ] **2b.** Over plán: **Premium** alebo **trial s API** (free často API nemá).  
-- [ ] **2c.** Vo firme SuperFaktúry doplň údaje ako v [docs/vzorfirma.md](./docs/vzorfirma.md): názov, adresa, IČO, DIČ, IBAN.  
+- [ ] **2c.** Vo firme SuperFaktúry doplň údaje ako vyššie (alebo [docs/vzorfirma.md](./docs/vzorfirma.md)).  
 - [ ] **2d.** Choď na **Nástroje → API** (`/api_access`).  
 - [ ] **2e.** Skopíruj: **API e-mail** (login), **API key**, **Company ID** (ak je viac firiem).  
 - [ ] **2f.** Otvor CMS: [WooCommerce → Nastavenia → SuperFaktúra](https://cms.growmedica.cz/wp-admin/admin.php?page=wc-settings&tab=superfaktura).  
 - [ ] **2g.** Nastav: Version = **SuperFaktura.sk**, Sandbox = **off**.  
-- [ ] **2h.** Vlož e-mail + key (+ company id) → **Uložiť**.  
+- [ ] **2h.** Vlož e-mail + key (+ company id) → **Uložiť**  
+  *(alebo daj hodnoty agentovi / do `wordpress-production.local.env` ako `SUPERFAKTURA_API_*` a agent spustí `set-superfaktura-api-from-env.sh`)*  
 - [ ] **2i.** Klikni **Test API connection** → musí byť OK / zelené.  
 - [ ] **2j.** Napíš agentovi vetu: **„API vložené, otestuj“**.  
 - [ ] **2k.** (Po agente) skontroluj v SuperFaktúre, či z testovej BACS objednávky prišla **zálohová** / faktúra.
@@ -232,7 +248,14 @@ MY010HUBPRS,12
 | **Kde to získaš** | Účtovník / FÚ |
 | **Kam to nahlásiš** | Agentovi + nastaviť v SuperFaktúre (profil firmy) a v Woo daniach |
 
-Bez tohto nechávame ceny ako doteraz (neplynie z toho automaticky 20 % DPH na webe).
+### Interim (2026-07-18) — platné, kým účtovník nepovie inak
+
+- Režim: **neplatca DPH** (IČ DPH prázdne).
+- Woo: `woocommerce_calc_taxes = no` → produkčný checkout hlási `taxesEnabled: false` (**zámerne**).
+- VOP: text „nie je platcom DPH / ceny bez DPH“.
+- Referencia: [docs/vzorfirma.md](./docs/vzorfirma.md) · [reports/SUPERFAKTURA_GO_LIVE_VERIFY.md](./reports/SUPERFAKTURA_GO_LIVE_VERIFY.md).
+
+Ak sa stanete **platcom**, napíš agentovi IČ DPH + sadzbu — zapneme Woo dane a upravíme SF + VOP.
 
 ---
 

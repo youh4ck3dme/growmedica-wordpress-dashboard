@@ -15,6 +15,8 @@ Kód: `storefront/src/lib/company.ts` (musí sedieť s touto tabuľkou).
 | Krajina | **Slovenská republika** |
 | IČO | **56 455 143** |
 | DIČ | **2122314975** |
+| IČ DPH | *(nie je — doplniť až po registrácii platcu DPH)* |
+| Platca DPH | **Neplatca** (interim 2026-07-18 — potvrdiť u účtovníka) |
 | E-mail | **info@growmedica.cz** |
 | Telefón | *(doplniť — zatiaľ sa na webe nezobrazuje)* |
 | Web (eshop) | https://www.growmedica.cz |
@@ -86,11 +88,30 @@ Na faktúre / v e-maile objednávky:
 
 ---
 
+## SuperFaktúra — profil firmy (skopírovať 1:1)
+
+Overené voči Woo BACS + store address (2026-07-18): [reports/SUPERFAKTURA_GO_LIVE_VERIFY.md](../reports/SUPERFAKTURA_GO_LIVE_VERIFY.md).
+
+```
+GrowMedica s.r.o.
+Bellova 3455 / 6
+040 01 Košice - Staré Mesto
+Slovenská republika
+
+IČO: 56 455 143
+DIČ: 2122314975
+IČ DPH: (prázdne — neplatca)
+
+IBAN: SK48 0200 0000 0050 3517 2956
+BIC: SUBASKBX
+```
+
 ## Poznámky
 
 - Adresa v tvare **Bellova 3455 / 6** (nie skrátene „BELLOVA 6“).
 - IČO s medzerou ako na OR: `56 455 143` (v systémoch bez medzier: `56455143`).
 - DIČ: `2122314975` (nie je to IČ DPH — IČ DPH doplniť až po registrácii).
+- **DPH:** interim režim **neplatca** → Woo `woocommerce_calc_taxes = no` → checkout `taxesEnabled: false`. Ak sa stanete platcom, aktualizovať SF profil + Woo dane + VOP.
 - SMTP From: `info@growmedica.cz` / meno `GrowMedica s.r.o.`
 
-*Posledná aktualizácia: 2026-07-16*
+*Posledná aktualizácia: 2026-07-18*

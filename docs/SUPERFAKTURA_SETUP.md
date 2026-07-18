@@ -11,7 +11,7 @@ Zip archívy (gitignored): `docs/plugins/woocommerce-superfaktura-1.53.2.zip`
 
 ---
 
-## Stav (2026-07-17)
+## Stav (2026-07-18)
 
 | Krok | Stav | Kto |
 |------|------|-----|
@@ -20,10 +20,13 @@ Zip archívy (gitignored): `docs/plugins/woocommerce-superfaktura-1.53.2.zip`
 | Status REST `GET /wp-json/growmedica/v1/sf-status` | ✅ | agent |
 | Smoke skript `scripts/smoke-superfaktura-30.sh` | ✅ | agent |
 | Smoke 30× infra (`ALLOW_WITHOUT_API=1`) | ✅ **30/30** | agent |
+| CMS firma / BACS IBAN = vzorfirma | ✅ live verify | agent |
+| `set-superfaktura-api-from-env.sh` + `smoke-superfaktura-bacs-order.sh` | ✅ | agent |
 | API pattern referencia `docs/reference/` | ✅ | agent |
+| Go-live report | ✅ [reports/SUPERFAKTURA_GO_LIVE_VERIFY.md](../reports/SUPERFAKTURA_GO_LIVE_VERIFY.md) | agent |
 | **Registrácia SF + API e-mail/key/company_id v Woo** | ⏳ | **majiteľ** ([majitel.md §2](../majitel.md#2-superfaktúra--automatické-faktúry) body **2a–2j**) |
 | Full smoke 30× (`api_*_set: true`) | ⏳ | agent po „API vložené“ |
-| 1× BACS test order → proforma v SF | ⏳ | agent + majiteľ kontrola **2k** |
+| 1× BACS test order → proforma v SF | ⏳ | `./scripts/smoke-superfaktura-bacs-order.sh` + majiteľ **2k** |
 
 **Aktuálny live `sf-status` (bez secrets):** `plugin_active: true`, `lang: sk`, `sandbox: false`, `defaults_applied: true`, **`api_email_set: false`**, **`api_key_set: false`**.
 
@@ -93,6 +96,20 @@ Skrátene (tech):
    - API Email / API Key / Company ID
 4. **Test API connection** — musí byť OK.  
 5. Agentovi: „API vložené, otestuj“.
+
+**Alebo bez WP UI** (gitignored env):
+
+```bash
+source ./scripts/load-wp-prod-env.sh
+# do wordpress-production.local.env doplň:
+# SUPERFAKTURA_API_EMAIL=...
+# SUPERFAKTURA_API_KEY=...
+# SUPERFAKTURA_COMPANY_ID=...   # voliteľné
+./scripts/set-superfaktura-api-from-env.sh
+# potom v admin: Test API connection
+./scripts/smoke-superfaktura-30.sh
+./scripts/smoke-superfaktura-bacs-order.sh
+```
 
 **Nikdy** nedávaj API key do gitu, do `STATUS.md` ani do Vercel env.  
 Voliteľný lokálny mirror (gitignored): `wordpress-production.local.env` (len ops poznámka — plugin číta WP options).
@@ -168,10 +185,11 @@ Očakávané po plnej konfigurácii:
 
 ### Manuálny smoke
 
-1. Test order (BACS) na cms checkout.  
-2. Status `on-hold` → v SuperFaktúre **zálohová**.  
-3. Prepnúť na `processing` → **faktúra** (paid).  
+1. Test order (BACS) na cms checkout **alebo** `./scripts/smoke-superfaktura-bacs-order.sh`.  
+2. Status `on-hold` → v SuperFaktúre **zálohová** (`wc_sf_internal_proforma_id`).  
+3. Prepnúť na `processing` → **faktúra** (paid) (`wc_sf_internal_regular_id`).  
 4. V objednávke Woo: metabox **Invoices** + link v e-maile zákazníkovi.
+5. Majiteľ **2k:** PDF, číslo dokladu, DPH, IBAN, e-mail.
 
 ---
 

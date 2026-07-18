@@ -1,6 +1,6 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-17 (SuperFaktúra: defaults + 30× infra smoke; API čaká na majiteľa)  
+**Aktualizované:** 2026-07-18 (SuperFaktúra go-live verify + API/BACS skripty; API stále majiteľ)  
 **Branch:** `main`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 
@@ -26,7 +26,8 @@
 | Fake telefón skrytý (kým nedáš reálne číslo) | ✅ |
 | Duplicitná DPD plugin metóda bez ceny vypnutá | ✅ |
 | Audit skladu (qty 50 ≈ fiktívne) | ✅ [reports/STOCK_AUDIT.md](./reports/STOCK_AUDIT.md) |
-| **SuperFaktúra WooCommerce 1.53.2** | ✅ active + BACS/COD defaults re-applied 2026-07-17 · **API key ešte majiteľ** · smoke 30/30 infra (`ALLOW_WITHOUT_API=1`) |
+| **SuperFaktúra WooCommerce 1.53.2** | ✅ active + BACS/COD defaults · CMS firma/IBAN overené 2026-07-18 · skripty API+BACS smoke ✅ · **API key ešte majiteľ** · [SUPERFAKTURA_GO_LIVE_VERIFY](./reports/SUPERFAKTURA_GO_LIVE_VERIFY.md) |
+| DPH interim (neplatca) | ✅ `calc_taxes: no` / `taxesEnabled: false` zámerne · VOP upravené · IČ DPH prázdne |
 | CMS snippets redeploy | ✅ checkout seed + CORS + ISR (2026-07-17) |
 | Production smoke www | ✅ `/api/products` Woo gid |
 | Facets vendor/type/effect | ✅ controlled taxonomy + URL query sync |
@@ -109,4 +110,4 @@ curl -s 'https://www.growmedica.cz/api/products?limit=1' | head -c 200
 | [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) | deploy |
 | [docs/vzorfirma.md](./docs/vzorfirma.md) | firma |
 | [reports/STOCK_AUDIT.md](./reports/STOCK_AUDIT.md) | sklad |
-| [reports/REMAINING_WORK_NOW.md](./reports/REMAINING_WORK_NOW.md) | zvyšok |
+| [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md) | čo dorobiť (súhrn) |

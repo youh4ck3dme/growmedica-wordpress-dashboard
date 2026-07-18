@@ -219,6 +219,7 @@ Diagnostika: [../storefront/docs/DIAGNOSTICS.md](../storefront/docs/DIAGNOSTICS.
 | **Tento súbor `docs/OPERATIONS.md`** | Endpointy + env + prevádzka |
 | [STATUS.md](../STATUS.md) | Čo je hotové / čo robiť |
 | [TODO.md](../TODO.md) | Checklist |
+| [CO_DOROBIT.md](../reports/CO_DOROBIT.md) | Súhrn nedokončených vecí |
 | [PRODUCTION_CHECKLIST.md](../PRODUCTION_CHECKLIST.md) | Deploy |
 | **[MERCHANT_KEYS.md](./MERCHANT_KEYS.md)** | **Packeta · Stripe · SuperFaktúra · GoPay · DPD (ty)** |
 | [vzorfirma.md](./vzorfirma.md) | IČO DIČ IBAN |
@@ -237,7 +238,8 @@ Diagnostika: [../storefront/docs/DIAGNOSTICS.md](../storefront/docs/DIAGNOSTICS.
 | Admin | `cms…/wp-admin/admin.php?page=wc-settings&tab=superfaktura` |
 | Status API | `GET /wp-json/growmedica/v1/sf-status` (App Password) |
 | Smoke 30× | `./scripts/smoke-superfaktura-30.sh` (full) · `ALLOW_WITHOUT_API=1` (infra ✅ 30/30) |
-| API credentials | ⏳ majiteľ **2a–2j** → potom full smoke + BACS proforma |
+| API credentials | ⏳ majiteľ **2a–2j** → `set-superfaktura-api-from-env.sh` alebo Woo tab → potom `smoke-superfaktura-30.sh` + `smoke-superfaktura-bacs-order.sh` |
+| Go-live verify | [SUPERFAKTURA_GO_LIVE_VERIFY.md](../reports/SUPERFAKTURA_GO_LIVE_VERIFY.md) |
 | Reinstall | `./scripts/install-superfaktura-cms.sh` |
 | Docs | [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) · [reference/superfaktura-api-pattern.md](./reference/superfaktura-api-pattern.md) · majiteľ **2a–2k:** [../majitel.md](../majitel.md#2-superfaktúra--automatické-faktúry) |
 

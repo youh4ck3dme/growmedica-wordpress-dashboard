@@ -20,7 +20,7 @@
 3. **Packeta / DPD** API (flat rate doprava už má ceny).
 4. **Mu-plugin revalidate** na cms (namespace ešte nevidno).
 5. Manuálny E2E nákup v prehliadači.
-6. Detail: `reports/REMAINING_WORK_NOW.md`
+6. Detail: `reports/CO_DOROBIT.md` (predtým `REMAINING_WORK_NOW.md`)
 
 ## Zakázané
 

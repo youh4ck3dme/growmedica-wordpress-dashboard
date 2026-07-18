@@ -2,9 +2,11 @@
 # 30× SuperFaktúra stability smoke against cms.growmedica.cz
 #
 # Usage:
-#   set -a; source wordpress-production.local.env; set +a
+#   source ./scripts/load-wp-prod-env.sh
 #   export WORDPRESS_BASE_URL=https://cms.growmedica.cz
 #   ./scripts/smoke-superfaktura-30.sh
+#
+# (Avoid raw `source wordpress-production.local.env` — spaces in App Password break it.)
 #
 # Modes:
 #   (default)             require api_email_set + api_key_set (full green)

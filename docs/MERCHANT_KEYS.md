@@ -9,7 +9,7 @@
 | Súvisiace | |
 |-----------|--|
 | Majiteľ (prehľad) | [../majitel.md](../majitel.md) |
-| Stav / backlog | [../STATUS.md](../STATUS.md) · [../TODO.md](../TODO.md) |
+| Stav / backlog | [../STATUS.md](../STATUS.md) · [../TODO.md](../TODO.md) · [../reports/CO_DOROBIT.md](../reports/CO_DOROBIT.md) |
 | Prevádzka | [OPERATIONS.md](./OPERATIONS.md) |
 | Firma / IBAN | [vzorfirma.md](./vzorfirma.md) |
 | SuperFaktúra detail | [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) |
@@ -24,11 +24,11 @@
 
 ---
 
-## Prehľad (aktualizované 2026-07-17)
+## Prehľad (aktualizované 2026-07-18)
 
 | Integrácia | Plugin na cms | Stav | Čaká na teba |
 |------------|---------------|------|----------------|
-| **SuperFaktúra** (faktúry) | SuperFaktúra WooCommerce **1.53.2** ✅ | defaults + smoke skript ✅ · api_* ⏳ | Registrácia + API (**majitel 2a–2j**) |
+| **SuperFaktúra** (faktúry) | SuperFaktúra WooCommerce **1.53.2** ✅ | defaults + skripty ✅ · api_* ⏳ · [verify report](../reports/SUPERFAKTURA_GO_LIVE_VERIFY.md) | Registrácia + API (**majitel 2a–2j**) |
 | **Stripe** (debetná/kreditná karta) | WooCommerce Stripe Gateway ✅ | brána **off** | publishable + secret (test/live) |
 | **GoPay** | gopay-gateway ✅ | brána **off** | merchant ID + client credentials |
 | **Packeta** | Packeta **2.3.1** ✅ | flat rate OK · mapa API ❌ | API password + odosielateľ |
@@ -61,7 +61,8 @@ Skrátene:
 
 - Overí `GET /wp-json/growmedica/v1/sf-status` (`api_key_set: true`)
 - `./scripts/smoke-superfaktura-30.sh` (30× full green)
-- Smoke: 1× test order BACS → proforma / faktúra
+- `./scripts/smoke-superfaktura-bacs-order.sh` (on-hold→proforma, processing→faktúra)
+- Voliteľne: `SUPERFAKTURA_API_*` v local env → `./scripts/set-superfaktura-api-from-env.sh`
 - Reinstall defaults: `./scripts/install-superfaktura-cms.sh`
 
 ### Už nastavené agentom
