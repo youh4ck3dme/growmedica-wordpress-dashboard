@@ -13,6 +13,59 @@ const SITE_NAME = BRAND_COPY.siteName
 const SITE_URL = resolvePublicSiteUrl()
 const SITE_DESCRIPTION = BRAND_COPY.siteDescription
 
+/**
+ * Soft-launch / pre-index gate.
+ * - Default ON (noindex whole shop) until explicitly disabled.
+ * - Set SITE_NOINDEX=0 (or false/off/no) on Vercel when ready for Google.
+ * - Also reads NEXT_PUBLIC_SITE_NOINDEX for edge/middleware parity.
+ */
+export function isSiteNoindexEnabled(): boolean {
+  const raw =
+    process.env.SITE_NOINDEX?.trim() ||
+    process.env.NEXT_PUBLIC_SITE_NOINDEX?.trim() ||
+    ''
+  if (!raw) return true
+  const v = raw.toLowerCase()
+  if (['0', 'false', 'no', 'off'].includes(v)) return false
+  if (['1', 'true', 'yes', 'on'].includes(v)) return true
+  return true
+}
+
+/** Meta robots for the whole site when soft-launch noindex is on. */
+export const SITE_NOINDEX_ROBOTS: NonNullable<Metadata['robots']> = {
+  index: false,
+  follow: false,
+  googleBot: {
+    index: false,
+    follow: false,
+    noimageindex: true,
+  },
+}
+
+/** Resolve page robots — global noindex wins over page-level indexability. */
+export function resolvePageRobots(indexable = true): Metadata['robots'] {
+  if (isSiteNoindexEnabled()) return SITE_NOINDEX_ROBOTS
+  return indexable
+    ? {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-video-preview': -1,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
+      }
+    : { index: false, follow: false }
+}
+
+/** Attach global noindex when enabled (does not override explicit noindex). */
+export function withSiteRobots(metadata: Metadata): Metadata {
+  if (!isSiteNoindexEnabled()) return metadata
+  return { ...metadata, robots: SITE_NOINDEX_ROBOTS }
+}
+
 /** Canonical page URL without locale query params (root has no trailing slash). */
 export function buildCanonicalPageUrl(pathname = '/', siteUrl = SITE_URL): string {
   const path = pathname.startsWith('/') ? pathname : `/${pathname}`
@@ -81,17 +134,7 @@ export const DEFAULT_METADATA: Metadata = {
     description: SITE_DESCRIPTION,
     images: ['/android-chrome-512x512.png'],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
+  robots: resolvePageRobots(true),
   alternates: buildLocaleAlternates('/'),
 }
 
@@ -101,7 +144,7 @@ export function buildPageMetadata(
   pathname = '/',
 ): Metadata {
   const pageUrl = buildCanonicalPageUrl(pathname)
-  return {
+  return withSiteRobots({
     title,
     ...(description ? { description } : {}),
     alternates: buildLocaleAlternates(pathname),
@@ -110,7 +153,7 @@ export function buildPageMetadata(
       ...(description ? { description } : {}),
       url: pageUrl,
     },
-  }
+  })
 }
 
 export function getProductMetadata(product: Product): Metadata {
@@ -119,7 +162,7 @@ export function getProductMetadata(product: Product): Metadata {
     product.seo.description ?? product.description.slice(0, 160)
   const image = product.featuredImage
 
-  return {
+  return withSiteRobots({
     title,
     description,
     openGraph: {
@@ -138,7 +181,7 @@ export function getProductMetadata(product: Product): Metadata {
         : [],
     },
     alternates: buildLocaleAlternates(`/produkty/${product.handle}`),
-  }
+  })
 }
 
 export function getCollectionMetadata(collection: Collection): Metadata {
@@ -146,7 +189,7 @@ export function getCollectionMetadata(collection: Collection): Metadata {
   const description = collection.seo.description ?? collection.description.slice(0, 160)
   const image = collection.image
 
-  return {
+  return withSiteRobots({
     title,
     description,
     openGraph: {
@@ -165,7 +208,7 @@ export function getCollectionMetadata(collection: Collection): Metadata {
         : [],
     },
     alternates: buildLocaleAlternates(`/kolekcie/${collection.handle}`),
-  }
+  })
 }
 
 export function getProductJsonLd(product: Product) {
@@ -234,7 +277,7 @@ export function getBundlesPageMetadata(): Metadata {
   const title = BRAND_COPY.bundlesHeading
   const description = BRAND_COPY.pageDescriptions.bundles
 
-  return {
+  return withSiteRobots({
     title,
     description,
     openGraph: {
@@ -244,7 +287,7 @@ export function getBundlesPageMetadata(): Metadata {
       url: `${SITE_URL}/balicky`,
     },
     alternates: buildLocaleAlternates('/balicky'),
-  }
+  })
 }
 
 export function getBundleCatalogItemListJsonLd(

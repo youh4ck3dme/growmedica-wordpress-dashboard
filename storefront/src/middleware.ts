@@ -14,6 +14,25 @@ function isDashboardPath(pathname: string): boolean {
   return pathname === '/dashboard' || pathname.startsWith('/dashboard/')
 }
 
+/** Edge-safe mirror of isSiteNoindexEnabled() — keep logic in sync with src/lib/seo.ts */
+function isSiteNoindexEnabled(): boolean {
+  const raw =
+    process.env.SITE_NOINDEX?.trim() ||
+    process.env.NEXT_PUBLIC_SITE_NOINDEX?.trim() ||
+    ''
+  if (!raw) return true
+  const v = raw.toLowerCase()
+  if (['0', 'false', 'no', 'off'].includes(v)) return false
+  return true
+}
+
+function applyNoindexHeader(response: NextResponse): NextResponse {
+  if (isSiteNoindexEnabled()) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow, noimageindex')
+  }
+  return response
+}
+
 const HOLD_PRODUCT_LEGACY_PATH =
   '/sk/hlavna-stranka/zdravie/produkt/bio-polyporus-prasok-100g-odvodnuje-organizmus/190'
 const HOLD_PRODUCT_TARGET_PATH = '/produkty/bio-polyporus-prasok-100g-odvodhuje-organizmus'
@@ -24,7 +43,9 @@ export function middleware(request: NextRequest) {
   // Next custom routes omit this single frozen HOLD redirect from the build manifest.
   // Preserve the legacy URL without importing or modifying the HOLD product in Woo.
   if (pathname === HOLD_PRODUCT_LEGACY_PATH) {
-    return NextResponse.redirect(new URL(HOLD_PRODUCT_TARGET_PATH, request.url), 301)
+    return applyNoindexHeader(
+      NextResponse.redirect(new URL(HOLD_PRODUCT_TARGET_PATH, request.url), 301),
+    )
   }
 
   if (isDashboardPath(pathname)) {
@@ -46,7 +67,7 @@ export function middleware(request: NextRequest) {
         sameSite: 'lax',
       })
     }
-    return response
+    return applyNoindexHeader(response)
   }
 
   const queryLang = searchParams.get('lang')
@@ -59,7 +80,7 @@ export function middleware(request: NextRequest) {
       maxAge: LOCALE_COOKIE_MAX_AGE,
       sameSite: 'lax',
     })
-    return response
+    return applyNoindexHeader(response)
   }
 
   const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value ?? null
@@ -83,7 +104,7 @@ export function middleware(request: NextRequest) {
     })
   }
 
-  return response
+  return applyNoindexHeader(response)
 }
 
 export const config = {

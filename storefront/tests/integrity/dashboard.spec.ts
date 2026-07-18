@@ -47,11 +47,18 @@ test.describe('Dashboard route — smoke', () => {
   })
 
   test('robots.txt disallows /dashboard', () => {
-    const robotsConfig = robots()
-    const rules = robotsConfig.rules
-    const baseRule = Array.isArray(rules) ? rules[0] : rules
-    const disallowList = baseRule?.disallow
-    expect(disallowList).toContain('/dashboard')
+    const prev = process.env.SITE_NOINDEX
+    process.env.SITE_NOINDEX = '0'
+    try {
+      const robotsConfig = robots()
+      const rules = robotsConfig.rules
+      const baseRule = Array.isArray(rules) ? rules[0] : rules
+      const disallowList = baseRule?.disallow
+      expect(disallowList).toContain('/dashboard')
+    } finally {
+      if (prev === undefined) delete process.env.SITE_NOINDEX
+      else process.env.SITE_NOINDEX = prev
+    }
   })
 
   test('DashboardShell uses SecretGate + layout panels', () => {

@@ -13,7 +13,7 @@ import {
   getFrozenCategorySeo,
   getSeoTaxonomyCollectionView,
 } from '@/lib/seo-taxonomy'
-import { buildLocaleAlternates } from '@/lib/seo'
+import { buildLocaleAlternates, resolvePageRobots } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -38,14 +38,14 @@ function parseOptions(search: Awaited<PageProps['searchParams']>): CollectionLis
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const path = (await params).path.join('/')
   const category = getFrozenCategoryByPath(path)
-  if (!category) return { title: 'Kategória nenájdená', robots: { index: false, follow: false } }
+  if (!category) return { title: 'Kategória nenájdená', robots: resolvePageRobots(false) }
   const seo = getFrozenCategorySeo(category.categoryId)
   const shouldIndex = category.indexRecommendation === 'INDEX CANDIDATE'
   return {
     title: { absolute: seo?.title ?? `${category.labels.sk} | GrowMedica` },
     description: seo?.metaDescription,
     alternates: buildLocaleAlternates(`/kategorie/${path}`),
-    robots: { index: shouldIndex, follow: true },
+    robots: resolvePageRobots(shouldIndex),
     openGraph: {
       title: seo?.title ?? category.labels.sk,
       description: seo?.metaDescription,

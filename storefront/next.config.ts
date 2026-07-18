@@ -69,6 +69,27 @@ const nextConfig: NextConfig = {
 
   // Security headers
   async headers() {
+    const siteNoindexRaw =
+      process.env.SITE_NOINDEX?.trim() || process.env.NEXT_PUBLIC_SITE_NOINDEX?.trim() || ''
+    const siteNoindex =
+      !siteNoindexRaw ||
+      !['0', 'false', 'no', 'off'].includes(siteNoindexRaw.toLowerCase())
+
+    const securityHeaders = [
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+      { key: 'X-Frame-Options', value: 'DENY' },
+      { key: 'X-XSS-Protection', value: '1; mode=block' },
+      { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+      { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+      {
+        key: 'Strict-Transport-Security',
+        value: 'max-age=63072000; includeSubDomains; preload',
+      },
+      ...(siteNoindex
+        ? [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noimageindex' }]
+        : []),
+    ]
+
     return [
       {
         source: '/dashboard',
@@ -80,17 +101,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/(.*)',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-        ],
+        headers: securityHeaders,
       },
     ]
   },

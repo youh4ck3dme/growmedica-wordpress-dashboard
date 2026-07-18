@@ -32,6 +32,9 @@ const shopifyTestEnv: Record<string, string> = {
   NEXT_PUBLIC_DASHBOARD_URL:
     process.env.NEXT_PUBLIC_DASHBOARD_URL ?? 'https://growmedica-nexus.lovable.app/admin',
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? playwrightDevUrl,
+  // Integrity/e2e assert indexable SEO paths; production soft-launch defaults noindex ON.
+  SITE_NOINDEX: process.env.SITE_NOINDEX ?? '0',
+  NEXT_PUBLIC_SITE_NOINDEX: process.env.NEXT_PUBLIC_SITE_NOINDEX ?? '0',
 };
 
 if (isNoorDemoTest) {

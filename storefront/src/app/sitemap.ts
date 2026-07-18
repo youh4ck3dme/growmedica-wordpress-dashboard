@@ -1,12 +1,16 @@
 import type { MetadataRoute } from 'next'
 import { getAllProductHandlesForSitemap } from '@/lib/catalog/products'
 import { getNavCollectionItems } from '@/lib/catalog/nav'
+import { isSiteNoindexEnabled } from '@/lib/seo'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
 import { getIndexableSeoTaxonomyPaths } from '@/lib/seo-taxonomy'
 
 const BASE_URL = resolvePublicSiteUrl()
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Soft-launch: do not advertise URLs while site-wide noindex is on.
+  if (isSiteNoindexEnabled()) return []
+
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
