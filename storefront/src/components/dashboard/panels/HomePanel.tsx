@@ -8,7 +8,7 @@ import IntegrationStatus from '@/components/dashboard/agent/IntegrationStatus'
 type OverviewData = {
   product_count: number
   collection_count: number
-  low_stock_count: number
+  low_stock_count: number | null
   unavailable_count: number
   recent_orders: Array<{
     name: string
@@ -23,6 +23,8 @@ type OverviewData = {
     status: string
     summary: string
   }>
+  note?: string
+  admin?: string
 }
 
 type HomePanelProps = {
@@ -94,9 +96,9 @@ export default function HomePanel({
             />
             <StatCard
               label={t('dashboard.home.lowStock')}
-              value={String(data.low_stock_count)}
+              value={data.low_stock_count == null ? '—' : String(data.low_stock_count)}
               onClick={onNavigateInventory}
-              highlight={data.low_stock_count > 0}
+              highlight={(data.low_stock_count ?? 0) > 0}
             />
             <StatCard
               label={t('dashboard.home.unavailable')}

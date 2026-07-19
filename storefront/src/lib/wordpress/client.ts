@@ -91,6 +91,50 @@ export async function wooFetch<T>({
   return (await response.json()) as T
 }
 
+/** Mutating Woo REST calls (PUT/POST/DELETE). Always no-store. */
+export async function wooMutate<T>({
+  path,
+  method = 'PUT',
+  body,
+  params,
+}: {
+  path: string
+  method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+  body?: unknown
+  params?: Record<string, string | number | boolean | undefined>
+}): Promise<T> {
+  const env = validateWordPressEnv()
+  const url = buildWooUrl(
+    env.WORDPRESS_BASE_URL,
+    env.WOO_CONSUMER_KEY,
+    env.WOO_CONSUMER_SECRET,
+    path,
+    params,
+  )
+
+  const response = await fetch(url.toString(), {
+    method,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...(env.WORDPRESS_BASE_URL.startsWith('http://')
+        ? { 'X-Forwarded-Proto': 'https' }
+        : {}),
+    },
+    body: body === undefined ? undefined : JSON.stringify(body),
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw new Error(
+      `WooCommerce API error: ${response.status} ${response.statusText} — ${await response.text()}`,
+    )
+  }
+
+  const text = await response.text()
+  return (text ? JSON.parse(text) : {}) as T
+}
+
 export async function wooFetchPaginated<T>({
   path,
   params,

@@ -1,77 +1,51 @@
 # Dashboard Panels (native admin)
 
-Natívny admin modul na `/dashboard` v Next.js storefronte — bez Nexus iframe.
+Natívny admin modul na `/dashboard` v Next.js storefronte — **WooCommerce** backend (Shopify Admin odstránený).
 
 ## Navigácia
 
-| Panel | Cesta | API |
-|-------|-------|-----|
-| Prehľad | Home | `GET /api/dashboard/overview` |
-| Produkty | Products | `GET /api/dashboard/products` |
-| Detail produktu | Product detail | `GET/PUT /api/dashboard/products/[handle]` |
-| Objednávky | Orders | `GET /api/dashboard/orders` |
-| Sklad | Inventory | `GET/PUT /api/dashboard/inventory` |
-| AI Agent | Agent | `POST /api/dashboard/agent` |
-| Audit log | Audit | `GET /api/dashboard/audit` |
+| Panel | API | Stav |
+|-------|-----|------|
+| Prehľad | `GET /api/dashboard/overview` | Woo katalóg + recent orders |
+| Produkty | `GET /api/dashboard/products` | Woo read-only list |
+| Detail produktu | `GET /api/dashboard/products/[handle]` | Woo read-only |
+| Objednávky | `GET /api/dashboard/orders` | Woo orders |
+| Sklad | `GET/PUT /api/dashboard/inventory` | Woo stock; PUT len s `DASHBOARD_ALLOW_LIVE_WRITES=1` |
+| AI Agent | `POST /api/dashboard/agent` | Mistral tools |
+| Audit log | `GET /api/dashboard/audit` | Redis/memory |
+
+Plná editácia (ceny, texty, media): [cms.growmedica.cz/wp-admin](https://cms.growmedica.cz/wp-admin)
 
 ## Auth
 
 1. Otvorte `https://www.growmedica.cz/dashboard`
-2. Zadajte `DASHBOARD_AGENT_SECRET` na secret gate obrazovke
-3. Session cookie platí 24h
-
-Alternatíva (testy, curl):
+2. Zadajte `DASHBOARD_AGENT_SECRET` (secret gate)
+3. Session cookie 24h
 
 ```
 x-dashboard-agent-secret: <DASHBOARD_AGENT_SECRET>
 ```
 
-Read-only health check bez auth: `GET /api/dashboard/health`
+Health (public): `GET /api/dashboard/health` → `{ ok: true }`
 
-## Prepojenie s growmedica.cz
+## Env (produkcia Vercel)
 
-- Každý produkt má link **Zobraziť na webe** → `/produkty/{handle}`
-- Po `PUT` produktu sa volá `revalidateTag('product-{handle}')` — zmeny na webe do ~60s
-- Katalóg číta rovnaký `catalog/*` facade ako verejný e-shop
-
-## Shopify Admin writes
-
-Vyžaduje server env:
-
-```
-SHOPIFY_CLIENT_ID=...
-SHOPIFY_CLIENT_SECRET=...
-DASHBOARD_ALLOW_LIVE_WRITES=1
-```
-
-Zápisy sú chránené `confirm: true` v API a agent tools.
+| Premenná | Účel |
+|----------|------|
+| `DASHBOARD_AGENT_SECRET` | min. 16 znakov — **povinné** pre login |
+| `NEXT_PUBLIC_DASHBOARD_MODE` | `agentic` (default) |
+| `WORDPRESS_BASE_URL` + `WOO_CONSUMER_KEY` + `WOO_CONSUMER_SECRET` | katalóg, orders, inventory |
+| `DASHBOARD_ALLOW_LIVE_WRITES` | `1` = povoliť zápis skladu + agent write tools |
+| `MISTRAL_API_KEY` | AI agent |
+| `UPSTASH_REDIS_REST_*` | audit + conversation (voliteľné) |
 
 ## Súbory
 
 ```
-src/components/dashboard/
-  SecretGate.tsx
-  layout/DashboardLayout.tsx
-  panels/HomePanel.tsx
-  panels/ProductsPanel.tsx
-  panels/ProductDetailPanel.tsx
-  panels/OrdersPanel.tsx
-  panels/InventoryPanel.tsx
-  agent/DashboardShell.tsx
-  agent/AgentActionResults.tsx
-
-src/lib/shopify/admin/     # Admin API client
-src/app/api/dashboard/     # BFF routes
+src/app/dashboard/              # UI route
+src/app/api/dashboard/          # BFF
+src/components/dashboard/       # panels + agent shell
+src/lib/dashboard-agent/        # auth, orchestrator, tools
 ```
 
-## Env (produkcia)
-
-| Premenná | Hodnota |
-|----------|---------|
-| `NEXT_PUBLIC_DASHBOARD_MODE` | `agentic` |
-| `DASHBOARD_AGENT_SECRET` | min. 32 znakov |
-| `DASHBOARD_ALLOW_LIVE_WRITES` | `1` |
-| `SHOPIFY_CLIENT_ID` + `SECRET` | server-only |
-| `UPSTASH_REDIS_REST_*` | audit + conversation memory |
-
-Pozri tiež: [DASHBOARD_AGENT.md](./DASHBOARD_AGENT.md) · [DASHBOARD_DEPLOY.md](./DASHBOARD_DEPLOY.md)
+Pozri: [DASHBOARD_AGENT.md](./DASHBOARD_AGENT.md) · [DASHBOARD_DEPLOY.md](./DASHBOARD_DEPLOY.md)
