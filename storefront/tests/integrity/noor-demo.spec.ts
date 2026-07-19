@@ -12,7 +12,7 @@ test.describe('NOOR demo — theme resolution', () => {
     expect(resolveInitialTheme('classic')).toBe(isLockedNoorDemo() ? 'noor' : 'classic')
   })
 
-  test('resolveInitialTheme ignores stored classic preference when locked', () => {
+  test('resolveInitialTheme ignores stored preference when theme is locked', () => {
     if (isLockedNoorDemo()) {
       expect(resolveInitialTheme('classic')).toBe('noor')
       expect(resolveInitialTheme('noor')).toBe('noor')
@@ -36,6 +36,7 @@ test.describe('NOOR demo — storefront smoke', () => {
     expect(fs.existsSync(themePath)).toBe(true)
     const content = fs.readFileSync(themePath, 'utf8')
     expect(content).toContain('resolveInitialTheme')
+    expect(content).toContain('isThemeLocked')
     expect(content).toContain('isLockedNoorDemo')
   })
 

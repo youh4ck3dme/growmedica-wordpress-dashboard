@@ -13,7 +13,7 @@ import {
   applyThemeToDocument,
   DEFAULT_THEME,
   getDocumentTheme,
-  isLockedNoorDemo,
+  isThemeLocked,
   readStoredTheme,
   setThemeCookie,
   STORAGE_KEY,
@@ -58,7 +58,7 @@ export function StorefrontThemeProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (isLockedNoorDemo()) {
+    if (isThemeLocked()) {
       const current = getDocumentTheme()
       if (current !== DEFAULT_THEME) {
         applyThemeToDocument(DEFAULT_THEME)
@@ -102,7 +102,7 @@ export function StorefrontThemeProvider({ children }: { children: ReactNode }) {
 
   const switchTheme = useCallback(
     (next: StorefrontTheme) => {
-      if (isLockedNoorDemo()) return
+      if (isThemeLocked()) return
       if (next === theme || isSwitching) return
 
       clearTimers()

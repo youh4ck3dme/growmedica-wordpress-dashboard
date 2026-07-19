@@ -14,27 +14,32 @@ export function shouldHideThemeSwitcher(): boolean {
   return process.env.NEXT_PUBLIC_HIDE_THEME_SWITCHER === '1'
 }
 
+/** When HIDE=1, force default theme and ignore cookie/localStorage. */
+export function isThemeLocked(): boolean {
+  return shouldHideThemeSwitcher()
+}
+
 /** Demo deploy: NOOR is forced and user preference in localStorage is ignored. */
 export function isLockedNoorDemo(): boolean {
-  return getDefaultTheme() === 'noor' && shouldHideThemeSwitcher()
+  return getDefaultTheme() === 'noor' && isThemeLocked()
 }
 
 export function resolveInitialTheme(stored: StorefrontTheme | null): StorefrontTheme {
   const defaultTheme = getDefaultTheme()
-  if (isLockedNoorDemo()) return defaultTheme
+  if (isThemeLocked()) return defaultTheme
   if (stored && isStorefrontTheme(stored)) return stored
   return defaultTheme
 }
 
 export function getThemeBootstrapScript(): string {
   const defaultTheme = getDefaultTheme()
-  const lockedDemo = isLockedNoorDemo()
+  const locked = isThemeLocked()
 
   return `(function () {
   try {
     var key = '${STORAGE_KEY}';
     var defaultTheme = '${defaultTheme}';
-    var lockedDemo = ${lockedDemo ? 'true' : 'false'};
+    var lockedDemo = ${locked ? 'true' : 'false'};
     var html = document.documentElement;
     var ssrTheme = html.getAttribute('data-storefront-theme');
     var stored = lockedDemo ? null : localStorage.getItem(key);
@@ -62,7 +67,7 @@ export function isStorefrontTheme(value: unknown): value is StorefrontTheme {
 
 export function readStoredTheme(): StorefrontTheme | null {
   if (typeof window === 'undefined') return null
-  if (isLockedNoorDemo()) return null
+  if (isThemeLocked()) return null
 
   try {
     const stored = localStorage.getItem(STORAGE_KEY)

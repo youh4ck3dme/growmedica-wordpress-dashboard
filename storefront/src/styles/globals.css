@@ -1946,6 +1946,12 @@
     display: none;
   }
 
+  /* Keep 3D logo-mark visible under NOOR (legacy SVG mark was hidden). */
+  [data-storefront-theme="noor"] .storefront-logo__mark,
+  [data-storefront-theme="noor"] .site-logo-mark .storefront-logo__mark {
+    display: block;
+  }
+
   [data-storefront-theme="noor"] .footer-brand-logo .storefront-logo__wordmark span {
     color: #ffffff !important;
   }

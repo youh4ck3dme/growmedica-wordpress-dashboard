@@ -17,25 +17,36 @@ interface BundleCatalogProps {
 const ALL_CATEGORY = 'vsetky' as const
 
 export function BundleCatalog({ bundles, productsByHandle }: BundleCatalogProps) {
+  const availableBundles = useMemo(
+    () => bundles.filter((bundle) => productsByHandle.has(bundle.slug)),
+    [bundles, productsByHandle],
+  )
+
   const categories = useMemo(() => {
     const seen = new Map<HealthBundle['category'], number>()
-    for (const bundle of bundles) {
+    for (const bundle of availableBundles) {
       seen.set(bundle.category, (seen.get(bundle.category) ?? 0) + 1)
     }
     return Array.from(seen.entries())
-  }, [bundles])
+  }, [availableBundles])
 
   const [selected, setSelected] = useState<HealthBundle['category'] | typeof ALL_CATEGORY>(
     ALL_CATEGORY,
   )
 
-  const filtered = useMemo(
-    () => (selected === ALL_CATEGORY ? bundles : bundles.filter((b) => b.category === selected)),
-    [bundles, selected],
+  const filteredAvailable = useMemo(
+    () =>
+      selected === ALL_CATEGORY
+        ? availableBundles
+        : availableBundles.filter((b) => b.category === selected),
+    [availableBundles, selected],
   )
 
-  const available = filtered.filter((b) => productsByHandle.has(b.slug))
-  const comingSoon = filtered.filter((b) => !productsByHandle.has(b.slug))
+  const comingSoonCount = useMemo(() => {
+    const availableSlugs = new Set(availableBundles.map((b) => b.slug))
+    const pool = selected === ALL_CATEGORY ? bundles : bundles.filter((b) => b.category === selected)
+    return pool.filter((b) => !availableSlugs.has(b.slug)).length
+  }, [bundles, availableBundles, selected])
 
   return (
     <div>
@@ -49,7 +60,7 @@ export function BundleCatalog({ bundles, productsByHandle }: BundleCatalogProps)
           onClick={() => setSelected(ALL_CATEGORY)}
           className={cn('bundle-filter-chip', selected === ALL_CATEGORY && 'bundle-filter-chip--active')}
         >
-          Všetky ({bundles.length})
+          Všetky ({availableBundles.length})
         </button>
         {categories.map(([category, count]) => (
           <button
@@ -63,30 +74,24 @@ export function BundleCatalog({ bundles, productsByHandle }: BundleCatalogProps)
         ))}
       </div>
 
-      {available.length > 0 && (
+      {filteredAvailable.length > 0 && (
         <section className="mb-10" aria-labelledby="bundles-available-heading">
           <h2 id="bundles-available-heading" className="text-lg font-bold text-(--color-text) mb-4">
             Dostupné teraz
           </h2>
           <div className="bundle-grid">
-            {available.map((bundle) => (
+            {filteredAvailable.map((bundle) => (
               <BundleCard key={bundle.id} bundle={bundle} product={productsByHandle.get(bundle.slug)} />
             ))}
           </div>
         </section>
       )}
 
-      {comingSoon.length > 0 && (
-        <section aria-labelledby="bundles-soon-heading">
-          <h2 id="bundles-soon-heading" className="text-lg font-bold text-(--color-text) mb-4">
-            Pripravujeme
-          </h2>
-          <div className="bundle-grid">
-            {comingSoon.map((bundle) => (
-              <BundleCard key={bundle.id} bundle={bundle} product={null} />
-            ))}
-          </div>
-        </section>
+      {comingSoonCount > 0 && (
+        <p className="text-sm text-(--color-text-muted)" data-testid="bundles-coming-soon-teaser">
+          Ďalších {comingSoonCount}{' '}
+          {comingSoonCount === 1 ? 'balíček pripravujeme' : 'balíčkov pripravujeme'}
+        </p>
       )}
     </div>
   )

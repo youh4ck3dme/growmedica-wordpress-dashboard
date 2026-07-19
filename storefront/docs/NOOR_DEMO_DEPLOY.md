@@ -54,20 +54,20 @@ Nastav v Vercel Dashboard (Project → Settings → Git → Ignored Build Step).
 One-shot CLI skripty boli odstránené pri project cleanup (2026-07).
 
 **Nezmenené:**
-- env na `growmedicanextjs` (žiadne `NEXT_PUBLIC_DEFAULT_THEME=noor`)
-- NOOR locked env iba na `growmedica-noor-demo`
 - branch `feat/noor-production-demo` sa nemaže a nemerguje do `main` kvôli preview deployu
+- NOOR locked env (`DEFAULT_THEME=noor` + `HIDE=1`) iba na `growmedica-noor-demo`
+- main (`growmedicanextjs`): `HIDE=1`, default classic (bez `DEFAULT_THEME=noor`)
 
 ## Env premenné
 
 ### Main produkcia (`growmedicanextjs`)
 
-Štandardný GrowMedica storefront — **bez** NOOR demo prepínačov:
+Štandardný GrowMedica storefront — **classic** skin, **bez** theme switchera:
 
 - `NEXT_PUBLIC_DEFAULT_THEME` — **nenastavené** (default `classic`)
-- `NEXT_PUBLIC_HIDE_THEME_SWITCHER` — **nenastavené** (prepínač Classic/NOOR viditeľný)
+- `NEXT_PUBLIC_HIDE_THEME_SWITCHER` — **`1`** (skryje Classic/NOOR prepínač; `isThemeLocked()` ignoruje starý `localStorage`)
 
-Používateľ si môže prepnúť tému; voľba sa ukladá do `localStorage` kľúča `growmedica-storefront-theme`.
+Zákazník vidí vždy classic. Prepínač ostáva len na NOOR demo projekte (nižšie).
 
 ### NOOR demo (`growmedica-noor-demo`)
 
@@ -76,10 +76,10 @@ Používateľ si môže prepnúť tému; voľba sa ukladá do `localStorage` kľ
 | `NEXT_PUBLIC_DEFAULT_THEME` | `noor` | SSR + bootstrap default NOOR skin |
 | `NEXT_PUBLIC_HIDE_THEME_SWITCHER` | `1` | Skryje Classic/NOOR prepínač v headeri aj mobile menu |
 
-Keď sú **obe** premenné nastavené, demo je v **locked** režime:
+Keď je `NEXT_PUBLIC_HIDE_THEME_SWITCHER=1`, téma je **locked** (`isThemeLocked`):
 
 - starý `localStorage` kľúč `growmedica-storefront-theme` sa **ignoruje**
-- návštevník vždy uvidí NOOR skin (aj po predchádzajúcom prepnutí na Classic)
+- návštevník vždy uvidí default tému projektu (`classic` na main, `noor` na demo)
 
 Ostatné env (Shopify, Mistral, `NEXT_PUBLIC_SITE_URL`) sú rovnaké ako na main, len s demo URL.
 
@@ -113,4 +113,4 @@ PR #23 môže zostať ako **permanentný demo branch** (odporúčané), kým NOO
 Merge do `main` iba ak:
 
 - NOOR bude nový produkčný default pre všetkých návštevníkov, a
-- na `growmedicanextjs` **nezapnete** `NEXT_PUBLIC_HIDE_THEME_SWITCHER=1` (pokiaľ nechcete vynútený NOOR aj na main).
+- na `growmedicanextjs` nastavíte `NEXT_PUBLIC_DEFAULT_THEME=noor` (pri `HIDE=1` ostane switcher skrytý a skin locked na NOOR).

@@ -24,18 +24,18 @@ test.describe('Primary navigation', () => {
 })
 
 test.describe('NOOR wordmark logo', () => {
-  test('header, mobile drawer, and footer share NOOR wordmark without icon', async () => {
-    // Statically check that css hides icon and styles wordmark correctly when in noor theme
+  test('header logo uses logo-mark image and styled wordmark', async () => {
     const cssPath = path.join(process.cwd(), 'src/styles/globals.css')
     expect(fs.existsSync(cssPath)).toBe(true)
     const cssContent = fs.readFileSync(cssPath, 'utf8')
-    expect(cssContent).toContain('[data-storefront-theme="noor"] .storefront-logo svg')
+    expect(cssContent).toContain('[data-storefront-theme="noor"] .storefront-logo__mark')
     expect(cssContent).toContain('[data-storefront-theme="noor"] .storefront-logo__wordmark')
-    
-    // Check that Logo has the components
+
     const logoPath = path.join(process.cwd(), 'src/components/ui/Logo.tsx')
     expect(fs.existsSync(logoPath)).toBe(true)
     const logoContent = fs.readFileSync(logoPath, 'utf8')
+    expect(logoContent).toContain('/logo-mark.webp')
+    expect(logoContent).toContain('storefront-logo__mark')
     expect(logoContent).toContain('className="storefront-logo__grow"')
     expect(logoContent).toContain('className="storefront-logo__accent"')
     expect(logoContent).toContain('className="storefront-logo__tld"')
