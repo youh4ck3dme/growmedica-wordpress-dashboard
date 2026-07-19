@@ -933,6 +933,20 @@
     color: var(--color-primary-dark);
   }
 
+  .bundle-card__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin: 0 0 0.75rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .bundle-card__image {
+    object-fit: cover;
+  }
+
   .bundle-card__benefit {
     font-family: var(--font-inter), sans-serif;
     font-size: 0.8125rem;

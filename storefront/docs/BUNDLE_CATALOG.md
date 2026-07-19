@@ -73,7 +73,43 @@ Po vytvorení upravte ceny podľa reálnych SKU v Admin.
 | `/kolekcie/balicky-zdravia` | 301 redirect → `/balicky` |
 | Homepage | Sekcia „Prečo GrowMedica“ + 6 featured balíčkov |
 
-Keď existuje Shopify produkt s handle `balicek-{slug}`, karta zobrazí cenu a odkaz na PDP.
+Keď existuje Woo produkt s handle/slug `balicek-{slug}`, karta zobrazí cenu a odkaz na PDP.
+
+## Produktové fotky (TOP 15)
+
+Curated shots sú v storefront:
+
+- `public/images/balicky/{slug}.webp` — frontend (`BundleCard`, Next.js)
+- `public/images/balicky/{slug}.jpg` — upload do WordPress Media Library
+
+Mapovanie slug ↔ názov (rovnaké ako top 15 v `create-woo-bundles.mjs`):
+
+| Slug | Názov na fotke |
+|------|----------------|
+| `imunitny-stit-basic` | Imunitný Štít Basic |
+| `imunitny-stit-plus` | Imunitný Štít Plus |
+| `pokojny-vecer` | Pokojný večer |
+| `anti-stres-den` | Anti-stres deň |
+| `hlboky-spanok` | Hlboký spánok |
+| `starter-fitness` | Štartér fitness |
+| `silovy-trenink` | Silový tréning |
+| `regeneracia-po-treninku` | Regenerácia po tréningu |
+| `klby-basic` | Kĺby Basic |
+| `srdce-basic` | Srdce Basic |
+| `crevna-rovnovaha` | Črevná rovnováha |
+| `krasa-zvnutra` | Krása zvnútra |
+| `denny-zaklad` | Denný základ |
+| `focus-mozog` | Focus & mozog |
+| `growmedica-komplet` | GrowMedica Komplet |
+
+Upload do Woo/WordPress:
+
+```bash
+cd storefront
+yarn bundles:images:dry     # dry-run proti cms.growmedica.cz
+yarn bundles:images         # upload + priradenie (iba bez obrázka)
+yarn bundles:images:force   # prepíše existujúce featured images
+```
 
 ## Shopify Bundles app (voliteľné)
 

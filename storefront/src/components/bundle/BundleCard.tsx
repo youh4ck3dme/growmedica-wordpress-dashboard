@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import {
   Activity,
   Apple,
@@ -19,6 +20,7 @@ import {
 import {
   BUNDLE_CATEGORY_BENEFITS,
   BUNDLE_CATEGORY_LABELS,
+  getBundleImageSrc,
   isHighlightedBundle,
   type HealthBundle,
 } from '@/lib/bundles/catalog'
@@ -63,6 +65,10 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
 
   const CategoryIcon = CATEGORY_ICONS[bundle.category]
   const highlighted = isHighlightedBundle(bundle.slug)
+  const staticImage = getBundleImageSrc(bundle.slug)
+  const wooImage = product?.featuredImage?.url
+  const imageSrc = staticImage ?? wooImage ?? null
+  const imageAlt = product?.featuredImage?.altText || `Balíček ${bundle.name}`
 
   return (
     <article
@@ -79,9 +85,22 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
         )}
       </div>
 
-      <div className="bundle-card__icon" aria-hidden="true">
-        <CategoryIcon size={22} strokeWidth={1.75} />
-      </div>
+      {imageSrc ? (
+        <div className="bundle-card__media">
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
+            quality={75}
+            className="bundle-card__image"
+          />
+        </div>
+      ) : (
+        <div className="bundle-card__icon" aria-hidden="true">
+          <CategoryIcon size={22} strokeWidth={1.75} />
+        </div>
+      )}
 
       <h3 className="bundle-card__title">{bundle.name}</h3>
       <p className="bundle-card__benefit">{BUNDLE_CATEGORY_BENEFITS[bundle.category]}</p>

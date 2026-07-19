@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test'
-import { HEALTH_BUNDLE_CATALOG, getBundleBySlug, getFeaturedBundles } from '../../src/lib/bundles/catalog'
+import {
+  BUNDLE_IMAGE_SLUGS,
+  HEALTH_BUNDLE_CATALOG,
+  getBundleBySlug,
+  getBundleImageSrc,
+  getFeaturedBundles,
+} from '../../src/lib/bundles/catalog'
 import { BRAND_COPY } from '../../src/lib/brand'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -70,5 +76,16 @@ test.describe('Health bundle catalog', () => {
     expect(content).toContain('breadcrumbJsonLd')
     expect(content).toContain('itemListJsonLd')
     expect(content).toContain('Breadcrumb')
+  })
+
+  test('11. curated bundle shots exist for top-15 slugs', () => {
+    expect(BUNDLE_IMAGE_SLUGS.size).toBe(15)
+    for (const slug of BUNDLE_IMAGE_SLUGS) {
+      const webp = path.join(process.cwd(), 'public/images/balicky', `${slug}.webp`)
+      const jpg = path.join(process.cwd(), 'public/images/balicky', `${slug}.jpg`)
+      expect(fs.existsSync(webp), `missing ${slug}.webp`).toBe(true)
+      expect(fs.existsSync(jpg), `missing ${slug}.jpg`).toBe(true)
+      expect(getBundleImageSrc(slug)).toBe(`/images/balicky/${slug}.webp`)
+    }
   })
 })

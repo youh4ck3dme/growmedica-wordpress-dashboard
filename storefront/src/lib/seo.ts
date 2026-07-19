@@ -309,7 +309,11 @@ export function getBundleCatalogItemListJsonLd(
 }
 
 /** Product/Offer JSON-LD for a bundle that has a real WooCommerce product behind it. */
-export function getBundleProductJsonLd(bundle: { name: string; slug: string; items: readonly string[] }, product: ProductListItem) {
+export function getBundleProductJsonLd(
+  bundle: { name: string; slug: string; items: readonly string[] },
+  product: ProductListItem,
+  options?: { imageUrl?: string | null },
+) {
   const variant = product.variants.edges[0]?.node
   const price = variant?.price ?? product.priceRange.minVariantPrice
   const currency = price?.currencyCode ?? 'EUR'
@@ -320,7 +324,10 @@ export function getBundleProductJsonLd(bundle: { name: string; slug: string; ite
     name: `Balíček: ${bundle.name}`,
     description: `Balíček GrowMedica — obsahuje: ${bundle.items.join(', ')}.`,
     url: `${SITE_URL}/balicky#${bundle.slug}`,
-    image: product.featuredImage ? [product.featuredImage.url] : undefined,
+    image: (() => {
+      const src = options?.imageUrl || product.featuredImage?.url
+      return src ? [src] : undefined
+    })(),
     brand: {
       '@type': 'Brand',
       name: SITE_NAME,

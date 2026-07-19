@@ -4,7 +4,7 @@ import { Container } from '@/components/ui/Container'
 import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { BundleCatalog } from '@/components/bundle/BundleCatalog'
 import { BRAND_COPY } from '@/lib/brand'
-import { HEALTH_BUNDLE_CATALOG } from '@/lib/bundles/catalog'
+import { getBundleImageSrc, HEALTH_BUNDLE_CATALOG } from '@/lib/bundles/catalog'
 import { getBundleProducts } from '@/lib/catalog/products'
 import {
   getBreadcrumbJsonLd,
@@ -57,7 +57,10 @@ export default async function BalickyPage() {
   )
   const bundleProductJsonLds = HEALTH_BUNDLE_CATALOG.flatMap((bundle) => {
     const product = productsByHandle.get(bundle.slug)
-    return product ? [{ slug: bundle.slug, jsonLd: getBundleProductJsonLd(bundle, product) }] : []
+    if (!product) return []
+    const staticSrc = getBundleImageSrc(bundle.slug)
+    const imageUrl = staticSrc ? `${siteUrl}${staticSrc}` : product.featuredImage?.url
+    return [{ slug: bundle.slug, jsonLd: getBundleProductJsonLd(bundle, product, { imageUrl }) }]
   })
 
   return (

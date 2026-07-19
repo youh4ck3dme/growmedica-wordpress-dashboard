@@ -47,7 +47,10 @@
     "import:categories": "node scripts/import-woo-categories.mjs",
     "import:categories:dry": "node scripts/import-woo-categories.mjs --dry-run",
     "import:products": "node scripts/import-woo-products.mjs",
-    "import:products:dry": "node scripts/import-woo-products.mjs --dry-run"
+    "import:products:dry": "node scripts/import-woo-products.mjs --dry-run",
+    "bundles:images": "node scripts/assign-bundle-images.mjs --prod",
+    "bundles:images:dry": "node scripts/assign-bundle-images.mjs --prod --dry-run",
+    "bundles:images:force": "node scripts/assign-bundle-images.mjs --prod --force"
   },
   "dependencies": {
     "@mistralai/mistralai": "^2.2.5",

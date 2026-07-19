@@ -205,3 +205,31 @@ export const HIGHLIGHTED_BUNDLE_SLUGS: ReadonlySet<string> = new Set([
 export function isHighlightedBundle(slug: string): boolean {
   return HIGHLIGHTED_BUNDLE_SLUGS.has(slug)
 }
+
+/**
+ * Curated product-shot assets in `/public/images/balicky/{slug}.webp`.
+ * Keep in sync with files on disk and with top-15 Woo bundles.
+ */
+export const BUNDLE_IMAGE_SLUGS: ReadonlySet<string> = new Set([
+  'imunitny-stit-basic',
+  'imunitny-stit-plus',
+  'pokojny-vecer',
+  'anti-stres-den',
+  'hlboky-spanok',
+  'starter-fitness',
+  'silovy-trenink',
+  'regeneracia-po-treninku',
+  'klby-basic',
+  'srdce-basic',
+  'crevna-rovnovaha',
+  'krasa-zvnutra',
+  'denny-zaklad',
+  'focus-mozog',
+  'growmedica-komplet',
+])
+
+/** Static storefront image path for a bundle (webp), or null if none shipped. */
+export function getBundleImageSrc(slug: string): string | null {
+  if (!BUNDLE_IMAGE_SLUGS.has(slug)) return null
+  return `/images/balicky/${slug}.webp`
+}
