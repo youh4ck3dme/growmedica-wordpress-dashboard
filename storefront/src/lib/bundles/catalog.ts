@@ -238,6 +238,17 @@ export const BUNDLE_IMAGE_SLUGS: ReadonlySet<string> = new Set([
   'crossfit-power',
   'ranny-energizer',
   'vecerna-regeneracia',
+  // batch 3
+  'klby-active',
+  'srdce-plus',
+  'cholesterol-balance',
+  'pecen-basic',
+  'detox-criev-jemne',
+  'turistika-pohyb',
+  'po-antibiotikach',
+  'krvny-obeh',
+  'travenie-komfort',
+  'senior-pohyb',
 ])
 
 /** Static storefront image path for a bundle (webp), or null if none shipped. */

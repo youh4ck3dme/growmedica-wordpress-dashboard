@@ -97,6 +97,17 @@ const BUNDLE_SHOTS = {
   'crossfit-power': 'CrossFit power',
   'ranny-energizer': 'Ranný energizer',
   'vecerna-regeneracia': 'Večerná regenerácia',
+  // batch 3
+  'klby-active': 'Kĺby Active',
+  'srdce-plus': 'Srdce Plus',
+  'cholesterol-balance': 'Cholesterol balance',
+  'pecen-basic': 'Pečeň Basic',
+  'detox-criev-jemne': 'Detox čriev jemne',
+  'turistika-pohyb': 'Turistika & pohyb',
+  'po-antibiotikach': 'Po antibiotikách',
+  'krvny-obeh': 'Krvný obeh',
+  'travenie-komfort': 'Trávenie komfort',
+  'senior-pohyb': 'Senior pohyb',
 }
 
 function getWpAuth() {

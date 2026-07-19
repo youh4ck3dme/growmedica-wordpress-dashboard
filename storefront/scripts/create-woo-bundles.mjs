@@ -59,7 +59,18 @@ const BUNDLES = [
   { slug: 'crossfit-power', name: 'CrossFit power', category: 'Športová výživa', items: ['Kreatín', 'BCAA', 'Zinok'], discountPercent: 12 },
   { slug: 'ranny-energizer', name: 'Ranný energizer', category: 'Regenerácia', items: ['Cordyceps', 'Kofeín', 'B-komplex'], discountPercent: 10 },
   { slug: 'vecerna-regeneracia', name: 'Večerná regenerácia', category: 'Regenerácia', items: ['Proteín', 'ZMA', 'Omega-3'], discountPercent: 15 },
-].slice(0, limitArg ? Number(limitArg.split('=')[1]) : 25)
+  // batch 3
+  { slug: 'klby-active', name: 'Kĺby Active', category: 'Kĺby a pohyb', items: ['Glukosamín', 'Chondroitín', 'MSM', 'Kolagén typ II', 'Vitamín C'], discountPercent: 15 },
+  { slug: 'srdce-plus', name: 'Srdce Plus', category: 'Srdce a cievy', items: ['Omega-3', 'CoQ10', 'Magnézium', 'Vitamín E'], discountPercent: 12 },
+  { slug: 'cholesterol-balance', name: 'Cholesterol balance', category: 'Srdce a cievy', items: ['Omega-3', 'Rýžový olej', 'Vitamín E'], discountPercent: 12 },
+  { slug: 'pecen-basic', name: 'Pečeň Basic', category: 'Detox a pečeň', items: ['Ostropestrec', 'Artičok'], discountPercent: 10 },
+  { slug: 'detox-criev-jemne', name: 'Detox čriev jemne', category: 'Trávenie', items: ['Probiotiká', 'Psyllium', 'Aktivované uhlie'], discountPercent: 12 },
+  { slug: 'turistika-pohyb', name: 'Turistika & pohyb', category: 'Kĺby a pohyb', items: ['Kolagén', 'Magnézium', 'Omega-3'], discountPercent: 12 },
+  { slug: 'po-antibiotikach', name: 'Po antibiotikách', category: 'Trávenie', items: ['Probiotiká vysoká dávka', 'Prebiotiká'], discountPercent: 15 },
+  { slug: 'krvny-obeh', name: 'Krvný obeh', category: 'Srdce a cievy', items: ['Ginkgo biloba', 'Omega-3', 'Vitamín B6'], discountPercent: 12 },
+  { slug: 'travenie-komfort', name: 'Trávenie komfort', category: 'Trávenie', items: ['Tráviace enzýmy', 'Probiotiká', 'Fenikel'], discountPercent: 12 },
+  { slug: 'senior-pohyb', name: 'Senior pohyb', category: 'Kĺby a pohyb', items: ['Glukosamín', 'Vitamín D3', 'Omega-3'], discountPercent: 12 },
+].slice(0, limitArg ? Number(limitArg.split('=')[1]) : 35)
 
 function estimatePricing(bundle) {
   const regular = Math.round(bundle.items.length * ITEM_UNIT_EUR * 100) / 100
