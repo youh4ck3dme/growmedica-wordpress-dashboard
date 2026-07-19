@@ -111,7 +111,16 @@ function buildReplyFromActions(command: string, actions: AgentAction[], mode: Ag
     }
     if (action.tool === 'list_orders') {
       const r = action.result as { count: number }
-      return `✅ Nájdených ${r.count} objednávok.`
+      return `✅ Nájdených ${r.count} WooCommerce objednávok.`
+    }
+    if (action.tool === 'get_order') {
+      const r = action.result as { name?: string; total?: string; currency?: string; financialStatus?: string }
+      return `✅ Objednávka ${r.name ?? '—'} — ${r.total ?? '—'} ${r.currency ?? 'EUR'} (${r.financialStatus ?? '—'})`
+    }
+    if (action.tool === 'update_inventory') {
+      const r = action.result as { dry_run?: boolean; handle?: string; quantity?: number }
+      if (r.dry_run) return `⚠️ Dry-run: sklad ${r.handle ?? 'produkt'} → ${r.quantity ?? '—'} ks. Potvrďte zápis.`
+      return `✅ Sklad ${r.handle ?? 'produkt'} nastavený na ${r.quantity ?? '—'} ks.`
     }
     if (action.tool === 'get_product') {
       const r = action.result as { title?: string; price?: string }

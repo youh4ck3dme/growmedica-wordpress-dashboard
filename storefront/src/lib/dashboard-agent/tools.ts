@@ -9,6 +9,10 @@ import { getCollections } from '@/lib/catalog/collections'
 import { callMistral } from '@/lib/ai/client'
 import { AiError } from '@/lib/ai/errors'
 import { isWooMockMode } from '@/lib/wordpress/mock'
+import { wooFetch, wooMutate } from '@/lib/wordpress/client'
+import type { WooProduct } from '@/lib/wordpress/types'
+import { decodeHtmlEntities } from '@/lib/utils'
+import { revalidateProductCache } from '@/lib/dashboard/revalidate'
 import {
   buildMockOptimizedCopy,
   validateProductCopyOutput,
@@ -17,8 +21,40 @@ import { buildOptimizeProductCopyPrompt } from '@/lib/dashboard-agent/prompts/op
 import { storeExport } from './exports'
 import type { AgentAction, AgentToolName } from './types'
 
-const WP_ADMIN_HINT =
-  'Shopify Admin bol odstránený. Správu produktov/skladu/objednávok rob v WordPress admin: https://cms.growmedica.cz/wp-admin'
+const WP_ADMIN_URL = 'https://cms.growmedica.cz/wp-admin'
+const WP_ORDERS_ADMIN = `${WP_ADMIN_URL}/edit.php?post_type=shop_order`
+const WP_PRODUCTS_ADMIN = `${WP_ADMIN_URL}/edit.php?post_type=product`
+
+type WooOrderLite = {
+  id: number
+  number: string
+  status: string
+  date_created: string
+  currency: string
+  total: string
+  billing?: {
+    first_name?: string
+    last_name?: string
+    email?: string
+    phone?: string
+  }
+  shipping?: {
+    first_name?: string
+    last_name?: string
+    address_1?: string
+    city?: string
+    postcode?: string
+    country?: string
+  }
+  payment_method_title?: string
+  line_items?: Array<{
+    id: number
+    name: string
+    quantity: number
+    total: string
+    sku?: string
+  }>
+}
 
 const optimizeSchema = z.object({
   title: z.string(),
@@ -38,14 +74,14 @@ export const AGENT_TOOL_DEFINITIONS = [
   { name: 'catalog_summary', description: 'Aggregated catalog stats (counts, price range)' },
   { name: 'optimize_product_copy', description: 'Suggest improved product title and short description' },
   { name: 'generate_product_seo', description: 'Generate meta title and description for SEO' },
-  { name: 'bulk_update_prices', description: 'Bulk update prices (dry-run unless confirm=true)' },
+  { name: 'bulk_update_prices', description: 'Bulk update WooCommerce prices (dry-run unless confirm=true)' },
   { name: 'export_catalog_csv', description: 'Export catalog to CSV download' },
-  { name: 'get_integration_status', description: 'CMS and Mistral integration health' },
-  { name: 'apply_product_copy', description: 'Apply optimized title and description to a product (confirm=true)' },
-  { name: 'apply_product_seo', description: 'Apply SEO meta title and description to a product (confirm=true)' },
-  { name: 'update_inventory', description: 'Update inventory quantity for a product (confirm=true)' },
-  { name: 'list_orders', description: 'List recent orders (use WP admin — Shopify removed)' },
-  { name: 'get_order', description: 'Get order detail (use WP admin — Shopify removed)' },
+  { name: 'get_integration_status', description: 'WordPress/WooCommerce and Mistral integration health' },
+  { name: 'apply_product_copy', description: 'Apply optimized title and description to a Woo product (confirm=true)' },
+  { name: 'apply_product_seo', description: 'Apply SEO meta title and description to a Woo product (confirm=true)' },
+  { name: 'update_inventory', description: 'Update WooCommerce inventory quantity for a product (confirm=true)' },
+  { name: 'list_orders', description: 'List recent WooCommerce orders' },
+  { name: 'get_order', description: 'Get WooCommerce order detail by ID or order number' },
 ] as const
 
 function isMockWriteMode(): boolean {
@@ -55,6 +91,53 @@ function isMockWriteMode(): boolean {
 function isStagingWriteAllowed(): boolean {
   if (isMockWriteMode()) return true
   return process.env.DASHBOARD_ALLOW_LIVE_WRITES === '1'
+}
+
+function mapOrderStatus(status: string): string {
+  if (status === 'completed' || status === 'processing') return status
+  if (status === 'pending' || status === 'on-hold') return status
+  if (status === 'cancelled' || status === 'refunded' || status === 'failed') return status
+  return status
+}
+
+function mapFulfillment(status: string): string {
+  if (status === 'completed') return 'fulfilled'
+  if (status === 'processing' || status === 'on-hold') return 'unfulfilled'
+  if (status === 'cancelled' || status === 'refunded' || status === 'failed') return status
+  return 'unknown'
+}
+
+function mapOrderSummary(order: WooOrderLite) {
+  const first = order.billing?.first_name?.trim() ?? ''
+  const last = order.billing?.last_name?.trim() ?? ''
+  const customerName = [first, last].filter(Boolean).join(' ') || '—'
+  return {
+    id: String(order.id),
+    name: `#${order.number || order.id}`,
+    createdAt: order.date_created,
+    financialStatus: mapOrderStatus(order.status),
+    fulfillmentStatus: mapFulfillment(order.status),
+    total: order.total,
+    currency: order.currency || 'EUR',
+    customerName: decodeHtmlEntities(customerName),
+    customerEmail: order.billing?.email ?? '',
+    paymentMethod: order.payment_method_title ?? '',
+  }
+}
+
+async function findWooProductByHandle(handle: string): Promise<WooProduct | null> {
+  const found = await wooFetch<WooProduct[]>({
+    path: '/products',
+    params: { slug: handle, per_page: 1 },
+    cache: 'no-store',
+    revalidate: false,
+  })
+  return found[0] ?? null
+}
+
+function dryRunWriteMessage(confirm: boolean): string {
+  if (!confirm) return 'Nastavte confirm=true pre zápis'
+  return 'Live zápis nie je povolený (nastavte DASHBOARD_ALLOW_LIVE_WRITES=1)'
 }
 
 async function optimizeProductCopyLive(
@@ -248,18 +331,38 @@ Popis: ${product.description.slice(0, 400)}`
             result: {
               dry_run: true,
               updates,
-              message: confirm
-                ? 'Live zápis nie je povolený (nastavte DASHBOARD_ALLOW_LIVE_WRITES=1 na staging)'
-                : 'Nastavte confirm=true pre zápis',
+              message: dryRunWriteMessage(confirm),
             },
             status: 'dry_run',
           }
         }
 
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: { applied: updates.length, updates, mock: true },
+            status: 'ok',
+          }
+        }
+
+        const applied: typeof updates = []
+        for (const row of updates) {
+          const product = await findWooProductByHandle(row.handle)
+          if (!product) continue
+          await wooMutate<WooProduct>({
+            path: `/products/${product.id}`,
+            method: 'PUT',
+            body: { regular_price: row.to },
+          })
+          revalidateProductCache(row.handle)
+          applied.push(row)
+        }
+
         return {
           tool,
           args,
-          result: { applied: updates.length, updates },
+          result: { applied: applied.length, updates: applied },
           status: 'ok',
         }
       }
@@ -297,24 +400,328 @@ Popis: ${product.description.slice(0, 400)}`
             cms_provider: cms,
             mistral: mistralMock ? 'mock' : 'configured',
             catalog: wooMock ? 'mock' : 'live',
-            shopify: 'removed',
             admin: 'wordpress',
+            admin_url: WP_ADMIN_URL,
             write_mode: isStagingWriteAllowed() ? 'live_writes_allowed' : 'dry_run_only',
           },
           status: 'ok',
         }
       }
 
-      case 'apply_product_copy':
-      case 'apply_product_seo':
-      case 'update_inventory':
-      case 'list_orders':
-      case 'get_order': {
+      case 'list_orders': {
+        const limit = Math.min(Math.max(Number(args.limit ?? 10) || 10, 1), 50)
+
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: {
+              orders: [],
+              count: 0,
+              note: 'WOO_MOCK_MODE — no live orders',
+              admin: WP_ORDERS_ADMIN,
+            },
+            status: 'ok',
+          }
+        }
+
+        const raw = await wooFetch<WooOrderLite[]>({
+          path: '/orders',
+          params: {
+            per_page: limit,
+            orderby: 'date',
+            order: 'desc',
+            status: 'any',
+          },
+          cache: 'no-store',
+          revalidate: false,
+        })
+        const orders = raw.map(mapOrderSummary)
         return {
           tool,
           args,
-          result: { removed: true, message: WP_ADMIN_HINT },
-          status: 'error',
+          result: { orders, count: orders.length, admin: WP_ORDERS_ADMIN },
+          status: 'ok',
+        }
+      }
+
+      case 'get_order': {
+        const orderRef = String(args.order_id ?? args.id ?? args.number ?? '').trim()
+        if (!orderRef) throw new Error('order_id is required')
+
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: {
+              found: false,
+              note: 'WOO_MOCK_MODE — no live orders',
+              admin: WP_ORDERS_ADMIN,
+            },
+            status: 'ok',
+          }
+        }
+
+        const numericId = orderRef.replace(/^#/, '')
+        let order: WooOrderLite | null = null
+
+        if (/^\d+$/.test(numericId)) {
+          try {
+            order = await wooFetch<WooOrderLite>({
+              path: `/orders/${numericId}`,
+              cache: 'no-store',
+              revalidate: false,
+            })
+          } catch {
+            order = null
+          }
+        }
+
+        if (!order) {
+          const search = await wooFetch<WooOrderLite[]>({
+            path: '/orders',
+            params: { search: numericId, per_page: 5, orderby: 'date', order: 'desc' },
+            cache: 'no-store',
+            revalidate: false,
+          })
+          order =
+            search.find(
+              (o) =>
+                String(o.id) === numericId ||
+                String(o.number) === numericId ||
+                `#${o.number}` === orderRef,
+            ) ?? search[0] ?? null
+        }
+
+        if (!order) throw new Error(`Order not found: ${orderRef}`)
+
+        const summary = mapOrderSummary(order)
+        return {
+          tool,
+          args,
+          result: {
+            ...summary,
+            line_items: (order.line_items ?? []).map((item) => ({
+              name: decodeHtmlEntities(item.name),
+              quantity: item.quantity,
+              total: item.total,
+              sku: item.sku ?? '',
+            })),
+            shipping: order.shipping
+              ? {
+                  name: [order.shipping.first_name, order.shipping.last_name]
+                    .filter(Boolean)
+                    .join(' '),
+                  address: order.shipping.address_1 ?? '',
+                  city: order.shipping.city ?? '',
+                  postcode: order.shipping.postcode ?? '',
+                  country: order.shipping.country ?? '',
+                }
+              : null,
+            admin: `${WP_ADMIN_URL}/post.php?post=${order.id}&action=edit`,
+          },
+          status: 'ok',
+        }
+      }
+
+      case 'update_inventory': {
+        const handle = String(args.handle ?? '').trim()
+        if (!handle) throw new Error('handle is required')
+        const quantity = Number(args.quantity)
+        if (!Number.isFinite(quantity) || quantity < 0) {
+          throw new Error('quantity must be a non-negative number')
+        }
+        const confirm = args.confirm === true
+        const dryRun = !confirm || !isStagingWriteAllowed()
+
+        if (dryRun) {
+          return {
+            tool,
+            args,
+            result: {
+              dry_run: true,
+              handle,
+              quantity: Math.floor(quantity),
+              message: dryRunWriteMessage(confirm),
+              admin: WP_PRODUCTS_ADMIN,
+            },
+            status: 'dry_run',
+          }
+        }
+
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: {
+              ok: true,
+              handle,
+              quantity: Math.floor(quantity),
+              available: quantity > 0,
+              mock: true,
+            },
+            status: 'ok',
+          }
+        }
+
+        const product = await findWooProductByHandle(handle)
+        if (!product) throw new Error(`Product not found: ${handle}`)
+
+        const updated = await wooMutate<WooProduct>({
+          path: `/products/${product.id}`,
+          method: 'PUT',
+          body: {
+            manage_stock: true,
+            stock_quantity: Math.floor(quantity),
+            stock_status: quantity > 0 ? 'instock' : 'outofstock',
+          },
+        })
+        revalidateProductCache(handle)
+
+        return {
+          tool,
+          args,
+          result: {
+            ok: true,
+            handle: updated.slug,
+            quantity: updated.stock_quantity,
+            available: updated.stock_status === 'instock',
+          },
+          status: 'ok',
+        }
+      }
+
+      case 'apply_product_copy': {
+        const handle = String(args.handle ?? '').trim()
+        if (!handle) throw new Error('handle is required')
+        const title = String(args.title ?? '').trim()
+        const shortDescription = String(args.short_description ?? '').trim()
+        if (!title || !shortDescription) {
+          throw new Error('title and short_description are required')
+        }
+        const confirm = args.confirm === true
+        const dryRun = !confirm || !isStagingWriteAllowed()
+
+        if (dryRun) {
+          return {
+            tool,
+            args,
+            result: {
+              dry_run: true,
+              handle,
+              title,
+              short_description: shortDescription,
+              message: dryRunWriteMessage(confirm),
+            },
+            status: 'dry_run',
+          }
+        }
+
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: { ok: true, handle, title, short_description: shortDescription, mock: true },
+            status: 'ok',
+          }
+        }
+
+        const product = await findWooProductByHandle(handle)
+        if (!product) throw new Error(`Product not found: ${handle}`)
+
+        const updated = await wooMutate<WooProduct>({
+          path: `/products/${product.id}`,
+          method: 'PUT',
+          body: {
+            name: title,
+            short_description: shortDescription,
+          },
+        })
+        const tags = revalidateProductCache(handle)
+
+        return {
+          tool,
+          args,
+          result: {
+            ok: true,
+            handle: updated.slug,
+            title: decodeHtmlEntities(updated.name),
+            short_description: updated.short_description,
+            revalidated: tags,
+          },
+          status: 'ok',
+        }
+      }
+
+      case 'apply_product_seo': {
+        const handle = String(args.handle ?? '').trim()
+        if (!handle) throw new Error('handle is required')
+        const metaTitle = String(args.meta_title ?? '').trim()
+        const metaDescription = String(args.meta_description ?? '').trim()
+        if (!metaTitle || !metaDescription) {
+          throw new Error('meta_title and meta_description are required')
+        }
+        const confirm = args.confirm === true
+        const dryRun = !confirm || !isStagingWriteAllowed()
+
+        if (dryRun) {
+          return {
+            tool,
+            args,
+            result: {
+              dry_run: true,
+              handle,
+              meta_title: metaTitle,
+              meta_description: metaDescription,
+              message: dryRunWriteMessage(confirm),
+            },
+            status: 'dry_run',
+          }
+        }
+
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: {
+              ok: true,
+              handle,
+              meta_title: metaTitle,
+              meta_description: metaDescription,
+              mock: true,
+            },
+            status: 'ok',
+          }
+        }
+
+        const product = await findWooProductByHandle(handle)
+        if (!product) throw new Error(`Product not found: ${handle}`)
+
+        await wooMutate<WooProduct>({
+          path: `/products/${product.id}`,
+          method: 'PUT',
+          body: {
+            meta_data: [
+              { key: 'rank_math_title', value: metaTitle },
+              { key: 'rank_math_description', value: metaDescription },
+              { key: '_yoast_wpseo_title', value: metaTitle },
+              { key: '_yoast_wpseo_metadesc', value: metaDescription },
+            ],
+          },
+        })
+        const tags = revalidateProductCache(handle)
+
+        return {
+          tool,
+          args,
+          result: {
+            ok: true,
+            handle,
+            meta_title: metaTitle,
+            meta_description: metaDescription,
+            revalidated: tags,
+          },
+          status: 'ok',
         }
       }
 
@@ -334,7 +741,8 @@ Popis: ${product.description.slice(0, 400)}`
 export function inferToolsFromCommand(command: string): Array<{ tool: AgentToolName; args: Record<string, unknown> }> {
   const lower = command.toLowerCase()
 
-  if (/stav|integrac|pripojen|health|status/.test(lower)) {
+  // Word-boundary on "stav" — otherwise "nastav sklad" false-matches integration status.
+  if (/\b(stav|status|health)\b|integrac|pripojen/.test(lower)) {
     return [{ tool: 'get_integration_status', args: {} }]
   }
 
@@ -422,7 +830,14 @@ export function inferToolsFromCommand(command: string): Array<{ tool: AgentToolN
     return [{ tool: 'get_product', args: { handle: slugMatch[1] } }]
   }
   if (/objednávk|objednávok|objednavk|orders?/i.test(lower)) {
-    const limitMatch = command.match(/(\d+)/)
+    const detailMatch = command.match(
+      /(?:objednávk[ayu]?|objednavk[ayu]?|order)\s*#?\s*(\d{3,})/i,
+    )
+    if (detailMatch && /detail|info|zobraz|ukáž|ukaz|get/i.test(lower)) {
+      return [{ tool: 'get_order', args: { order_id: detailMatch[1] } }]
+    }
+    const limitMatch = command.match(/(?:posledn\w*|last|top)?\s*(\d{1,2})\s*(?:objedn|order)/i)
+      ?? command.match(/(\d{1,2})\s*$/)
     return [{ tool: 'list_orders', args: { limit: limitMatch ? Number(limitMatch[1]) : 10 } }]
   }
 

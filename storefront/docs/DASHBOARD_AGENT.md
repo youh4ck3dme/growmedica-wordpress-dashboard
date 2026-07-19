@@ -93,11 +93,11 @@ Stiahnutie CSV exportu vygenerovaného nástrojom `export_catalog_csv`.
 | `bulk_update_prices` | Hromadná zmena cien (`confirm: true` pre zápis) |
 | `export_catalog_csv` | Export CSV + download link |
 | `get_integration_status` | CMS + Mistral + mock/live stav |
-| `apply_product_copy` | Zapíše optimalizovaný copy do Shopify (`confirm: true`) |
-| `apply_product_seo` | Zapíše SEO meta do produktu (`confirm: true`) |
+| `apply_product_copy` | Zapíše optimalizovaný copy do WooCommerce (`confirm: true`) |
+| `apply_product_seo` | Zapíše SEO meta (Rank Math / Yoast) do Woo produktu (`confirm: true`) |
 | `update_inventory` | Zmena skladu podľa handle (`confirm: true`) |
-| `list_orders` | Posledné objednávky (Shopify Admin) |
-| `get_order` | Detail objednávky |
+| `list_orders` | Posledné WooCommerce objednávky |
+| `get_order` | Detail WooCommerce objednávky |
 
 Agent používa **Mistral tool-calling** s regex fallbackom pri chybe API.
 

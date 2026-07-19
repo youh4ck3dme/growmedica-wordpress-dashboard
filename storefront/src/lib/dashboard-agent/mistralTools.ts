@@ -104,14 +104,14 @@ const TOOL_DEFINITIONS: Array<{ name: AgentToolName; description: string }> = [
   { name: 'catalog_summary', description: 'Aggregated catalog stats (counts, price range)' },
   { name: 'optimize_product_copy', description: 'Suggest improved product title and short description' },
   { name: 'generate_product_seo', description: 'Generate meta title and description for SEO' },
-  { name: 'bulk_update_prices', description: 'Bulk update prices (dry-run unless confirm=true)' },
+  { name: 'bulk_update_prices', description: 'Bulk update WooCommerce prices (dry-run unless confirm=true)' },
   { name: 'export_catalog_csv', description: 'Export catalog to CSV download' },
-  { name: 'get_integration_status', description: 'CMS and Mistral integration health' },
-  { name: 'apply_product_copy', description: 'Apply optimized title and description to a product (confirm=true)' },
-  { name: 'apply_product_seo', description: 'Apply SEO meta title and description to a product (confirm=true)' },
-  { name: 'update_inventory', description: 'Update inventory quantity for a product (confirm=true)' },
-  { name: 'list_orders', description: 'List recent Shopify orders' },
-  { name: 'get_order', description: 'Get order detail by ID or order number' },
+  { name: 'get_integration_status', description: 'WordPress/WooCommerce and Mistral integration health' },
+  { name: 'apply_product_copy', description: 'Apply optimized title and description to a Woo product (confirm=true)' },
+  { name: 'apply_product_seo', description: 'Apply SEO meta title and description to a Woo product (confirm=true)' },
+  { name: 'update_inventory', description: 'Update WooCommerce inventory quantity for a product (confirm=true)' },
+  { name: 'list_orders', description: 'List recent WooCommerce orders' },
+  { name: 'get_order', description: 'Get WooCommerce order detail by ID or order number' },
 ]
 
 export const MISTRAL_TOOL_SCHEMAS = TOOL_DEFINITIONS.map((tool) => ({

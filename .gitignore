@@ -50,3 +50,5 @@ docs/Prihlasovacie*
 
 # Local Firebase / gcloud / JDK toolchain (ADC secrets inside — never commit)
 .tools/
+.env.local
+.dashboard-secret.local.txt

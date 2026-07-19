@@ -69,3 +69,7 @@ pnpm-workspace.yaml
 .vercel
 .env.nexus-lovable-paste.tmp
 IMPORT_SHOPIFY_TO_WOO_REPORT.json
+
+# Local secrets
+.env.local
+.dashboard-secret.local.txt

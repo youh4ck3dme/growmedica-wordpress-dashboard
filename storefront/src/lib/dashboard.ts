@@ -1,10 +1,13 @@
 export type DashboardMode = 'agentic' | 'iframe' | 'hybrid'
 
-/** Lovable Nexus admin — iframe src pre /dashboard (produkcia + lokál). */
-export const NEXUS_DASHBOARD_IFRAME_URL = 'https://growmedica-nexus.lovable.app/admin'
+/** WordPress / WooCommerce admin (produkčný CMS). */
+export const WORDPRESS_ADMIN_URL = 'https://cms.growmedica.cz/wp-admin'
 
-/** Priamy login odkaz (nový tab). */
-export const LEGACY_NEXUS_ADMIN_URL = 'https://growmedica-nexus.lovable.app/admin/prihlasenie'
+/** @deprecated Use WORDPRESS_ADMIN_URL — kept for legacy iframe hybrid mode. */
+export const NEXUS_DASHBOARD_IFRAME_URL = WORDPRESS_ADMIN_URL
+
+/** Priamy odkaz do WordPress adminu (nový tab). */
+export const LEGACY_NEXUS_ADMIN_URL = WORDPRESS_ADMIN_URL
 
 /** agentic | iframe | hybrid (default: agentic = native admin + AI Command Bar) */
 export function getDashboardMode(): DashboardMode {

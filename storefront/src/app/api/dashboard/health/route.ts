@@ -18,8 +18,8 @@ export async function GET(request: NextRequest) {
     cms_provider: cms,
     mistral: mistralMock ? 'mock' : process.env.MISTRAL_API_KEY ? 'configured' : 'missing',
     catalog: wooMock ? 'mock' : 'live',
-    shopify: 'removed',
     admin: 'wordpress',
+    admin_url: 'https://cms.growmedica.cz/wp-admin',
     write_mode:
       wooMock || mistralMock
         ? 'dry_run_only'
