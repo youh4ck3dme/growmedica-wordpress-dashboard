@@ -79,7 +79,7 @@ test.describe('Health bundle catalog', () => {
   })
 
   test('11. curated bundle shots exist for top-15 slugs', () => {
-    expect(BUNDLE_IMAGE_SLUGS.size).toBe(15)
+    expect(BUNDLE_IMAGE_SLUGS.size).toBe(25)
     for (const slug of BUNDLE_IMAGE_SLUGS) {
       const webp = path.join(process.cwd(), 'public/images/balicky', `${slug}.webp`)
       const jpg = path.join(process.cwd(), 'public/images/balicky', `${slug}.jpg`)

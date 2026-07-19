@@ -91,6 +91,10 @@ export const BRAND_ASSETS = [
   '/logo.svg',
   '/logo-icon.svg',
   '/logo-dark.svg',
+  '/logo-mark.png',
+  '/logo-mark.webp',
+  '/android-chrome-512x512.png',
+  '/apple-touch-icon.png',
   '/manifest.webmanifest',
 ] as const
 

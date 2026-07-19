@@ -70,6 +70,7 @@ if (useProd) {
  * File path: public/images/balicky/{slug}.jpg
  */
 const BUNDLE_SHOTS = {
+  // batch 1
   'imunitny-stit-basic': 'Imunitný Štít Basic',
   'imunitny-stit-plus': 'Imunitný Štít Plus',
   'pokojny-vecer': 'Pokojný večer',
@@ -85,6 +86,17 @@ const BUNDLE_SHOTS = {
   'denny-zaklad': 'Denný základ',
   'focus-mozog': 'Focus & mozog',
   'growmedica-komplet': 'GrowMedica Komplet',
+  // batch 2
+  'imunita-jesen-zima': 'Imunita na jeseň/zimu',
+  'rodinna-imunita': 'Rodinná imunita',
+  'imunita-energia': 'Imunita & energia',
+  'office-relax': 'Office relax',
+  'spanok-krasa': 'Spánok & krása',
+  'vytrvalost': 'Vytrvalosť',
+  'bezecky-balicek': 'Bežecký balíček',
+  'crossfit-power': 'CrossFit power',
+  'ranny-energizer': 'Ranný energizer',
+  'vecerna-regeneracia': 'Večerná regenerácia',
 }
 
 function getWpAuth() {
