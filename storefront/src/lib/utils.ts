@@ -69,6 +69,36 @@ export function truncate(str: string, maxLength: number): string {
   return str.slice(0, maxLength).trimEnd() + '…'
 }
 
+/**
+ * Decode common HTML entities in plain text (Woo titles/names).
+ * Runs up to 3 passes so double-encoded values like `&amp;amp;` become `&`.
+ */
+export function decodeHtmlEntities(text: string): string {
+  if (!text || !text.includes('&')) return text
+
+  let value = text
+  for (let pass = 0; pass < 3; pass++) {
+    const next = value
+      .replace(/&amp;/gi, '&')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#0*39;/g, "'")
+      .replace(/&#x27;/gi, "'")
+      .replace(/&#(\d+);/g, (_, code: string) => {
+        const n = Number(code)
+        return Number.isFinite(n) ? String.fromCodePoint(n) : _
+      })
+      .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) => {
+        const n = parseInt(hex, 16)
+        return Number.isFinite(n) ? String.fromCodePoint(n) : _
+      })
+    if (next === value) break
+    value = next
+  }
+  return value
+}
+
 export function slugify(str: string): string {
   return str
     .toLowerCase()

@@ -5,6 +5,7 @@
 
 import type { Money, Product, ProductListItem, CatalogImage } from '@/lib/catalog/types'
 import { getDeepestVisibleProductType } from '@/lib/product-facets'
+import { decodeHtmlEntities } from '@/lib/utils'
 import type { WooCategory, WooProduct } from './types'
 
 const DEFAULT_CURRENCY = 'EUR'
@@ -15,10 +16,11 @@ function toMoney(amount: string): Money {
 
 function toImage(image: WooProduct['images'][number] | undefined): CatalogImage | null {
   if (!image) return null
+  const alt = image.alt || image.name || null
   return {
     id: String(image.id),
     url: image.src,
-    altText: image.alt || image.name || null,
+    altText: alt ? decodeHtmlEntities(alt) : null,
     width: null,
     height: null,
   }
@@ -58,21 +60,24 @@ export function resolveWooVendor(product: WooProduct): string {
 
 /** Prefer deepest category name for "Forma / Kategória" facet (last term is usually leaf). */
 export function resolveWooProductType(product: WooProduct): string {
-  return getDeepestVisibleProductType(product.categories.map((category) => category.name))
+  return getDeepestVisibleProductType(
+    product.categories.map((category) => decodeHtmlEntities(category.name)),
+  )
 }
 
 export function wooProductToListItem(product: WooProduct): ProductListItem {
   const featuredImage = toImage(product.images[0])
   const price = toMoney(product.price)
   const compareAt = product.on_sale && product.regular_price ? toMoney(product.regular_price) : null
+  const title = decodeHtmlEntities(product.name)
 
   return {
     id: `gid://woocommerce/Product/${product.id}`,
     handle: product.slug,
-    title: product.name,
+    title,
     vendor: resolveWooVendor(product),
     productType: resolveWooProductType(product),
-    tags: product.tags.map((tag) => tag.name),
+    tags: product.tags.map((tag) => decodeHtmlEntities(tag.name)),
     availableForSale: product.stock_status === 'instock',
     priceRange: {
       minVariantPrice: price,
@@ -112,8 +117,8 @@ export function wooProductToProduct(product: WooProduct): Product {
     descriptionHtml: product.description,
     options: product.attributes.map((attribute) => ({
       id: String(attribute.id),
-      name: attribute.name,
-      values: attribute.options,
+      name: decodeHtmlEntities(attribute.name),
+      values: attribute.options.map((option) => decodeHtmlEntities(option)),
     })),
     variants: {
       edges: [
@@ -134,7 +139,7 @@ export function wooProductToProduct(product: WooProduct): Product {
     },
     images: { edges: images },
     seo: {
-      title: product.name,
+      title: listItem.title,
       description: product.short_description || null,
     },
     updatedAt: product.date_modified_gmt,

@@ -63,7 +63,7 @@ Bez Stripe/GoPay ide predaj **BACS + COD**. Bez SF API shop funguje, len **bez a
 | 11 | DPH / IČ DPH | Dnes **neplatca** (interim). Ak platca → účtovník + agent zapne Woo dane |
 | 12 | Plné VOP (právnik) | Základ už je; schválený text podľa potreby |
 | 13 | Vypnúť Shopify | Až po stabilite Woo + faktúry |
-| 14 | CZ zóna / Nexus | nízka priorita |
+| 14 | CZ/AT/HU/PL zóny + DPH sadzby (neplatca) | ✅ 2026-07-19 — [report](./WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md); prompt: [PROMPT…](../docs/PROMPT_WOO_KRAJINY_CZ_AT_HU_PL.md) |
 
 ---
 

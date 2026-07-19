@@ -11,6 +11,7 @@
 | CMS admin (WordPress) | https://cms.growmedica.cz/wp-admin |
 | Login CMS | e-mail `info@growmedica.cz` (heslo máš ty / WebSupport) |
 | Technický detail pre AI | [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md) |
+| AI prompt: krajiny CZ/AT/HU/PL | [docs/PROMPT_WOO_KRAJINY_CZ_AT_HU_PL.md](./docs/PROMPT_WOO_KRAJINY_CZ_AT_HU_PL.md) |
 | Firma / IBAN | [docs/vzorfirma.md](./docs/vzorfirma.md) |
 
 ---
@@ -256,6 +257,8 @@ MY010HUBPRS,12
 - Referencia: [docs/vzorfirma.md](./docs/vzorfirma.md) · [reports/SUPERFAKTURA_GO_LIVE_VERIFY.md](./reports/SUPERFAKTURA_GO_LIVE_VERIFY.md).
 
 Ak sa stanete **platcom**, napíš agentovi IČ DPH + sadzbu — zapneme Woo dane a upravíme SF + VOP.
+
+**Rozšírenie predaja CZ/AT/HU/PL** (doprava + pripravené % DPH, dane stále vypnuté): skopíruj agentovi prompt [docs/PROMPT_WOO_KRAJINY_CZ_AT_HU_PL.md](./docs/PROMPT_WOO_KRAJINY_CZ_AT_HU_PL.md).
 
 ---
 
