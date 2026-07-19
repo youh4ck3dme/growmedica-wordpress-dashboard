@@ -1,6 +1,8 @@
 # Dashboard Panels (native admin)
 
-Natívny admin modul na `/dashboard` v Next.js storefronte — **WooCommerce** backend (Shopify Admin odstránený).
+Natívny admin modul na `/dashboard` v Next.js storefronte — **WooCommerce** backend.
+
+**Aktualizované:** 2026-07-19 — panely aj AI agent tools sú Woo-only (Shopify Admin stuby odstránené). Odkaz v sidebar → WordPress admin.
 
 ## Navigácia
 
@@ -11,10 +13,10 @@ Natívny admin modul na `/dashboard` v Next.js storefronte — **WooCommerce** b
 | Detail produktu | `GET /api/dashboard/products/[handle]` | Woo read-only |
 | Objednávky | `GET /api/dashboard/orders` | Woo orders |
 | Sklad | `GET/PUT /api/dashboard/inventory` | Woo stock; PUT len s `DASHBOARD_ALLOW_LIVE_WRITES=1` |
-| AI Agent | `POST /api/dashboard/agent` | Mistral tools |
+| AI Agent | `POST /api/dashboard/agent` | Mistral + Woo tools (`list_orders`, inventory, apply copy/SEO, …) |
 | Audit log | `GET /api/dashboard/audit` | Redis/memory |
 
-Plná editácia (ceny, texty, media): [cms.growmedica.cz/wp-admin](https://cms.growmedica.cz/wp-admin)
+Plná editácia (media, zložitejšie nastavenia): [cms.growmedica.cz/wp-admin](https://cms.growmedica.cz/wp-admin)
 
 ## Auth
 

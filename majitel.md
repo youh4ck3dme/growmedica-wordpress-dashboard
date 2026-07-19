@@ -2,7 +2,7 @@
 
 **Pre koho:** majiteľ firmy / prevádzkovateľ e-shopu (nie developer).  
 **Jazyk:** jednoduché body — *čo*, *kde získaš*, *kam vložiť* / *komu poslať*.  
-**Dátum:** 2026-07-18  
+**Dátum:** 2026-07-19  
 **Súhrn čo dorobiť:** [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md)
 
 | Odkaz | |
@@ -22,9 +22,11 @@
 - Košík → pokladňa na **cms**
 - **Bankový prevod** (BACS) + **dobierka** (COD)
 - Doprava SK s cenami (DPD / Packeta flat rate, zdarma od 50 €)
+- Predaj / doručenie aj do **CZ, AT, HU, PL** (EUR)
 - Firemné údaje, IČO, DIČ, IBAN, e-maily (SMTP)
 - Plugin **SuperFaktúra** nainštalovaný (chýba len tvoj API kľúč)
 - Pluginy Packeta, DPD, Stripe, GoPay nainštalované (chýbajú merchant prístupy)
+- **Admin dashboard** na https://www.growmedica.cz/dashboard (secret + AI agent nad Woo — objednávky, sklad, katalóg; nie Shopify)
 
 **Shop už vie predávať** cez prevod a dobierku. Nižšie body sú vylepšenia a povinné veci na tvojej strane.
 
@@ -52,7 +54,7 @@ Odškrtávaj:
 - [ ] **8. Reálny sklad** (Excel/CSV: sku + množstvo)
 - [ ] **9. DPH / IČ DPH** (ak ste platcovia DPH — rozhodnutie s účtovníkom)
 - [ ] **10. Plné VOP** (právnik, ak treba doplniť text)
-- [ ] **11. Potvrdenie: vypnúť Shopify** (až keď je Woo stabilné)
+- [ ] **11. Vypnúť Shopify merchant účet** (web už beží len na Woo; účet zrušiť po tvojom E2E)
 
 ---
 

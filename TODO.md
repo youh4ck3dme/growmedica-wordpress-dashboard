@@ -1,6 +1,6 @@
 # GrowMedica — TODO
 
-**Aktualizované:** 2026-07-18  
+**Aktualizované:** 2026-07-19  
 **Súhrn čo dorobiť:** [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md)  
 **Hlavný stav:** [STATUS.md](./STATUS.md) · **Prevádzka:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)  
 **Majiteľ:** [majitel.md](./majitel.md) · SuperFaktúra **2a–2k**
@@ -13,8 +13,11 @@
 - [x] CMS firma/IBAN verify + DPH interim neplatca + VOP (2026-07-18)  
 - [x] Menu ako growmedica.sk, facets (vendor / type / effect)  
 - [x] Vendor z `_shopify_vendor`, vendor audit report  
-- [x] Mega-menu empty leaf filter (PR #7)  
+- [x] Mega-menu empty leaf filter + logo mark / banners  
 - [x] Docs MERCHANT_KEYS + majitel.md + CO_DOROBIT  
+- [x] Krajiny CZ/AT/HU/PL sell+ship (EUR), smoke 61/0 (2026-07-19)  
+- [x] **`/dashboard` Woo-only** — panely + agent tools (`list_orders`, sklad, copy/SEO, prices); prod redeploy (2026-07-19)  
+- [x] Shopify runtime cleanup + dashboard agent bez Shopify stubov  
 
 ## Otvorené — majiteľ (secrets / rozhodnutia)
 
@@ -27,14 +30,14 @@
 - [ ] Packeta / DPD API  
 - [ ] Reálny sklad (CSV)  
 - [ ] DPH / VOP právnik podľa potreby (dnes interim neplatca)  
-- [ ] Shopify off po stabilite  
+- [ ] Shopify merchant účet vypnúť / zrušiť (až po stabilite — storefront už Woo-only)  
 
 ## Otvorené — agent (technické, podľa priority)
 
 - [ ] Behavior E2E facets v prehliadači (Playwright flow)  
 - [ ] Plná stabilita `yarn test:integrity` na pomalom CI/Mac (webServer)  
 - [ ] Performance `/produkty` (Lighthouse ~66)  
-- [ ] Mega-menu banner assets (ak WIP stash)  
+- [ ] Voliteľné: dashboard Redis (audit/conversation) na Vercel  
 
 ## Po dodaní dát agent vie
 
@@ -44,4 +47,4 @@
 | Stripe keys | zapnúť bránu + SF rules |
 | Packeta/DPD API | plugin config |
 | Telefón | company.ts + deploy |
-| CSV sklad | bulk stock update |
+| CSV sklad | bulk stock update (dashboard agent / Woo REST) |

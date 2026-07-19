@@ -1,7 +1,7 @@
 # Čo dorobiť — GrowMedica
 
-**Kanónický súhrn nedokončených vecí** (predtým `REMAINING_WORK_NOW.md`).  
-**Aktualizované:** 2026-07-18  
+**Kanónický súhrn nedokončených vecí.**  
+**Aktualizované:** 2026-07-19  
 
 | Súvisiace | |
 |-----------|--|
@@ -10,6 +10,7 @@
 | Merchant API | [../docs/MERCHANT_KEYS.md](../docs/MERCHANT_KEYS.md) |
 | Deploy | [../PRODUCTION_CHECKLIST.md](../PRODUCTION_CHECKLIST.md) |
 | SuperFaktúra verify | [SUPERFAKTURA_GO_LIVE_VERIFY.md](./SUPERFAKTURA_GO_LIVE_VERIFY.md) |
+| Dashboard | [../storefront/docs/DASHBOARD_PANELS.md](../storefront/docs/DASHBOARD_PANELS.md) · [../storefront/docs/DASHBOARD_AGENT.md](../storefront/docs/DASHBOARD_AGENT.md) |
 
 ---
 
@@ -22,9 +23,12 @@
 | VOP / GDPR stránky (základ); VOP DPH text = neplatca | ✅ |
 | SuperFaktúra plugin 1.53.2 + BACS/COD defaults + `sf-status` | ✅ |
 | Skripty: `load-wp-prod-env`, `set-superfaktura-api-from-env`, `smoke-superfaktura-30`, `smoke-superfaktura-bacs-order` | ✅ |
-| CMS firma/IBAN overené voči [vzorfirma.md](../docs/vzorfirma.md) (2026-07-18) | ✅ |
-| DPH interim: **neplatca** → Woo `calc_taxes: no` → checkout `taxesEnabled: false` | ✅ zámerne |
+| CMS firma/IBAN overené voči [vzorfirma.md](../docs/vzorfirma.md) | ✅ |
+| DPH interim: **neplatca** → Woo `calc_taxes: no` | ✅ zámerne |
 | Shop **už predáva** cez bankový prevod a dobierku | ✅ |
+| Krajiny CZ / AT / HU / PL (sell + ship, EUR) | ✅ 2026-07-19 · [WOO_KRAJINY…](./WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md) |
+| **`/dashboard` + AI agent na WooCommerce** (nie Shopify) | ✅ 2026-07-19 · panely, `list_orders`, inventory, apply copy/SEO, bulk prices · prod smoke OK |
+| Shopify runtime v storefronte | ✅ odstránený |
 
 ---
 
@@ -37,7 +41,7 @@
 | 3 | Po API: full smoke + BACS PDF | agent | ostré doklady | `./scripts/smoke-superfaktura-30.sh` · `./scripts/smoke-superfaktura-bacs-order.sh` |
 | 4 | Kontrola PDF v SF (číslo, DPH, IBAN, e-mail) | majiteľ **2k** | go-live faktúr | po bode 3 |
 
-**Live blokátor SuperFaktúry (2026-07-18):** `api_email_set: false`, `api_key_set: false` na cms.
+**Live blokátor SuperFaktúry:** `api_email_set` / `api_key_set` na cms ešte majiteľ.
 
 Bez Stripe/GoPay ide predaj **BACS + COD**. Bez SF API shop funguje, len **bez automatických PDF**.
 
@@ -62,8 +66,9 @@ Bez Stripe/GoPay ide predaj **BACS + COD**. Bez SF API shop funguje, len **bez a
 |---|-----|----------|
 | 11 | DPH / IČ DPH | Dnes **neplatca** (interim). Ak platca → účtovník + agent zapne Woo dane |
 | 12 | Plné VOP (právnik) | Základ už je; schválený text podľa potreby |
-| 13 | Vypnúť Shopify | Až po stabilite Woo + faktúry |
-| 14 | CZ/AT/HU/PL zóny + DPH sadzby (neplatca) | ✅ 2026-07-19 — [report](./WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md); prompt: [PROMPT…](../docs/PROMPT_WOO_KRAJINY_CZ_AT_HU_PL.md) |
+| 13 | Vypnúť Shopify merchant účet | Storefront + dashboard už Woo-only; účet zrušiť po stabilite |
+| 14 | CZ/AT/HU/PL zóny + DPH sadzby (neplatca) | ✅ 2026-07-19 — [report](./WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md) |
+| 15 | Dashboard Shopify → WordPress | ✅ 2026-07-19 |
 
 ---
 
@@ -72,7 +77,7 @@ Bez Stripe/GoPay ide predaj **BACS + COD**. Bez SF API shop funguje, len **bez a
 - Behavior E2E facets (Playwright)
 - Stabilita `yarn test:integrity` na CI
 - Performance `/produkty` (Lighthouse)
-- Mega-menu banner assets (ak WIP)
+- Voliteľné: Upstash Redis pre dashboard audit
 
 Detail: [../TODO.md](../TODO.md)
 
@@ -85,7 +90,7 @@ Detail: [../TODO.md](../TODO.md)
 2) SuperFaktúra: profil firmy + API → Woo → Test → „API vložené, otestuj“
 3) Agent: smoke + BACS proforma/faktúra → majiteľ 2k
 4) Stripe test → Packeta/DPD
-5) Telefón / sklad / Shopify off
+5) Telefón / sklad / Shopify merchant off
 ```
 
 **Ľudsky celý checklist:** [../majitel.md](../majitel.md)

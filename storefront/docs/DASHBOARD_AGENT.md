@@ -1,13 +1,15 @@
 # Dashboard Agent (Mistral Command Bar)
 
-Natívny AI admin modul v Next.js storefronte na `/dashboard`. Mistral orchestruje tool-calling akcie nad katalógom (`catalog/*`) s audit logom a exportom CSV.
+Natívny AI admin modul v Next.js storefronte na `/dashboard`. Mistral orchestruje tool-calling akcie nad **WooCommerce** (katalóg, objednávky, sklad) s audit logom a exportom CSV.
+
+**Stav (2026-07-19):** všetky agent tools idú cez Woo REST — žiadny Shopify Admin stub. Odkaz „WordPress admin“ v UI → `https://cms.growmedica.cz/wp-admin`.
 
 ## Režimy (`NEXT_PUBLIC_DASHBOARD_MODE`)
 
 | Režim | Správanie |
 |-------|-----------|
-| `agentic` | Natívny admin + AI Agent (default) |
-| `iframe` | Len externý admin iframe (legacy) |
+| `agentic` | Natívny admin + AI Agent (default na produkcii) |
+| `iframe` | Externý admin iframe (legacy; default URL = WP admin) |
 | `hybrid` | Tabs: AI Agent + iframe (legacy) |
 
 Default: `agentic`.
@@ -20,9 +22,10 @@ Pozri [DASHBOARD_PANELS.md](./DASHBOARD_PANELS.md) pre natívne panely (produkty
 |---|---|---|
 | `NEXT_PUBLIC_DASHBOARD_MODE` | `agentic` | Režim dashboardu |
 | `DASHBOARD_AGENT_SECRET` | `min-32-chars-secret` | Auth pre `/api/dashboard/*` + secret gate |
-| `DASHBOARD_ALLOW_LIVE_WRITES` | `1` | Povoliť live Shopify zápisy |
+| `DASHBOARD_ALLOW_LIVE_WRITES` | `1` | Povoliť live zápisy do Woo (sklad, copy, SEO, ceny) |
 | `MISTRAL_API_KEY` | `...` | Live Mistral (alebo `MISTRAL_MOCK_MODE=1`) |
-| `CMS_PROVIDER` | `wordpress` | Katalóg backend |
+| `CMS_PROVIDER` | `wordpress` | Katalóg backend (vždy wordpress) |
+| `WORDPRESS_BASE_URL` + `WOO_CONSUMER_KEY` + `WOO_CONSUMER_SECRET` | cms + ck/cs | Live Woo REST |
 | `WOO_MOCK_MODE` | `1` | Mock katalóg pre dev/test |
 | `UPSTASH_REDIS_REST_URL` | `...` | Voliteľná persistencia audit logu |
 | `UPSTASH_REDIS_REST_TOKEN` | `...` | Upstash token |
@@ -111,8 +114,10 @@ Agent používa **Mistral tool-calling** s regex fallbackom pri chybe API.
 - „Export CSV katalógu“
 - „Stav integrácie“
 - „Hromadná zmena cien o 5%“
+- „Zobraz posledných 10 objednávok“
 - „Optimalizuj copy produktu omega-3“
 - „SEO pre produkt reishi-extrakt“
+- „Produkt {slug} nastav sklad 12“ (dry-run; live s potvrdením + `DASHBOARD_ALLOW_LIVE_WRITES=1`)
 
 ## E4 — Kvalita SK copy (`optimize_product_copy`)
 

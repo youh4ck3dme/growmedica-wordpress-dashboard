@@ -25,7 +25,7 @@ Prehliadač
 | Admin produktov / objednávok | `cms…/wp-admin` |
 | Firemné údaje | [vzorfirma.md](./vzorfirma.md) |
 
-`CMS_PROVIDER=wordpress` na produkcii → dáta z Woo, nie zo Shopify.
+`CMS_PROVIDER=wordpress` na produkcii → dáta výhradne z WooCommerce. Shopify runtime v storefronte nie je.
 
 ---
 
@@ -58,7 +58,7 @@ Všetko pod `storefront/src/app/api/`.
 
 | Method | Path | Účel |
 |--------|------|------|
-| GET | `/api/products` | Zoznam produktov (Woo/Shopify podľa CMS) |
+| GET | `/api/products` | Zoznam produktov (WooCommerce) |
 | GET | `/api/search` | Vyhľadávanie |
 
 ### Košík (WordPress režim)
@@ -97,9 +97,9 @@ Cookie session (nie browser localStorage ako SoT). Detail: [../storefront/docs/W
 | GET | `/api/dashboard/products` | Produkty |
 | GET/PATCH | `/api/dashboard/products/[handle]` | Detail / úprava |
 | POST | `/api/dashboard/products/[handle]/revalidate` | Revalidate |
-| GET | `/api/dashboard/orders` | Objednávky |
-| GET | `/api/dashboard/inventory` | Sklad |
-| POST | `/api/dashboard/agent` | AI agent |
+| GET | `/api/dashboard/orders` | Objednávky (Woo) |
+| GET/PUT | `/api/dashboard/inventory` | Sklad (Woo; PUT s live writes) |
+| POST | `/api/dashboard/agent` | AI agent (Woo tools; pozri DASHBOARD_AGENT.md) |
 | GET | `/api/dashboard/audit` | Audit log |
 | GET | `/api/dashboard/export/[id]` | Export |
 
@@ -123,7 +123,7 @@ Cookie session (nie browser localStorage ako SoT). Detail: [../storefront/docs/W
 
 | Súbor | Kde | Čo obsahuje | Git |
 |-------|-----|-------------|-----|
-| **`storefront/.env.local`** | lokálny dev | `CMS_PROVIDER`, Woo `ck_/cs_`, revalidate, Mistral, dashboard secret, Shopify rollback | **gitignored** |
+| **`storefront/.env.local`** | lokálny dev | `CMS_PROVIDER`, Woo `ck_/cs_`, revalidate, Mistral, dashboard secret | **gitignored** |
 | **`storefront/.env.example`** | šablóna | rovnaké kľúče **bez** hesiel | v gite |
 | **`wordpress-production.local.env`** | koreň repa | DB, App Password, SMTP, Woo keys (prevádzka cms) | **gitignored** |
 | **Vercel Project → Env** | cloud | produkčné Next env (nie DB, nie SMTP cms) | mimo gitu |
@@ -138,10 +138,27 @@ WOO_CONSUMER_KEY=ck_...
 WOO_CONSUMER_SECRET=cs_...
 WORDPRESS_REVALIDATION_SECRET=...   # rovnaký ako na cms
 NEXT_PUBLIC_SITE_URL=https://www.growmedica.cz
+NEXT_PUBLIC_DASHBOARD_MODE=agentic
 NEXT_PUBLIC_DASHBOARD_URL=https://cms.growmedica.cz/wp-admin
 DASHBOARD_AGENT_SECRET=...
+DASHBOARD_ALLOW_LIVE_WRITES=1       # len ak chceš agent zápisy do Woo
 MISTRAL_API_KEY=...                 # AI
 ```
+
+**Dashboard smoke (produkcia):**
+
+```bash
+curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
+  https://www.growmedica.cz/api/dashboard/health
+# očakávaj: cms_provider=wordpress, catalog=live, admin=wordpress
+
+curl -s -X POST https://www.growmedica.cz/api/dashboard/agent \
+  -H "Content-Type: application/json" \
+  -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
+  -d '{"command":"Zobraz posledných 5 objednávok"}'
+# očakávaj: list_orders status ok
+```
+
 
 ### Len v `wordpress-production.local.env` (cms hosting)
 
