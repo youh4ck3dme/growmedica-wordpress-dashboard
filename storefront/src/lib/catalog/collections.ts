@@ -1,17 +1,19 @@
 import type { Collection } from '@/lib/catalog/types'
+import { decodeHtmlEntities } from '@/lib/utils'
 import { getWooCategories, getWooCategoryBySlug } from '@/lib/wordpress/categories'
 import { isWooMockMode, getMockWooCategories } from '@/lib/wordpress/mock'
 import type { WooCategory } from '@/lib/wordpress/types'
 
 function wooCategoryToCollection(category: WooCategory): Collection {
+  const title = decodeHtmlEntities(category.name)
   return {
     id: String(category.id),
     handle: category.slug,
-    title: category.name,
+    title,
     description: category.description,
     descriptionHtml: category.description,
     image: null,
-    seo: { title: category.name, description: category.description || null },
+    seo: { title, description: category.description || null },
     updatedAt: new Date().toISOString(),
   }
 }
