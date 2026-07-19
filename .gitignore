@@ -47,3 +47,6 @@ wordpress-php-server.log
 docs/wordpress.secrets.md
 docs/plugins/
 docs/Prihlasovacie*
+
+# Local Firebase / gcloud / JDK toolchain (ADC secrets inside — never commit)
+.tools/

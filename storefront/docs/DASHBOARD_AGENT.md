@@ -47,9 +47,18 @@ Vydá httpOnly cookie `growmedica-dashboard-agent-session` (24h). Volá sa autom
 ```json
 {
   "command": "Zobraz produkty",
-  "conversation_id": "optional-uuid"
+  "conversation_id": "optional-uuid",
+  "mode": "assist"
 }
 ```
+
+| `mode` | Správanie |
+|--------|-----------|
+| `assist` (default) | Interaktívny agent. Live zápis len s `confirm` + `DASHBOARD_ALLOW_LIVE_WRITES=1`. |
+| `plan` | Plánovanie + dry-run. Write tools majú server-side `confirm=false` (simulácia). |
+| `monitor` | Read-only. Write tools sa odfiltrujú (prompt + server). |
+
+`mode` mení system prompt a server-side constraints. **Neobchádza** write gate (`confirm` + `DASHBOARD_ALLOW_LIVE_WRITES`).
 
 Odpoveď:
 
@@ -57,7 +66,8 @@ Odpoveď:
 {
   "conversation_id": "conv-...",
   "reply": "✅ Nájdených 10 produktov...",
-  "actions": [{ "tool": "list_products", "args": {}, "result": {}, "status": "ok" }]
+  "actions": [{ "tool": "list_products", "args": {}, "result": {}, "status": "ok" }],
+  "mode": "assist"
 }
 ```
 

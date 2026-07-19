@@ -224,6 +224,7 @@ Diagnostika: [../storefront/docs/DIAGNOSTICS.md](../storefront/docs/DIAGNOSTICS.
 | **[MERCHANT_KEYS.md](./MERCHANT_KEYS.md)** | **Packeta · Stripe · SuperFaktúra · GoPay · DPD (ty)** |
 | [vzorfirma.md](./vzorfirma.md) | IČO DIČ IBAN |
 | [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) | SuperFaktúra Woo plugin + API |
+| **[FIREBASE_CLI.md](./FIREBASE_CLI.md)** | **Nexus Google Sign-In — firebase/gcloud Auth ops** |
 | [storefront/docs/DEVELOPMENT.md](../storefront/docs/DEVELOPMENT.md) | Vývoj + freeze |
 | [storefront/docs/WOO_CART.md](../storefront/docs/WOO_CART.md) | Košík |
 | [storefront/docs/WP_WEBHOOKS.md](../storefront/docs/WP_WEBHOOKS.md) | Revalidate |
@@ -243,6 +244,17 @@ Diagnostika: [../storefront/docs/DIAGNOSTICS.md](../storefront/docs/DIAGNOSTICS.
 | Reinstall | `./scripts/install-superfaktura-cms.sh` |
 | Docs | [SUPERFAKTURA_SETUP.md](./SUPERFAKTURA_SETUP.md) · [reference/superfaktura-api-pattern.md](./reference/superfaktura-api-pattern.md) · majiteľ **2a–2k:** [../majitel.md](../majitel.md#2-superfaktúra--automatické-faktúry) |
 
+### Firebase Auth (Nexus Google Sign-In)
+
+| | |
+|--|--|
+| Project | `noorgrowmfinnal-58800798-76fac` |
+| CLI docs | [FIREBASE_CLI.md](./FIREBASE_CLI.md) |
+| Status | `./scripts/firebase/status.sh` |
+| Domains | `./scripts/firebase/ensure-auth-domains.sh` |
+| Google IdP | `./scripts/firebase/ensure-google-provider.sh` |
+| Local tools | `.tools/` (gitignored) — firebase-tools, gcloud ADC, Temurin 21 |
+
 ---
 
-*Aktualizované: 2026-07-17 (SF: infra smoke hotový, API čaká majiteľa)*
+*Aktualizované: 2026-07-18 (Firebase CLI Auth ops + SF)*
