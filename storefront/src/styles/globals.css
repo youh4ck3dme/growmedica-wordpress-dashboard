@@ -2858,15 +2858,17 @@
   .assistant-drawer {
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0;
+    right: auto;
     z-index: 111;
     display: flex;
     flex-direction: column;
     width: min(100%, 28rem);
     height: 100dvh;
     background: var(--color-surface);
-    border-left: 1px solid var(--color-border);
-    box-shadow: -8px 0 32px rgba(16, 22, 21, 0.12);
+    border-right: 1px solid var(--color-border);
+    border-left: none;
+    box-shadow: 8px 0 32px rgba(16, 22, 21, 0.12);
   }
 
   [data-storefront-theme='noor'] .assistant-drawer {
@@ -3040,7 +3042,8 @@
 
   .assistant-fab {
     position: fixed;
-    right: max(1rem, env(safe-area-inset-right, 0px));
+    left: max(1rem, env(safe-area-inset-left, 0px));
+    right: auto;
     bottom: max(1rem, env(safe-area-inset-bottom, 0px));
     z-index: 105;
     display: inline-flex;
