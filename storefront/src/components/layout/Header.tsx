@@ -6,23 +6,23 @@ import { Container } from '@/components/ui/Container'
 import Logo from '@/components/ui/Logo'
 import MobileNav from './MobileNav'
 import HeaderMegaMenu, { type MegaMenuCategory } from './HeaderMegaMenu'
+import HeaderCommerceActions from './HeaderCommerceActions'
 import { StorefrontThemeSwitcher } from '@/components/theme/StorefrontThemeSwitcher'
 import { ThemeSearch } from '@/components/ui/ThemeSearch'
 import { useStorefrontTheme } from '@/components/theme/StorefrontThemeProvider'
 import { PRIMARY_NAV_LINKS } from '@/lib/navigation/primary-nav'
 import { shouldHideThemeSwitcher } from '@/lib/theme/storefront-theme'
-import { Heart, User } from 'lucide-react'
 
 interface HeaderProps {
   megaMenuCategories?: MegaMenuCategory[]
 }
 
+const legacyActionClass =
+  'p-2 text-(--color-text-muted) hover:text-(--color-primary) transition-colors rounded-lg relative min-w-[44px] min-h-[44px] flex items-center justify-center'
+
 export default function Header({ megaMenuCategories = [] }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [cartCount, setCartCount] = useState(0)
   const [scrolled, setScrolled] = useState(false)
-
-  const [wishlistCount, setWishlistCount] = useState(0)
 
   type MobileCat = { href: string; label: string; children?: MobileCat[] }
   const mapCat = (c: MegaMenuCategory): MobileCat => ({
@@ -33,48 +33,12 @@ export default function Header({ megaMenuCategories = [] }: HeaderProps) {
   const categoryLinks = megaMenuCategories.map(mapCat)
 
   useEffect(() => {
-    async function fetchCartCount() {
-      try {
-        const res = await fetch('/api/cart')
-        if (res.ok) {
-          const data = (await res.json()) as { count?: number }
-          if (data.count !== undefined) setCartCount(data.count)
-        }
-      } catch {
-        /* silent */
-      }
-    }
-    fetchCartCount()
-
-    // Load initial wishlist count
-    try {
-      const stored = localStorage.getItem('gm_wishlist')
-      if (stored) {
-        setWishlistCount((JSON.parse(stored) as string[]).length)
-      }
-    } catch {
-      /* silent */
-    }
-
-    function handleCartCountUpdate(e: Event) {
-      setCartCount((e as CustomEvent<number>).detail)
-    }
-    window.addEventListener('cart-count-updated', handleCartCountUpdate)
-
-    function handleWishlistUpdate(e: Event) {
-      const wishlist = (e as CustomEvent<string[]>).detail
-      if (wishlist) setWishlistCount(wishlist.length)
-    }
-    window.addEventListener('wishlist-updated', handleWishlistUpdate)
-
     function handleScroll() {
       setScrolled(window.scrollY > 8)
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
-      window.removeEventListener('cart-count-updated', handleCartCountUpdate)
-      window.removeEventListener('wishlist-updated', handleWishlistUpdate)
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -145,52 +109,7 @@ export default function Header({ megaMenuCategories = [] }: HeaderProps) {
                 className={`${searchButtonClass}${theme === 'noor' ? '' : ' lg:hidden'}`}
               />
 
-              {/* Wishlist Link */}
-              <Link
-                href="/oblubene"
-                id="wishlist-button"
-                className="p-2 text-(--color-text-muted) hover:text-(--color-primary) transition-colors rounded-lg relative"
-                aria-label={`Obľúbené produkty${wishlistCount > 0 ? `, ${wishlistCount} položiek` : ''}`}
-              >
-                <Heart className="h-5 w-5" />
-                {wishlistCount > 0 && (
-                  <span
-                    className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full text-[9px] font-bold text-white bg-red-500"
-                    aria-hidden="true"
-                  >
-                    {wishlistCount}
-                  </span>
-                )}
-              </Link>
-
-              {/* Profile/Customer Zone Link */}
-              <Link
-                href="/profil"
-                id="profile-button"
-                className="p-2 text-(--color-text-muted) hover:text-(--color-primary) transition-colors rounded-lg"
-                aria-label="Klientska zóna"
-              >
-                <User className="h-5 w-5" />
-              </Link>
-
-              <Link
-                href="/kosik"
-                id="cart-button"
-                className="p-2 text-(--color-text-muted) hover:text-(--color-primary) transition-colors rounded-lg relative"
-                aria-label={`Nákupný košík${cartCount > 0 ? `, ${cartCount} položiek` : ''}`}
-              >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
-                </svg>
-                {cartCount > 0 && (
-                  <span
-                    className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white bg-(--color-primary)"
-                    aria-hidden="true"
-                  >
-                    {cartCount > 9 ? '9+' : cartCount}
-                  </span>
-                )}
-              </Link>
+              <HeaderCommerceActions actionClassName={legacyActionClass} />
             </div>
           </div>
         </Container>

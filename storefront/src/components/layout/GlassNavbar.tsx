@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { Suspense, useState, useEffect, useMemo } from 'react'
-import { Menu, Search, ShoppingBag } from 'lucide-react'
+import { Menu, Search } from 'lucide-react'
 import { Container } from '@/components/ui/Container'
 import Logo from '@/components/ui/Logo'
+import HeaderCommerceActions from '@/components/layout/HeaderCommerceActions'
 import MobileNav from '@/components/layout/MobileNav'
 import HeaderMegaMenu, { type MegaMenuCategory } from '@/components/layout/HeaderMegaMenu'
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher'
@@ -24,7 +25,6 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
   const { locale, t } = useLocale()
   const primaryLinks = useMemo(() => getPrimaryNavLinks(locale), [locale])
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [cartCount, setCartCount] = useState(0)
   const [scrolled, setScrolled] = useState(false)
 
   type MobileCat = { href: string; label: string; children?: MobileCat[] }
@@ -36,24 +36,6 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
   const categoryLinks = megaMenuCategories.map(mapCat)
 
   useEffect(() => {
-    async function fetchCartCount() {
-      try {
-        const res = await fetch('/api/cart')
-        if (res.ok) {
-          const data = (await res.json()) as { count?: number }
-          if (data.count !== undefined) setCartCount(data.count)
-        }
-      } catch {
-        /* silent */
-      }
-    }
-    fetchCartCount()
-
-    function handleCartCountUpdate(e: Event) {
-      setCartCount((e as CustomEvent<number>).detail)
-    }
-    window.addEventListener('cart-count-updated', handleCartCountUpdate)
-
     function handleScroll() {
       setScrolled(window.scrollY > 8)
     }
@@ -61,7 +43,6 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
     handleScroll()
 
     return () => {
-      window.removeEventListener('cart-count-updated', handleCartCountUpdate)
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -71,10 +52,6 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
 
   const showThemeSwitcher = !shouldHideThemeSwitcher()
   const { theme } = useStorefrontTheme()
-  const cartAria =
-    cartCount > 0
-      ? `${t('aria.cart')}, ${t('aria.cartItems', { count: cartCount })}`
-      : t('aria.cart')
 
   return (
     <>
@@ -142,22 +119,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
                 <Search className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
               </ThemeSearch>
 
-              <Link
-                href="/kosik"
-                id="cart-button"
-                className="glass-navbar__action relative"
-                aria-label={cartAria}
-              >
-                <ShoppingBag className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-                {cartCount > 0 && (
-                  <span
-                    className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white bg-(--color-primary)"
-                    aria-hidden="true"
-                  >
-                    {cartCount > 9 ? '9+' : cartCount}
-                  </span>
-                )}
-              </Link>
+              <HeaderCommerceActions />
             </div>
           </div>
         </Container>

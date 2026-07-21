@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Heart } from 'lucide-react'
+import { IconHeart } from '@/components/icons/storefront'
 import { cn } from '@/lib/utils'
 import { useThemeToast } from '@/components/ui/ThemeToast'
 
@@ -79,7 +79,11 @@ export function WishlistButton({
           className
         )}
       >
-        <Heart className={cn("h-4.5 w-4.5 transition-transform duration-200", isLiked && "fill-current scale-110")} />
+        <IconHeart
+          size={18}
+          filled={isLiked}
+          className={cn('transition-transform duration-200', isLiked && 'scale-110')}
+        />
       </button>
     )
   }
@@ -93,7 +97,7 @@ export function WishlistButton({
         className
       )}
     >
-      <Heart className={cn("h-4 w-4", isLiked && "fill-current text-(--color-error)")} />
+      <IconHeart size={16} filled={isLiked} className={cn(isLiked && 'text-(--color-error)')} />
       <span>{isLiked ? 'V obľúbených' : 'Pridať do obľúbených'}</span>
     </button>
   )

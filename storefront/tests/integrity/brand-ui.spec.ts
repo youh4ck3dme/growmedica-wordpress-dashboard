@@ -20,15 +20,20 @@ test.describe('Brand UI — layout markup (SSR HTML)', () => {
 
   test('logo a navigácia majú stabilné selektory', () => {
     const headerPath = path.join(process.cwd(), 'src/components/layout/GlassNavbar.tsx')
+    const commercePath = path.join(process.cwd(), 'src/components/layout/HeaderCommerceActions.tsx')
     const searchPath = path.join(process.cwd(), 'src/components/ui/ThemeSearch.tsx')
     const footerPath = path.join(process.cwd(), 'src/components/layout/Footer.tsx')
     
     const headerContent = fs.readFileSync(headerPath, 'utf8')
+    const commerceContent = fs.readFileSync(commercePath, 'utf8')
     const searchContent = fs.readFileSync(searchPath, 'utf8')
     const footerContent = fs.readFileSync(footerPath, 'utf8')
     
     expect(headerContent).toContain('id="site-logo"')
-    expect(headerContent).toContain('id="cart-button"')
+    expect(headerContent).toContain('HeaderCommerceActions')
+    expect(commerceContent).toContain('id="cart-button"')
+    expect(commerceContent).toContain('id="profile-button"')
+    expect(commerceContent).toContain('id="wishlist-button"')
     expect(searchContent).toContain('id="search-button"')
     expect(footerContent).toMatch(/<footer[^>]*role="contentinfo"/)
   })
