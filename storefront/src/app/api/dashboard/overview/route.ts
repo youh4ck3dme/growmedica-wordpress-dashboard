@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const [catalog, collections, audit, recentOrders] = await Promise.all([
-      getProductsAccumulated({ pages: 1, first: 250 }),
+      getProductsAccumulated({ pages: 1, first: 100 }),
       getCollections(50),
       listAuditEntries(5, 0),
       (async () => {

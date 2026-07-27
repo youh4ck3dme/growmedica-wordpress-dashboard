@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { Container } from '@/components/ui/Container'
 import { FilterableProductList } from '@/components/product/FilterableProductList'
-import { getProductsAccumulated } from '@/lib/catalog/products'
+import { getProductsAccumulated, PRODUCTS_PAGE_SIZE } from '@/lib/catalog/products'
 import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
 import type { ProductListItem } from '@/lib/catalog/types'
@@ -30,8 +30,9 @@ export default async function ProduktyPage({ searchParams }: ProductsPageProps) 
   let products: ProductListItem[] = []
 
   try {
+    // Woo REST caps per_page at 100 — accumulate pages instead of asking for 250.
     const productData = await getProductsAccumulated({
-      first: 250,
+      first: PRODUCTS_PAGE_SIZE,
       pages: 'all',
       query,
     })

@@ -123,10 +123,11 @@ export async function getWooFeaturedProducts(first = 8): Promise<ProductListItem
     return result.items.map(wooProductToListItem)
   }
 
-  const result = await wooFetchPaginated<WooProduct>({
+  const perPage = resolvePerPage(first)
+  const featured = await wooFetchPaginated<WooProduct>({
     path: '/products',
     params: {
-      per_page: resolvePerPage(first),
+      per_page: perPage,
       featured: true,
       status: 'publish',
       orderby: 'popularity',
@@ -135,7 +136,23 @@ export async function getWooFeaturedProducts(first = 8): Promise<ProductListItem
     revalidate: 3600,
   })
 
-  return result.items.map(wooProductToListItem)
+  if (featured.items.length > 0) {
+    return featured.items.map(wooProductToListItem)
+  }
+
+  // Woo often has zero products marked "featured" — fall back to bestsellers.
+  const popular = await wooFetchPaginated<WooProduct>({
+    path: '/products',
+    params: {
+      per_page: perPage,
+      status: 'publish',
+      orderby: 'popularity',
+    },
+    tags: ['woo-featured-products', 'woo-products'],
+    revalidate: 3600,
+  })
+
+  return popular.items.map(wooProductToListItem)
 }
 
 export const WOO_PRODUCTS_PAGE_SIZE = 48

@@ -39,7 +39,12 @@ function buildWooUrl(
 
   for (const [key, value] of Object.entries(params ?? {})) {
     if (value !== undefined && value !== '') {
-      url.searchParams.set(key, String(value))
+      // Always clamp per_page at the URL layer — Woo rejects >100 with 400.
+      if (key === 'per_page') {
+        url.searchParams.set(key, String(clampWooPerPage(Number(value))))
+      } else {
+        url.searchParams.set(key, String(value))
+      }
     }
   }
 
