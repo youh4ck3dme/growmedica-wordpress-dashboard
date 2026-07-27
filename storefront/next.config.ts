@@ -4,6 +4,7 @@ import withSerwistInit from '@serwist/next'
 import { getLegacyRedirectEntries } from './src/lib/category-map'
 import { getSeoTaxonomyRedirects } from './src/lib/seo-taxonomy-redirects'
 import { getDashboardOrigin } from './src/lib/dashboard'
+import skMenu from './src/lib/navigation/growmedica-sk-menu.json'
 
 const categoryRedirects = getLegacyRedirectEntries().map(({ source, destination }) => ({
   source,
@@ -14,6 +15,14 @@ const seoTaxonomyRedirects = getSeoTaxonomyRedirects().map(({ source, destinatio
   source,
   destination,
   statusCode: 301 as const,
+}))
+/** SK menu typos / legacy category paths → SEO freeze paths (308). */
+const skMenuPathAliasRedirects = Object.entries(
+  (skMenu as { pathAliases?: Record<string, string> }).pathAliases ?? {},
+).map(([from, to]) => ({
+  source: `/kategorie/${from}`,
+  destination: `/kategorie/${to}`,
+  permanent: true,
 }))
 
 const revision =
@@ -110,6 +119,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       ...seoTaxonomyRedirects,
+      ...skMenuPathAliasRedirects,
       ...categoryRedirects,
       {
         source: '/produkt/:slug',

@@ -50,7 +50,7 @@
         },
         {
           "label": "Chudnutie",
-          "path": "zdravotne-riesenia/chudnutie",
+          "path": "zdravotne-riesenia/kontrola-hmotnosti",
           "children": [],
           "skPath": "zdravotne-riesenia/chudnutie"
         },
@@ -355,7 +355,7 @@
           "children": [
             {
               "label": "Kolagén na krásu",
-              "path": "doplnky-vyzivy/kolagen-a-pohyb/kolagen-na-krasu",
+              "path": "doplnky-vyzivy/kolagen-a-pohyb/kolagen-pre-krasu",
               "children": [],
               "skPath": "doplnky-vyzivy/kolagen-a-pohyb/kolagen-na-krasu"
             },
@@ -436,7 +436,7 @@
             },
             {
               "label": "Kapsule Omega 3",
-              "path": "doplnky-vyzivy/omega-3/kapsule-omega-3",
+              "path": "doplnky-vyzivy/omega-3/omega-3-kapsuly",
               "children": [],
               "skPath": "doplnky-vyzivy/omega-3/kapsule-omega-3"
             }
@@ -628,7 +628,7 @@
             },
             {
               "label": "Medy & Sladidlá",
-              "path": "zdravie/zdrave-potraviny/medy-and-sladidla",
+              "path": "zdravie/zdrave-potraviny/medy-a-sladidla",
               "children": [],
               "skPath": "zdravie/zdrave-potraviny/medy-and-sladidla"
             }
@@ -653,7 +653,7 @@
             },
             {
               "label": "Terapeutické nápoje",
-              "path": "zdravie/zdrave-napoje/terapeuticke-napoje",
+              "path": "zdravie/zdrave-napoje/funkcne-napoje",
               "children": [],
               "skPath": "zdravie/zdrave-napoje/terapeuticke-napoje"
             }
@@ -939,7 +939,7 @@
             },
             {
               "label": "Hormonálne riešenia",
-              "path": "pre-zvierata/zvieracie-riesenia/hormonalne-riesenia",
+              "path": "pre-zvierata/zvieracie-riesenia/hormonalna-rovnovaha",
               "children": [],
               "skPath": "pre-zvierata/zvieracie-riesenia/hormonalne-riesenia"
             },
@@ -1000,9 +1000,15 @@
     "doplnky-vyzivy/diety/paleo": "doplnky-vyzivy/diety-a-stravovanie/paleo",
     "doplnky-vyzivy/diety/vegan": "doplnky-vyzivy/diety-a-stravovanie/veganske",
     "doplnky-vyzivy/diety/vegetarian": "doplnky-vyzivy/diety-a-stravovanie/vegetarianske",
+    "doplnky-vyzivy/kolagen-a-pohyb/kolagen-na-krasu": "doplnky-vyzivy/kolagen-a-pohyb/kolagen-pre-krasu",
+    "doplnky-vyzivy/omega-3/kapsule-omega-3": "doplnky-vyzivy/omega-3/omega-3-kapsuly",
     "kozmetika/vlasova-kozmentika": "kozmetika/vlasova-kozmetika",
     "kozmetika/vlasova-kozmentika/kondicionery": "kozmetika/vlasova-kozmetika/kondicionery",
     "kozmetika/vlasova-kozmentika/sampony": "kozmetika/vlasova-kozmetika/sampony",
-    "zdravie/zdrave-potraviny/zelene-a-superoleje": "zdravie/zdrave-potraviny/zelene-a-superpotraviny"
+    "pre-zvierata/zvieracie-riesenia/hormonalne-riesenia": "pre-zvierata/zvieracie-riesenia/hormonalna-rovnovaha",
+    "zdravie/zdrave-napoje/terapeuticke-napoje": "zdravie/zdrave-napoje/funkcne-napoje",
+    "zdravie/zdrave-potraviny/medy-and-sladidla": "zdravie/zdrave-potraviny/medy-a-sladidla",
+    "zdravie/zdrave-potraviny/zelene-a-superoleje": "zdravie/zdrave-potraviny/zelene-a-superpotraviny",
+    "zdravotne-riesenia/chudnutie": "zdravotne-riesenia/kontrola-hmotnosti"
   }
 }
