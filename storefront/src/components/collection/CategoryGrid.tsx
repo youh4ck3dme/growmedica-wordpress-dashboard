@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { m, useReducedMotion } from 'framer-motion'
 import type { NavCollectionItem } from '@/lib/catalog/nav'
@@ -25,37 +26,52 @@ export function CategoryGrid({ categories, className }: CategoryGridProps) {
       )}
       role="list"
     >
-      {categories.map((category) => (
-        <m.div
-          key={category.handle}
-          role="listitem"
-          className="h-full"
-          whileHover={
-            reduceMotion
-              ? undefined
-              : {
-                  scale: 1.03,
-                }
-          }
-          transition={{
-            type: 'spring',
-            stiffness: 420,
-            damping: 28,
-          }}
-        >
-          <Link
-            href={category.href}
-            className="category-grid-premium__card group flex h-full flex-col items-center justify-center text-center"
+      {categories.map((category) => {
+        const imageUrl = category.imageUrl?.trim() || null
+
+        return (
+          <m.div
+            key={category.handle}
+            role="listitem"
+            className="h-full"
+            whileHover={
+              reduceMotion
+                ? undefined
+                : {
+                    scale: 1.03,
+                  }
+            }
+            transition={{
+              type: 'spring',
+              stiffness: 420,
+              damping: 28,
+            }}
           >
-            {category.icon ? (
-              <span className="category-grid-premium__icon" aria-hidden="true">
-                {category.icon}
-              </span>
-            ) : null}
-            <h3 className="category-grid-premium__title">{category.title}</h3>
-          </Link>
-        </m.div>
-      ))}
+            <Link
+              href={category.href}
+              className="category-grid-premium__card group flex h-full flex-col items-center justify-center text-center"
+            >
+              {imageUrl ? (
+                <span className="category-grid-premium__media" aria-hidden="true">
+                  <Image
+                    src={imageUrl}
+                    alt=""
+                    width={64}
+                    height={64}
+                    className="category-grid-premium__image"
+                    sizes="64px"
+                  />
+                </span>
+              ) : category.icon ? (
+                <span className="category-grid-premium__icon" aria-hidden="true">
+                  {category.icon}
+                </span>
+              ) : null}
+              <h3 className="category-grid-premium__title">{category.title}</h3>
+            </Link>
+          </m.div>
+        )
+      })}
     </div>
   )
 }

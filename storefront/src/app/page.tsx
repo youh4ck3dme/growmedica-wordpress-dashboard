@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
-import { cookies } from 'next/headers'
 import { getImageProps } from 'next/image'
 import { preload } from 'react-dom'
 import { Container } from '@/components/ui/Container'
@@ -13,18 +12,14 @@ import { BundleShowcase } from '@/components/sections/BundleShowcase'
 import { HomeMobileSearch } from '@/components/home/HomeMobileSearch'
 import { HomeCategoriesSection, HomeFeaturedSection } from '@/components/home/HomeSections'
 import { getRequestLocale } from '@/lib/i18n/server'
-import { t } from '@/lib/i18n/translate'
+import { t, type TranslationKey } from '@/lib/i18n/translate'
+import type { Locale } from '@/lib/i18n/types'
 import { getNavCollectionItems } from '@/lib/catalog/nav'
+import { shouldIncludeMegaMenuCollection } from '@/lib/catalog/nav-types'
 import { getFeaturedProducts } from '@/lib/catalog/products'
-import { getHomepageCategories } from '@/lib/category-map'
 import { BRAND_COPY } from '@/lib/brand'
-import { HERO_IMAGE_SIZES, HERO_LCP_QUALITY, HERO_VIDEO_SRC } from '@/lib/hero-image'
-import {
-  isStorefrontTheme,
-  resolveInitialTheme,
-  STORAGE_KEY,
-} from '@/lib/theme/storefront-theme'
-import type { ProductListItem } from '@/lib/catalog/types'
+import { HERO_IMAGE_SIZES, HERO_LCP_QUALITY } from '@/lib/hero-image'
+import { HERO_SLIDES } from '@/lib/hero-slides'
 
 const SupplementFinder = dynamic(
   () =>
@@ -53,17 +48,16 @@ export const metadata: Metadata = {
   description: BRAND_COPY.siteDescription,
 }
 
-function buildHeroSlides(products: ProductListItem[]): HeroSlide[] {
-  return products
-    .filter((product) => product.featuredImage?.url)
-    .slice(0, 5)
-    .map((product) => ({
-      id: product.id,
-      imageUrl: product.featuredImage!.url,
-      alt: product.featuredImage!.altText ?? product.title,
-      width: product.featuredImage!.width ?? 1600,
-      height: product.featuredImage!.height ?? 900,
-    }))
+function buildHeroSlides(locale: Locale): HeroSlide[] {
+  return HERO_SLIDES.map((slide) => ({
+    id: slide.id,
+    imageUrl: slide.imageUrl,
+    alt: t(`hero.slides.${slide.copyKey}.alt` as TranslationKey, locale),
+    width: slide.width,
+    height: slide.height,
+    copyKey: slide.copyKey,
+    ctaHref: slide.ctaHref,
+  }))
 }
 
 function preloadHeroLcpImage(slide: HeroSlide): void {
@@ -99,23 +93,13 @@ export default async function HomePage() {
     // Shopify not configured
   }
 
-  const categoriesByHandle = new Map(allCategories.map((c) => [c.handle, c]))
-  const categories = getHomepageCategories()
-    .map((def) => categoriesByHandle.get(def.slug))
-    .filter((c): c is NonNullable<typeof c> => Boolean(c))
+  // Same top-level tree as header mega menu + footer Menu
+  const categories = allCategories.filter(shouldIncludeMegaMenuCollection)
 
-  const cookieStore = await cookies()
-  const cookieTheme = cookieStore.get(STORAGE_KEY)?.value
-  const ssrTheme = resolveInitialTheme(
-    isStorefrontTheme(cookieTheme) ? cookieTheme : null,
-  )
-
-  const heroSlides = buildHeroSlides(featuredProducts)
+  const heroSlides = buildHeroSlides(locale)
   const lcpSlide = heroSlides[0]
 
-  if (ssrTheme === 'noor') {
-    preload(HERO_VIDEO_SRC, { as: 'video', type: 'video/mp4' })
-  } else if (lcpSlide?.imageUrl) {
+  if (lcpSlide?.imageUrl) {
     preloadHeroLcpImage(lcpSlide)
   }
 

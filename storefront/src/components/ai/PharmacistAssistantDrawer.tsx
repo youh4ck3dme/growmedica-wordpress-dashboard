@@ -24,6 +24,7 @@ export function PharmacistAssistantDrawer() {
   const [chatError, setChatError] = useState<string | null>(null)
   const [isSending, setIsSending] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
   const bootstrappedLocale = useRef(false)
 
   useEffect(() => {
@@ -91,9 +92,11 @@ export function PharmacistAssistantDrawer() {
       if (event.key === 'Escape') setOpen(false)
     }
     window.addEventListener('keydown', onKeyDown)
+    const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 180)
     return () => {
       document.body.style.overflow = ''
       window.removeEventListener('keydown', onKeyDown)
+      window.clearTimeout(focusTimer)
     }
   }, [open])
 
@@ -165,13 +168,19 @@ export function PharmacistAssistantDrawer() {
       >
         <header className="assistant-drawer__header">
           <div className="assistant-drawer__title-wrap">
-            <MessageCircle className="assistant-drawer__title-icon" aria-hidden="true" size={20} />
-            <div>
+            <div className="assistant-drawer__avatar" aria-hidden="true">
+              <MessageCircle className="assistant-drawer__title-icon" size={22} />
+            </div>
+            <div className="assistant-drawer__heading">
               <h2 id={titleId} className="assistant-drawer__title">
                 {t('assistant.headerTitle')}
               </h2>
               <p className="assistant-drawer__subtitle">
                 {t('assistant.subtitle')}
+              </p>
+              <p className="assistant-drawer__status">
+                <span className="assistant-drawer__status-dot" aria-hidden="true" />
+                {t('assistant.statusOnline')}
               </p>
             </div>
           </div>
@@ -191,23 +200,52 @@ export function PharmacistAssistantDrawer() {
               key={`${message.role}-${index}`}
               className={
                 message.role === 'assistant'
-                  ? 'assistant-drawer__bubble assistant-drawer__bubble--assistant'
-                  : 'assistant-drawer__bubble assistant-drawer__bubble--user'
+                  ? 'assistant-drawer__row assistant-drawer__row--assistant'
+                  : 'assistant-drawer__row assistant-drawer__row--user'
               }
             >
-              {message.content}
+              {message.role === 'assistant' ? (
+                <div className="assistant-drawer__bubble-avatar" aria-hidden="true">
+                  <MessageCircle size={14} />
+                </div>
+              ) : null}
+              <div
+                className={
+                  message.role === 'assistant'
+                    ? 'assistant-drawer__bubble assistant-drawer__bubble--assistant'
+                    : 'assistant-drawer__bubble assistant-drawer__bubble--user'
+                }
+              >
+                {message.content}
+              </div>
             </div>
           ))}
+          {isSending ? (
+            <div className="assistant-drawer__row assistant-drawer__row--assistant" aria-live="polite">
+              <div className="assistant-drawer__bubble-avatar" aria-hidden="true">
+                <MessageCircle size={14} />
+              </div>
+              <div className="assistant-drawer__bubble assistant-drawer__bubble--assistant assistant-drawer__bubble--typing">
+                <span className="assistant-drawer__typing" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </span>
+                <span className="sr-only">{t('assistant.typing')}</span>
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="assistant-drawer__footer">
           {suggestedReplies.length > 0 ? (
-            <div className="assistant-drawer__suggestions">
+            <div className="assistant-drawer__suggestions" aria-label={t('assistant.suggestionsLabel')}>
               {suggestedReplies.slice(0, 3).map((reply) => (
                 <button
                   key={reply}
                   type="button"
                   className="assistant-drawer__suggestion"
+                  disabled={isSending}
                   onClick={() => void sendUserMessage(reply)}
                 >
                   {reply}
@@ -218,12 +256,14 @@ export function PharmacistAssistantDrawer() {
 
           <form className="assistant-drawer__form" onSubmit={handleSubmit}>
             <input
+              ref={inputRef}
               value={input}
               onChange={(event) => setInput(event.target.value)}
               placeholder={t('assistant.placeholder')}
               className="assistant-drawer__input"
               disabled={isSending}
               aria-label={t('assistant.messageAria')}
+              autoComplete="off"
             />
             <button
               type="submit"
@@ -236,15 +276,17 @@ export function PharmacistAssistantDrawer() {
           </form>
 
           <p className="assistant-drawer__disclaimer">
-            <ShieldCheck size={12} aria-hidden="true" />
-            {t('finder.disclaimer')}{' '}
-            <Link href="/kosik" className="assistant-drawer__link" onClick={() => setOpen(false)}>
-              {t('cart.pageTitle')}
-            </Link>
-            {' · '}
-            <Link href="/kontakt" className="assistant-drawer__link" onClick={() => setOpen(false)}>
-              {t('footer.contact')}
-            </Link>
+            <ShieldCheck size={13} aria-hidden="true" className="assistant-drawer__disclaimer-icon" />
+            <span>
+              {t('finder.disclaimer')}{' '}
+              <Link href="/kosik" className="assistant-drawer__link" onClick={() => setOpen(false)}>
+                {t('cart.pageTitle')}
+              </Link>
+              {' · '}
+              <Link href="/kontakt" className="assistant-drawer__link" onClick={() => setOpen(false)}>
+                {t('footer.contact')}
+              </Link>
+            </span>
           </p>
           {chatError ? <p className="assistant-drawer__error">{chatError}</p> : null}
         </div>

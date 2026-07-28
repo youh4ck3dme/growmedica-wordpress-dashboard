@@ -501,6 +501,9 @@
   "assistant.sendAria": "Nachricht senden",
   "assistant.triggerAria": "Beratung anfordern",
   "assistant.headerTitle": "GrowMedica Apotheker",
+  "assistant.statusOnline": "Bereit zu beraten",
+  "assistant.typing": "Apotheker schreibt…",
+  "assistant.suggestionsLabel": "Vorgeschlagene Fragen",
   "cart.add": "In den Warenkorb",
   "cart.addAria": "Produkt in den Warenkorb legen",
   "cart.addStickyAria": "Produkt schnell in den Warenkorb legen",
@@ -688,8 +691,5 @@
   "reviews.bodyLabel": "Bewertungstext *",
   "reviews.bodyPlaceholder": "Beschreiben Sie Ihre Erfahrung mit dem Produkt ausführlich...",
   "reviews.empty": "Noch keine Bewertungen. Seien Sie der Erste, der dieses Produkt bewertet!",
-  "reviews.reviewedBy": "Bewertet von:",
-  "assistant.statusOnline": "Online",
-  "assistant.typing": "Schreibt…",
-  "assistant.suggestionsLabel": "Vorschläge"
+  "reviews.reviewedBy": "Bewertet von:"
 }

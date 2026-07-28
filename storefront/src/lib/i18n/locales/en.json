@@ -501,6 +501,9 @@
   "assistant.sendAria": "Send message",
   "assistant.triggerAria": "Get advice",
   "assistant.headerTitle": "GrowMedica Pharmacist",
+  "assistant.statusOnline": "Ready to help",
+  "assistant.typing": "Pharmacist is typing…",
+  "assistant.suggestionsLabel": "Suggested questions",
   "cart.add": "Add to cart",
   "cart.addAria": "Add product to cart",
   "cart.addStickyAria": "Quick add product to cart",
@@ -688,8 +691,5 @@
   "reviews.bodyLabel": "Review text *",
   "reviews.bodyPlaceholder": "Describe your experience with the product in detail...",
   "reviews.empty": "No reviews yet. Be the first to review this product!",
-  "reviews.reviewedBy": "Reviewed by:",
-  "assistant.statusOnline": "Online",
-  "assistant.typing": "Typing…",
-  "assistant.suggestionsLabel": "Suggestions"
+  "reviews.reviewedBy": "Reviewed by:"
 }
