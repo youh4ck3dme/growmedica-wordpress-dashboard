@@ -3,9 +3,10 @@
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
-import { SAFE_DISCLAIMER } from '@/lib/ai/compliance'
 import type { ProductFitOutput } from '@/lib/ai/schemas'
 import { cn } from '@/lib/utils'
+import { useT } from '@/components/i18n/LocaleProvider'
+import type { TranslationKey } from '@/lib/i18n/translate'
 
 const fitBoxClasses: Record<ProductFitOutput['fit'], string> = {
   good: 'bg-(--color-surface-2) border-(--color-success) text-(--color-success)',
@@ -13,10 +14,10 @@ const fitBoxClasses: Record<ProductFitOutput['fit'], string> = {
   not_recommended: 'bg-(--color-surface-2) border-(--color-error) text-(--color-error)',
 }
 
-const fitLabels: Record<ProductFitOutput['fit'], string> = {
-  good: 'Vhodné',
-  maybe: 'Overte si u odborníka',
-  not_recommended: 'Nevhodné',
+const fitLabelKeys: Record<ProductFitOutput['fit'], TranslationKey> = {
+  good: 'fit.good',
+  maybe: 'fit.maybe',
+  not_recommended: 'fit.notRecommended',
 }
 
 interface ProductFitBoxProps {
@@ -25,6 +26,7 @@ interface ProductFitBoxProps {
 }
 
 export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
+  const t = useT()
   const [userContext, setUserContext] = useState('')
   const [fitData, setFitData] = useState<ProductFitOutput | null>(null)
   const [loading, setLoading] = useState(false)
@@ -46,12 +48,12 @@ export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
 
       const data = (await response.json()) as ProductFitOutput & { error?: string }
       if (!response.ok) {
-        throw new Error(data.error ?? 'Nepodarilo sa posúdiť vhodnosť. Skúste to znova.')
+        throw new Error(data.error ?? t('fit.error'))
       }
 
       setFitData(data)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Nepodarilo sa overiť vhodnosť.')
+      setError(err instanceof Error ? err.message : t('fit.errorGeneric'))
     } finally {
       setLoading(false)
     }
@@ -60,15 +62,15 @@ export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
   return (
     <div className="mt-8 p-4 border border-(--color-border) rounded-lg bg-(--color-surface-2)">
       <h3 className="text-lg font-semibold mb-1 text-(--color-text)">
-        Hodí sa vám produkt {productTitle}?
+        {t('fit.title', { title: productTitle })}
       </h3>
       <p className="text-sm text-(--color-text-muted) mb-4">
-        Krátko popíšte svoje ciele — AI posúdi, či vám produkt sedí. {SAFE_DISCLAIMER}
+        {t('fit.subtitle')} {t('finder.disclaimer')}
       </p>
 
       <form onSubmit={handleCheckFit} className="space-y-4">
         <textarea
-          placeholder="Popíšte svoje ciele alebo obavy (napr. som vegán a hľadám železo)"
+          placeholder={t('fit.placeholder')}
           value={userContext}
           onChange={(event) => setUserContext(event.target.value)}
           disabled={loading}
@@ -80,7 +82,7 @@ export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'resize-y',
           )}
-          aria-label="Popíšte svoj kontext pre overenie vhodnosti produktu"
+          aria-label={t('fit.inputAria')}
         />
         <Button
           type="submit"
@@ -90,7 +92,7 @@ export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
           disabled={!userContext.trim()}
           fullWidth
         >
-          {loading ? 'Posudzujem vhodnosť…' : 'Overiť vhodnosť pre mňa'}
+          {loading ? t('fit.loading') : t('fit.submit')}
         </Button>
       </form>
 
@@ -113,13 +115,13 @@ export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
       {fitData && !loading && (
         <div className="mt-4 space-y-4">
           <div className={cn('p-3 rounded-lg border', fitBoxClasses[fitData.fit])}>
-            <p className="font-medium">{fitLabels[fitData.fit]}</p>
+            <p className="font-medium">{t(fitLabelKeys[fitData.fit])}</p>
             <p className="mt-1 text-(--color-text)">{fitData.shortAnswer}</p>
           </div>
 
           {fitData.bestFor.length > 0 && (
             <div>
-              <h4 className="font-medium text-(--color-text)">Vhodné pre:</h4>
+              <h4 className="font-medium text-(--color-text)">{t('fit.bestFor')}</h4>
               <ul className="mt-2 list-disc pl-5 space-y-1 text-(--color-text-muted)">
                 {fitData.bestFor.map((item) => (
                   <li key={item}>{item}</li>
@@ -130,7 +132,7 @@ export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
 
           {fitData.notIdealFor.length > 0 && (
             <div>
-              <h4 className="font-medium text-(--color-text)">Nevhodné pre:</h4>
+              <h4 className="font-medium text-(--color-text)">{t('fit.notIdealFor')}</h4>
               <ul className="mt-2 list-disc pl-5 space-y-1 text-(--color-text-muted)">
                 {fitData.notIdealFor.map((item) => (
                   <li key={item}>{item}</li>
@@ -141,7 +143,7 @@ export function ProductFitBox({ handle, productTitle }: ProductFitBoxProps) {
 
           {fitData.howToUse && (
             <div>
-              <h4 className="font-medium text-(--color-text)">Ako používať:</h4>
+              <h4 className="font-medium text-(--color-text)">{t('fit.howToUse')}</h4>
               <p className="mt-1 text-(--color-text-muted)">{fitData.howToUse}</p>
             </div>
           )}

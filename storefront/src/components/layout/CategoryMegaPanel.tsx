@@ -108,13 +108,6 @@ export default function CategoryMegaPanel({
           </div>
         )}
         <Link
-          href="/kolekcie"
-          className="mega-menu-all-link"
-          onClick={onNavigate}
-        >
-          Všetky kolekcie →
-        </Link>
-        <Link
           href="/balicky"
           className="mega-menu-all-link"
           onClick={onNavigate}

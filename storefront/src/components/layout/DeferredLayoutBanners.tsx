@@ -6,6 +6,10 @@ const PwaInstallBanner = dynamic(() => import('@/components/layout/PwaInstallBan
   ssr: false,
 })
 
+const CookieConsentBanner = dynamic(() => import('@/components/layout/CookieConsentBanner'), {
+  ssr: false,
+})
+
 const PharmacistAssistantDrawer = dynamic(
   () =>
     import('@/components/ai/PharmacistAssistantDrawer').then((mod) => ({
@@ -26,6 +30,7 @@ export function DeferredLayoutBanners() {
   return (
     <>
       <PwaInstallBanner />
+      <CookieConsentBanner />
       <PharmacistAssistantDrawer />
       <FloatingAssistantFab />
     </>

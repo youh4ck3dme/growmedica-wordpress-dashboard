@@ -1,34 +1,50 @@
 'use client'
 
 import Link from 'next/link'
-import { FormEvent, useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import { FormEvent, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Loader2, MessageCircle, Send, ShieldCheck, X } from 'lucide-react'
 import { PHARMACIST_ASSISTANT_OPEN_EVENT, consumePendingAssistantOpen, openPharmacistAssistant } from '@/lib/ai/pharmacist-assistant-events'
 import type { AssistantChatMessage, AssistantChatResponse } from '@/lib/ai/pharmacist-assistant'
-import { SAFE_DISCLAIMER } from '@/lib/ai/compliance'
-
-const INITIAL_ASSISTANT_MESSAGE: AssistantChatMessage = {
-  role: 'assistant',
-  content:
-    'Som váš virtuálny farmaceut GrowMedica. Pomôžem s výberom produktu alebo s orientáciou v objednávke.',
-}
+import { useT } from '@/components/i18n/LocaleProvider'
 
 const ASSISTANT_CONVERSATION_STORAGE_KEY = 'growmedica_assistant_conversation_id'
 
 export function PharmacistAssistantDrawer() {
+  const t = useT()
   const titleId = useId()
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
-  const [messages, setMessages] = useState<AssistantChatMessage[]>([INITIAL_ASSISTANT_MESSAGE])
+  const initialMessage = useMemo<AssistantChatMessage>(
+    () => ({ role: 'assistant', content: t('assistant.initial') }),
+    [t],
+  )
+  const [messages, setMessages] = useState<AssistantChatMessage[]>([initialMessage])
   const [conversationId, setConversationId] = useState('')
-  const [suggestedReplies, setSuggestedReplies] = useState<string[]>([
-    'Odporuč mi produkt na spánok',
-    'Ako dokončím objednávku?',
-    'Kontakt na podporu',
-  ])
+  const [suggestedReplies, setSuggestedReplies] = useState<string[]>([])
   const [chatError, setChatError] = useState<string | null>(null)
   const [isSending, setIsSending] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const bootstrappedLocale = useRef(false)
+
+  useEffect(() => {
+    // Reset greeting/suggestions when locale translator changes
+    if (!bootstrappedLocale.current) {
+      bootstrappedLocale.current = true
+      setMessages([initialMessage])
+      setSuggestedReplies([
+        t('assistant.suggest1'),
+        t('assistant.suggest2'),
+        t('assistant.suggest3'),
+      ])
+      return
+    }
+    setMessages([initialMessage])
+    setSuggestedReplies([
+      t('assistant.suggest1'),
+      t('assistant.suggest2'),
+      t('assistant.suggest3'),
+    ])
+  }, [initialMessage, t])
 
   useEffect(() => {
     const stored =
@@ -110,7 +126,7 @@ export function PharmacistAssistantDrawer() {
 
       const payload = (await response.json()) as AssistantChatResponse & { error?: string }
       if (!response.ok) {
-        throw new Error(payload.error ?? 'Chat je dočasne nedostupný.')
+        throw new Error(payload.error ?? t('assistant.unavailable'))
       }
 
       setMessages((current) => [...current, { role: 'assistant', content: payload.message }])
@@ -118,7 +134,7 @@ export function PharmacistAssistantDrawer() {
       scrollToBottom()
     } catch (error) {
       setChatError(
-        error instanceof Error ? error.message : 'Chat je dočasne nedostupný. Skúste to, prosím, o chvíľu.',
+        error instanceof Error ? error.message : t('assistant.unavailableRetry'),
       )
     } finally {
       setIsSending(false)
@@ -137,7 +153,7 @@ export function PharmacistAssistantDrawer() {
       <button
         type="button"
         className="assistant-drawer__backdrop"
-        aria-label="Zavrieť chat"
+        aria-label={t('assistant.closeChat')}
         onClick={() => setOpen(false)}
       />
       <aside
@@ -152,10 +168,10 @@ export function PharmacistAssistantDrawer() {
             <MessageCircle className="assistant-drawer__title-icon" aria-hidden="true" size={20} />
             <div>
               <h2 id={titleId} className="assistant-drawer__title">
-                GrowMedica Farmaceut
+                {t('assistant.headerTitle')}
               </h2>
               <p className="assistant-drawer__subtitle">
-                Produktové poradenstvo a orientácia v objednávke.
+                {t('assistant.subtitle')}
               </p>
             </div>
           </div>
@@ -163,7 +179,7 @@ export function PharmacistAssistantDrawer() {
             type="button"
             className="assistant-drawer__close"
             onClick={() => setOpen(false)}
-            aria-label="Zavrieť"
+            aria-label={t('assistant.close')}
           >
             <X size={20} />
           </button>
@@ -204,16 +220,16 @@ export function PharmacistAssistantDrawer() {
             <input
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Napíšte správu..."
+              placeholder={t('assistant.placeholder')}
               className="assistant-drawer__input"
               disabled={isSending}
-              aria-label="Správa pre asistenta"
+              aria-label={t('assistant.messageAria')}
             />
             <button
               type="submit"
               className="assistant-drawer__send"
               disabled={isSending || input.trim().length === 0}
-              aria-label="Odoslať správu"
+              aria-label={t('assistant.sendAria')}
             >
               {isSending ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
             </button>
@@ -221,13 +237,13 @@ export function PharmacistAssistantDrawer() {
 
           <p className="assistant-drawer__disclaimer">
             <ShieldCheck size={12} aria-hidden="true" />
-            {SAFE_DISCLAIMER}{' '}
+            {t('finder.disclaimer')}{' '}
             <Link href="/kosik" className="assistant-drawer__link" onClick={() => setOpen(false)}>
-              Košík
+              {t('cart.pageTitle')}
             </Link>
             {' · '}
             <Link href="/kontakt" className="assistant-drawer__link" onClick={() => setOpen(false)}>
-              Kontakt
+              {t('footer.contact')}
             </Link>
           </p>
           {chatError ? <p className="assistant-drawer__error">{chatError}</p> : null}
@@ -241,7 +257,7 @@ export function AssistantChatTrigger({
   className,
   children,
   onOpen,
-  'aria-label': ariaLabel = 'Poradiť sa',
+  'aria-label': ariaLabel,
   'data-testid': dataTestId = 'assistant-chat-trigger',
 }: {
   className?: string
@@ -250,11 +266,12 @@ export function AssistantChatTrigger({
   'aria-label'?: string
   'data-testid'?: string
 }) {
+  const t = useT()
   return (
     <button
       type="button"
       className={className}
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? t('assistant.triggerAria')}
       data-testid={dataTestId}
       onClick={() => {
         openPharmacistAssistant()

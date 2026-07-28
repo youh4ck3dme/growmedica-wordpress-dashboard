@@ -14,6 +14,8 @@ import {
   getSeoTaxonomyCollectionView,
 } from '@/lib/seo-taxonomy'
 import { buildLocaleAlternates, resolvePageRobots } from '@/lib/seo'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { t } from '@/lib/i18n/translate'
 
 export const revalidate = 3600
 
@@ -57,6 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function SeoCategoryPage({ params, searchParams }: PageProps) {
   const path = (await params).path.join('/')
+  const locale = await getRequestLocale()
   const category = getFrozenCategoryByPath(path)
   if (!category) notFound()
   const search = await searchParams
@@ -70,7 +73,7 @@ export default async function SeoCategoryPage({ params, searchParams }: PageProp
       <Container>
         <nav aria-label="Breadcrumb" className="mb-6">
           <ol className="flex flex-wrap items-center gap-2 text-sm text-(--color-text-muted)">
-            <li><Link href="/">Domov</Link></li>
+            <li><Link href="/">{t('page.breadcrumbHome', locale)}</Link></li>
             {[...ancestors, category].map((item, index, list) => (
               <li key={item.categoryId} className="flex items-center gap-2">
                 <span aria-hidden="true">/</span>
@@ -96,10 +99,10 @@ export default async function SeoCategoryPage({ params, searchParams }: PageProp
         </Suspense>
         <ProductGrid
           products={view.products}
-          emptyTitle="V tejto kategórii zatiaľ nie sú produkty"
-          emptyDescription="Skúste nadradenú kategóriu alebo sa vráťte do obchodu."
-          emptyAction="Zobraziť všetky produkty"
-          listAriaLabel={`Produkty v kategórii ${view.title}`}
+          emptyTitle={t('empty.category.title', locale)}
+          emptyDescription={t('empty.category.description', locale)}
+          emptyAction={t('empty.category.action', locale)}
+          listAriaLabel={t('aria.categoryProductsNamed', locale, { title: view.title })}
         />
       </Container>
     </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import type { Money } from '@/lib/catalog/types'
 import { Price } from '@/components/ui/Price'
 import { Button } from '@/components/ui/Button'
+import { useT } from '@/components/i18n/LocaleProvider'
 
 interface StickyAddToCartBarProps {
   productTitle: string
@@ -20,6 +21,7 @@ export default function StickyAddToCartBar({
   availableForSale,
   variantId,
 }: StickyAddToCartBarProps) {
+  const t = useT()
   const [visible, setVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -57,7 +59,7 @@ export default function StickyAddToCartBar({
   if (!visible) return null
 
   return (
-    <div className="sticky-atc-bar lg:hidden" role="region" aria-label="Rýchle pridanie produktu do košíka">
+    <div className="sticky-atc-bar lg:hidden" role="region" aria-label={t('cart.addStickyAria')}>
       <div className="flex items-center gap-3 px-4 py-3">
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-(--color-text)">{productTitle}</p>
@@ -69,9 +71,9 @@ export default function StickyAddToCartBar({
           isLoading={isLoading}
           disabled={!availableForSale}
           onClick={handleAdd}
-          aria-label="Pridať do košíka"
+          aria-label={t('cart.add')}
         >
-          {availableForSale ? 'Pridať do košíka' : 'Momentálne vypredané'}
+          {availableForSale ? t('cart.add') : t('product.soldOutBadge')}
         </Button>
       </div>
     </div>

@@ -19,6 +19,8 @@ import { getProductMetadata, getProductJsonLd, getBreadcrumbJsonLd, serializeJso
 import { getCollectionUrl } from '@/lib/utils'
 import { getCategoryDefinition, resolveCategory } from '@/lib/category-map'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { t } from '@/lib/i18n/translate'
 
 export const revalidate = 3600
 
@@ -39,12 +41,16 @@ interface ProductPageProps {
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { handle } = await params
   const product = await getProductByHandle(handle)
-  if (!product) return { title: 'Produkt nenájdený' }
+  if (!product) {
+    const locale = await getRequestLocale()
+    return { title: t('page.productNotFound', locale) }
+  }
   return getProductMetadata(product)
 }
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { handle } = await params
+  const locale = await getRequestLocale()
   const product = await getProductByHandle(handle)
 
   if (!product) notFound()
@@ -65,7 +71,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
   const productJsonLd = getProductJsonLd(p)
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
-    { name: 'Domov', item: siteUrl },
+    { name: t('page.breadcrumbHome', locale), item: siteUrl },
     ...(categorySlug !== 'ostatne'
       ? [{ name: categoryDef.title, item: `${siteUrl}${getCollectionUrl(categorySlug)}` }]
       : []),
@@ -130,9 +136,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </h1>
                 <div className="flex items-center gap-2 flex-wrap">
                   {p.availableForSale ? (
-                    <Badge variant="success">Dostupné skladom</Badge>
+                    <Badge variant="success">{t('product.inStock', locale)}</Badge>
                   ) : (
-                    <Badge variant="error">Momentálne vypredané</Badge>
+                    <Badge variant="error">{t('product.outOfStock', locale)}</Badge>
                   )}
                   {p.productType && <Badge variant="muted">{p.productType}</Badge>}
                   {categorySlug !== 'ostatne' && (

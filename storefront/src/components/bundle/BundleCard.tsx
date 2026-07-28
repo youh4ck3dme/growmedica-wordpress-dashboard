@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import {
   Activity,
@@ -27,6 +29,13 @@ import {
 import { getProductUrl } from '@/lib/utils'
 import type { ProductListItem } from '@/lib/catalog/types'
 import { BundleAddToCart } from '@/components/bundle/BundleAddToCart'
+import { useLocale, useT } from '@/components/i18n/LocaleProvider'
+import {
+  getBundleCategoryBenefit,
+  getBundleCategoryLabel,
+  getBundleDisclaimer,
+  getBundleName,
+} from '@/lib/i18n/bundles'
 
 const CATEGORY_ICONS: Record<HealthBundle['category'], LucideIcon> = {
   imunita: Shield,
@@ -53,6 +62,21 @@ interface BundleCardProps {
 }
 
 export function BundleCard({ bundle, product }: BundleCardProps) {
+  const t = useT()
+  const { locale } = useLocale()
+  const name = getBundleName(bundle.slug, locale, bundle.name)
+  const categoryLabel = getBundleCategoryLabel(
+    bundle.category,
+    locale,
+    BUNDLE_CATEGORY_LABELS[bundle.category],
+  )
+  const benefit = getBundleCategoryBenefit(
+    bundle.category,
+    locale,
+    BUNDLE_CATEGORY_BENEFITS[bundle.category],
+  )
+  const disclaimer = getBundleDisclaimer(bundle, locale)
+
   const variant = product?.variants.edges[0]?.node
   const price = variant?.price ?? product?.priceRange.minVariantPrice
   const compareAt = variant?.compareAtPrice ?? product?.compareAtPriceRange.minVariantPrice
@@ -68,7 +92,7 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
   const staticImage = getBundleImageSrc(bundle.slug)
   const wooImage = product?.featuredImage?.url
   const imageSrc = staticImage ?? wooImage ?? null
-  const imageAlt = product?.featuredImage?.altText || `Balíček ${bundle.name}`
+  const imageAlt = product?.featuredImage?.altText || t('bundle.ui.imageAlt', { name })
 
   return (
     <article
@@ -81,7 +105,9 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
       <div className="bundle-card__badges">
         <span className="bundle-card__badge">−{bundle.discountPercent} %</span>
         {highlighted && (
-          <span className="bundle-card__badge bundle-card__badge--highlight">Odporúčame</span>
+          <span className="bundle-card__badge bundle-card__badge--highlight">
+            {t('bundle.ui.recommended')}
+          </span>
         )}
       </div>
 
@@ -102,20 +128,18 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
         </div>
       )}
 
-      <h3 className="bundle-card__title">{bundle.name}</h3>
-      <p className="bundle-card__benefit">{BUNDLE_CATEGORY_BENEFITS[bundle.category]}</p>
+      <h3 className="bundle-card__title">{name}</h3>
+      <p className="bundle-card__benefit">{benefit}</p>
       <ul className="bundle-card__items">
         {bundle.items.map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>
-      {bundle.disclaimer && (
-        <p className="text-xs text-(--color-text-muted) mb-3 italic">{bundle.disclaimer}</p>
+      {disclaimer && (
+        <p className="text-xs text-(--color-text-muted) mb-3 italic">{disclaimer}</p>
       )}
       <div className="bundle-card__footer">
-        <span className="bundle-card__category">
-          {BUNDLE_CATEGORY_LABELS[bundle.category]}
-        </span>
+        <span className="bundle-card__category">{categoryLabel}</span>
         {hasShopifyPrice ? (
           <span className="text-sm font-bold text-(--color-primary)" data-testid="bundle-price">
             {hasDiscount && (
@@ -126,7 +150,7 @@ export function BundleCard({ bundle, product }: BundleCardProps) {
             {price!.amount} €
           </span>
         ) : (
-          <span className="bundle-card__soon">Čoskoro dostupné</span>
+          <span className="bundle-card__soon">{t('bundle.ui.comingSoon')}</span>
         )}
       </div>
 

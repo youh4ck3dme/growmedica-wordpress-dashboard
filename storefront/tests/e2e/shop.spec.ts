@@ -50,10 +50,12 @@ test.describe('1. Domovská stránka (Homepage)', () => {
     }
   });
 
-  test('5. Mal by obsahovať sekciu "Nakupujte podľa kategórie" s dynamickými kolekciami', async ({ page }) => {
+  test('5. Mal by obsahovať sekciu kategórií s dynamickými kolekciami', async ({ page }) => {
     await page.goto('/');
-    const categoriesSection = page.locator('section[aria-labelledby="categories-heading"]');
-    await expect(categoriesSection).toBeVisible();
+    const categoriesSection = page.locator('section[aria-label]').filter({
+      has: page.locator('a[href="/kolekcie/vitaminy-mineraly"]'),
+    });
+    await expect(categoriesSection.first()).toBeVisible();
     await expect(categoriesSection.locator('a[href="/kolekcie/vitaminy-mineraly"]')).toBeVisible();
   });
 

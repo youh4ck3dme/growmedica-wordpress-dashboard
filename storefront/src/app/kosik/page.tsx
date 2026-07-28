@@ -5,13 +5,17 @@ import { EmptyState } from '@/components/ui/EmptyState'
 import { InteractiveCart } from '@/components/cart/InteractiveCart'
 import { getCart, CART_COOKIE } from '@/lib/catalog/cart'
 import type { Cart } from '@/lib/catalog/types'
-import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
 import { getRequestLocale } from '@/lib/i18n/server'
 import { t } from '@/lib/i18n/translate'
+import { DEFAULT_LOCALE } from '@/lib/i18n/config'
 
 export const metadata: Metadata = {
-  ...buildPageMetadata('Košík', BRAND_COPY.pageDescriptions.cart, '/kosik'),
+  ...buildPageMetadata(
+    t('page.cart.metaTitle', DEFAULT_LOCALE),
+    t('page.cart.metaDescription', DEFAULT_LOCALE),
+    '/kosik',
+  ),
   robots: { index: false },
 }
 

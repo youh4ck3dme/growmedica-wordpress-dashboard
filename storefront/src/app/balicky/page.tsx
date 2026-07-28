@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { BundleCatalog } from '@/components/bundle/BundleCatalog'
-import { BRAND_COPY } from '@/lib/brand'
 import { getBundleImageSrc, HEALTH_BUNDLE_CATALOG } from '@/lib/bundles/catalog'
 import { getBundleProducts } from '@/lib/catalog/products'
 import {
@@ -14,6 +13,9 @@ import {
   serializeJsonLd,
 } from '@/lib/seo'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { t } from '@/lib/i18n/translate'
+import { getBundleName } from '@/lib/i18n/bundles'
 
 export const revalidate = 3600
 
@@ -37,6 +39,7 @@ function mapProductsByBundleSlug(
 }
 
 export default async function BalickyPage() {
+  const locale = await getRequestLocale()
   const siteUrl = resolvePublicSiteUrl()
   let productsByHandle = new Map<string, Awaited<ReturnType<typeof getBundleProducts>>[number]>()
 
@@ -48,12 +51,17 @@ export default async function BalickyPage() {
   }
 
   const liveCount = productsByHandle.size
+  const bundlesHeading = t('home.bundlesHeading', locale)
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
-    { name: 'Domov', item: siteUrl },
-    { name: BRAND_COPY.bundlesHeading, item: `${siteUrl}/balicky` },
+    { name: t('page.breadcrumbHome', locale), item: siteUrl },
+    { name: bundlesHeading, item: `${siteUrl}/balicky` },
   ])
   const itemListJsonLd = getBundleCatalogItemListJsonLd(
-    HEALTH_BUNDLE_CATALOG.map((bundle) => ({ name: bundle.name, slug: bundle.slug })),
+    HEALTH_BUNDLE_CATALOG.map((bundle) => ({
+      name: getBundleName(bundle.slug, locale, bundle.name),
+      slug: bundle.slug,
+    })),
+    locale,
   )
   const bundleProductJsonLds = HEALTH_BUNDLE_CATALOG.flatMap((bundle) => {
     const product = productsByHandle.get(bundle.slug)
@@ -87,19 +95,19 @@ export default async function BalickyPage() {
             <ol className="flex items-center gap-2 text-sm text-(--color-text-muted)">
               <li>
                 <Link href="/" className="hover:text-(--color-primary) transition-colors">
-                  Domov
+                  {t('page.breadcrumbHome', locale)}
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
               <li className="text-(--color-text) font-medium" aria-current="page">
-                {BRAND_COPY.bundlesHeading}
+                {bundlesHeading}
               </li>
             </ol>
           </nav>
 
           <BrandPageHeader
-            title={BRAND_COPY.bundlesHeading}
-            subtitle={BRAND_COPY.bundlesSubheading}
+            title={bundlesHeading}
+            subtitle={t('home.bundlesSubheading', locale)}
             centered={false}
             className="mb-8"
           />
@@ -107,15 +115,15 @@ export default async function BalickyPage() {
           {liveCount === 0 && (
             <div className="mb-8 rounded-xl border border-(--color-border) bg-(--color-surface) p-4 text-sm text-(--color-text-muted)">
               <p>
-                Katalóg obsahuje <strong>{HEALTH_BUNDLE_CATALOG.length} navrhovaných balíčkov</strong>.
-                Produktové stránky sa zobrazia automaticky po vytvorení vo WooCommerce s handle{' '}
-                <code className="text-(--color-text)">balicek-{'{slug}'}</code>.
+                {t('page.bundles.emptyHint', locale, {
+                  count: HEALTH_BUNDLE_CATALOG.length,
+                  slug: '{slug}',
+                })}
               </p>
               <p className="mt-2">
-                Návod na nastavenie nájdete v dokumentácii projektu{' '}
-                <code className="text-(--color-text)">BUNDLE_CATALOG.md</code> alebo nás{' '}
+                {t('page.bundles.emptyDocs', locale)}{' '}
                 <Link href="/kontakt" className="text-(--color-primary) underline">
-                  kontaktujte
+                  {t('footer.contactUs', locale)}
                 </Link>
                 .
               </p>

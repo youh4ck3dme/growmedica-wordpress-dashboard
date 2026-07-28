@@ -4,6 +4,7 @@ import { useState } from 'react'
 import type { ProductVariant } from '@/lib/catalog/types'
 import { Button } from '@/components/ui/Button'
 import { useThemeToast } from '@/components/ui/ThemeToast'
+import { useT } from '@/components/i18n/LocaleProvider'
 
 interface AddToCartButtonProps {
   variants: ProductVariant[]
@@ -16,6 +17,7 @@ export default function AddToCartButton({
   availableForSale,
   selectedVariantId,
 }: AddToCartButtonProps) {
+  const t = useT()
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -40,24 +42,24 @@ export default function AddToCartButton({
 
       if (!response.ok) {
         const data = await response.json() as { error?: string }
-        throw new Error(data.error ?? 'Produkt sa nepodarilo pridať do košíka. Skúste to znova.')
+        throw new Error(data.error ?? t('cart.addError'))
       }
 
       const data = await response.json() as { count?: number }
-      
+
       if (typeof window !== 'undefined' && data.count !== undefined) {
         window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: data.count }))
       }
 
       setSuccess(true)
       toast({
-        title: 'Pridané do košíka',
-        description: 'Položka je v košíku. Môžete pokračovať v nákupe.',
+        title: t('cart.addedTitle'),
+        description: t('cart.addedDescription'),
         variant: 'success',
       })
       setTimeout(() => setSuccess(false), 2500)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Nastala neočakávaná chyba. Skúste to prosím znova.')
+      setError(err instanceof Error ? err.message : t('cart.addErrorGeneric'))
     } finally {
       setIsLoading(false)
     }
@@ -71,9 +73,9 @@ export default function AddToCartButton({
         size="lg"
         fullWidth
         disabled
-        aria-label="Produkt je momentálne vypredaný"
+        aria-label={t('cart.soldOutAria')}
       >
-        Momentálne vypredané
+        {t('product.soldOutBadge')}
       </Button>
     )
   }
@@ -87,21 +89,21 @@ export default function AddToCartButton({
         fullWidth
         isLoading={isLoading}
         onClick={handleAddToCart}
-        aria-label="Pridať produkt do košíka"
+        aria-label={t('cart.addAria')}
       >
         {success ? (
           <span className="flex items-center gap-2">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
-            Pridané do košíka
+            {t('cart.addedTitle')}
           </span>
         ) : (
           <>
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            Pridať do košíka
+            {t('cart.add')}
           </>
         )}
       </Button>

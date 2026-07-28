@@ -8,6 +8,8 @@ import {
 import type { ProductListItem } from '@/lib/catalog/types'
 import { BundleCard } from '@/components/bundle/BundleCard'
 import { cn } from '@/lib/utils'
+import { useLocale, useT } from '@/components/i18n/LocaleProvider'
+import { getBundleCategoryLabel } from '@/lib/i18n/bundles'
 
 interface BundleCatalogProps {
   bundles: readonly HealthBundle[]
@@ -17,6 +19,9 @@ interface BundleCatalogProps {
 const ALL_CATEGORY = 'vsetky' as const
 
 export function BundleCatalog({ bundles, productsByHandle }: BundleCatalogProps) {
+  const t = useT()
+  const { locale } = useLocale()
+
   const availableBundles = useMemo(
     () => bundles.filter((bundle) => productsByHandle.has(bundle.slug)),
     [bundles, productsByHandle],
@@ -53,14 +58,14 @@ export function BundleCatalog({ bundles, productsByHandle }: BundleCatalogProps)
       <div
         className="mb-8 flex flex-wrap gap-2"
         role="group"
-        aria-label="Filtrovať balíčky podľa kategórie"
+        aria-label={t('bundle.filterAria')}
       >
         <button
           type="button"
           onClick={() => setSelected(ALL_CATEGORY)}
           className={cn('bundle-filter-chip', selected === ALL_CATEGORY && 'bundle-filter-chip--active')}
         >
-          Všetky ({availableBundles.length})
+          {t('bundle.filterAll', { count: availableBundles.length })}
         </button>
         {categories.map(([category, count]) => (
           <button
@@ -69,7 +74,7 @@ export function BundleCatalog({ bundles, productsByHandle }: BundleCatalogProps)
             onClick={() => setSelected(category)}
             className={cn('bundle-filter-chip', selected === category && 'bundle-filter-chip--active')}
           >
-            {BUNDLE_CATEGORY_LABELS[category]} ({count})
+            {getBundleCategoryLabel(category, locale, BUNDLE_CATEGORY_LABELS[category])} ({count})
           </button>
         ))}
       </div>
@@ -77,7 +82,7 @@ export function BundleCatalog({ bundles, productsByHandle }: BundleCatalogProps)
       {filteredAvailable.length > 0 && (
         <section className="mb-10" aria-labelledby="bundles-available-heading">
           <h2 id="bundles-available-heading" className="text-lg font-bold text-(--color-text) mb-4">
-            Dostupné teraz
+            {t('bundle.availableNow')}
           </h2>
           <div className="bundle-grid">
             {filteredAvailable.map((bundle) => (
@@ -89,8 +94,9 @@ export function BundleCatalog({ bundles, productsByHandle }: BundleCatalogProps)
 
       {comingSoonCount > 0 && (
         <p className="text-sm text-(--color-text-muted)" data-testid="bundles-coming-soon-teaser">
-          Ďalších {comingSoonCount}{' '}
-          {comingSoonCount === 1 ? 'balíček pripravujeme' : 'balíčkov pripravujeme'}
+          {comingSoonCount === 1
+            ? t('bundle.comingSoonOne', { count: comingSoonCount })
+            : t('bundle.comingSoonMany', { count: comingSoonCount })}
         </p>
       )}
     </div>

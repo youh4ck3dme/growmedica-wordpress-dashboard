@@ -3,15 +3,16 @@ import { Suspense } from 'react'
 import { Container } from '@/components/ui/Container'
 import { FilterableProductList } from '@/components/product/FilterableProductList'
 import { getProductsAccumulated, PRODUCTS_PAGE_SIZE } from '@/lib/catalog/products'
-import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
 import type { ProductListItem } from '@/lib/catalog/types'
+import { t } from '@/lib/i18n/translate'
+import { DEFAULT_LOCALE } from '@/lib/i18n/config'
 
 export const revalidate = 3600
 
 export const metadata: Metadata = buildPageMetadata(
-  'Produkty',
-  BRAND_COPY.pageDescriptions.products,
+  t('page.products.metaTitle', DEFAULT_LOCALE),
+  t('page.products.metaDescription', DEFAULT_LOCALE),
   '/produkty',
 )
 

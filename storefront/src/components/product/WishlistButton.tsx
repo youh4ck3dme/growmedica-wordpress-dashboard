@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { IconHeart } from '@/components/icons/storefront'
 import { cn } from '@/lib/utils'
 import { useThemeToast } from '@/components/ui/ThemeToast'
+import { useT } from '@/components/i18n/LocaleProvider'
 
 interface WishlistButtonProps {
   productHandle: string
@@ -18,10 +19,10 @@ export function WishlistButton({
   variant = 'icon',
   className,
 }: WishlistButtonProps) {
+  const t = useT()
   const [isLiked, setIsLiked] = useState(false)
   const { toast } = useThemeToast()
 
-  // Load initial wishlist state
   useEffect(() => {
     try {
       const stored = localStorage.getItem('gm_wishlist')
@@ -44,16 +45,16 @@ export function WishlistButton({
       if (wishlist.includes(productHandle)) {
         wishlist = wishlist.filter((h) => h !== productHandle)
         toast({
-          title: 'Odstránené z obľúbených',
-          description: `Produkt ${productTitle} bol odstránený z vášho zoznamu prianí.`,
+          title: t('wishlist.removedTitle'),
+          description: t('wishlist.removedDescription', { title: productTitle }),
           variant: 'default',
         })
       } else {
         wishlist.push(productHandle)
         newLiked = true
         toast({
-          title: 'Pridané do obľúbených',
-          description: `Produkt ${productTitle} bol pridaný do vášho zoznamu prianí.`,
+          title: t('wishlist.addedTitle'),
+          description: t('wishlist.addedDescription', { title: productTitle }),
           variant: 'success',
         })
       }
@@ -61,7 +62,6 @@ export function WishlistButton({
       localStorage.setItem('gm_wishlist', JSON.stringify(wishlist))
       setIsLiked(newLiked)
 
-      // Dispatch custom event to notify header/other components
       window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: wishlist }))
     } catch {
       // Ignore errors
@@ -72,7 +72,7 @@ export function WishlistButton({
     return (
       <button
         onClick={toggleWishlist}
-        aria-label={isLiked ? 'Odstrániť z obľúbených' : 'Pridať do obľúbených'}
+        aria-label={isLiked ? t('wishlist.remove') : t('wishlist.add')}
         className={cn(
           "p-2 rounded-full border border-(--color-border) bg-white/80 hover:bg-white text-gray-500 hover:text-(--color-error) shadow-sm hover:scale-105 transition-all flex items-center justify-center",
           isLiked && "text-(--color-error) border-red-200 bg-red-50/50 hover:bg-red-50",
@@ -98,7 +98,7 @@ export function WishlistButton({
       )}
     >
       <IconHeart size={16} filled={isLiked} className={cn(isLiked && 'text-(--color-error)')} />
-      <span>{isLiked ? 'V obľúbených' : 'Pridať do obľúbených'}</span>
+      <span>{isLiked ? t('wishlist.inList') : t('wishlist.add')}</span>
     </button>
   )
 }

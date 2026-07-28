@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { useThemeToast } from '@/components/ui/ThemeToast'
+import { useT } from '@/components/i18n/LocaleProvider'
 
 interface BundleAddToCartProps {
   variantId: string
@@ -16,6 +17,7 @@ export function BundleAddToCart({
   availableForSale,
   productUrl,
 }: BundleAddToCartProps) {
+  const t = useT()
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -38,7 +40,7 @@ export function BundleAddToCart({
 
       if (!response.ok) {
         const data = (await response.json()) as { error?: string }
-        throw new Error(data.error ?? 'Balíček sa nepodarilo pridať do košíka.')
+        throw new Error(data.error ?? t('bundle.addError'))
       }
 
       const data = (await response.json()) as { count?: number }
@@ -48,13 +50,13 @@ export function BundleAddToCart({
 
       setSuccess(true)
       toast({
-        title: 'Balíček v košíku',
-        description: 'Môžete pokračovať v nákupe alebo prejsť do pokladne.',
+        title: t('bundle.toastTitle'),
+        description: t('bundle.toastDescription'),
         variant: 'success',
       })
       setTimeout(() => setSuccess(false), 2500)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Nastala chyba pri pridávaní do košíka.')
+      setError(err instanceof Error ? err.message : t('bundle.addErrorGeneric'))
     } finally {
       setIsLoading(false)
     }
@@ -71,15 +73,15 @@ export function BundleAddToCart({
         isLoading={isLoading}
         data-testid="bundle-add-to-cart"
         onClick={handleAddToCart}
-        aria-label={`Pridať balíček do košíka`}
+        aria-label={t('bundle.addAria')}
       >
-        {success ? 'Pridané do košíka' : 'Pridať do košíka'}
+        {success ? t('bundle.addedToCart') : t('bundle.addToCart')}
       </Button>
       <Link
         href={productUrl}
         className="block text-center text-xs font-semibold text-(--color-primary) hover:text-(--color-primary-dark)"
       >
-        Detail balíčka →
+        {t('bundle.viewProduct')} →
       </Link>
       {error && (
         <p className="text-xs text-(--color-error) text-center" role="alert">

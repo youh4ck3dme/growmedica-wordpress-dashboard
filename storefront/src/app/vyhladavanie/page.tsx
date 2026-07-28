@@ -3,13 +3,17 @@ import { Container } from '@/components/ui/Container'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { ProductGrid } from '@/components/product/ProductGrid'
 import { getProducts } from '@/lib/catalog/products'
-import { BRAND_COPY } from '@/lib/brand'
 import { buildPageMetadata } from '@/lib/seo'
 import { getRequestLocale } from '@/lib/i18n/server'
 import { t } from '@/lib/i18n/translate'
+import { DEFAULT_LOCALE } from '@/lib/i18n/config'
 
 export const metadata: Metadata = {
-  ...buildPageMetadata('Vyhľadávanie', BRAND_COPY.pageDescriptions.search, '/vyhladavanie'),
+  ...buildPageMetadata(
+    t('page.search.metaTitle', DEFAULT_LOCALE),
+    t('page.search.metaDescription', DEFAULT_LOCALE),
+    '/vyhladavanie',
+  ),
   robots: { index: false },
 }
 

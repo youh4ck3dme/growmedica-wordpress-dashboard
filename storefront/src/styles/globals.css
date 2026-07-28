@@ -3197,6 +3197,212 @@
     }
   }
 
+  /* ─── Cookie consent banner (GrowMedica) ─────────────────────────────── */
+  .cookie-consent {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 60;
+    padding: 0.75rem;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+  }
+
+  .cookie-consent__inner {
+    pointer-events: auto;
+    display: grid;
+    gap: 1rem;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: 1rem 1.1rem;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--color-border) 85%, transparent);
+    background:
+      linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--color-surface) 96%, white) 0%,
+        color-mix(in srgb, var(--color-surface) 92%, var(--color-primary-light)) 100%
+      );
+    box-shadow:
+      0 -1px 0 color-mix(in srgb, var(--color-border) 60%, transparent),
+      0 18px 48px rgba(16, 22, 21, 0.14);
+    backdrop-filter: blur(14px);
+  }
+
+  @media (min-width: 900px) {
+    .cookie-consent {
+      padding: 1rem 1.25rem;
+      padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    .cookie-consent__inner {
+      grid-template-columns: auto minmax(0, 1fr) 12.5rem;
+      align-items: start;
+      gap: 1.25rem 1.5rem;
+      padding: 1.15rem 1.35rem;
+    }
+  }
+
+  .cookie-consent__brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .cookie-consent__logo-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-surface) 90%, white);
+  }
+
+  .cookie-consent__logo .storefront-logo__wordmark {
+    font-size: 0.95rem;
+  }
+
+  .cookie-consent__title {
+    margin: 0 0 0.4rem;
+    font-family: Montserrat, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+
+  .cookie-consent__body,
+  .cookie-consent__note,
+  .cookie-consent__links {
+    margin: 0 0 0.45rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  .cookie-consent__note {
+    color: var(--color-text);
+  }
+
+  .cookie-consent__text-link {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .cookie-consent__text-link:hover {
+    color: var(--color-primary-dark);
+  }
+
+  .cookie-consent__details {
+    margin: 0.15rem 0 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-primary-bright);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .cookie-consent__details:hover {
+    color: var(--color-primary);
+  }
+
+  .cookie-consent__customize {
+    margin-top: 0.85rem;
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.85rem;
+    border-radius: 0.9rem;
+    border: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-surface-2) 70%, white);
+  }
+
+  .cookie-consent__toggle {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.8125rem;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .cookie-consent__toggle strong {
+    display: block;
+    font-weight: 700;
+  }
+
+  .cookie-consent__toggle-desc {
+    display: block;
+    margin-top: 0.15rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+
+  .cookie-consent__toggle input[type='checkbox'] {
+    margin-top: 0.2rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .cookie-consent__actions {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .cookie-consent__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 0.55rem;
+    font-family: Montserrat, sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .cookie-consent__btn--primary {
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    color: #fff;
+  }
+
+  .cookie-consent__btn--primary:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+  }
+
+  .cookie-consent__btn--secondary {
+    background: transparent;
+    border: 1.5px solid var(--color-primary);
+    color: var(--color-text);
+  }
+
+  .cookie-consent__btn--secondary:hover {
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+  }
+
+  @media (max-width: 899px) {
+    .cookie-consent__actions .cookie-consent__btn {
+      width: 100%;
+    }
+  }
+
   @media (max-width: 639px) {
     .assistant-fab {
       padding-inline: 0.75rem;

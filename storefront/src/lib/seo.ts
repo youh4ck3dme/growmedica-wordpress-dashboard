@@ -7,6 +7,8 @@ import { DEFAULT_LOCALE, HREFLANG_MAP, OG_LOCALE_MAP } from '@/lib/i18n/config'
 import { SUPPORTED_LOCALES } from '@/lib/i18n/types'
 import { resolvePublicSiteUrl } from '@/lib/site-url'
 import { BRAND_COPY } from './brand'
+import { t } from '@/lib/i18n/translate'
+import type { Locale } from '@/lib/i18n/types'
 import type { Product, ProductListItem, Collection } from './catalog/types'
 
 const SITE_NAME = BRAND_COPY.siteName
@@ -273,9 +275,9 @@ export function serializeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c')
 }
 
-export function getBundlesPageMetadata(): Metadata {
-  const title = BRAND_COPY.bundlesHeading
-  const description = BRAND_COPY.pageDescriptions.bundles
+export function getBundlesPageMetadata(locale: Locale = DEFAULT_LOCALE): Metadata {
+  const title = t('home.bundlesHeading', locale)
+  const description = t('page.bundles.metaDescription', locale)
 
   return withSiteRobots({
     title,
@@ -292,12 +294,13 @@ export function getBundlesPageMetadata(): Metadata {
 
 export function getBundleCatalogItemListJsonLd(
   bundles: ReadonlyArray<{ name: string; slug: string }>,
+  locale: Locale = DEFAULT_LOCALE,
 ) {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: BRAND_COPY.bundlesHeading,
-    description: BRAND_COPY.pageDescriptions.bundles,
+    name: t('home.bundlesHeading', locale),
+    description: t('page.bundles.metaDescription', locale),
     numberOfItems: bundles.length,
     itemListElement: bundles.map((bundle, index) => ({
       '@type': 'ListItem',

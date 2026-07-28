@@ -60,29 +60,9 @@ export function HomeCategoriesSection({
   return (
     <section
       className="theme-transition py-12 lg:py-16 bg-(--color-bg)"
-      aria-labelledby="categories-heading"
+      aria-label={t('aria.shopByCategory', locale)}
     >
-      <Container>
-        <div className="mb-8 text-center mx-auto max-w-2xl">
-          <p className="section-label">{t('home.shopByCategory', locale)}</p>
-          <h2 id="categories-heading" className="section-heading">
-            {t('home.whatLookingFor', locale)}
-          </h2>
-        </div>
-
-        {children}
-
-        <div className="mt-6 text-center">
-          <Link
-            href="/kolekcie"
-            className="text-sm font-semibold text-(--color-primary) hover:text-(--color-primary-dark) transition-colors"
-            style={{ fontFamily: 'Montserrat, sans-serif' }}
-            aria-label={t('home.allCollectionsAria', locale)}
-          >
-            {t('home.allCollections', locale)}
-          </Link>
-        </div>
-      </Container>
+      <Container>{children}</Container>
     </section>
   )
 }
