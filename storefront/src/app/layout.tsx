@@ -10,6 +10,7 @@ import HeaderShell from '@/components/layout/HeaderShell'
 import TrustStrip from '@/components/layout/TrustStrip'
 import Footer from '@/components/layout/Footer'
 import { DeferredLayoutBanners } from '@/components/layout/DeferredLayoutBanners'
+import PwaInstallBanner from '@/components/layout/PwaInstallBanner'
 import { MotionProvider } from '@/components/motion/MotionProvider'
 import { StorefrontThemeProvider } from '@/components/theme/StorefrontThemeProvider'
 import { NoorThemeChrome } from '@/components/theme/NoorThemeChrome'
@@ -113,6 +114,7 @@ export default async function RootLayout({
               <NoorThemeChrome />
               <div className="flex min-h-dvh flex-col">
                 <AnnouncementBar />
+                <PwaInstallBanner />
                 <HeaderShell />
                 <TrustStrip />
                 <main className="flex-1">{children}</main>

@@ -2,10 +2,6 @@
 
 import dynamic from 'next/dynamic'
 
-const PwaInstallBanner = dynamic(() => import('@/components/layout/PwaInstallBanner'), {
-  ssr: false,
-})
-
 const CookieConsentBanner = dynamic(() => import('@/components/layout/CookieConsentBanner'), {
   ssr: false,
 })
@@ -29,7 +25,6 @@ const FloatingAssistantFab = dynamic(
 export function DeferredLayoutBanners() {
   return (
     <>
-      <PwaInstallBanner />
       <CookieConsentBanner />
       <PharmacistAssistantDrawer />
       <FloatingAssistantFab />

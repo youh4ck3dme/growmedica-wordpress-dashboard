@@ -52,6 +52,11 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || '.next',
   poweredByHeader: false,
   compress: true,
+  // N indicator only exists in `next dev` (localhost). Never in production builds.
+  // Keep it on localhost but away from the assistant FAB (bottom-left).
+  devIndicators: {
+    position: 'bottom-right',
+  },
   images: {
     remotePatterns: [
       {

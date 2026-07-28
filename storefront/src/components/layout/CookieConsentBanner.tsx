@@ -103,7 +103,7 @@ export default function CookieConsentBanner() {
           </button>
 
           {customizing && (
-            <div className="cookie-consent__customize" data-testid="cookie-consent-customize">
+            <div className="cookie-consent__customize" data-testid="cookie-consent-customize-panel">
               <label className="cookie-consent__toggle">
                 <span>
                   <strong>{t('cookies.cat.necessary')}</strong>

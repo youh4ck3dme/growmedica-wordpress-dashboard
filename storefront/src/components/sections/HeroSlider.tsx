@@ -61,6 +61,14 @@ export function HeroSlider({ slides }: HeroSliderProps) {
   const [index, setIndex] = useState(0)
   const reduceMotion = useHydrationSafeReducedMotion()
   const videoRef = useRef<HTMLVideoElement>(null)
+  /** null = pre-mount (treat as hidden); ghost = localhost preview; off = production */
+  const [copyMode, setCopyMode] = useState<'off' | 'ghost' | null>(null)
+
+  useEffect(() => {
+    const host = window.location.hostname
+    const isLocal = host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0'
+    setCopyMode(isLocal ? 'ghost' : 'off')
+  }, [])
 
   const goTo = useCallback(
     (next: number) => {
@@ -97,11 +105,14 @@ export function HeroSlider({ slides }: HeroSliderProps) {
   const hasImage = Boolean(active.imageUrl)
   const isLcpSlide = index === 0
   const showSlideControls = !useHeroVideo && items.length > 1
+  const showCopy = copyMode === 'ghost'
+  const heroAriaLabel = t('hero.title')
 
   return (
     <section
       className="theme-transition noor-reveal noor-hero-section hero-slider relative overflow-hidden bg-(--color-surface)"
-      aria-labelledby="hero-heading"
+      aria-labelledby={showCopy ? 'hero-heading' : undefined}
+      aria-label={showCopy ? undefined : heroAriaLabel}
     >
       <div className="hero-slider__stage relative w-full min-h-112 sm:min-h-128 lg:min-h-144">
         {useHeroVideo ? (
@@ -157,33 +168,37 @@ export function HeroSlider({ slides }: HeroSliderProps) {
           </AnimatePresence>
         )}
 
-        <Container className="relative z-10 flex h-full min-h-[inherit] items-end justify-start py-8 sm:py-10 lg:pb-12 lg:pt-16">
-          <m.div
-            className="hero-slider__copy liquid-glass liquid-glass--heavy"
-            initial={false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : 0.15 }}
-          >
-            <p className="section-label hero-slider__eyebrow">{t('hero.eyebrow')}</p>
-            <h1
-              id="hero-heading"
-              className="noor-display-heading hero-slider__title font-extrabold leading-tight text-balance text-(--color-text)"
+        {showCopy && (
+          <Container className="relative z-10 flex h-full min-h-[inherit] items-end justify-start py-8 sm:py-10 lg:pb-12 lg:pt-16">
+            <m.div
+              className="hero-slider__copy hero-slider__copy--dev-ghost liquid-glass liquid-glass--heavy"
+              initial={false}
+              animate={{ opacity: 0.2, y: 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : 0.15 }}
             >
-              {t('hero.title')}
-            </h1>
-            <p className="hero-slider__subtitle leading-relaxed text-(--color-text-muted)">
-              <span className="sm:hidden">{t('hero.subtitleShort')}</span>
-              <span className="hidden sm:inline">{t('hero.subtitle')}</span>
-            </p>
-            <Link
-              href="/produkty"
-              id="hero-cta-primary"
-              className="btn btn-primary hero-slider__cta noor-pill-cta w-full sm:w-auto"
-            >
-              {t('hero.cta')}
-            </Link>
-          </m.div>
-        </Container>
+              <p className="section-label hero-slider__eyebrow">{t('hero.eyebrow')}</p>
+              <h1
+                id="hero-heading"
+                className="noor-display-heading hero-slider__title font-extrabold leading-tight text-balance text-(--color-text)"
+              >
+                {t('hero.title')}
+              </h1>
+              <p className="hero-slider__subtitle leading-relaxed text-(--color-text-muted)">
+                <span className="sm:hidden">{t('hero.subtitleShort')}</span>
+                <span className="hidden sm:inline">{t('hero.subtitle')}</span>
+              </p>
+              <Link
+                href="/produkty"
+                id="hero-cta-primary"
+                className="btn btn-primary hero-slider__cta noor-pill-cta w-full sm:w-auto"
+                tabIndex={-1}
+                aria-hidden="true"
+              >
+                {t('hero.cta')}
+              </Link>
+            </m.div>
+          </Container>
+        )}
 
         {showSlideControls && (
           <>

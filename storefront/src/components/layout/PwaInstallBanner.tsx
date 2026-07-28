@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useT } from '@/components/i18n/LocaleProvider'
 
 const STORAGE_KEY = 'growmedica-pwa-dismissed'
 
@@ -10,6 +11,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export default function PwaInstallBanner() {
+  const t = useT()
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [visible, setVisible] = useState(false)
 
@@ -44,26 +46,27 @@ export default function PwaInstallBanner() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-(--color-primary-light) bg-(--color-primary-light) p-4 md:bottom-4 md:left-4 md:right-auto md:max-w-md md:rounded-xl md:border md:shadow-lg"
+      className="pwa-install-bar"
       role="region"
-      aria-label="Inštalácia aplikácie"
+      aria-label={t('pwa.aria')}
+      data-testid="pwa-install-banner"
     >
-      <div className="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="font-semibold text-(--color-primary-dark)">Inštalujte GrowMedica.cz</p>
-          <p className="text-sm text-(--color-text-muted)">Rýchly prístup bez prehliadača</p>
+      <div className="pwa-install-bar__inner">
+        <div className="pwa-install-bar__copy min-w-0">
+          <p className="pwa-install-bar__title">{t('pwa.title')}</p>
+          <p className="pwa-install-bar__subtitle">{t('pwa.subtitle')}</p>
         </div>
-        <div className="flex shrink-0 gap-2">
+        <div className="pwa-install-bar__actions shrink-0">
           <button type="button" onClick={handleInstall} className="btn btn-primary btn-sm">
-            Inštalovať
+            {t('pwa.install')}
           </button>
           <button
             type="button"
             onClick={handleDismiss}
             className="btn btn-secondary btn-sm"
-            aria-label="Zavrieť ponuku inštalácie"
+            aria-label={t('pwa.dismissAria')}
           >
-            Neskôr
+            {t('pwa.later')}
           </button>
         </div>
       </div>
