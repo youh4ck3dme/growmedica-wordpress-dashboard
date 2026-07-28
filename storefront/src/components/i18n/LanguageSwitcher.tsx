@@ -56,7 +56,7 @@ export default function LanguageSwitcher({ className = '' }: { className?: strin
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 rounded-lg border border-(--color-border) bg-(--color-surface)/80 px-2 py-1 text-[10px] font-bold tracking-wider text-(--color-text) transition-colors hover:border-(--color-primary)/40"
+        className="inline-flex items-center gap-1 rounded-lg border border-(--color-border) bg-(--color-surface)/80 px-3 py-1.5 text-[12px] font-bold tracking-wider text-(--color-text) transition-colors hover:border-(--color-primary)/40"
         aria-label={`${t('locale.switcher')}: ${LOCALE_LABELS[locale]}`}
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -66,7 +66,7 @@ export default function LanguageSwitcher({ className = '' }: { className?: strin
       >
         <span data-testid={`locale-switcher-current`}>{LOCALE_LABELS[locale]}</span>
         <svg
-          className={`h-3 w-3 text-(--color-text-muted) transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`h-3.5 w-3.5 text-(--color-text-muted) transition-transform ${open ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

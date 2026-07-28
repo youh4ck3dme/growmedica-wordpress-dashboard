@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { getRevalidationSecret } from '@/lib/env'
 import { timingSafeEqual } from 'node:crypto'
 
 const WOO_TAG_PATTERN =
-  /^(woo-products|woo-categories|woo-product-.+|woo-category-.+)$/
+  /^(woo-products|woo-categories|woo-featured-products|woo-product-.+|woo-category-.+|woo-product-id-.+)$/
 
 function safeEqual(a: string, b: string): boolean {
   try {
@@ -63,28 +63,48 @@ export async function POST(request: NextRequest) {
 
   try {
     const tagParam = request.nextUrl.searchParams.get('tag')
+    const pathParam = request.nextUrl.searchParams.get('path')
+    const body = (await request.json().catch(() => ({}))) as Record<string, unknown>
+    const revalidatedTags: string[] = []
+    const revalidatedPaths: string[] = []
+
     if (tagParam) {
-      const tags = revalidateWooTag(tagParam)
-      return NextResponse.json({
-        revalidated: true,
-        provider: 'wordpress',
-        tags,
-        at: new Date().toISOString(),
-      })
+      revalidatedTags.push(...revalidateWooTag(tagParam))
     }
 
-    const body = (await request.json().catch(() => ({}))) as Record<string, unknown>
-    const revalidated: string[] = []
+    const bodyTag = body.tag
+    if (typeof bodyTag === 'string' && bodyTag) {
+      revalidatedTags.push(...revalidateWooTag(bodyTag))
+    }
 
-    // Shopify webhook topics no longer accepted — Woo tags only.
-    const wooTag = (body as { tag?: string }).tag
-    if (typeof wooTag === 'string' && wooTag) {
-      revalidated.push(...revalidateWooTag(wooTag))
+    const bodyTags = body.tags
+    if (Array.isArray(bodyTags)) {
+      for (const tag of bodyTags) {
+        if (typeof tag === 'string' && tag) {
+          revalidatedTags.push(...revalidateWooTag(tag))
+        }
+      }
+    }
+
+    const paths: string[] = []
+    if (typeof pathParam === 'string' && pathParam.startsWith('/')) paths.push(pathParam)
+    if (typeof body.path === 'string' && body.path.startsWith('/')) paths.push(body.path)
+    if (Array.isArray(body.paths)) {
+      for (const path of body.paths) {
+        if (typeof path === 'string' && path.startsWith('/')) paths.push(path)
+      }
+    }
+
+    for (const path of [...new Set(paths)]) {
+      revalidatePath(path)
+      revalidatedPaths.push(path)
     }
 
     return NextResponse.json({
       revalidated: true,
-      tags: [...new Set(revalidated)],
+      provider: 'wordpress',
+      tags: [...new Set(revalidatedTags)],
+      paths: revalidatedPaths,
       at: new Date().toISOString(),
     })
   } catch (error) {

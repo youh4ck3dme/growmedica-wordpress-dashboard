@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { DASHBOARD_ROUTE_HEADER } from '@/lib/dashboard'
+import {
+  evaluateGeoBlock,
+  GEO_BLOCK_BODY,
+  GEO_BLOCK_RESPONSE_INIT,
+  logGeoBlock,
+} from '@/lib/geo-block'
 import { PATHNAME_HEADER } from '@/lib/request-headers'
 import {
   isValidLocale,
@@ -39,6 +45,17 @@ const HOLD_PRODUCT_TARGET_PATH = '/produkty/bio-polyporus-prasok-100g-odvodhuje-
 
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
+
+  // Country block (SG by default when GEO_BLOCK_ENABLED=1) — before any other work.
+  const geoDecision = evaluateGeoBlock({
+    headers: request.headers,
+    pathname,
+    ip: (request as NextRequest & { ip?: string | null }).ip,
+  })
+  if (geoDecision.blocked) {
+    logGeoBlock(geoDecision)
+    return new NextResponse(GEO_BLOCK_BODY, GEO_BLOCK_RESPONSE_INIT)
+  }
 
   // Next custom routes omit this single frozen HOLD redirect from the build manifest.
   // Preserve the legacy URL without importing or modifying the HOLD product in Woo.
@@ -108,9 +125,8 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
+  // Include /api/* so geo-block covers BFF + dashboard agent (not only pages).
   matcher: [
-    '/dashboard',
-    '/dashboard/:path*',
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)',
   ],
 }

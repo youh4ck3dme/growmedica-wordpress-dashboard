@@ -102,7 +102,7 @@ export function StorefrontThemeSwitcher({
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1.5 rounded-lg border border-(--color-border) bg-(--color-surface)/80 px-2 py-1 text-[10px] font-bold tracking-wider text-(--color-text) transition-colors hover:border-(--color-primary)/40 disabled:opacity-50"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-(--color-border) bg-(--color-surface)/80 px-3 py-1.5 text-[12px] font-bold tracking-wider text-(--color-text) transition-colors hover:border-(--color-primary)/40 disabled:opacity-50"
         aria-label="Prepínač vzhľadu"
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -111,11 +111,11 @@ export function StorefrontThemeSwitcher({
         disabled={isSwitching}
         onClick={() => setOpen((prev) => !prev)}
       >
-        <CurrentIcon className="h-3.5 w-3.5 text-(--color-primary)" />
+        <CurrentIcon className="h-[1.125rem] w-[1.125rem] text-(--color-primary)" />
         <span data-testid="theme-switcher-current">{currentLabel}</span>
         <svg
           className={cn(
-            'h-3 w-3 text-(--color-text-muted) transition-transform',
+            'h-4 w-4 text-(--color-text-muted) transition-transform',
             open && 'rotate-180',
           )}
           fill="none"

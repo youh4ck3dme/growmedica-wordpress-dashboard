@@ -63,7 +63,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
         )}
       >
         <Container>
-          <div className="noor-header-grid flex h-[60px] items-center justify-between gap-4">
+          <div className="noor-header-grid flex h-[73px] items-center justify-between gap-4">
             <div className="noor-header-left flex items-center min-w-0">
               <button
                 id="mobile-nav-toggle"
@@ -73,7 +73,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
                 aria-label={t('aria.openMenu')}
                 aria-expanded={mobileOpen}
               >
-                <Menu className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                <Menu className="h-[29px] w-[29px]" strokeWidth={1.5} aria-hidden="true" />
               </button>
             </div>
 
@@ -83,7 +83,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
               className="noor-header-center shrink-0 site-logo-mark"
               aria-label={t('aria.home')}
             >
-              <Logo iconSize={32} />
+              <Logo iconSize={39} />
             </Link>
 
             <nav
@@ -95,7 +95,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
                   key={link.href}
                   href={link.href}
                   className={navLinkClass}
-                  style={{ fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.06em', fontSize: '0.72rem' }}
+                  style={{ fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.06em', fontSize: '0.871rem' }}
                 >
                   {link.label}
                   <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-(--color-primary) scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -116,7 +116,7 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
                 className={`glass-navbar__action${theme === 'noor' ? '' : ' lg:hidden'}`}
                 aria-label={t('aria.search')}
               >
-                <Search className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                <Search className="h-[29px] w-[29px]" strokeWidth={1.5} aria-hidden="true" />
               </ThemeSearch>
 
               <HeaderCommerceActions />

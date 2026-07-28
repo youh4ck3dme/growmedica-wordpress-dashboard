@@ -1,6 +1,6 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { m, useReducedMotion } from 'framer-motion'
 
 const REVEAL_EASE = [0.22, 1, 0.36, 1] as const
@@ -19,6 +19,17 @@ interface ScrollRevealSectionProps {
   'aria-label'?: string
 }
 
+function useHydrationSafeReducedMotion() {
+  const prefersReduced = useReducedMotion()
+  const [reduceMotion, setReduceMotion] = useState(false)
+
+  useEffect(() => {
+    setReduceMotion(prefersReduced === true)
+  }, [prefersReduced])
+
+  return reduceMotion
+}
+
 export function ScrollRevealSection({
   children,
   className,
@@ -27,13 +38,15 @@ export function ScrollRevealSection({
   'aria-labelledby': ariaLabelledby,
   'aria-label': ariaLabel,
 }: ScrollRevealSectionProps) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useHydrationSafeReducedMotion()
+
+  // Keep `initial` identical on SSR and hydrate. Only duration respects reduced motion.
   const motionProps = {
     className,
     id,
     'aria-labelledby': ariaLabelledby,
     'aria-label': ariaLabel,
-    initial: reduceMotion ? false : { opacity: 0, y: 20 },
+    initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: SCROLL_REVEAL_VIEWPORT,
     transition: {

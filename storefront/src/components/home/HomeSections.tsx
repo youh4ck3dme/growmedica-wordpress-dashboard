@@ -63,7 +63,7 @@ export function HomeCategoriesSection({
       aria-labelledby="categories-heading"
     >
       <Container>
-        <div className="mb-8">
+        <div className="mb-8 text-center mx-auto max-w-2xl">
           <p className="section-label">{t('home.shopByCategory', locale)}</p>
           <h2 id="categories-heading" className="section-heading">
             {t('home.whatLookingFor', locale)}

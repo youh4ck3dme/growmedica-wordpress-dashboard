@@ -10,9 +10,10 @@ Stav / backlog: [../STATUS.md](../STATUS.md) · vývoj: [../storefront/docs/DEVE
 ```
 Prehliadač
     │
-    ├─ https://www.growmedica.cz     → Next.js na Vercel (UI + /api/*)
+    ├─ https://www.growmedica.cz     → Next.js storefront (Vercel)
+    ├─ https://growmedica.store      → Amber theme storefront (Vercel kadadakaj-dev)
     │         │
-    │         │ Woo REST (server-only kľúče)
+    │         │ Woo REST (server-only ck_/cs_)
     │         ▼
     └─ https://cms.growmedica.cz     → WordPress + WooCommerce
               produkty, sklad, objednávky, platby, doprava, e-maily
@@ -20,12 +21,15 @@ Prehliadač
 
 | Čo | Kde |
 |----|-----|
-| Katalóg, stránky, AI, košík UI | Next (`storefront/`) |
+| Katalóg / UI (.cz) | Next `storefront/` — Vercel project `growmedica-wordpress-dashboard` (h4ck3d) / `growmedica-woo-storefront` (kadadakaj-dev) |
+| Katalóg / UI (.store) | Amber — Vercel `growmedica-store-amber` (team `kds-projects-cb8807c0` / kadadakaj-dev) → https://growmedica-store-amber.vercel.app |
 | Pokladňa / platba / doprava | CMS Woo (`/kontrola-objednavky`) |
 | Admin produktov / objednávok | `cms…/wp-admin` |
 | Firemné údaje | [vzorfirma.md](./vzorfirma.md) |
 
-`CMS_PROVIDER=wordpress` na produkcii → dáta výhradne z WooCommerce. Shopify runtime v storefronte nie je.
+**Jeden CMS:** oba weby ťahajú katalóg z `WORDPRESS_BASE_URL=https://cms.growmedica.cz` + `WOO_CONSUMER_KEY` / `WOO_CONSUMER_SECRET`. Shopify runtime v storefronte nie je.
+
+**CORS (Store API z browsera):** `wordpress/mu-plugins/growmedica-cors.php` — allowlist obsahuje `growmedica.cz`, `www`, `growmedica.store`, `www.growmedica.store`, Amber preview URL.
 
 ---
 
@@ -172,6 +176,17 @@ GROWMEDICA_REVALIDATION_SECRET
 
 Šablóna zoznamu: [../storefront/.env.example](../storefront/.env.example)  
 Deploy checklist: [../PRODUCTION_CHECKLIST.md](../PRODUCTION_CHECKLIST.md)
+
+### GeoIP block (Singapur / SG)
+
+Na Vercel storefronte voliteľne blokuj krajiny cez middleware (`x-vercel-ip-country`):
+
+```bash
+GEO_BLOCK_ENABLED=1
+GEO_BLOCK_COUNTRIES=SG
+```
+
+Detail: [../storefront/docs/GEO_BLOCK.md](../storefront/docs/GEO_BLOCK.md)
 
 ---
 

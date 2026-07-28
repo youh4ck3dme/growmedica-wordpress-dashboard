@@ -6,13 +6,18 @@ export const PRODUCT_CARD_IMAGE_SIZES =
 
 /**
  * Request a resized CDN asset before Next.js image optimizer.
- * Supports CDN width query params when present; otherwise returns the original URL.
+ * Shopify CDN honors `width`; WordPress/CMS URLs are returned unchanged
+ * (query params are unused there and only complicate /_next/image allowlisting).
  */
 export function getSizedImageUrl(url: string, width: number = PRODUCT_CARD_IMAGE_WIDTH): string {
   try {
     const parsed = new URL(url)
-    parsed.searchParams.set('width', String(width))
-    return parsed.toString()
+    const host = parsed.hostname
+    if (host === 'cdn.shopify.com' || host.endsWith('.shopify.com')) {
+      parsed.searchParams.set('width', String(width))
+      return parsed.toString()
+    }
+    return url
   } catch {
     return url
   }

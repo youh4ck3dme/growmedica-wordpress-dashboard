@@ -94,7 +94,7 @@ export default function HeaderMegaMenu({ categories }: HeaderMegaMenuProps) {
         type="button"
         id="category-mega-menu-trigger"
         className={`${navLinkClass} ${isOpen ? 'text-(--color-primary)' : ''}`}
-        style={{ fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.06em', fontSize: '0.72rem' }}
+        style={{ fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.06em', fontSize: '0.871rem' }}
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-controls="category-mega-menu-panel"
@@ -102,7 +102,7 @@ export default function HeaderMegaMenu({ categories }: HeaderMegaMenuProps) {
       >
         {t('nav.categories')}
         <svg
-          className={`h-3.5 w-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

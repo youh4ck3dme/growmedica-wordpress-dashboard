@@ -33,11 +33,11 @@ export default function DashboardFrame({
         data-testid="dashboard-frame-error"
       >
         <p className="text-lg font-semibold text-(--color-text)">
-          Nexus admin sa nepodarilo načítať
+          Sales CRM sa nepodarilo načítať
         </p>
         <p className="max-w-md text-sm text-(--color-text-muted)">
-          Skontrolujte, či je Lovable Nexus admin dostupný a povolí embed zo storefront domény
-          (CSP <code className="text-xs">frame-ancestors</code> na Lovable/Vercel).
+          Skontrolujte, či je Sales CRM dostupný a povolí embed zo storefront domény
+          (CSP <code className="text-xs">frame-ancestors</code>).
           Ak iframe auth nefunguje, prihláste sa priamo cez odkaz nižšie.
         </p>
         <a
@@ -47,7 +47,7 @@ export default function DashboardFrame({
           className="btn btn-primary mt-2"
           data-testid="dashboard-direct-link"
         >
-          Otvoriť Nexus admin priamo
+          Otvoriť Sales CRM priamo
         </a>
       </div>
     )
@@ -60,7 +60,7 @@ export default function DashboardFrame({
           className="absolute inset-0 z-10 flex items-center justify-center bg-(--color-surface)"
           data-testid="dashboard-frame-loading"
         >
-          <p className="text-sm text-(--color-text-muted)">Načítavam Nexus admin…</p>
+          <p className="text-sm text-(--color-text-muted)">Načítavam Sales CRM…</p>
         </div>
       )}
       <iframe

@@ -39,12 +39,27 @@ const FALLBACK_SLIDES: HeroSlide[] = [
   },
 ]
 
+/**
+ * useReducedMotion() is null on SSR and can be true on the client → hydration mismatch
+ * if used for autoPlay / motion initial. Keep SSR + first client paint identical.
+ */
+function useHydrationSafeReducedMotion() {
+  const prefersReduced = useReducedMotion()
+  const [reduceMotion, setReduceMotion] = useState(false)
+
+  useEffect(() => {
+    setReduceMotion(prefersReduced === true)
+  }, [prefersReduced])
+
+  return reduceMotion
+}
+
 export function HeroSlider({ slides }: HeroSliderProps) {
   const t = useT()
   const useHeroVideo = true
   const items = slides.length > 0 ? slides : FALLBACK_SLIDES
   const [index, setIndex] = useState(0)
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useHydrationSafeReducedMotion()
   const videoRef = useRef<HTMLVideoElement>(null)
 
   const goTo = useCallback(
@@ -94,7 +109,6 @@ export function HeroSlider({ slides }: HeroSliderProps) {
             <video
               ref={videoRef}
               className="hero-slider__video absolute inset-0 h-full w-full object-cover object-center"
-              autoPlay={!reduceMotion}
               muted
               loop
               playsInline
@@ -143,10 +157,10 @@ export function HeroSlider({ slides }: HeroSliderProps) {
           </AnimatePresence>
         )}
 
-        <Container className="relative z-10 flex h-full min-h-[inherit] items-center py-10 lg:py-16">
+        <Container className="relative z-10 flex h-full min-h-[inherit] items-end justify-start py-8 sm:py-10 lg:pb-12 lg:pt-16">
           <m.div
             className="hero-slider__copy liquid-glass liquid-glass--heavy"
-            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : 0.15 }}
           >
@@ -183,7 +197,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                     dotIndex === index && 'hero-slider__dot--active',
                   )}
                   onClick={() => goTo(dotIndex)}
-                  aria-label={`Slide ${dotIndex + 1} z ${items.length}`}
+                  aria-label={t('aria.slideOf', { n: dotIndex + 1, total: items.length })}
                   aria-current={dotIndex === index ? 'true' : undefined}
                 />
               ))}
@@ -193,7 +207,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
               type="button"
               className="hero-slider__nav hero-slider__nav--prev"
               onClick={goPrev}
-              aria-label="Predchádzajúci slide"
+              aria-label={t('aria.prevSlide')}
             >
               <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
             </button>
@@ -201,7 +215,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
               type="button"
               className="hero-slider__nav hero-slider__nav--next"
               onClick={goNext}
-              aria-label="Ďalší slide"
+              aria-label={t('aria.nextSlide')}
             >
               <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
             </button>

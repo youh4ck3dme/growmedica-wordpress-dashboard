@@ -5,32 +5,32 @@ import { useState, useEffect, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Skeleton } from '@/components/ui/Skeleton'
-import { SAFE_DISCLAIMER } from '@/lib/ai/compliance'
 import type { AiProductSummary, RecommendApiResponse } from '@/lib/ai/schemas'
 import { getProductUrl } from '@/lib/utils'
+import { useLocale, useT } from '@/components/i18n/LocaleProvider'
 
 export function SupplementFinder() {
+  const t = useT()
+  const { locale } = useLocale()
   const [input, setInput] = useState('')
   const [recommendations, setRecommendations] = useState<RecommendApiResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [placeholder, setPlaceholder] = useState('Popíšte svoje potreby ...')
+  const [placeholder, setPlaceholder] = useState(t('finder.placeholder'))
 
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth >= 640) {
-        setPlaceholder('Popíšte svoje potreby (napr. viac energie na tréning)')
+        setPlaceholder(t('finder.placeholderLong'))
       } else {
-        setPlaceholder('Popíšte svoje potreby ...')
+        setPlaceholder(t('finder.placeholder'))
       }
     }
 
-    // Nastaviť hneď pri mountnutí na klientovi
     handleResize()
-
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [locale, t])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -53,13 +53,13 @@ export function SupplementFinder() {
         const message =
           typeof raw === 'string' && raw.trim() && !raw.trimStart().startsWith('[')
             ? raw
-            : 'Nepodarilo sa spracovať požiadavku. Skúste popísať cieľ (napr. viac energie, spánok).'
+            : t('finder.errorGeneric')
         throw new Error(message)
       }
 
       setRecommendations(data)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Nepodarilo sa načítať odporúčania.')
+      setError(err instanceof Error ? err.message : t('finder.errorLoad'))
     } finally {
       setLoading(false)
     }
@@ -85,32 +85,24 @@ export function SupplementFinder() {
 
         <div className="text-center mb-8">
           <h2 className="text-3xl font-extrabold mb-2 tracking-tight text-(--color-text)" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-            Nájdite vhodný doplnok
+            {t('finder.title')}
           </h2>
           <p className="text-sm text-(--color-text-muted) max-w-lg mx-auto">
-            AI asistent vám pomôže vybrať produkty na mieru z našej ponuky. {SAFE_DISCLAIMER}
+            {t('finder.subtitle')} {t('finder.disclaimer')}
           </p>
         </div>
 
-        {/* Hlavný prémiový vyhľadávač v štýle Google/Gemini s animovaným dúhovým okrajom */}
         <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto mb-10">
-          {/* Obal s rotujúcim dúhovým hadíkom */}
           <div className="relative p-[2px] overflow-hidden rounded-2xl bg-(--color-border)">
-            
-            {/* Traveling neon beam */}
             <div className="w-[108px] h-[108px] rounded-full bg-gradient-to-r from-[#35C79A] via-[#4f46e5] to-[#ec4899] blur-sm opacity-90 animate-spin-gradient" />
-            
-            {/* Vnútorná maska (stred riadku), ktorá prekrýva gradient a vytvára tenký okraj */}
+
             <div className="relative flex items-center p-1.5 rounded-[14px] bg-white dark:bg-(--color-surface-2)">
-              
-              {/* Ikona AI / Sparkles */}
               <div className="pl-3 pr-1 text-(--color-primary) shrink-0 flex items-center justify-center">
                 <svg className="h-5 w-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 21L8.188 15.904L3 15L8.188 14.096L9 9L9.813 14.096L15 15L9.813 15.904ZM19.071 5.929L18.5 9L17.929 5.929L15 5.358L17.929 4.787L18.5 1.714L19.071 4.787L22 5.358L19.071 5.929Z" />
                 </svg>
               </div>
-              
-              {/* Input pole */}
+
               <input
                 type="text"
                 placeholder={placeholder}
@@ -118,10 +110,9 @@ export function SupplementFinder() {
                 onChange={(event) => setInput(event.target.value)}
                 disabled={loading}
                 className="w-full py-3 px-2 text-sm sm:text-base text-(--color-text) bg-transparent border-0 focus:outline-none focus:ring-0 placeholder:text-xs sm:placeholder:text-base placeholder:text-(--color-text-muted) disabled:opacity-50"
-                aria-label="Popíšte svoje potreby pre hľadanie doplnkov"
+                aria-label={t('finder.inputAria')}
               />
-              
-              {/* Prémiové tlačidlo vo vnútri */}
+
               <Button
                 type="submit"
                 variant="primary"
@@ -132,7 +123,7 @@ export function SupplementFinder() {
               >
                 {!loading && (
                   <>
-                    <span>Nájsť doplnky</span>
+                    <span>{t('finder.submit')}</span>
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
@@ -171,12 +162,12 @@ export function SupplementFinder() {
 
             {recommendations.recommendedProducts.length > 0 ? (
               <ProductLinkList
-                heading="Odporúčané produkty"
+                heading={t('finder.recommended')}
                 products={recommendations.recommendedProducts}
               />
             ) : (
               <EmptyState
-                title="Nenašli sa vhodné produkty"
+                title={t('finder.noMatch')}
                 description={recommendations.reasoningForUser}
                 icon="search"
               />
@@ -199,7 +190,7 @@ export function SupplementFinder() {
                 role="alert"
                 className="p-4 border border-(--color-warning) rounded-lg bg-(--color-surface-2)"
               >
-                <h4 className="font-semibold mb-2 text-(--color-warning)">Upozornenia</h4>
+                <h4 className="font-semibold mb-2 text-(--color-warning)">{t('finder.warnings')}</h4>
                 <ul className="list-disc pl-5 space-y-1 text-(--color-text)">
                   {recommendations.warnings.map((warning) => (
                     <li key={warning}>{warning}</li>

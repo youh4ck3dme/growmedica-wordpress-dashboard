@@ -20,6 +20,9 @@ function growmedica_cors_allowed_origins(): array
         'http://127.0.0.1:5555',
         'https://growmedica.cz',
         'https://www.growmedica.cz',
+        'https://growmedica.store',
+        'https://www.growmedica.store',
+        'https://growmedica-store-amber.vercel.app',
     ];
 
     $extra = getenv('GROWMEDICA_CORS_ORIGINS')

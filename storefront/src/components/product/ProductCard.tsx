@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import type { ProductListItem } from '@/lib/catalog/types'
@@ -8,6 +10,7 @@ import {
 import { getProductUrl } from '@/lib/utils'
 import { Price } from '@/components/ui/Price'
 import { WishlistButton } from '@/components/product/WishlistButton'
+import { useT } from '@/components/i18n/LocaleProvider'
 
 interface ProductCardProps {
   product: ProductListItem
@@ -15,6 +18,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, priority = false }: ProductCardProps) {
+  const t = useT()
   const image = product.featuredImage
   const firstVariant = product.variants.edges[0]?.node
   const price = firstVariant?.price ?? product.priceRange.minVariantPrice
@@ -62,10 +66,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
           <div className="absolute top-2 left-2 flex flex-col gap-1">
             {!product.availableForSale && (
-              <span className="badge badge-error">Momentálne vypredané</span>
+              <span className="badge badge-error">{t('product.soldOutBadge')}</span>
             )}
             {hasDiscount && product.availableForSale && (
-              <span className="badge badge-sale">Zľava {discountPct}%</span>
+              <span className="badge badge-sale">{t('product.saleBadge', { pct: discountPct })}</span>
             )}
           </div>
         </Link>
@@ -95,7 +99,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         </h3>
 
         <p className="product-card__stock text-xs font-semibold">
-          {product.availableForSale ? '✓ Dostupné skladom' : '✗ Momentálne vypredané'}
+          {product.availableForSale ? t('product.inStock') : t('product.outOfStock')}
         </p>
 
         <Price
@@ -108,9 +112,9 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           href={getProductUrl(product.handle)}
           id={`product-cta-${product.handle}`}
           className="btn btn-primary btn-sm btn-full mt-1"
-          aria-label={`Detail produktu: ${product.title}`}
+          aria-label={t('product.viewProductAria', { title: product.title })}
         >
-          Zobraziť produkt
+          {t('product.viewProduct')}
         </Link>
       </div>
     </article>

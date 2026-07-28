@@ -29,14 +29,14 @@ export default function HeaderCommerceActions({
   return (
     <>
       <Link href="/profil" id="profile-button" className={cn(actionClassName)} aria-label={profileAria}>
-        <IconUser size={20} />
+        <IconUser size={29} />
       </Link>
 
       <Link href="/oblubene" id="wishlist-button" className={cn(actionClassName)} aria-label={wishlistAria}>
-        <IconHeart size={20} />
+        <IconHeart size={29} />
         {wishlistCount > 0 && (
           <span
-            className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full text-[9px] font-bold text-white bg-red-500"
+            className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white bg-red-500"
             aria-hidden="true"
           >
             {wishlistCount > 9 ? '9+' : wishlistCount}
@@ -45,10 +45,10 @@ export default function HeaderCommerceActions({
       </Link>
 
       <Link href="/kosik" id="cart-button" className={cn(actionClassName)} aria-label={cartAria}>
-        <IconBasket size={20} />
+        <IconBasket size={29} />
         {cartCount > 0 && (
           <span
-            className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white bg-(--color-primary)"
+            className="absolute -top-1 -right-1 flex h-[1.125rem] w-[1.125rem] items-center justify-center rounded-full text-[10px] font-bold text-white bg-(--color-primary)"
             aria-hidden="true"
           >
             {cartCount > 9 ? '9+' : cartCount}
