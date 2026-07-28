@@ -24,72 +24,55 @@ test.describe('Pharmacist Assistant — API', () => {
     expect(fs.existsSync(chatPath)).toBe(true)
     const content = fs.readFileSync(chatPath, 'utf8')
     expect(content).toContain('detectHandoff')
-    expect(content).toContain('getMockResponse')
+    expect(content).toContain('recommended_products')
+    expect(content).toContain('warning: copy.warning')
+  })
+
+  test('4. prompt enforces reply in last user language', async () => {
+    const promptPath = path.join(process.cwd(), 'src/lib/ai/prompts/pharmacist.ts')
+    const content = fs.readFileSync(promptPath, 'utf8')
+    expect(content).toContain('VŽDY odpovedaj v jazyku poslednej používateľovej správy')
+    expect(content).toContain('Ak používateľ zmení jazyk, okamžite prepni do nového jazyka')
   })
 })
 
 test.describe('Pharmacist Assistant — UI', () => {
-  test('4. single FAB entry opens drawer without duplicate CTAs', async () => {
+  test('5. single FAB entry opens drawer without duplicate CTAs', async () => {
     const fabPath = path.join(process.cwd(), 'src/components/ai/FloatingAssistantFab.tsx')
     expect(fs.existsSync(fabPath)).toBe(true)
     const fabContent = fs.readFileSync(fabPath, 'utf8')
     expect(fabContent).toContain('data-testid="assistant-fab-trigger"')
-    expect(fabContent).toContain('Poradiť sa')
+    expect(fabContent).toContain("t('assistant.triggerAria')")
     expect(fabContent).not.toContain('Lekárnik')
     expect(fabContent).not.toContain('Poradiť sa s lekárnikom')
 
     const drawerPath = path.join(process.cwd(), 'src/components/ai/PharmacistAssistantDrawer.tsx')
     expect(fs.existsSync(drawerPath)).toBe(true)
     const drawerContent = fs.readFileSync(drawerPath, 'utf8')
-    expect(drawerContent).toContain('data-testid="pharmacist-assistant-drawer"')
-    expect(drawerContent).toContain('GrowMedica Farmaceut')
-    expect(drawerContent).toContain('Som váš virtuálny farmaceut GrowMedica')
-
-    const finderPath = path.join(process.cwd(), 'src/components/ai/SupplementFinder.tsx')
-    const finderContent = fs.readFileSync(finderPath, 'utf8')
-    expect(finderContent).not.toContain('openPharmacistAssistant')
-
-    const fitPath = path.join(process.cwd(), 'src/components/ai/ProductFitBox.tsx')
-    const fitContent = fs.readFileSync(fitPath, 'utf8')
-    expect(fitContent).not.toContain('openPharmacistAssistant')
+    expect(drawerContent).toContain("data-testid='pharmacist-assistant-drawer'")
+    expect(drawerContent).toContain("t('assistant.headerTitle')")
+    expect(drawerContent).toContain("t('assistant.initial')")
   })
 
-  test('5. drawer sends mock reply from input', async () => {
+  test('6. drawer renders structured product recommendation blocks', async () => {
     const drawerPath = path.join(process.cwd(), 'src/components/ai/PharmacistAssistantDrawer.tsx')
-    expect(fs.existsSync(drawerPath)).toBe(true)
     const content = fs.readFileSync(drawerPath, 'utf8')
-    expect(content).toContain('Správa pre asistenta')
-    expect(content).toContain('Odoslať správu')
-    expect(content).toContain('assistant-drawer__bubble')
+    expect(content).toContain("data-testid='assistant-products-section'")
+    expect(content).toContain("data-testid='assistant-bundle-section'")
+    expect(content).toContain("data-testid='assistant-warning-section'")
+    expect(content).toContain("data-testid='assistant-next-step-section'")
+    expect(content).toContain('ProductRecommendationCard')
   })
 
-  test('5b. floating FAB is visible on homepage without scrolling', async () => {
-    const fabPath = path.join(process.cwd(), 'src/components/ai/FloatingAssistantFab.tsx')
-    expect(fs.existsSync(fabPath)).toBe(true)
-    const content = fs.readFileSync(fabPath, 'utf8')
-    expect(content).toContain('data-testid="assistant-fab-trigger"')
-    expect(content).toContain('Poradiť sa')
-  })
-
-  test('5c. floating FAB opens assistant drawer', async () => {
+  test('7. drawer keeps loading skeleton and sticky composer UX', async () => {
     const drawerPath = path.join(process.cwd(), 'src/components/ai/PharmacistAssistantDrawer.tsx')
-    expect(fs.existsSync(drawerPath)).toBe(true)
     const content = fs.readFileSync(drawerPath, 'utf8')
-    expect(content).toContain('open')
-    expect(content).toContain('setOpen')
+    expect(content).toContain("data-testid='assistant-loading-cards'")
+    expect(content).toContain('assistant-drawer__footer--sticky')
+    expect(content).toContain("t('assistant.startHere')")
   })
 
-  test('5d. mobile floating FAB opens assistant drawer', async () => {
-    const fabPath = path.join(process.cwd(), 'src/components/ai/FloatingAssistantFab.tsx')
-    expect(fs.existsSync(fabPath)).toBe(true)
-    const content = fs.readFileSync(fabPath, 'utf8')
-    expect(content).toContain('assistant-fab')
-    expect(content).toContain('AssistantChatTrigger')
-    expect(content).toContain('Poradiť sa')
-    expect(content).not.toContain('Lekárnik')
-  })
-
-  test('6. footer has no assistant chat trigger', async () => {
+  test('8. footer has no assistant chat trigger', async () => {
     const footerPath = path.join(process.cwd(), 'src/components/layout/Footer.tsx')
     expect(fs.existsSync(footerPath)).toBe(true)
     const content = fs.readFileSync(footerPath, 'utf8')
@@ -99,7 +82,7 @@ test.describe('Pharmacist Assistant — UI', () => {
     )
   })
 
-  test('7. mobile menu has no assistant chat trigger', async () => {
+  test('9. mobile menu has no assistant chat trigger', async () => {
     const mobileNavPath = path.join(process.cwd(), 'src/components/layout/MobileNav.tsx')
     expect(fs.existsSync(mobileNavPath)).toBe(true)
     const content = fs.readFileSync(mobileNavPath, 'utf8')

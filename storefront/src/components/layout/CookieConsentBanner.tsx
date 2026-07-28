@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { useEffect, useId, useState } from 'react'
-import { m, useReducedMotion } from 'framer-motion'
+import { m } from 'framer-motion'
 import Logo from '@/components/ui/Logo'
 import { useT } from '@/components/i18n/LocaleProvider'
+import { useHydrationSafeReducedMotion } from '@/hooks/useHydrationSafeReducedMotion'
 import {
   acceptAllConsent,
   createConsent,
@@ -15,17 +16,6 @@ import {
   type CookieConsent,
 } from '@/lib/cookie-consent'
 import { cn } from '@/lib/utils'
-
-function useHydrationSafeReducedMotion() {
-  const prefersReduced = useReducedMotion()
-  const [reduceMotion, setReduceMotion] = useState(false)
-
-  useEffect(() => {
-    setReduceMotion(prefersReduced === true)
-  }, [prefersReduced])
-
-  return reduceMotion
-}
 
 export default function CookieConsentBanner() {
   const t = useT()

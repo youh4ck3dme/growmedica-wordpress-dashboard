@@ -5,6 +5,7 @@ import type { ProductVariant } from '@/lib/catalog/types'
 import { Button } from '@/components/ui/Button'
 import { useThemeToast } from '@/components/ui/ThemeToast'
 import { useT } from '@/components/i18n/LocaleProvider'
+import { addToCartRequest, dispatchCartCountUpdated } from '@/lib/catalog/cart-client'
 
 interface AddToCartButtonProps {
   variants: ProductVariant[]
@@ -34,22 +35,8 @@ export default function AddToCartButton({
     setError(null)
 
     try {
-      const response = await fetch('/api/cart/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ variantId, quantity: 1 }),
-      })
-
-      if (!response.ok) {
-        const data = await response.json() as { error?: string }
-        throw new Error(data.error ?? t('cart.addError'))
-      }
-
-      const data = await response.json() as { count?: number }
-
-      if (typeof window !== 'undefined' && data.count !== undefined) {
-        window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: data.count }))
-      }
+      const data = await addToCartRequest(variantId, 1, t('cart.addError'))
+      dispatchCartCountUpdated(data.count)
 
       setSuccess(true)
       toast({
@@ -59,7 +46,13 @@ export default function AddToCartButton({
       })
       setTimeout(() => setSuccess(false), 2500)
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('cart.addErrorGeneric'))
+      const message =
+        err instanceof Error && err.name === 'TimeoutError'
+          ? t('cart.addErrorGeneric')
+          : err instanceof Error
+            ? err.message
+            : t('cart.addErrorGeneric')
+      setError(message)
     } finally {
       setIsLoading(false)
     }

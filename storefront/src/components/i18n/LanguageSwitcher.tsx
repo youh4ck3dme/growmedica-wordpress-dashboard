@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale } from '@/lib/i18n/types'
 import { useLocale } from '@/components/i18n/LocaleProvider'
+import { cn } from '@/lib/utils'
 
 const LOCALE_LABELS: Record<Locale, string> = {
   cs: 'CS',
@@ -51,7 +52,7 @@ export default function LanguageSwitcher({ className = '' }: { className?: strin
   return (
     <div
       ref={rootRef}
-      className={`relative inline-flex ${className}`.trim()}
+      className={cn('relative inline-flex', className)}
       data-testid="locale-switcher"
     >
       <button

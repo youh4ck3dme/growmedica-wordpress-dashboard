@@ -26,7 +26,14 @@ function setCartCookie(response: NextResponse, cartId: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = addSchema.parse(await request.json())
+    let rawBody: unknown
+    try {
+      rawBody = await request.json()
+    } catch {
+      return NextResponse.json({ error: 'Neplatné údaje košíka' }, { status: 400 })
+    }
+
+    const body = addSchema.parse(rawBody)
     const { variantId, quantity } = body
 
     const cookieStore = await cookies()

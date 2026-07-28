@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { useThemeToast } from '@/components/ui/ThemeToast'
 import { useT } from '@/components/i18n/LocaleProvider'
+import { addToCartRequest, dispatchCartCountUpdated } from '@/lib/catalog/cart-client'
 
 interface BundleAddToCartProps {
   variantId: string
@@ -32,21 +33,8 @@ export function BundleAddToCart({
     setError(null)
 
     try {
-      const response = await fetch('/api/cart/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ variantId, quantity: 1 }),
-      })
-
-      if (!response.ok) {
-        const data = (await response.json()) as { error?: string }
-        throw new Error(data.error ?? t('bundle.addError'))
-      }
-
-      const data = (await response.json()) as { count?: number }
-      if (typeof window !== 'undefined' && data.count !== undefined) {
-        window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: data.count }))
-      }
+      const data = await addToCartRequest(variantId, 1, t('bundle.addError'))
+      dispatchCartCountUpdated(data.count)
 
       setSuccess(true)
       toast({

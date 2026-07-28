@@ -77,6 +77,8 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    // Next 15+ warns / Next 16 requires explicit allowlist for Image `quality`.
+    qualities: [65, 70, 75],
     deviceSizes: [640, 750, 828, 1080, 1200, 1600],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },

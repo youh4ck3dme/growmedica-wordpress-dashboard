@@ -3,8 +3,11 @@ import { ASSISTANT_CART_HINT, PHARMACIST_PERSONA } from '@/lib/ai/prompts/pharma
 import {
   buildAssistantProductContext,
   detectHandoff,
+  toAssistantProductCard,
+  type AssistantBundleSuggestion,
   type AssistantChatMessage,
   type AssistantChatResponse,
+  type AssistantProductCard,
   type AssistantProductContext,
 } from '@/lib/ai/pharmacist-assistant'
 import { getSafeDisclaimer, checkCompliance } from '@/lib/ai/compliance'
@@ -21,6 +24,8 @@ type ChatWithPharmacistInput = {
   conversationId?: string
   ip: string
 }
+
+type AssistantUiLocale = 'sk' | 'cs' | 'en' | 'de'
 
 function extractMessageContent(content: unknown): string {
   if (typeof content === 'string') return content
@@ -56,42 +61,132 @@ function getLastUserMessage(messages: AssistantChatMessage[]): string {
   return ''
 }
 
-function defaultSuggestedReplies(lastUser: string): string[] {
+function detectAssistantLocale(lastUser: string): AssistantUiLocale {
   const normalized = lastUser.toLowerCase()
-  if (/objedn|kosik|platb/.test(normalized)) {
-    return ['Ako dokončím objednávku?', 'Odporuč mi produkt na energiu', 'Kontakt na podporu']
+  if (/[äöüß]/.test(normalized) || /(hallo|bitte|schlaf|bestellung|danke)/.test(normalized)) {
+    return 'de'
   }
-  if (/spánok|energi|tráven|imunit/.test(normalized)) {
-    return ['Ukáž produkty v košíku', 'Čo odporúčate pre šport?', 'Prejsť na /kolekcie']
+  if (/(hello|please|order|sleep|energy|support)/.test(normalized)) {
+    return 'en'
   }
-  return ['Odporuč mi produkt na spánok', 'Ako dokončím objednávku?', 'Kontakt na podporu']
+  if (/(doporuc|objednavk|spánek|košík|podpora)/.test(normalized)) {
+    return 'cs'
+  }
+  return 'sk'
+}
+
+function localeCopy(locale: AssistantUiLocale) {
+  switch (locale) {
+    case 'en':
+      return {
+        suggestions: ['Recommend a product for sleep', 'How do I complete my order?', 'Support contact'],
+        productLead: 'Based on your request, these products are the best fit to review first.',
+        fallback: 'I did not find a strong direct match yet, but these products are the closest starting point from the catalog.',
+        nextStep: 'Open a product detail and compare the composition, dosage, and stock availability.',
+        bundleTitle: 'Suggested combination',
+        bundleCta: 'Review these together',
+        handoffSuggestion: ['Go to contact', 'Recommend a product'],
+        warning: getSafeDisclaimer(),
+      }
+    case 'de':
+      return {
+        suggestions: ['Empfiehl mir ein Produkt für den Schlaf', 'Wie schließe ich die Bestellung ab?', 'Support-Kontakt'],
+        productLead: 'Zu Ihrer Anfrage passen diese Produkte am besten als erster Schritt.',
+        fallback: 'Ich habe noch keinen exakten Treffer gefunden, aber diese Produkte sind der beste Ausgangspunkt aus dem Katalog.',
+        nextStep: 'Öffnen Sie ein Produktdetail und vergleichen Sie Zusammensetzung, Dosierung und Verfügbarkeit.',
+        bundleTitle: 'Empfohlene Kombination',
+        bundleCta: 'Gemeinsam ansehen',
+        handoffSuggestion: ['Zum Kontakt', 'Produkt empfehlen'],
+        warning: getSafeDisclaimer(),
+      }
+    case 'cs':
+      return {
+        suggestions: ['Doporuč mi produkt na spánek', 'Jak dokončím objednávku?', 'Kontakt na podporu'],
+        productLead: 'Podle vašeho dotazu dávají největší smysl tyto produkty jako první výběr.',
+        fallback: 'Nenašel jsem úplně přesnou shodu, ale tyto produkty jsou nejlepší výchozí bod z katalogu.',
+        nextStep: 'Otevřete detail produktu a porovnejte složení, dávkování a dostupnost.',
+        bundleTitle: 'Doporučená kombinace',
+        bundleCta: 'Projít společně',
+        handoffSuggestion: ['Přejít na kontakt', 'Doporuč mi produkt'],
+        warning: getSafeDisclaimer(),
+      }
+    case 'sk':
+    default:
+      return {
+        suggestions: ['Odporuč mi produkt na spánok', 'Ako dokončím objednávku?', 'Kontakt na podporu'],
+        productLead: 'Podľa vašej otázky dávajú najväčší zmysel tieto produkty ako prvý výber.',
+        fallback: 'Nenašiel som úplne presnú zhodu, ale tieto produkty sú najlepší štart z katalógu.',
+        nextStep: 'Otvorte detail produktu a porovnajte zloženie, dávkovanie a dostupnosť.',
+        bundleTitle: 'Odporúčaná kombinácia',
+        bundleCta: 'Pozrieť spolu',
+        handoffSuggestion: ['Prejsť na kontakt', 'Odporuč mi produkt'],
+        warning: getSafeDisclaimer(),
+      }
+  }
+}
+
+function defaultSuggestedReplies(lastUser: string): string[] {
+  const locale = detectAssistantLocale(lastUser)
+  const normalized = lastUser.toLowerCase()
+  const copy = localeCopy(locale)
+
+  if (/objedn|kosik|košík|platb|order|checkout|bestell/i.test(normalized)) {
+    return [copy.suggestions[1], copy.suggestions[0], copy.suggestions[2]]
+  }
+
+  return copy.suggestions
+}
+
+function buildBundleSuggestion(
+  locale: AssistantUiLocale,
+  products: AssistantProductCard[],
+): AssistantBundleSuggestion | null {
+  if (products.length < 2) return null
+  const copy = localeCopy(locale)
+  return {
+    title: copy.bundleTitle,
+    cta: copy.bundleCta,
+    products: products.slice(0, 2),
+  }
 }
 
 function getMockResponse(
   lastUser: string,
   productContext: AssistantProductContext[],
 ): AssistantChatResponse {
+  const locale = detectAssistantLocale(lastUser)
+  const copy = localeCopy(locale)
   const handoff = detectHandoff(lastUser)
+  const recommendedProducts = productContext.map(toAssistantProductCard)
+
   if (handoff) {
     return {
-      message: `${handoff.message}\n\n${getSafeDisclaimer()}`,
-      suggested_replies: ['Prejsť na kontakt', 'Odporuč mi produkt'],
+      message: handoff.message,
+      suggested_replies: copy.handoffSuggestion,
       handoff,
+      warning: copy.warning,
+      next_step: null,
+      recommended_products: recommendedProducts.slice(0, 2),
+      bundle_suggestion: null,
     }
   }
 
   const productLine =
-    productContext.length > 0
-      ? `Z katalógu by som sa pozrel na ${productContext
+    recommendedProducts.length > 0
+      ? `${copy.productLead} ${recommendedProducts
           .slice(0, 2)
           .map((product) => product.title)
-          .join(' alebo ')}.`
-      : 'Pozrite si naše kolekcie na /kolekcie.'
+          .join(' / ')}.`
+      : copy.fallback
 
   return {
-    message: `${productLine} ${ASSISTANT_CART_HINT}\n\n${getSafeDisclaimer()}`,
+    message: `${productLine} ${ASSISTANT_CART_HINT}`,
     suggested_replies: defaultSuggestedReplies(lastUser),
     handoff: null,
+    warning: copy.warning,
+    next_step: copy.nextStep,
+    recommended_products: recommendedProducts,
+    bundle_suggestion: buildBundleSuggestion(locale, recommendedProducts),
   }
 }
 
@@ -131,10 +226,16 @@ function buildMistralMessages(
 ): Array<{ role: 'system' | 'user' | 'assistant'; content: string }> {
   const catalogBlock =
     productContext.length > 0
-      ? `\n\nDostupné produkty (odporúčaj len tieto, s presným názvom):\n${JSON.stringify(productContext)}`
+      ? `
+
+Dostupné produkty (odporúčaj len tieto, s presným názvom):
+${JSON.stringify(productContext)}`
       : ''
 
-  const systemContent = `${PHARMACIST_PERSONA}\n\n${getSafeDisclaimer()}\n${ASSISTANT_CART_HINT}${catalogBlock}`
+  const systemContent = `${PHARMACIST_PERSONA}
+
+${getSafeDisclaimer()}
+${ASSISTANT_CART_HINT}${catalogBlock}`
 
   const trimmed = messages.slice(-12)
   return [
@@ -162,8 +263,12 @@ export async function chatWithPharmacist(input: ChatWithPharmacistInput): Promis
     throw new AiError('Príliš veľa požiadaviek. Skúste to prosím neskôr.', 429)
   }
 
+  const locale = detectAssistantLocale(lastUser)
+  const copy = localeCopy(locale)
   const handoff = detectHandoff(lastUser)
   const productContext = await buildAssistantProductContext(lastUser)
+  const recommendedProducts = productContext.map(toAssistantProductCard)
+  const bundleSuggestion = buildBundleSuggestion(locale, recommendedProducts)
 
   if (process.env.MISTRAL_MOCK_MODE === '1') {
     return {
@@ -211,6 +316,10 @@ export async function chatWithPharmacist(input: ChatWithPharmacistInput): Promis
     message: rendered,
     suggested_replies: defaultSuggestedReplies(lastUser),
     handoff,
+    warning: copy.warning,
+    next_step: copy.nextStep,
+    recommended_products: recommendedProducts,
+    bundle_suggestion: bundleSuggestion,
     conversation_id: input.conversationId ?? null,
   }
 }

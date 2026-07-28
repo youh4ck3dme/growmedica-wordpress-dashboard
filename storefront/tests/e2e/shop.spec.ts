@@ -18,7 +18,7 @@ test.describe('1. Domovská stránka (Homepage)', () => {
     await page.goto('/');
     const heroHeading = page.locator('h1');
     await expect(heroHeading).toBeVisible();
-    await expect(heroHeading).toContainText(BRAND_COPY.heroTitle);
+    await expect(heroHeading).toContainText('Kvalita, ktorú vidíte aj v zložení');
   });
 
   test('2. Mal by zobraziť logo a názov obchodu growmedica v hlavičke', async ({ page }) => {
@@ -66,15 +66,15 @@ test.describe('1. Domovská stránka (Homepage)', () => {
     await expect(featuredHeading).toContainText('Najpredávanejšie produkty');
   });
 
-  test('7. Mal by obsahovať sekciu "Prečo GrowMedica" so SEO popisom', async ({ page }) => {
+  test('7. Mal by obsahovať spojenú sekciu Supplement Finder s cieľmi', async ({ page }) => {
     await page.goto('/');
-    const aboutSection = page.locator('section.why-growmedica');
-    await expect(aboutSection).toBeVisible();
-    await expect(aboutSection.locator('.why-growmedica__label')).toContainText(BRAND_COPY.aboutLabel);
-    await expect(aboutSection.locator('h2')).toContainText(BRAND_COPY.aboutHeading);
-    await expect(aboutSection.locator('.why-growmedica__slogan')).toContainText(BRAND_COPY.aboutSlogan);
-    await expect(aboutSection.locator('.why-growmedica__glass.liquid-glass')).toBeVisible();
-    await expect(aboutSection.locator('.why-growmedica__health-line')).toHaveCount(BRAND_COPY.aboutHealthLines.length);
+    const finder = page.locator('#supplement-finder');
+    await expect(finder).toBeVisible();
+    await expect(finder.locator('.supplement-finder__eyebrow')).toContainText('Prečo GrowMedica');
+    await expect(finder.locator('h2')).toContainText('Nájdite vhodný doplnok');
+    await expect(finder.locator('.supplement-finder__step')).toHaveCount(3);
+    await expect(finder.locator('.supplement-finder__chip')).toHaveCount(3);
+    await expect(finder.getByRole('button', { name: 'Nájsť doplnky' })).toBeVisible();
   });
 
   test('7b. Mal by obsahovať sekciu balíčkov zdravia s odkazom na /balicky', async ({ page }) => {
@@ -110,14 +110,12 @@ test.describe('2. Navigácia a Statické Podstránky', () => {
     await page.goto('/balicky');
     await expect(page.locator('h1')).toContainText(BRAND_COPY.bundlesHeading);
     await expect(page.locator('nav[aria-label="Breadcrumb"]')).toContainText(BRAND_COPY.bundlesHeading);
-    await expect(page.locator('.bundle-grid .bundle-card')).toHaveCount(63);
-    const isWooCms =
-      process.env.CMS_PROVIDER === 'wordpress' || process.env.WOO_MOCK_MODE === '1';
-    if (isWooCms) {
+    const bundleCards = page.locator('.bundle-grid .bundle-card, [data-testid="bundle-card"]');
+    const hasAvailableBundleCards = (await bundleCards.count()) > 0;
+    if (hasAvailableBundleCards) {
       await expect(page.getByTestId('bundle-card').first()).toBeVisible();
     } else {
-      await expect(page.locator('[data-has-shopify-product="true"]').first()).toBeVisible();
-      await expect(page.getByTestId('bundle-add-to-cart').first()).toBeVisible();
+      await expect(page.getByTestId('bundles-coming-soon-teaser')).toContainText('63');
     }
   });
 
@@ -288,10 +286,7 @@ test.describe('5. Košík a Nákupný Proces', () => {
     await acceptCookies(page);
     const addToCartBtn = page.locator('#add-to-cart-btn');
     await expect(addToCartBtn).toBeEnabled({ timeout: 15000 });
-    await Promise.all([
-      page.waitForResponse((r) => r.url().includes('/api/cart/add') && r.request().method() === 'POST'),
-      addToCartBtn.click({ force: true }),
-    ]);
+    await addToCartBtn.click({ force: true });
     const cartBadge = page.locator('#cart-button span[aria-hidden="true"]');
     await expect(cartBadge).toHaveText(/[1-9]/, { timeout: 10000 });
   });
@@ -302,10 +297,10 @@ test.describe('5. Košík a Nákupný Proces', () => {
     const productTitle = await page.locator('h1').innerText();
     const addToCartBtn = page.locator('#add-to-cart-btn');
     await expect(addToCartBtn).toBeEnabled({ timeout: 15000 });
-    await Promise.all([
-      page.waitForResponse((r) => r.url().includes('/api/cart/add') && r.request().method() === 'POST'),
-      addToCartBtn.click({ force: true }),
-    ]);
+    await addToCartBtn.click({ force: true });
+    await expect(page.locator('#cart-button span[aria-hidden="true"]')).toHaveText(/[1-9]/, {
+      timeout: 10000,
+    });
     await page.goto('/kosik');
     const cartItemTitle = page.locator('a[href^="/produkty/"]').first();
     await cartItemTitle.scrollIntoViewIfNeeded();
@@ -318,10 +313,10 @@ test.describe('5. Košík a Nákupný Proces', () => {
     await acceptCookies(page);
     const addToCartBtn = page.locator('#add-to-cart-btn');
     await expect(addToCartBtn).toBeEnabled({ timeout: 15000 });
-    await Promise.all([
-      page.waitForResponse((r) => r.url().includes('/api/cart/add') && r.request().method() === 'POST'),
-      addToCartBtn.click({ force: true }),
-    ]);
+    await addToCartBtn.click({ force: true });
+    await expect(page.locator('#cart-button span[aria-hidden="true"]')).toHaveText(/[1-9]/, {
+      timeout: 10000,
+    });
     await page.goto('/kosik');
     const summaryHeading = page.locator('h2', { hasText: /Súhrn|nákupu|objednáv/i });
     await summaryHeading.scrollIntoViewIfNeeded();

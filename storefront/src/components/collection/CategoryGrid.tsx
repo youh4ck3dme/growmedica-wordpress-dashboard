@@ -2,8 +2,9 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { m, useReducedMotion } from 'framer-motion'
+import { m } from 'framer-motion'
 import type { NavCollectionItem } from '@/lib/catalog/nav'
+import { useHydrationSafeReducedMotion } from '@/hooks/useHydrationSafeReducedMotion'
 import { cn } from '@/lib/utils'
 
 interface CategoryGridProps {
@@ -12,7 +13,7 @@ interface CategoryGridProps {
 }
 
 export function CategoryGrid({ categories, className }: CategoryGridProps) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useHydrationSafeReducedMotion()
 
   if (categories.length === 0) {
     return null

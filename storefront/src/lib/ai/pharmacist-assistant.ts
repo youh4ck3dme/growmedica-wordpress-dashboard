@@ -16,6 +16,23 @@ export interface AssistantProductContext {
   tags: string[]
   priceFrom: string
   availableForSale: boolean
+  imageUrl?: string | null
+  url?: string
+}
+
+export interface AssistantProductCard {
+  handle: string
+  title: string
+  vendor: string
+  priceFrom: string
+  imageUrl: string | null
+  url: string
+}
+
+export interface AssistantBundleSuggestion {
+  title: string
+  cta: string
+  products: AssistantProductCard[]
 }
 
 export interface AssistantHandoff {
@@ -30,6 +47,10 @@ export interface AssistantChatResponse {
   message: string
   suggested_replies?: string[]
   handoff?: AssistantHandoff | null
+  warning?: string | null
+  next_step?: string | null
+  recommended_products?: AssistantProductCard[]
+  bundle_suggestion?: AssistantBundleSuggestion | null
   conversation_id?: string | null
 }
 
@@ -70,6 +91,19 @@ function toAssistantContext(product: AiProductContext): AssistantProductContext 
     tags: product.tags,
     priceFrom: product.priceFrom,
     availableForSale: product.availableForSale,
+    imageUrl: product.imageUrl ?? null,
+    url: product.url,
+  }
+}
+
+export function toAssistantProductCard(product: AssistantProductContext): AssistantProductCard {
+  return {
+    handle: product.handle,
+    title: product.title,
+    vendor: product.vendor,
+    priceFrom: product.priceFrom,
+    imageUrl: product.imageUrl ?? null,
+    url: product.url ?? `/produkty/${product.handle}`,
   }
 }
 

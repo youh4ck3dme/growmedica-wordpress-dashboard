@@ -33,6 +33,8 @@ const pinnedEnv = {
   SHOPIFY_STOREFRONT_ACCESS_TOKEN:
     process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ?? 'mock-storefront-token',
   SHOPIFY_API_VERSION: process.env.SHOPIFY_API_VERSION ?? '2026-07',
+  // Keep Playwright dist cache separate from manual `yarn dev` (.next).
+  NEXT_DIST_DIR: process.env.NEXT_DIST_DIR ?? '.next-playwright',
 }
 
 for (const [key, value] of Object.entries(pinnedEnv)) {

@@ -136,17 +136,6 @@
     font-family: var(--font-inter), sans-serif;
   }
 
-  /* Content type +15%; header/footer chrome stay at base scale */
-  main {
-    zoom: 1.15;
-  }
-
-  @supports not (zoom: 1) {
-    main {
-      font-size: 1.15em;
-    }
-  }
-
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-montserrat), sans-serif;
   }
@@ -382,54 +371,73 @@
     border: 1px solid var(--color-border);
   }
 
-  /* Trust strip — subpages only (hidden on homepage via component) */
+  /* Trust strip — Intent Compass (hidden on homepage via component) */
   .trust-strip {
     background: var(--color-primary-light);
     border-bottom: 1px solid var(--color-border);
-    padding: 0.5rem 0;
+    padding: 0.65rem 0;
   }
 
   .trust-strip-inner {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem 1rem;
-    font-size: 0.75rem;
+    justify-content: space-between;
+    gap: 0.65rem 1rem;
     font-family: var(--font-montserrat), sans-serif;
   }
 
-  .trust-strip-tagline {
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-primary-dark);
-    text-align: center;
-  }
-
-  .trust-strip-stats {
-    display: none;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  @media (min-width: 640px) {
-    .trust-strip-stats {
-      display: flex;
-    }
-  }
-
-  .trust-strip-stat {
-    padding: 0.2rem 0.625rem;
-    border-radius: 9999px;
-    background: white;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-muted);
+  .trust-strip-lead {
+    flex: 1 1 16rem;
+    margin: 0;
+    font-size: 0.8125rem;
     font-weight: 600;
+    line-height: 1.35;
+    color: var(--color-primary-dark);
+    text-align: left;
+    max-width: 36rem;
+  }
+
+  .trust-strip-intents {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .trust-strip-intents::-webkit-scrollbar {
+    display: none;
+  }
+
+  .trust-strip-intent {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-border);
+    background: white;
+    color: var(--color-text);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
     white-space: nowrap;
+    transition:
+      border-color var(--transition-fast),
+      color var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+
+  .trust-strip-intent:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 40%, var(--color-border));
+    color: var(--color-primary-dark);
+    background: color-mix(in srgb, white 70%, var(--color-primary-light));
   }
 
   .trust-strip-link {
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--color-primary);
     text-decoration: none;
@@ -438,6 +446,24 @@
 
   .trust-strip-link:hover {
     color: var(--color-primary-dark);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 639px) {
+    .trust-strip-inner {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.55rem;
+    }
+
+    .trust-strip-lead {
+      max-width: none;
+      font-size: 0.75rem;
+    }
+
+    .trust-strip-link {
+      align-self: flex-start;
+    }
   }
 
   .section-label {
@@ -1198,6 +1224,45 @@
 
   .glass-navbar__action:active {
     transform: scale(0.96);
+  }
+
+  /* Mobile header: prevent action cluster from forcing horizontal page overflow
+     (Pro Max / large phones showed a white right column when scrollWidth > viewport). */
+  @media (max-width: 639px) {
+    .glass-navbar .noor-header-grid,
+    .site-header .noor-header-grid {
+      gap: 0.35rem;
+      min-width: 0;
+    }
+
+    .glass-navbar .noor-header-left,
+    .glass-navbar .noor-header-center,
+    .glass-navbar .noor-header-right,
+    .site-header .noor-header-left,
+    .site-header .noor-header-center,
+    .site-header .noor-header-right {
+      min-width: 0;
+    }
+
+    .glass-navbar .noor-header-right,
+    .site-header .noor-header-right {
+      max-width: 100%;
+    }
+
+    .glass-navbar__action {
+      padding: 0.35rem;
+    }
+
+    .site-header .storefront-logo__wordmark,
+    .glass-navbar .storefront-logo__wordmark {
+      font-size: 1rem;
+    }
+
+    .site-header .storefront-logo__mark,
+    .glass-navbar .storefront-logo__mark {
+      width: 32px !important;
+      height: 32px !important;
+    }
   }
 
   /* Hero slider — fixed stage height prevents CLS */
@@ -2143,31 +2208,44 @@
     color: #ffffff !important;
   }
 
-  /* Header — mobile 3-column NOOR layout */
+  /* Header — mobile 3-column NOOR layout
+     Use auto | 1fr | auto so a wide actions cluster cannot force equal
+     side tracks (and horizontal page overflow) on Pro Max widths. */
   @media (max-width: 1023px) {
     [data-storefront-theme="noor"] .noor-header-grid {
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.35rem;
+      min-width: 0;
     }
 
     [data-storefront-theme="noor"] .noor-header-left {
       justify-self: start;
+      min-width: 0;
     }
 
     [data-storefront-theme="noor"] .noor-header-center {
       justify-self: center;
       grid-column: 2;
+      min-width: 0;
+      max-width: 100%;
     }
 
     [data-storefront-theme="noor"] .noor-header-right {
       justify-self: end;
       grid-column: 3;
+      min-width: 0;
+      max-width: 100%;
     }
 
     [data-storefront-theme="noor"] .noor-header-nav {
       display: none;
+    }
+
+    /* Slightly tighter hit targets so Search+Profile+Wishlist+Cart fit */
+    [data-storefront-theme="noor"] .glass-navbar__action {
+      padding: 0.4rem;
     }
   }
 
@@ -2462,6 +2540,53 @@
 
   [data-storefront-theme="noor"] .noor-about-inner .section-label {
     opacity: 0.72;
+  }
+
+  .supplement-finder__step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .supplement-finder__step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .supplement-finder__chip {
+    padding: 0.45rem 0.9rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+
+  .supplement-finder__chip:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
+  }
+
+  .supplement-finder__chip:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   [data-storefront-theme="noor"] .supplement-finder-submit {
@@ -3700,6 +3825,9 @@
     inset-inline: 0;
     bottom: 0;
     z-index: 60;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     padding: 0.75rem;
     padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
     pointer-events: none;
@@ -3937,5 +4065,30 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+}
+
+
+.assistant-drawer__footer--sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.assistant-drawer__suggestion--primary {
+  border-color: color-mix(in srgb, var(--color-primary) 40%, var(--color-border));
+  background: color-mix(in srgb, var(--color-primary-light) 46%, white);
+  color: var(--color-primary-dark);
+}
+
+.assistant-drawer__messages {
+  scroll-padding-bottom: 18rem;
+}
+
+@media (max-width: 639px) {
+  .assistant-drawer__messages {
+    scroll-padding-bottom: 20rem;
   }
 }

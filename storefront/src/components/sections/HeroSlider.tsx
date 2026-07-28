@@ -3,10 +3,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
-import { AnimatePresence, m, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Container } from '@/components/ui/Container'
 import { useT } from '@/components/i18n/LocaleProvider'
+import { useHydrationSafeReducedMotion } from '@/hooks/useHydrationSafeReducedMotion'
 import {
   HERO_IMAGE_SIZES,
   HERO_LCP_QUALITY,
@@ -30,21 +31,6 @@ interface HeroSliderProps {
 }
 
 const AUTOPLAY_MS = 6000
-
-/**
- * useReducedMotion() is null on SSR and can be true on the client → hydration mismatch
- * if used for motion initial. Keep SSR + first client paint identical.
- */
-function useHydrationSafeReducedMotion() {
-  const prefersReduced = useReducedMotion()
-  const [reduceMotion, setReduceMotion] = useState(false)
-
-  useEffect(() => {
-    setReduceMotion(prefersReduced === true)
-  }, [prefersReduced])
-
-  return reduceMotion
-}
 
 export function HeroSlider({ slides }: HeroSliderProps) {
   const t = useT()

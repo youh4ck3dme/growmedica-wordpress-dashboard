@@ -68,7 +68,6 @@ export const BRAND_COPY = {
   aboutPageTitle: 'O spoločnosti GrowMedica.cz',
   aboutPageIntro:
     'Sme tím, ktorý verí v silu prirodzených biomedicínskych supplementov podložených skutočnou vedou a rastúcou komunitou v strednej Európe.',
-  trustStripStats: ['460+ produktov', 'Stredná Európa', 'Biomedicínske supplementy'] as const,
   pageDescriptions: {
     about:
       'Zistite viac o poslaní, hodnotách a prístupe GrowMedica.cz k prirodzeným biomedicínskym supplementom.',

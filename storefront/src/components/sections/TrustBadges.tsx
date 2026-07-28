@@ -2,9 +2,10 @@
 
 import type { LucideIcon } from 'lucide-react'
 import { Headphones, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react'
-import { m, useReducedMotion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Container } from '@/components/ui/Container'
 import { useT } from '@/components/i18n/LocaleProvider'
+import { useHydrationSafeReducedMotion } from '@/hooks/useHydrationSafeReducedMotion'
 import type { TranslationKey } from '@/lib/i18n/translate'
 import { cn } from '@/lib/utils'
 
@@ -39,7 +40,7 @@ const TRUST_BADGE_DEFS: TrustBadgeDef[] = [
 
 export function TrustBadges() {
   const t = useT()
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useHydrationSafeReducedMotion()
 
   return (
     <section className="usp-bar trust-badges theme-transition" aria-label={t('trust.aria')}>

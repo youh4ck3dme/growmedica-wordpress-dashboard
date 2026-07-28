@@ -18,7 +18,7 @@ export const HERO_SLIDES: HeroSlideDef[] = [
     width: 1536,
     height: 1024,
     copyKey: '1',
-    ctaHref: '/produkty',
+    ctaHref: '/#supplement-finder',
   },
   {
     id: 'lifestyle-green',

@@ -7,7 +7,6 @@ import { ProductGrid } from '@/components/product/ProductGrid'
 import { HeroSlider, type HeroSlide } from '@/components/sections/HeroSlider'
 import { TrustBadges } from '@/components/sections/TrustBadges'
 import { ScrollRevealSection } from '@/components/sections/ScrollRevealSection'
-import { WhyGrowMedicaSection } from '@/components/sections/WhyGrowMedicaSection'
 import { BundleShowcase } from '@/components/sections/BundleShowcase'
 import { HomeMobileSearch } from '@/components/home/HomeMobileSearch'
 import { HomeCategoriesSection, HomeFeaturedSection } from '@/components/home/HomeSections'
@@ -109,6 +108,12 @@ export default async function HomePage() {
 
       <HeroSlider slides={heroSlides} />
 
+      <div className="noor-reveal noor-glass theme-transition bg-(--color-surface) border-y border-(--color-border)">
+        <Container>
+          <SupplementFinder />
+        </Container>
+      </div>
+
       <ScrollRevealSection>
         <TrustBadges />
       </ScrollRevealSection>
@@ -119,12 +124,6 @@ export default async function HomePage() {
         </HomeCategoriesSection>
       </ScrollRevealSection>
 
-      <div className="noor-reveal noor-glass theme-transition bg-(--color-surface) border-y border-(--color-border)">
-        <Container>
-          <SupplementFinder />
-        </Container>
-      </div>
-
       <HomeFeaturedSection>
         <ProductGrid
           products={featuredProducts}
@@ -133,8 +132,6 @@ export default async function HomePage() {
           emptyAction={t('empty.products.action', locale)}
         />
       </HomeFeaturedSection>
-
-      <WhyGrowMedicaSection />
 
       <ScrollRevealSection
         as="section"

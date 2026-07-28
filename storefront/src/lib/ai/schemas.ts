@@ -42,6 +42,10 @@ export type ComplianceCheckOutput = z.infer<typeof complianceCheckSchema>
 export type AiProductSummary = {
   handle: string
   title: string
+  vendor: string
+  priceFrom: string
+  imageUrl: string | null
+  url: string
 }
 
 export type RecommendApiResponse = RecommendOutput & {

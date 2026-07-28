@@ -39,10 +39,6 @@ export function getAboutHealthLines(locale: Locale): string[] {
   ]
 }
 
-export function getTrustStripStats(locale: Locale): string[] {
-  return [t('trust.stat1', locale), t('trust.stat2', locale), t('trust.stat3', locale)]
-}
-
 export function getFooterInfoLinks(locale: Locale): Array<{ href: string; label: string }> {
   return [
     { href: '/obchodne-podmienky', label: t('footer.infoTerms', locale) },

@@ -30,13 +30,28 @@ for (const vp of VIEWPORTS) {
     test('homepage + produkty bez horizontal overflow', async ({ page }) => {
       await page.goto('/', { waitUntil: 'domcontentloaded' })
       await expect(page.locator('body')).toBeVisible()
-      // Mock catalog / theme may soft-overflow; only require page render + main chrome
-      await expect(page.locator('body')).toBeVisible()
-      const homeOverflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      )
-      if (homeOverflow > 2) {
-        console.warn(`SOFT_OVERFLOW home ${vp.label}: ${homeOverflow}px`)
+
+      const homeLayout = await page.evaluate(() => {
+        const main = document.querySelector('main')
+        const mainStyle = main ? getComputedStyle(main) : null
+        const mainRect = main?.getBoundingClientRect()
+        const vw = document.documentElement.clientWidth
+        return {
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          mainZoom: mainStyle?.zoom ?? '1',
+          mainWidth: mainRect?.width ?? 0,
+          mainRightGap: mainRect ? vw - mainRect.right : 0,
+          vw,
+        }
+      })
+
+      // Regression: main { zoom: 1.15 } left a white column on Pro Max / wide phones
+      expect(Number.parseFloat(homeLayout.mainZoom || '1')).toBeLessThanOrEqual(1.001)
+      expect(homeLayout.mainRightGap).toBeLessThanOrEqual(2)
+      expect(homeLayout.mainWidth).toBeGreaterThanOrEqual(homeLayout.vw - 2)
+
+      if (homeLayout.overflow > 2) {
+        console.warn(`SOFT_OVERFLOW home ${vp.label}: ${homeLayout.overflow}px`)
       }
 
       await page.goto('/produkty', { waitUntil: 'domcontentloaded' })

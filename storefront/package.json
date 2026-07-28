@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 5555",
-    "dev:playwright": "next dev --port 5557",
+    "dev:playwright": "NEXT_DIST_DIR=.next-playwright next dev --port 5557",
+    "clean:dev": "node scripts/clean-dev.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

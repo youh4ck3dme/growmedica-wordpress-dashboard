@@ -109,11 +109,14 @@ export default function GlassNavbar({ megaMenuCategories = [] }: GlassNavbarProp
 
             <div className="noor-header-right flex items-center gap-0.5 shrink-0">
               <Suspense fallback={null}>
-                <LanguageSwitcher className="hidden sm:inline-flex" />
+                <LanguageSwitcher className="!hidden sm:!inline-flex" />
               </Suspense>
               {showThemeSwitcher && <StorefrontThemeSwitcher />}
               <ThemeSearch
-                className={`glass-navbar__action${theme === 'noor' ? '' : ' lg:hidden'}`}
+                className={cn(
+                  'glass-navbar__action max-sm:hidden',
+                  theme !== 'noor' && 'lg:hidden',
+                )}
                 aria-label={t('aria.search')}
               >
                 <Search className="h-[29px] w-[29px]" strokeWidth={1.5} aria-hidden="true" />

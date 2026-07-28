@@ -35,9 +35,10 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    ".next-codex/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",
-    ".next-codex/types/**/*.ts"
+    ".next-playwright/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

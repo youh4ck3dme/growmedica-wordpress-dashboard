@@ -39,10 +39,14 @@ test.describe('Brand naming — GrowMedica.cz', () => {
     expect(content).toContain('return null')
   })
 
-  test('/faq má trust strip', async () => {
+  test('/faq má trust strip Intent Compass', async () => {
     const stripPath = path.join(process.cwd(), 'src/components/layout/TrustStrip.tsx')
     const content = fs.readFileSync(stripPath, 'utf8')
     expect(content).toContain('className="trust-strip"')
-    expect(content).toContain("t('trust.tagline', locale)")
+    expect(content).toContain('trust.compass.leadDefault')
+    expect(content).toContain("href=\"/#supplement-finder\"")
+    expect(content).toContain("handle: 'imunita'")
+    expect(content).toContain("handle: 'sportova-vyziva'")
+    expect(content).toContain("handle: 'spanok-stres'")
   })
 })

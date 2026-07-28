@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState, type ReactNode } from 'react'
-import { m, useReducedMotion } from 'framer-motion'
+import type { ReactNode } from 'react'
+import { m } from 'framer-motion'
+import { useHydrationSafeReducedMotion } from '@/hooks/useHydrationSafeReducedMotion'
 
 const REVEAL_EASE = [0.22, 1, 0.36, 1] as const
 
@@ -17,17 +18,6 @@ interface ScrollRevealSectionProps {
   id?: string
   'aria-labelledby'?: string
   'aria-label'?: string
-}
-
-function useHydrationSafeReducedMotion() {
-  const prefersReduced = useReducedMotion()
-  const [reduceMotion, setReduceMotion] = useState(false)
-
-  useEffect(() => {
-    setReduceMotion(prefersReduced === true)
-  }, [prefersReduced])
-
-  return reduceMotion
 }
 
 export function ScrollRevealSection({

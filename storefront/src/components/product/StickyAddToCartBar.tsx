@@ -5,6 +5,7 @@ import type { Money } from '@/lib/catalog/types'
 import { Price } from '@/components/ui/Price'
 import { Button } from '@/components/ui/Button'
 import { useT } from '@/components/i18n/LocaleProvider'
+import { addToCartRequest, dispatchCartCountUpdated } from '@/lib/catalog/cart-client'
 
 interface StickyAddToCartBarProps {
   productTitle: string
@@ -41,16 +42,10 @@ export default function StickyAddToCartBar({
     if (!variantId || !availableForSale) return
     setIsLoading(true)
     try {
-      const response = await fetch('/api/cart/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ variantId, quantity: 1 }),
-      })
-      if (!response.ok) throw new Error('Cart add failed')
-      const data = (await response.json()) as { count?: number }
-      if (typeof window !== 'undefined' && data.count !== undefined) {
-        window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: data.count }))
-      }
+      const data = await addToCartRequest(variantId, 1, t('cart.addError'))
+      dispatchCartCountUpdated(data.count)
+    } catch {
+      // Sticky bar stays silent; main buy-box shows detailed errors.
     } finally {
       setIsLoading(false)
     }
