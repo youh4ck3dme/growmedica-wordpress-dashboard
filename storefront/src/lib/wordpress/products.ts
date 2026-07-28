@@ -13,6 +13,8 @@ interface GetWooProductsOptions {
   category?: string
   orderby?: 'date' | 'title' | 'popularity' | 'rating' | 'price'
   order?: 'asc' | 'desc'
+  /** UI locale for localized title/description meta (gm_i18n / name_en / …). */
+  locale?: string | null
 }
 
 export async function getWooProducts(options: GetWooProductsOptions = {}) {
@@ -23,6 +25,7 @@ export async function getWooProducts(options: GetWooProductsOptions = {}) {
     category,
     orderby = 'popularity',
     order = 'desc',
+    locale,
   } = options
   const perPage = resolvePerPage(perPageInput)
 
@@ -30,7 +33,7 @@ export async function getWooProducts(options: GetWooProductsOptions = {}) {
     const result = getMockWooProducts({ page, perPage, search, category })
     return {
       edges: result.items.map((product) => ({
-        node: wooProductToListItem(product),
+        node: wooProductToListItem(product, locale),
       })),
       pageInfo: {
         hasNextPage: result.page < result.totalPages,
@@ -72,7 +75,7 @@ export async function getWooProducts(options: GetWooProductsOptions = {}) {
 
   return {
     edges: result.items.map((product) => ({
-      node: wooProductToListItem(product),
+      node: wooProductToListItem(product, locale),
     })),
     pageInfo: {
       hasNextPage: result.page < result.totalPages,
@@ -85,11 +88,14 @@ export async function getWooProducts(options: GetWooProductsOptions = {}) {
   }
 }
 
-export async function getWooProductById(id: number): Promise<Product | null> {
+export async function getWooProductById(
+  id: number,
+  locale?: string | null,
+): Promise<Product | null> {
   if (isWooMockMode()) {
     const result = getMockWooProducts({ page: 1, perPage: 200 })
     const product = result.items.find((p) => p.id === id)
-    return product ? wooProductToProduct(product) : null
+    return product ? wooProductToProduct(product, locale) : null
   }
 
   const product = await wooFetch<WooProduct>({
@@ -98,12 +104,18 @@ export async function getWooProductById(id: number): Promise<Product | null> {
     revalidate: 3600,
   })
 
-  return product ? wooProductToProduct(product) : null
+  return product ? wooProductToProduct(product, locale) : null
 }
 
-export async function getWooProductBySlug(slug: string): Promise<Product | null> {
+export async function getWooProductBySlug(
+  slug: string,
+  locale?: string | null,
+): Promise<Product | null> {
   if (isWooMockMode()) {
-    return getMockWooProductBySlug(slug)
+    const product = getMockWooProductBySlug(slug)
+    if (!product) return null
+    // mock helper already returns Product shape; re-resolve via raw if available
+    return product
   }
 
   const products = await wooFetch<WooProduct[]>({
@@ -114,13 +126,16 @@ export async function getWooProductBySlug(slug: string): Promise<Product | null>
   })
 
   const product = products[0]
-  return product ? wooProductToProduct(product) : null
+  return product ? wooProductToProduct(product, locale) : null
 }
 
-export async function getWooFeaturedProducts(first = 8): Promise<ProductListItem[]> {
+export async function getWooFeaturedProducts(
+  first = 8,
+  locale?: string | null,
+): Promise<ProductListItem[]> {
   if (isWooMockMode()) {
     const result = getMockWooProducts({ page: 1, perPage: first })
-    return result.items.map(wooProductToListItem)
+    return result.items.map((product) => wooProductToListItem(product, locale))
   }
 
   const perPage = resolvePerPage(first)
@@ -137,7 +152,7 @@ export async function getWooFeaturedProducts(first = 8): Promise<ProductListItem
   })
 
   if (featured.items.length > 0) {
-    return featured.items.map(wooProductToListItem)
+    return featured.items.map((product) => wooProductToListItem(product, locale))
   }
 
   // Woo often has zero products marked "featured" — fall back to bestsellers.
@@ -152,7 +167,7 @@ export async function getWooFeaturedProducts(first = 8): Promise<ProductListItem
     revalidate: 3600,
   })
 
-  return popular.items.map(wooProductToListItem)
+  return popular.items.map((product) => wooProductToListItem(product, locale))
 }
 
 export const WOO_PRODUCTS_PAGE_SIZE = 48
@@ -189,6 +204,7 @@ export async function getWooRelatedProducts(
   categorySlug: MainCategory,
   excludeHandle: string,
   count = 4,
+  locale?: string | null,
 ): Promise<ProductListItem[]> {
   if (categorySlug === 'ostatne') return []
 
@@ -196,6 +212,7 @@ export async function getWooRelatedProducts(
     category: categorySlug,
     perPage: count + 8,
     orderby: 'popularity',
+    locale,
   })
 
   return result.edges
@@ -238,12 +255,16 @@ export function getWooProductCompositionHtml(product: Product): string | null {
   return html.includes('<') ? html : `<p>${html}</p>`
 }
 
-export async function getWooBundleProducts(count = 48): Promise<ProductListItem[]> {
+export async function getWooBundleProducts(
+  count = 48,
+  locale?: string | null,
+): Promise<ProductListItem[]> {
   const result = await getWooProducts({
     perPage: count,
     search: 'balicek',
     orderby: 'title',
     order: 'asc',
+    locale,
   })
   return result.edges.map((e) => e.node)
 }

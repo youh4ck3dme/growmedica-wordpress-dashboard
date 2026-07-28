@@ -15,6 +15,7 @@ export const metadata: Metadata = buildPageMetadata(
 
 export default async function GDPR() {
   const locale = await getRequestLocale()
+
   return (
     <div className="py-12 lg:py-20 bg-(--color-bg) min-h-screen">
       <Container>
@@ -23,10 +24,10 @@ export default async function GDPR() {
 
           <div className="bg-white p-8 md:p-12 rounded-2xl shadow-(--shadow-card) border border-(--color-border)">
             <div className="prose prose-lg text-(--color-text-muted) space-y-6">
-              <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">1. Prevádzkovateľ / správca údajov</h2>
-              <p>
-                Prevádzkovateľom osobných údajov je:
-              </p>
+              <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">
+                {t('page.privacy.s1h', locale)}
+              </h2>
+              <p>{t('page.privacy.s1p', locale)}</p>
               <p className="not-prose leading-relaxed">
                 <strong className="text-(--color-text)">{COMPANY.legalName}</strong>
                 <br />
@@ -45,18 +46,17 @@ export default async function GDPR() {
                   {COMPANY.email}
                 </a>
               </p>
-              <p>Dbáme na bezpečnosť vašich osobných údajov v súlade s GDPR a platnými predpismi SR.</p>
+              <p>{t('page.privacy.s1note', locale)}</p>
 
-              <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">2. Aké údaje spracúvame a prečo</h2>
-              <p>
-                Spracúvame len tie údaje, ktoré sú nutné na vybavenie vašej objednávky (meno, adresa, e-mail,
-                telefónne číslo) alebo na odoslanie noviniek, ak ste nám na to dali súhlas.
-              </p>
-              <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">3. Vaše práva</h2>
-              <p>
-                Máte právo na výmaz, zmenu alebo informácie o tom, aké údaje o vás vedieme. Stačí nás kontaktovať
-                na {COMPANY.email}.
-              </p>
+              <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">
+                {t('page.privacy.s2h', locale)}
+              </h2>
+              <p>{t('page.privacy.s2p', locale)}</p>
+
+              <h2 className="text-xl font-bold text-(--color-text) mt-8 mb-4">
+                {t('page.privacy.s3h', locale)}
+              </h2>
+              <p>{t('page.privacy.s3p', locale, { email: COMPANY.email })}</p>
             </div>
           </div>
         </div>

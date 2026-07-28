@@ -54,7 +54,7 @@ describe('adapter title decode contract', () => {
       'utf8',
     )
     assert.match(src, /decodeHtmlEntities/)
-    assert.match(src, /const title = decodeHtmlEntities\(product\.name\)/)
+    assert.match(src, /resolveLocalizedProductFields/)
     assert.match(src, /title: listItem\.title/)
   })
 

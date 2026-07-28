@@ -103,7 +103,7 @@ export function getMockWooProducts(options: {
 }
 
 export function getMockWooProductListItems(): ProductListItem[] {
-  return allMockProducts().map(wooProductToListItem)
+  return allMockProducts().map((product) => wooProductToListItem(product))
 }
 
 export function getMockWooProductBySlug(slug: string): Product | null {

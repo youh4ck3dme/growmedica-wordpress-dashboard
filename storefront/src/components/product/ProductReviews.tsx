@@ -5,6 +5,7 @@ import { Star, MessageSquare, CheckCircle, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { useThemeToast } from '@/components/ui/ThemeToast'
+import { useT } from '@/components/i18n/LocaleProvider'
 import { m, AnimatePresence } from 'framer-motion'
 
 interface Review {
@@ -57,6 +58,7 @@ const DEFAULT_REVIEWS: Record<string, Omit<Review, 'id'>[]> = {
 }
 
 export function ProductReviews({ productHandle, productTitle }: ProductReviewsProps) {
+  const t = useT()
   const [reviews, setReviews] = useState<Review[]>([])
   const [ratingInput, setRatingInput] = useState(5)
   const [hoverRating, setHoverRating] = useState<number | null>(null)
@@ -108,8 +110,8 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
     e.preventDefault()
     if (!author.trim() || !email.trim() || !body.trim()) {
       toast({
-        title: 'Chyba validácie',
-        description: 'Vyplňte prosím všetky povinné polia (Meno, Email a text recenzie).',
+        title: t('reviews.validationTitle'),
+        description: t('reviews.validationDesc'),
         variant: 'error',
       })
       return
@@ -124,7 +126,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
         rating: ratingInput,
         author: author.trim(),
         email: email.trim(),
-        title: title.trim() || undefined || 'Bez názvu',
+        title: title.trim() || t('reviews.untitled'),
         body: body.trim(),
         verified: true, // Simulated purchase verification
         date: new Date().toISOString().split('T')[0],
@@ -149,8 +151,8 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
       setRatingInput(5)
 
       toast({
-        title: 'Recenzia bola pridaná',
-        description: 'Ďakujeme za vaše hodnotenie produktu! Vaša recenzia bola úspešne zverejnená.',
+        title: t('reviews.addedTitle'),
+        description: t('reviews.addedDesc'),
         variant: 'success',
       })
     }, 800)
@@ -165,17 +167,17 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
           <div>
             <h2 className="text-xl font-bold text-(--color-text) mb-2 flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-(--color-primary)" />
-              Hodnotenia zákazníkov
+              {t('reviews.heading')}
             </h2>
             <p className="text-xs text-(--color-text-muted)">
-              Všetky recenzie sú od overených zákazníkov obchodu GrowMedica.cz.
+              {t('reviews.subtitle')}
             </p>
           </div>
 
           <div className="flex items-center gap-4 bg-gray-50 border border-(--color-border) rounded-2xl p-5 shadow-sm">
             <div className="text-center">
               <div className="text-4xl lg:text-5xl font-black text-(--color-text)">{stats.average}</div>
-              <div className="text-[10px] uppercase font-extrabold text-(--color-text-muted) tracking-wider mt-1">z 5 hviezdičiek</div>
+              <div className="text-[10px] uppercase font-extrabold text-(--color-text-muted) tracking-wider mt-1">{t('reviews.outOf5')}</div>
             </div>
             <div className="flex-1 space-y-1">
               <div className="flex gap-0.5">
@@ -192,7 +194,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                 ))}
               </div>
               <p className="text-xs text-(--color-text-muted) font-semibold">
-                Spolu <span className="text-(--color-text)">{stats.count}</span> hodnotení
+                {t('reviews.total', { count: stats.count })}
               </p>
             </div>
           </div>
@@ -224,7 +226,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
               fullWidth
               onClick={() => setShowForm(!showForm)}
             >
-              {showForm ? 'Zrušiť písanie recenzie' : 'Napísať recenziu'}
+              {showForm ? t('reviews.cancel') : t('reviews.write')}
             </Button>
           </div>
         </div>
@@ -240,9 +242,9 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                 className="bg-white border border-(--color-border) rounded-2xl p-6 shadow-sm space-y-5"
               >
                 <div>
-                  <h3 className="font-bold text-lg text-(--color-text)">Ohodnoťte produkt</h3>
+                  <h3 className="font-bold text-lg text-(--color-text)">{t('reviews.formTitle')}</h3>
                   <p className="text-xs text-(--color-text-muted)">
-                    Vaša e-mailová adresa nebude zverejnená. Povinné polia sú označené *.
+                    {t('reviews.formHint')}
                   </p>
                 </div>
 
@@ -250,7 +252,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                   {/* Star Rating Selector */}
                   <div>
                     <span className="block text-xs font-bold uppercase tracking-wider text-(--color-text-muted) mb-2">
-                      Vaša spokojnosť *
+                      {t('reviews.satisfaction')}
                     </span>
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((star) => {
@@ -263,7 +265,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                             onMouseEnter={() => setHoverRating(star)}
                             onMouseLeave={() => setHoverRating(null)}
                             className="p-1 -ml-1 text-gray-300 hover:text-(--color-accent-gold) transition-colors outline-none scale-110 hover:scale-125 duration-100"
-                            aria-label={`Ohodnotiť ${star} z 5 hviezdičiek`}
+                            aria-label={t('reviews.rateAria', { n: star })}
                           >
                             <Star className={cn("h-6 w-6 stroke-[1.5]", isGold && "text-(--color-accent-gold) fill-current")} />
                           </button>
@@ -275,7 +277,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="author-input" className="block text-xs font-bold uppercase tracking-wider text-(--color-text-muted) mb-1.5">
-                        Vaše meno *
+                        {t('reviews.nameLabel')}
                       </label>
                       <input
                         type="text"
@@ -283,13 +285,13 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                         required
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
-                        placeholder="napr. Jozef M."
+                        placeholder={t('reviews.namePlaceholder')}
                         className="w-full text-sm px-3.5 py-2 rounded-lg border border-(--color-border) focus:border-(--color-primary-bright) focus:ring-1 focus:ring-(--color-primary-bright) outline-none transition-all"
                       />
                     </div>
                     <div>
                       <label htmlFor="email-input" className="block text-xs font-bold uppercase tracking-wider text-(--color-text-muted) mb-1.5">
-                        Váš e-mail *
+                        {t('reviews.emailLabel')}
                       </label>
                       <input
                         type="email"
@@ -297,7 +299,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="napr. jozef@email.sk"
+                        placeholder={t('reviews.emailPlaceholder')}
                         className="w-full text-sm px-3.5 py-2 rounded-lg border border-(--color-border) focus:border-(--color-primary-bright) focus:ring-1 focus:ring-(--color-primary-bright) outline-none transition-all"
                       />
                     </div>
@@ -305,21 +307,21 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
 
                   <div>
                     <label htmlFor="title-input" className="block text-xs font-bold uppercase tracking-wider text-(--color-text-muted) mb-1.5">
-                      Názov recenzie
+                      {t('reviews.titleLabel')}
                     </label>
                     <input
                       type="text"
                       id="title-input"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="napr. Naozaj to funguje!"
+                      placeholder={t('reviews.titlePlaceholder')}
                       className="w-full text-sm px-3.5 py-2 rounded-lg border border-(--color-border) focus:border-(--color-primary-bright) focus:ring-1 focus:ring-(--color-primary-bright) outline-none transition-all"
                     />
                   </div>
 
                   <div>
                     <label htmlFor="body-input" className="block text-xs font-bold uppercase tracking-wider text-(--color-text-muted) mb-1.5">
-                      Obsah recenzie *
+                      {t('reviews.bodyLabel')}
                     </label>
                     <textarea
                       id="body-input"
@@ -327,14 +329,14 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                       rows={4}
                       value={body}
                       onChange={(e) => setBody(e.target.value)}
-                      placeholder="Podrobne popíšte vašu skúsenosť s produktom..."
+                      placeholder={t('reviews.bodyPlaceholder')}
                       className="w-full text-sm px-3.5 py-2 rounded-lg border border-(--color-border) focus:border-(--color-primary-bright) focus:ring-1 focus:ring-(--color-primary-bright) outline-none transition-all"
                     />
                   </div>
 
                   <div className="pt-2">
                     <Button variant="primary" type="submit" isLoading={isSubmitting} fullWidth>
-                      Odoslať recenziu
+                      {t('reviews.submit')}
                     </Button>
                   </div>
                 </form>
@@ -348,7 +350,7 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
               >
                 {reviews.length === 0 ? (
                   <div className="py-12 text-center text-(--color-text-light)">
-                    Žiadne recenzie. Buďte prvý, kto napíše recenziu pre tento produkt!
+                    {t('reviews.empty')}
                   </div>
                 ) : (
                   reviews.map((review) => (
@@ -381,12 +383,12 @@ export function ProductReviews({ productHandle, productTitle }: ProductReviewsPr
                           {review.verified && (
                             <span className="text-[10px] text-(--color-primary) font-bold bg-(--color-primary-light) px-2 py-0.5 rounded-full flex items-center gap-0.5">
                               <ShieldCheck className="h-3 w-3 stroke-[2]" />
-                              Overený nákup
+                              {t('reviews.verified')}
                             </span>
                           )}
                         </div>
                         <p className="text-xs text-gray-500 font-semibold">
-                          Hodnotil/a: <span className="text-(--color-text) font-bold">{review.author}</span>
+                          {t('reviews.reviewedBy')} <span className="text-(--color-text) font-bold">{review.author}</span>
                         </p>
                       </div>
 

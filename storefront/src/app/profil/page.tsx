@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
 import { User, LogOut, Award, Gift, TrendingUp, History, MapPin, Receipt, Check } from 'lucide-react'
 import { useThemeToast } from '@/components/ui/ThemeToast'
+import { useT } from '@/components/i18n/LocaleProvider'
 import { cn } from '@/lib/utils'
 
 interface UserSession {
@@ -29,6 +30,7 @@ interface Transaction {
 }
 
 export default function ProfilePage() {
+  const t = useT()
   const [session, setSession] = useState<UserSession | null>(null)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isApplyingCoupon, setIsApplyingCoupon] = useState<string | null>(null)
@@ -62,8 +64,8 @@ export default function ProfilePage() {
   const handleLogout = () => {
     localStorage.removeItem('gm_user_session')
     toast({
-      title: 'Odhlásenie úspešné',
-      description: 'Boli ste bezpečne odhlásený z vášho účtu.',
+      title: t('auth.logoutTitle'),
+      description: t('auth.logoutDesc'),
       variant: 'default',
     })
     router.push('/prihlasenie')
@@ -74,8 +76,8 @@ export default function ProfilePage() {
   const handleRedeem = (pointsCost: number, discountValue: number, code: string) => {
     if (!session || session.points < pointsCost) {
       toast({
-        title: 'Nedostatok bodov',
-        description: 'Na uplatnenie tejto zľavy nemáte dostatok vernostných bodov.',
+        title: t('profile.notEnoughTitle'),
+        description: t('profile.notEnoughDesc'),
         variant: 'error',
       })
       return
@@ -112,7 +114,7 @@ export default function ProfilePage() {
     setRedeemedCode(code)
 
     toast({
-      title: 'Body úspešne uplatnené',
+      title: t('profile.redeemedTitle'),
       description: `Získali ste zľavový kód: ${code}`,
       variant: 'success',
     })
@@ -130,24 +132,24 @@ export default function ProfilePage() {
 
       if (response.ok) {
         toast({
-          title: 'Zľavový kód aplikovaný',
+          title: t('profile.codeApplied'),
           description: `Zľava ${code} bola pridaná do vášho košíka.`,
           variant: 'success',
         })
         setRedeemedCode(null)
       } else if (response.status === 404) {
         toast({
-          title: 'Prázdny košík',
-          description: 'Váš nákupný košík je prázdny. Pre uplatnenie zľavy najprv pridajte nejaký produkt do košíka.',
+          title: t('profile.emptyCartTitle'),
+          description: t('profile.emptyCartDesc'),
           variant: 'error',
         })
       } else {
-        throw new Error('Nepodarilo sa uplatniť kód.')
+        throw new Error(t('profile.redeemFail'))
       }
     } catch {
       toast({
         title: 'Chyba',
-        description: 'Nepodarilo sa automaticky uplatniť zľavový kód v košíku.',
+        description: t('profile.redeemAutoFail'),
         variant: 'error',
       })
     } finally {
@@ -158,7 +160,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <div className="py-20 text-center text-(--color-text-muted)">
-        Načítavam profil...
+        {t('auth.loading')}...
       </div>
     )
   }
@@ -195,7 +197,7 @@ export default function ProfilePage() {
             className="flex items-center justify-center gap-1.5 px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 text-xs font-bold transition-all w-fit cursor-pointer"
           >
             <LogOut className="h-4 w-4" />
-            Odhlásiť sa
+            {t('auth.logout')}
           </button>
         </div>
 
@@ -209,13 +211,13 @@ export default function ProfilePage() {
               <div className="absolute top-0 right-0 h-24 w-24 bg-(--color-primary-light)/20 rounded-bl-full pointer-events-none" />
               <div className="flex items-center gap-3">
                 <Award className="h-6 w-6 text-(--color-primary)" />
-                <h3 className="font-bold text-base text-(--color-text)">Vernostný program</h3>
+                <h3 className="font-bold text-base text-(--color-text)">{t('profile.loyalty')}</h3>
               </div>
 
               <div className="space-y-1">
                 <div className="text-3xl font-black text-(--color-text)">
                   {session.points}{' '}
-                  <span className="text-xs text-(--color-text-muted) font-extrabold uppercase tracking-wide">bodov</span>
+                  <span className="text-xs text-(--color-text-muted) font-extrabold uppercase tracking-wide">{t('profile.points')}</span>
                 </div>
                 <div className="flex items-center gap-1.5 pt-1">
                   <span className={cn(
@@ -253,7 +255,7 @@ export default function ProfilePage() {
             <div className="bg-white border border-(--color-border) rounded-2xl p-5 shadow-sm space-y-4">
               <h3 className="font-bold text-sm text-(--color-text) flex items-center gap-2 border-b border-(--color-border) pb-2">
                 <MapPin className="h-4 w-4 text-(--color-text-light)" />
-                Doručovacia adresa
+                {t('profile.address')}
               </h3>
               {session.addresses.map((addr, idx) => (
                 <div key={idx} className="text-sm text-(--color-text-muted) leading-relaxed">
