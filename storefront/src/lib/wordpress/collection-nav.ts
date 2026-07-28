@@ -20,6 +20,8 @@ import { getWooProducts } from './products'
 import { isWooMockMode, getMockWooCategories, getMockWooProducts } from './mock'
 import { getSeoTaxonomyFeaturedProducts } from '@/lib/seo-taxonomy'
 import { getSkMenuNavItems } from '@/lib/navigation/sk-menu-nav'
+import type { Locale } from '@/lib/i18n/types'
+import { DEFAULT_LOCALE } from '@/lib/i18n/config'
 
 export type { NavCollectionItem, CollectionView, CollectionListOptions }
 
@@ -76,9 +78,11 @@ async function fetchCategoryCounts(): Promise<Map<string, number>> {
   return counts
 }
 
-export async function getWooNavCollectionItems(): Promise<NavCollectionItem[]> {
+export async function getWooNavCollectionItems(
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<NavCollectionItem[]> {
   // Live Woo: mirror growmedica.sk main menu (full hierarchy), not SEO L1/L2-only slice.
-  if (!isWooMockMode()) return getSkMenuNavItems()
+  if (!isWooMockMode()) return getSkMenuNavItems(locale)
   const counts = await fetchCategoryCounts()
 
   const items: NavCollectionItem[] = []

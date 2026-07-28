@@ -2,7 +2,8 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { callMistral } from '@/lib/ai/client'
 import { buildProductSummaries, getRecommendContext } from '@/lib/ai/context'
-import { SAFE_DISCLAIMER } from '@/lib/ai/compliance'
+import { getSafeDisclaimer } from '@/lib/ai/compliance'
+import { LOCALE_COOKIE } from '@/lib/i18n/types'
 import { AiError } from '@/lib/ai/errors'
 import { getClientIp } from '@/lib/ai/request'
 import { recommendSchema } from '@/lib/ai/schemas'
@@ -16,7 +17,9 @@ const recommendInputSchema = z.object({
     .max(1000, 'Text je príliš dlhý (max. 1000 znakov).'),
 })
 
-const RECOMMEND_PROMPT_SCHEMA = `
+function buildRecommendPromptSchema(locale?: string | null): string {
+  const disclaimer = getSafeDisclaimer(locale)
+  return `
 Vráť IBA JSON objekt s nasledujúcou štruktúrou:
 {
   "summary": "Krátke zhrnutie odporúčania (1-2 vety)",
@@ -32,8 +35,10 @@ PRAVIDLÁ:
 - Ak je vstup len pozdrav alebo príliš vágny (napr. „ahoj“, „help“), neodporúčaj náhodné produkty — v summary a reasoningForUser zdvorilo požiadaj o cieľ (energia, spánok, imunita, šport…) a nechaj recommendedHandles prázdne.
 - Nikdy neodporúčaj produkty pre liečbu alebo diagnostiku.
 - Nikdy negarantuj zdravotné výsledky.
-- Disclaimer: "${SAFE_DISCLAIMER}"
+- Odpovedaj v jazyku podľa locale kódu: ${locale ?? 'sk'}.
+- Disclaimer: "${disclaimer}"
 `
+}
 
 function formatRecommendError(error: unknown): { message: string; status: number } {
   if (error instanceof z.ZodError) {
@@ -60,12 +65,16 @@ export async function POST(request: NextRequest) {
     const ip = getClientIp(request)
     const body = await request.json()
     const { userInput } = recommendInputSchema.parse(body)
+    const locale =
+      request.cookies.get(LOCALE_COOKIE)?.value ??
+      request.headers.get('accept-language')?.slice(0, 2) ??
+      'sk'
 
     const { products, categories } = await getRecommendContext({ limit: 60 })
 
     const prompt = `
-Si pomocník pre e-shop so zdravotnými doplnkami GrowMedica.cz (SK trh).
-${RECOMMEND_PROMPT_SCHEMA}
+Si pomocník pre e-shop so zdravotnými doplnkami GrowMedica.cz.
+${buildRecommendPromptSchema(locale)}
 
 Dostupné produkty: ${JSON.stringify(products)}
 Dostupné kategórie: ${JSON.stringify(categories)}

@@ -36,7 +36,7 @@ export default async function Footer() {
 
   let menuLinks: Array<{ href: string; label: string }> = []
   try {
-    const collections = await getNavCollectionItems()
+    const collections = await getNavCollectionItems(locale)
     menuLinks = [
       { href: '/balicky', label: t('footer.bundles', locale) },
       ...collections.map((item) => ({

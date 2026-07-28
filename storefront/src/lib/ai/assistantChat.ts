@@ -7,7 +7,7 @@ import {
   type AssistantChatResponse,
   type AssistantProductContext,
 } from '@/lib/ai/pharmacist-assistant'
-import { SAFE_DISCLAIMER, checkCompliance } from '@/lib/ai/compliance'
+import { getSafeDisclaimer, checkCompliance } from '@/lib/ai/compliance'
 import { getMistralEnv } from '@/lib/ai/env'
 import { AiError } from '@/lib/ai/errors'
 import { checkRateLimit } from '@/lib/ai/rateLimit'
@@ -74,7 +74,7 @@ function getMockResponse(
   const handoff = detectHandoff(lastUser)
   if (handoff) {
     return {
-      message: `${handoff.message}\n\n${SAFE_DISCLAIMER}`,
+      message: `${handoff.message}\n\n${getSafeDisclaimer()}`,
       suggested_replies: ['Prejsť na kontakt', 'Odporuč mi produkt'],
       handoff,
     }
@@ -89,7 +89,7 @@ function getMockResponse(
       : 'Pozrite si naše kolekcie na /kolekcie.'
 
   return {
-    message: `${productLine} ${ASSISTANT_CART_HINT}\n\n${SAFE_DISCLAIMER}`,
+    message: `${productLine} ${ASSISTANT_CART_HINT}\n\n${getSafeDisclaimer()}`,
     suggested_replies: defaultSuggestedReplies(lastUser),
     handoff: null,
   }
@@ -134,7 +134,7 @@ function buildMistralMessages(
       ? `\n\nDostupné produkty (odporúčaj len tieto, s presným názvom):\n${JSON.stringify(productContext)}`
       : ''
 
-  const systemContent = `${PHARMACIST_PERSONA}\n\n${SAFE_DISCLAIMER}\n${ASSISTANT_CART_HINT}${catalogBlock}`
+  const systemContent = `${PHARMACIST_PERSONA}\n\n${getSafeDisclaimer()}\n${ASSISTANT_CART_HINT}${catalogBlock}`
 
   const trimmed = messages.slice(-12)
   return [

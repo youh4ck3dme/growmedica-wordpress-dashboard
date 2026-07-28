@@ -2,21 +2,27 @@ import { Container } from '@/components/ui/Container'
 import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { COMPANY } from '@/lib/company'
 import { KontaktForm } from './KontaktForm'
+import { getRequestLocale } from '@/lib/i18n/server'
+import { t } from '@/lib/i18n/translate'
 
-export default function Kontakt() {
+export default async function Kontakt() {
+  const locale = await getRequestLocale()
+
   return (
     <div className="py-12 lg:py-20 bg-(--color-bg) min-h-screen">
       <Container>
         <div className="max-w-5xl mx-auto">
           <BrandPageHeader
-            eyebrow="Sme tu pre vás"
-            title="Kontaktujte nás"
-            subtitle="Máte otázky ohľadom produktov, vašej objednávky, alebo hľadáte odbornú radu? Napíšte nám e-mailom."
+            eyebrow={t('page.contact.eyebrow', locale)}
+            title={t('page.contact.title', locale)}
+            subtitle={t('page.contact.subtitle', locale)}
           />
 
           <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             <div className="bg-white p-8 md:p-10 rounded-2xl shadow-(--shadow-card) border border-(--color-border) flex flex-col justify-center">
-              <h2 className="text-2xl font-bold text-(--color-text) mb-8 font-montserrat">Kontaktné údaje</h2>
+              <h2 className="text-2xl font-bold text-(--color-text) mb-8 font-montserrat">
+                {t('page.contact.detailsHeading', locale)}
+              </h2>
 
               <ul className="space-y-8">
                 <li className="flex items-start">
@@ -24,14 +30,16 @@ export default function Kontakt() {
                     @
                   </div>
                   <div>
-                    <strong className="block text-lg mb-1 text-(--color-text)">E-mail:</strong>
+                    <strong className="block text-lg mb-1 text-(--color-text)">
+                      {t('page.contact.emailLabel', locale)}
+                    </strong>
                     <a
                       href={`mailto:${COMPANY.email}`}
                       className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
                     >
                       {COMPANY.email}
                     </a>
-                    <p className="text-sm text-gray-400 mt-1">Odpovedáme väčšinou do 24 hodín.</p>
+                    <p className="text-sm text-gray-400 mt-1">{t('page.contact.replyNote', locale)}</p>
                   </div>
                 </li>
 
@@ -41,14 +49,16 @@ export default function Kontakt() {
                       ☏
                     </div>
                     <div>
-                      <strong className="block text-lg mb-1 text-(--color-text)">Zákaznícka linka:</strong>
+                      <strong className="block text-lg mb-1 text-(--color-text)">
+                        {t('page.contact.phoneHeading', locale)}
+                      </strong>
                       <a
                         href={`tel:${COMPANY.phoneTel}`}
                         className="text-(--color-text-muted) hover:text-(--color-primary) transition-colors"
                       >
                         {COMPANY.phoneDisplay}
                       </a>
-                      <p className="text-sm text-gray-400 mt-1">Po - Pia: 9:00 - 16:00</p>
+                      <p className="text-sm text-gray-400 mt-1">{t('page.contact.hours', locale)}</p>
                     </div>
                   </li>
                 ) : null}
@@ -59,7 +69,7 @@ export default function Kontakt() {
                   </div>
                   <div>
                     <strong className="block text-lg mb-1 text-(--color-text)">
-                      Sídlo spoločnosti a fakturačné údaje:
+                      {t('page.contact.companyHeading', locale)}
                     </strong>
                     <p className="text-(--color-text-muted) leading-relaxed">
                       {COMPANY.legalName}

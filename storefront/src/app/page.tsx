@@ -93,7 +93,7 @@ export default async function HomePage() {
   try {
     ;[featuredProducts, allCategories] = await Promise.all([
       getFeaturedProducts(8),
-      getNavCollectionItems(),
+      getNavCollectionItems(locale),
     ])
   } catch {
     // Shopify not configured

@@ -3,15 +3,23 @@ import { Container } from '@/components/ui/Container'
 import BrandPageHeader from '@/components/ui/BrandPageHeader'
 import { COMPANY } from '@/lib/company'
 import { buildPageMetadata } from '@/lib/seo'
+import { t } from '@/lib/i18n/translate'
+import { DEFAULT_LOCALE } from '@/lib/i18n/config'
+import { getRequestLocale } from '@/lib/i18n/server'
 
-export const metadata: Metadata = buildPageMetadata('Reklamačný poriadok', undefined, '/reklamacny-poriadok')
+export const metadata: Metadata = buildPageMetadata(
+  t('page.returns.title', DEFAULT_LOCALE),
+  undefined,
+  '/reklamacny-poriadok',
+)
 
-export default function ReklamacnyPoriadok() {
+export default async function ReklamacnyPoriadok() {
+  const locale = await getRequestLocale()
   return (
     <div className="py-12 lg:py-20 bg-(--color-bg) min-h-screen">
       <Container>
         <div className="max-w-4xl mx-auto">
-          <BrandPageHeader title="Reklamačný poriadok" centered={false} className="mb-8" />
+          <BrandPageHeader title={t('page.returns.title', locale)} centered={false} className="mb-8" />
 
           <div className="bg-white p-8 md:p-12 rounded-2xl shadow-(--shadow-card) border border-(--color-border)">
             <div className="prose prose-lg text-(--color-text-muted) space-y-6">

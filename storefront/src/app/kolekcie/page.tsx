@@ -23,7 +23,7 @@ export default async function KolekciePage() {
   const locale = await getRequestLocale()
   let collections: Awaited<ReturnType<typeof getNavCollectionItems>> = []
   try {
-    collections = await getNavCollectionItems()
+    collections = await getNavCollectionItems(locale)
   } catch {
     // Shopify not configured
   }

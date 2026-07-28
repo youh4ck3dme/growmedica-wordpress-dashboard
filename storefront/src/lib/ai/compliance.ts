@@ -24,3 +24,17 @@ export function checkCompliance(text: string): string[] {
 
 export const SAFE_DISCLAIMER =
   'Toto nie je odborná zdravotná rada. Pri zdravotných ťažkostiach sa poraďte s kvalifikovaným odborníkom.'
+
+/** Locale-aware disclaimer for AI UI/API (falls back to SK). */
+export function getSafeDisclaimer(locale?: string | null): string {
+  switch ((locale ?? 'sk').toLowerCase().slice(0, 2)) {
+    case 'cs':
+      return 'Toto není odborná zdravotní rada. Při zdravotních potížích se poraďte s kvalifikovaným odborníkem.'
+    case 'en':
+      return 'This is not professional medical advice. For health concerns, consult a qualified professional.'
+    case 'de':
+      return 'Dies ist keine medizinische Fachberatung. Bei gesundheitlichen Beschwerden wenden Sie sich an einen qualifizierten Fachmann.'
+    default:
+      return SAFE_DISCLAIMER
+  }
+}

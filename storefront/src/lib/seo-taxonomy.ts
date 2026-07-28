@@ -5,11 +5,14 @@ import { getWooCategories } from '@/lib/wordpress/categories'
 import { getWooProducts } from '@/lib/wordpress/products'
 import type { WooCategory } from '@/lib/wordpress/types'
 import skMenuData from '@/lib/navigation/growmedica-sk-menu.json'
+import type { Locale } from '@/lib/i18n/types'
+import { DEFAULT_LOCALE } from '@/lib/i18n/config'
 
 const SK_MENU_PATH_ALIASES: Record<string, string> =
   (skMenuData as { pathAliases?: Record<string, string> }).pathAliases ?? {}
 
 export type FrozenCategory = (typeof taxonomy.categories)[number]
+type TaxonomyLocale = keyof FrozenCategory['labels']
 
 const categories = taxonomy.categories as FrozenCategory[]
 const byId = new Map(categories.map((category) => [category.categoryId, category]))
@@ -17,6 +20,31 @@ const bySkPath = new Map(categories.map((category) => [category.localizedPaths.s
 
 function normalizedName(value: string): string {
   return value.trim().toLocaleLowerCase('sk')
+}
+
+function asTaxonomyLocale(locale: Locale): TaxonomyLocale {
+  if (locale === 'cs' || locale === 'en' || locale === 'de' || locale === 'sk') return locale
+  return 'sk'
+}
+
+/** Display label for a frozen category in the active UI locale (fallback SK). */
+export function getFrozenCategoryLabel(
+  category: FrozenCategory,
+  locale: Locale = DEFAULT_LOCALE,
+): string {
+  const loc = asTaxonomyLocale(locale)
+  return category.labels[loc] || category.labels.sk || category.labels.cs || ''
+}
+
+/** Resolve freeze category label by SK path (or path alias). */
+export function getFrozenCategoryLabelByPath(
+  path: string,
+  locale: Locale = DEFAULT_LOCALE,
+  fallback = '',
+): string {
+  const category = getFrozenCategoryByPath(path)
+  if (!category) return fallback
+  return getFrozenCategoryLabel(category, locale) || fallback
 }
 
 export function getFrozenCategoryByPath(path: string): FrozenCategory | null {
@@ -39,8 +67,14 @@ export function getFrozenCategoryAncestors(category: FrozenCategory): FrozenCate
   return ancestors
 }
 
-export function getFrozenCategorySeo(categoryId: string) {
-  return taxonomy.categorySeo.find((entry) => entry.categoryId === categoryId && entry.locale === 'sk') ?? null
+export function getFrozenCategorySeo(categoryId: string, locale: Locale = DEFAULT_LOCALE) {
+  const loc = asTaxonomyLocale(locale)
+  return (
+    taxonomy.categorySeo.find((entry) => entry.categoryId === categoryId && entry.locale === loc) ??
+    taxonomy.categorySeo.find((entry) => entry.categoryId === categoryId && entry.locale === 'sk') ??
+    taxonomy.categorySeo.find((entry) => entry.categoryId === categoryId && entry.locale === 'cs') ??
+    null
+  )
 }
 
 export function getIndexableSeoTaxonomyPaths(): string[] {
@@ -123,21 +157,27 @@ async function resolveCategoryImageUrlBySlug(
   )
 }
 
-export async function getSeoTaxonomyNavItems(): Promise<NavCollectionItem[]> {
+export async function getSeoTaxonomyNavItems(
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<NavCollectionItem[]> {
   const wooMap = await buildWooCategoryMap()
+  const loc = asTaxonomyLocale(locale)
   return categories
     .filter((category) => category.menuVisibility === 'global_l1_l2')
     .map((category) => ({ category, count: descendantCount(category.categoryId, wooMap) }))
     .filter(({ count }) => count > 0)
-    .map(({ category, count }) => ({
-      handle: category.localizedPaths.sk,
-      title: category.labels.sk,
-      description: getFrozenCategorySeo(category.categoryId)?.metaDescription ?? null,
-      href: `/kategorie/${category.localizedPaths.sk}`,
-      productCount: count,
-      menuLabel: category.labels.sk.toLocaleUpperCase('sk'),
-      source: 'catalog' as const,
-    }))
+    .map(({ category, count }) => {
+      const title = getFrozenCategoryLabel(category, locale)
+      return {
+        handle: category.localizedPaths.sk,
+        title,
+        description: getFrozenCategorySeo(category.categoryId, locale)?.metaDescription ?? null,
+        href: `/kategorie/${category.localizedPaths.sk}`,
+        productCount: count,
+        menuLabel: title.toLocaleUpperCase(loc === 'en' ? 'en' : loc),
+        source: 'catalog' as const,
+      }
+    })
 }
 
 function applyFilters(
@@ -154,13 +194,15 @@ function applyFilters(
 export async function getSeoTaxonomyCollectionView(
   path: string,
   options: CollectionListOptions = {},
+  locale: Locale = DEFAULT_LOCALE,
 ): Promise<CollectionView | null> {
   const category = getFrozenCategoryByPath(path)
   if (!category) return null
   const page = Math.max(1, options.page ?? 1)
   const wooMap = await buildWooCategoryMap()
   const wooCategory = wooMap.get(category.categoryId)
-  const seo = getFrozenCategorySeo(category.categoryId)
+  const seo = getFrozenCategorySeo(category.categoryId, locale)
+  const title = getFrozenCategoryLabel(category, locale)
   const imageUrl =
     resolveWooCategoryImageUrl(category, wooMap) ??
     (await resolveCategoryImageUrlBySlug(path, category.labels.sk))
@@ -168,7 +210,7 @@ export async function getSeoTaxonomyCollectionView(
   if (!wooCategory) {
     return {
       handle: category.localizedPaths.sk,
-      title: category.labels.sk,
+      title,
       description: seo?.metaDescription ?? null,
       products: [],
       availableVendors: [],
@@ -193,7 +235,7 @@ export async function getSeoTaxonomyCollectionView(
 
   return {
     handle: category.localizedPaths.sk,
-    title: category.labels.sk,
+    title,
     description: seo?.metaDescription ?? null,
     products,
     availableVendors,

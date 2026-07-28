@@ -7,6 +7,9 @@ import skMenu from '@/lib/navigation/growmedica-sk-menu.json'
 import type { NavCollectionItem } from '@/lib/catalog/nav-types'
 import { getWooCategories } from '@/lib/wordpress/categories'
 import type { WooCategory } from '@/lib/wordpress/types'
+import type { Locale } from '@/lib/i18n/types'
+import { DEFAULT_LOCALE } from '@/lib/i18n/config'
+import { getFrozenCategoryLabelByPath } from '@/lib/seo-taxonomy'
 
 // Ensure JSON import is treated as module data (paths / labels only — no secrets).
 
@@ -29,20 +32,28 @@ function leafSlug(path: string): string {
   return parts[parts.length - 1] ?? clean
 }
 
+function resolveNodeLabel(node: SkMenuNode, locale: Locale): string {
+  const path = node.path.replace(/^\/+|\/+$/g, '')
+  return getFrozenCategoryLabelByPath(path, locale, node.label)
+}
+
 function toItem(
   node: SkMenuNode,
   productCount: number,
   children: NavCollectionItem[],
-  imageUrl?: string | null,
+  imageUrl: string | null | undefined,
+  locale: Locale,
 ): NavCollectionItem {
   const path = node.path.replace(/^\/+|\/+$/g, '')
+  const title = resolveNodeLabel(node, locale)
+  const upperLocale = locale === 'en' ? 'en' : locale
   return {
     handle: path,
-    title: node.label,
+    title,
     description: null,
     href: `/kategorie/${path}`,
     productCount,
-    menuLabel: node.label.toLocaleUpperCase('sk'),
+    menuLabel: title.toLocaleUpperCase(upperLocale),
     source: 'catalog',
     imageUrl: imageUrl ?? null,
     children: children.length > 0 ? children : undefined,
@@ -94,21 +105,25 @@ function resolveNodeImage(node: SkMenuNode, index: WooNavIndex): string | null {
   )
 }
 
-function mapNode(node: SkMenuNode, index: WooNavIndex): NavCollectionItem {
-  const children = node.children.map((child) => mapNode(child, index))
+function mapNode(node: SkMenuNode, index: WooNavIndex, locale: Locale): NavCollectionItem {
+  const children = node.children.map((child) => mapNode(child, index, locale))
   const count = nodeCount(node, index.byName)
-  return toItem(node, count, children, resolveNodeImage(node, index))
+  return toItem(node, count, children, resolveNodeImage(node, index), locale)
 }
 
-/** Top-level SK menu categories (7) with nested children — like growmedica.sk. */
-export async function getSkMenuNavItems(): Promise<NavCollectionItem[]> {
+/** Top-level menu categories with nested children — labels follow UI locale. */
+export async function getSkMenuNavItems(
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<NavCollectionItem[]> {
   const index = await buildWooNavIndex()
-  return ROOT_ITEMS.map((node) => mapNode(node, index))
+  return ROOT_ITEMS.map((node) => mapNode(node, index, locale))
 }
 
-/** Flat list of every node in the SK tree (for sitemap / full mobile expand). */
-export async function getSkMenuNavItemsFlat(): Promise<NavCollectionItem[]> {
-  const tree = await getSkMenuNavItems()
+/** Flat list of every node in the menu tree (for sitemap / full mobile expand). */
+export async function getSkMenuNavItemsFlat(
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<NavCollectionItem[]> {
+  const tree = await getSkMenuNavItems(locale)
   const out: NavCollectionItem[] = []
   const walk = (items: NavCollectionItem[]) => {
     for (const item of items) {
