@@ -43,29 +43,29 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 
 | # | Problém | Závažnosť | Detail |
 |---|---------|-----------|--------|
-| 1 | **Prihlásenie je MOCK** | **Kritické** | `prihlasenie/page.tsx` = `setTimeout` + fake user „Jozef Novák“. Žiadna reálna auth. |
-| 2 | **Profil je MOCK** | **Kritické** | Body, transakcie, kupóny = localStorage fake. Žiadne Woo účty. |
+| 1 | ~~Prihlásenie MOCK~~ | ✅ | Woo auth BFF — [storefront/docs/AUTH.md](./storefront/docs/AUTH.md) |
+| 2 | ~~Profil MOCK~~ | ✅ | Reálne adresy + Woo objednávky |
 | 3 | Obľúbené (wishlist) | Stredné | UI `/oblubene` + `WishlistButton` = len localStorage, bez sync s účtom. |
-| 4 | **Žiadna analytics** | **Vysoké** | Žiadny GTM / GA4 / Pixel / Hotjar / Clarity. Consent banner trackuje nič. |
-| 5 | Meta title podstránok | Nízke | `/prihlasenie`, `/profil`, `/oblubene` → generic „GrowMedica.cz“. |
+| 4 | Analytics | 🟡 wiring ✅ | `AnalyticsLoader` čaká na `NEXT_PUBLIC_GTM_ID` / GA4 / Pixel od majiteľa |
+| 5 | ~~Meta title podstránok~~ | ✅ | layout metadata |
 | 6 | Checkout = CMS redirect | Stredné (info) | Košík Next → `cms.growmedica.cz/kontrola-objednavky`. Funguje, UX skok medzi doménami. |
 | 7 | Platobná brána | Info | Platba v Woo (BACS+COD). Stripe/GoPay/Comgate ešte nie. |
 | 8 | Faktúry / SuperFaktúra | Info | Plugin na CMS ✅ · **API key ešte majiteľ** ([majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry)). |
-| 9 | Dead CSS WhyGrowMedica | Nízke | `globals.css` stále má `.why-growmedica__*` (~200 riadkov), komponent zmazaný. |
+| 9 | ~~Dead CSS WhyGrowMedica~~ | ✅ | odstránené |
 | 10 | Untracked workspace file | Nízke | `docs/*.code-workspace` → `.gitignore`. |
 
 ### Prioritný zoznam pre AI (rob v tomto poradí)
 
-#### P0 — kritické (pred ostrým customer launch)
+#### P0 — kritické
 
-1. **Reálna autentifikácia** — napojiť `/prihlasenie` na Woo/WP (JWT / Application Password / NextAuth + Woo). Profil musí ťahať reálne Woo customer dáta.  
-2. **Analytics** — GTM / GA4 / Pixel. Cookie consent banner existuje → prepojiť s consent + tag managerom.
+1. ~~Reálna autentifikácia~~ ✅ — [storefront/docs/AUTH.md](./storefront/docs/AUTH.md)  
+2. Analytics — wiring ✅; **majiteľ musí dodať** `NEXT_PUBLIC_GTM_ID` / GA4 / Pixel na Vercel.
 
 #### P1 — vysoké
 
-3. **Meta title** pre `/prihlasenie`, `/profil`, `/oblubene` (`metadata` export).  
-4. **Wishlist** — rozhodnúť: localStorage-only (guest) **alebo** sync s Woo user meta.  
-5. **Dead CSS cleanup** — odstrániť `.why-growmedica__*` z `globals.css`.
+3. ~~Meta title~~ ✅  
+4. **Wishlist** — stále localStorage-only (sync s Woo TBD).  
+5. ~~Dead CSS~~ ✅
 
 #### P2 — stredné
 
@@ -104,8 +104,8 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 | ISR webhooks | ✅ mu-plugin + `/api/revalidate` |
 | Playwright Woo testy | ✅ `yarn test:woo:integrity` |
 | SEO taxonomy + redirects | ✅ `/kategorie`, freeze 1.1.0 |
-| Auth / profil / wishlist | 🔴 MOCK — pozri AI AGENT sekciu vyššie |
-| Analytics (GTM/GA4) | 🔴 chýba |
+| Auth / profil | ✅ Woo BFF · wishlist stále localStorage |
+| Analytics (GTM/GA4) | 🟡 wiring · čaká na ID od majiteľa |
 | Shopify integrácia | 🗑️ Runtime odstránený (legacy docs only) |
 
 | | |

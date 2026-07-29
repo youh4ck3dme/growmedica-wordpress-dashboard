@@ -1,6 +1,6 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-29  
+**Aktualizované:** 2026-07-29 (auth + analytics wiring)  
 **Branch:** `main`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 **Last deploy:** `26bcf3f` (homepage full-bleed Pro Max + Finder merge)
@@ -44,11 +44,11 @@
 
 | P | Úloha | Závažnosť | Súbory / poznámka |
 |---|--------|-----------|-------------------|
-| P0 | **Reálna auth** (prihlásenie + profil) | Kritické | `src/app/prihlasenie/page.tsx`, `src/app/profil/page.tsx` — dnes MOCK |
-| P0 | **Analytics** GTM/GA4/Pixel + consent | Vysoké | Cookie banner existuje, trackuje nič |
-| P1 | Meta title `/prihlasenie`, `/profil`, `/oblubene` | Nízke→P1 | `metadata` export |
-| P1 | Wishlist sync vs localStorage-only | Stredné | `WishlistButton`, `/oblubene` |
-| P1 | Dead CSS `.why-growmedica__*` | Nízke | `globals.css` |
+| P0 | Reálna auth (prihlásenie + profil) | ✅ 2026-07-29 | Woo CMS `growmedica/v1/auth/*` + Next BFF · [AUTH.md](./storefront/docs/AUTH.md) |
+| P0 | Analytics GTM/GA4/Pixel + consent | ✅ wiring | `AnalyticsLoader` — zapne sa po `NEXT_PUBLIC_GTM_ID` / GA4 / Pixel |
+| P1 | Meta title `/prihlasenie`, `/profil`, `/oblubene` | ✅ | `layout.tsx` metadata |
+| P1 | Wishlist sync vs localStorage-only | Stredné | stále localStorage-only |
+| P1 | Dead CSS `.why-growmedica__*` | ✅ | odstránené z `globals.css` |
 | P2 | E-mail notifikácie Woo branding | Stredné | CMS |
 | P2 | Product reviews Woo napojenie | Stredné | overiť |
 | P2 | Search UX `/vyhladavanie` | Stredné | overiť relevantnosť |

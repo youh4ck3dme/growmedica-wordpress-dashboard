@@ -24,14 +24,14 @@
 
 ### P0 — kritické
 
-- [ ] **Reálna autentifikácia** — `/prihlasenie` + `/profil` (dnes MOCK „Jozef Novák“ / localStorage)  
-- [ ] **Analytics** — GTM / GA4 / Pixel + napojenie na cookie consent  
+- [x] **Reálna autentifikácia** — Woo CMS auth + Next BFF (`storefront/docs/AUTH.md`)  
+- [x] **Analytics wiring** — `AnalyticsLoader` + consent (vyžaduje GTM/GA4/Pixel ID od majiteľa)  
 
 ### P1 — vysoké
 
-- [ ] Meta `title` pre `/prihlasenie`, `/profil`, `/oblubene`  
+- [x] Meta `title` pre `/prihlasenie`, `/profil`, `/oblubene`  
 - [ ] Wishlist: localStorage-only vs Woo user meta sync (rozhodnúť + implementovať)  
-- [ ] Dead CSS cleanup — `.why-growmedica__*` v `globals.css`  
+- [x] Dead CSS cleanup — `.why-growmedica__*` v `globals.css`  
 
 ### P2 — stredné
 
