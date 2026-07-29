@@ -56,3 +56,6 @@ docs/Prihlasovacie*
 .tools/
 .env.local
 .dashboard-secret.local.txt
+
+# Local Vercel env dump (secrets)
+docs/VERCEL_PRODUCTION_ENV_VALUES.txt

@@ -1,5 +1,5 @@
 import { clampWooPerPage, wooFetch, wooFetchPaginated } from './client'
-import { wooProductToListItem, wooProductToProduct } from './adapter'
+import { resolveWooVendor, wooProductToListItem, wooProductToProduct } from './adapter'
 import { isWooMockMode, getMockWooProducts, getMockWooProductBySlug } from './mock'
 import { getWooCategoryBySlug } from './categories'
 import type { MainCategory } from '@/lib/category-map'
@@ -129,6 +129,86 @@ export async function getWooProductBySlug(
   return product ? wooProductToProduct(product, locale) : null
 }
 
+/** Woo category slugs that belong to the Balíčky / bundles merchandising, not singles. */
+const BUNDLE_CATEGORY_SLUGS = new Set(['balicky-zdravia', 'balicky', 'balicky-zdravi'])
+
+/**
+ * Health-bundle / pack products shown in BundleShowcase — keep them out of
+ * homepage "bestsellers" so that rail is a mix of regular singles.
+ */
+export function isWooBundleProduct(product: WooProduct): boolean {
+  const slug = product.slug.toLowerCase()
+  if (slug.startsWith('balicek-') || slug.includes('balicek')) return true
+
+  if (
+    product.categories.some((category) => BUNDLE_CATEGORY_SLUGS.has(category.slug.toLowerCase()))
+  ) {
+    return true
+  }
+
+  const name = product.name.toLowerCase()
+  if (name.includes('balíček') || name.includes('balicek')) return true
+
+  return product.tags.some((tag) => {
+    const tagName = tag.name.toLowerCase()
+    return tagName.startsWith('balicek-') || tagName === 'balicek-zdravia'
+  })
+}
+
+function primaryMixCategorySlug(product: WooProduct): string {
+  const preferred = product.categories.find(
+    (category) =>
+      category.slug !== 'nezaradene' && !BUNDLE_CATEGORY_SLUGS.has(category.slug.toLowerCase()),
+  )
+  return preferred?.slug ?? product.categories[0]?.slug ?? 'other'
+}
+
+/**
+ * Prefer a real mix: unique category + brand first, then unique category, then fill.
+ * Keeps homepage bestsellers from looking like another Balíčky strip.
+ */
+export function pickMixedNonBundleProducts(products: WooProduct[], count: number): WooProduct[] {
+  const eligible = products.filter((product) => !isWooBundleProduct(product))
+  const picked: WooProduct[] = []
+  const usedCategories = new Set<string>()
+  const usedVendors = new Set<string>()
+  const seenIds = new Set<number>()
+
+  const take = (product: WooProduct) => {
+    seenIds.add(product.id)
+    usedCategories.add(primaryMixCategorySlug(product))
+    usedVendors.add(resolveWooVendor(product).toLowerCase())
+    picked.push(product)
+  }
+
+  // Pass 1 — different category AND brand
+  for (const product of eligible) {
+    if (picked.length >= count) break
+    if (seenIds.has(product.id)) continue
+    const category = primaryMixCategorySlug(product)
+    const vendor = resolveWooVendor(product).toLowerCase()
+    if (usedCategories.has(category) || usedVendors.has(vendor)) continue
+    take(product)
+  }
+
+  // Pass 2 — different category (brand may repeat once)
+  for (const product of eligible) {
+    if (picked.length >= count) break
+    if (seenIds.has(product.id)) continue
+    if (usedCategories.has(primaryMixCategorySlug(product))) continue
+    take(product)
+  }
+
+  // Pass 3 — fill by popularity order
+  for (const product of eligible) {
+    if (picked.length >= count) break
+    if (seenIds.has(product.id)) continue
+    take(product)
+  }
+
+  return picked
+}
+
 export async function getWooFeaturedProducts(
   first = 8,
   locale?: string | null,
@@ -138,11 +218,23 @@ export async function getWooFeaturedProducts(
     return result.items.map((product) => wooProductToListItem(product, locale))
   }
 
-  const perPage = resolvePerPage(first)
+  // Woo "featured"/popularity is dominated by balíčky — pull a wider pool and mix singles.
+  const poolSize = resolvePerPage(Math.max(first * 12, 48))
+  const pool: WooProduct[] = []
+  const seen = new Set<number>()
+
+  const appendUnique = (items: WooProduct[]) => {
+    for (const item of items) {
+      if (seen.has(item.id)) continue
+      seen.add(item.id)
+      pool.push(item)
+    }
+  }
+
   const featured = await wooFetchPaginated<WooProduct>({
     path: '/products',
     params: {
-      per_page: perPage,
+      per_page: poolSize,
       featured: true,
       status: 'publish',
       orderby: 'popularity',
@@ -150,24 +242,43 @@ export async function getWooFeaturedProducts(
     tags: ['woo-featured-products'],
     revalidate: 3600,
   })
+  appendUnique(featured.items)
 
-  if (featured.items.length > 0) {
-    return featured.items.map((product) => wooProductToListItem(product, locale))
+  let mixed = pickMixedNonBundleProducts(pool, first)
+
+  if (mixed.length < first) {
+    const popular = await wooFetchPaginated<WooProduct>({
+      path: '/products',
+      params: {
+        per_page: poolSize,
+        status: 'publish',
+        orderby: 'popularity',
+      },
+      tags: ['woo-featured-products', 'woo-products'],
+      revalidate: 3600,
+    })
+    appendUnique(popular.items)
+    mixed = pickMixedNonBundleProducts(pool, first)
   }
 
-  // Woo often has zero products marked "featured" — fall back to bestsellers.
-  const popular = await wooFetchPaginated<WooProduct>({
-    path: '/products',
-    params: {
-      per_page: perPage,
-      status: 'publish',
-      orderby: 'popularity',
-    },
-    tags: ['woo-featured-products', 'woo-products'],
-    revalidate: 3600,
-  })
+  // Still short (many top sellers are bundles) — second page of popularity.
+  if (mixed.length < first) {
+    const popularPage2 = await wooFetchPaginated<WooProduct>({
+      path: '/products',
+      params: {
+        page: 2,
+        per_page: poolSize,
+        status: 'publish',
+        orderby: 'popularity',
+      },
+      tags: ['woo-featured-products', 'woo-products'],
+      revalidate: 3600,
+    })
+    appendUnique(popularPage2.items)
+    mixed = pickMixedNonBundleProducts(pool, first)
+  }
 
-  return popular.items.map((product) => wooProductToListItem(product, locale))
+  return mixed.map((product) => wooProductToListItem(product, locale))
 }
 
 export const WOO_PRODUCTS_PAGE_SIZE = 48
