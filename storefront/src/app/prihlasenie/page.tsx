@@ -4,19 +4,24 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
-import { Mail, Lock, LogIn } from 'lucide-react'
+import { Mail, Lock, LogIn, UserPlus } from 'lucide-react'
 import { useThemeToast } from '@/components/ui/ThemeToast'
 import { useT } from '@/components/i18n/LocaleProvider'
 
+type Mode = 'login' | 'register'
+
 export default function LoginPage() {
   const t = useT()
+  const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useThemeToast()
 
-  const handleLogin = (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email.trim() || !password.trim()) {
       toast({
@@ -27,82 +32,50 @@ export default function LoginPage() {
       return
     }
 
+    if (mode === 'register' && password.length < 8) {
+      toast({
+        title: t('auth.errorTitle'),
+        description: t('auth.errorPasswordShort'),
+        variant: 'error',
+      })
+      return
+    }
+
     setIsLoading(true)
-
-    setTimeout(() => {
-      const mockUser = {
-        name: 'Jozef Novák',
-        email: email.trim(),
-        points: 150,
-        tier: 'BRONZE',
-        addresses: [
-          {
-            street: 'Hlavná 12',
-            city: 'Bratislava',
-            zip: '811 01',
-            country: 'Slovensko',
-          },
-        ],
-      }
-
-      localStorage.setItem('gm_user_session', JSON.stringify(mockUser))
-
-      if (!localStorage.getItem('gm_loyalty_transactions')) {
-        const initialTransactions = [
-          { id: 't1', amount: 100, description: 'Uvítacie body za registráciu', date: '2026-05-15' },
-          { id: 't2', amount: 50, description: 'Body za nákup - Objednávka #1001', date: '2026-06-01' },
-        ]
-        localStorage.setItem('gm_loyalty_transactions', JSON.stringify(initialTransactions))
+    try {
+      const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register'
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          password,
+          firstName: firstName.trim() || undefined,
+          lastName: lastName.trim() || undefined,
+        }),
+      })
+      const data = (await response.json()) as { error?: string; customer?: { name: string } }
+      if (!response.ok) {
+        throw new Error(data.error || t('auth.errorGeneric'))
       }
 
       toast({
         title: t('auth.successTitle'),
-        description: t('auth.welcomeBack', { name: mockUser.name }),
+        description: t('auth.welcomeBack', { name: data.customer?.name ?? email.trim() }),
         variant: 'success',
       })
-
-      setIsLoading(false)
-      router.push('/profil')
       window.dispatchEvent(new Event('auth-updated'))
-    }, 1000)
-  }
-
-  const handleSocialMock = (provider: string) => {
-    setIsLoading(true)
-    setTimeout(() => {
-      const mockUser = {
-        name: 'Jozef Novák',
-        email: 'jozef.novak@gmail.com',
-        points: 250,
-        tier: 'SILVER',
-        addresses: [
-          {
-            street: 'Hlavná 12',
-            city: 'Bratislava',
-            zip: '811 01',
-            country: 'Slovensko',
-          },
-        ],
-      }
-      localStorage.setItem('gm_user_session', JSON.stringify(mockUser))
-
-      if (!localStorage.getItem('gm_loyalty_transactions')) {
-        const initialTransactions = [
-          { id: 't1', amount: 150, description: 'Uvítacie body za registráciu', date: '2026-05-15' },
-          { id: 't2', amount: 100, description: 'Body za nákup - Objednávka #1001', date: '2026-06-01' },
-        ]
-        localStorage.setItem('gm_loyalty_transactions', JSON.stringify(initialTransactions))
-      }
-
+      router.push('/profil')
+      router.refresh()
+    } catch (err) {
       toast({
-        title: t('auth.successTitle'),
-        description: t('auth.socialSuccess', { provider, name: mockUser.name }),
-        variant: 'success',
+        title: t('auth.errorTitle'),
+        description: err instanceof Error ? err.message : t('auth.errorGeneric'),
+        variant: 'error',
       })
+    } finally {
       setIsLoading(false)
-      router.push('/profil')
-      window.dispatchEvent(new Event('auth-updated'))
-    }, 800)
+    }
   }
 
   return (
@@ -111,13 +84,54 @@ export default function LoginPage() {
         <div className="max-w-md mx-auto bg-white border border-(--color-border) rounded-2xl p-6 md:p-8 shadow-md space-y-6">
           <div className="text-center space-y-2">
             <h1 className="text-2xl font-bold text-(--color-text) flex items-center justify-center gap-2">
-              <LogIn className="h-6 w-6 text-(--color-primary)" />
-              {t('auth.loginTitle')}
+              {mode === 'login' ? (
+                <LogIn className="h-6 w-6 text-(--color-primary)" />
+              ) : (
+                <UserPlus className="h-6 w-6 text-(--color-primary)" />
+              )}
+              {mode === 'login' ? t('auth.loginTitle') : t('auth.registerTitle')}
             </h1>
-            <p className="text-xs text-(--color-text-muted)">{t('auth.loginSubtitle')}</p>
+            <p className="text-xs text-(--color-text-muted)">
+              {mode === 'login' ? t('auth.loginSubtitle') : t('auth.registerSubtitle')}
+            </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {mode === 'register' && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    htmlFor="first-name-input"
+                    className="block text-xs font-bold uppercase tracking-wider text-(--color-text-muted) mb-1.5"
+                  >
+                    {t('auth.firstNameLabel')}
+                  </label>
+                  <input
+                    type="text"
+                    id="first-name-input"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-(--color-border) focus:border-(--color-primary-bright) focus:ring-1 focus:ring-(--color-primary-bright) outline-none"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="last-name-input"
+                    className="block text-xs font-bold uppercase tracking-wider text-(--color-text-muted) mb-1.5"
+                  >
+                    {t('auth.lastNameLabel')}
+                  </label>
+                  <input
+                    type="text"
+                    id="last-name-input"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-(--color-border) focus:border-(--color-primary-bright) focus:ring-1 focus:ring-(--color-primary-bright) outline-none"
+                  />
+                </div>
+              </div>
+            )}
+
             <div>
               <label
                 htmlFor="email-input"
@@ -130,6 +144,7 @@ export default function LoginPage() {
                   type="email"
                   id="email-input"
                   required
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t('auth.emailPlaceholder')}
@@ -151,6 +166,7 @@ export default function LoginPage() {
                   type="password"
                   id="password-input"
                   required
+                  autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
@@ -162,41 +178,25 @@ export default function LoginPage() {
 
             <div className="pt-2">
               <Button type="submit" variant="primary" fullWidth isLoading={isLoading}>
-                {t('auth.submit')}
+                {mode === 'login' ? t('auth.submit') : t('auth.registerSubmit')}
               </Button>
             </div>
           </form>
 
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-(--color-border)"></div>
-            <span className="flex-shrink mx-4 text-xs text-(--color-text-light) uppercase font-bold">
-              {t('auth.or')}
-            </span>
-            <div className="flex-grow border-t border-(--color-border)"></div>
-          </div>
+          <p className="text-center text-xs text-(--color-text-muted)">
+            {mode === 'login' ? t('auth.noAccount') : t('auth.hasAccount')}{' '}
+            <button
+              type="button"
+              className="font-semibold text-(--color-primary) hover:underline"
+              onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
+            >
+              {mode === 'login' ? t('auth.switchToRegister') : t('auth.switchToLogin')}
+            </button>
+          </p>
 
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => handleSocialMock('Google')}
-              disabled={isLoading}
-              className="flex items-center justify-center gap-2 border border-(--color-border) hover:bg-gray-50 rounded-lg p-2.5 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
-            >
-              <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114A5.94 5.94 0 018 12.63c0-3.26 2.612-5.94 5.99-5.94 1.56 0 2.97.585 4.04 1.575l3.11-3.11A9.97 9.97 0 0013.99 2C8.47 2 4 6.47 4 12s4.47 10 9.99 10c5.52 0 10.01-4.47 10.01-10 0-.765-.09-1.53-.27-2.265H12.24z" />
-              </svg>
-              Google
-            </button>
-            <button
-              onClick={() => handleSocialMock('Apple')}
-              disabled={isLoading}
-              className="flex items-center justify-center gap-2 border border-(--color-border) hover:bg-gray-50 rounded-lg p-2.5 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
-            >
-              <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-.96.04-2.13.64-2.82 1.45-.6.69-1.12 1.84-.98 2.94.1.08.2.1.31.1.86 0 1.9-.52 2.5-1.43z" />
-              </svg>
-              Apple
-            </button>
-          </div>
+          <p className="text-[11px] text-center text-(--color-text-light) leading-relaxed">
+            {t('auth.accountOnCmsHint')}
+          </p>
         </div>
       </Container>
     </div>

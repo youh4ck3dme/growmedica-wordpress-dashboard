@@ -188,6 +188,13 @@ desired = [
         "tags": ["growmedica", "isr"],
         "priority": 10,
     },
+    {
+        "name": "GrowMedica Customer Auth API",
+        "desc": "REST growmedica/v1/auth/login|register|me for Next.js storefront (shared secret header).",
+        "code": strip_php(Path(root) / "wordpress/mu-plugins/growmedica-customer-auth.php"),
+        "tags": ["growmedica", "auth"],
+        "priority": 10,
+    },
 ]
 
 st, snippets = rest("/wp-json/code-snippets/v1/snippets?per_page=100")

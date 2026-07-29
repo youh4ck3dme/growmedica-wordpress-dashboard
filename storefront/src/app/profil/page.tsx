@@ -2,159 +2,84 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
-import { Button } from '@/components/ui/Button'
-import { User, LogOut, Award, Gift, TrendingUp, History, MapPin, Receipt, Check } from 'lucide-react'
+import { User, LogOut, MapPin, Receipt, Package } from 'lucide-react'
 import { useThemeToast } from '@/components/ui/ThemeToast'
 import { useT } from '@/components/i18n/LocaleProvider'
-import { cn } from '@/lib/utils'
 
-interface UserSession {
-  name: string
-  email: string
-  points: number
-  tier: 'BRONZE' | 'SILVER' | 'GOLD'
-  addresses: {
-    street: string
-    city: string
-    zip: string
-    country: string
-  }[]
+type Address = {
+  street: string
+  city: string
+  zip: string
+  country: string
 }
 
-interface Transaction {
-  id: string
-  amount: number
-  description: string
-  date: string
+type CustomerOrder = {
+  id: number
+  number: string
+  status: string
+  total: string
+  currency: string
+  dateCreated: string
+}
+
+type ProfileCustomer = {
+  customerId: number
+  email: string
+  name: string
+  addresses: Address[]
 }
 
 export default function ProfilePage() {
   const t = useT()
-  const [session, setSession] = useState<UserSession | null>(null)
-  const [transactions, setTransactions] = useState<Transaction[]>([])
-  const [isApplyingCoupon, setIsApplyingCoupon] = useState<string | null>(null)
-  const [redeemedCode, setRedeemedCode] = useState<string | null>(null)
+  const [customer, setCustomer] = useState<ProfileCustomer | null>(null)
+  const [orders, setOrders] = useState<CustomerOrder[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
   const { toast } = useThemeToast()
 
-  // Load user session
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('gm_user_session')
-      const storedTx = localStorage.getItem('gm_loyalty_transactions')
-      
-      if (!stored) {
-        router.push('/prihlasenie')
-        return
+    let cancelled = false
+    async function load() {
+      try {
+        const response = await fetch('/api/auth/me', { cache: 'no-store' })
+        if (response.status === 401) {
+          router.push('/prihlasenie')
+          return
+        }
+        if (!response.ok) {
+          throw new Error('Failed to load profile')
+        }
+        const data = (await response.json()) as {
+          customer: ProfileCustomer
+          orders: CustomerOrder[]
+        }
+        if (cancelled) return
+        setCustomer(data.customer)
+        setOrders(data.orders ?? [])
+      } catch {
+        if (!cancelled) router.push('/prihlasenie')
+      } finally {
+        if (!cancelled) setIsLoading(false)
       }
-
-      setSession(JSON.parse(stored) as UserSession)
-      if (storedTx) {
-        setTransactions(JSON.parse(storedTx) as Transaction[])
-      }
-    } catch {
-      router.push('/prihlasenie')
-    } finally {
-      setIsLoading(false)
+    }
+    void load()
+    return () => {
+      cancelled = true
     }
   }, [router])
 
-  const handleLogout = () => {
-    localStorage.removeItem('gm_user_session')
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' })
     toast({
       title: t('auth.logoutTitle'),
       description: t('auth.logoutDesc'),
       variant: 'default',
     })
-    router.push('/prihlasenie')
     window.dispatchEvent(new Event('auth-updated'))
-  }
-
-  // Redeem reward points
-  const handleRedeem = (pointsCost: number, discountValue: number, code: string) => {
-    if (!session || session.points < pointsCost) {
-      toast({
-        title: t('profile.notEnoughTitle'),
-        description: t('profile.notEnoughDesc'),
-        variant: 'error',
-      })
-      return
-    }
-
-    const updatedPoints = session.points - pointsCost
-    
-    // Determine new tier based on points
-    let updatedTier = session.tier
-    if (updatedPoints >= 500) updatedTier = 'GOLD'
-    else if (updatedPoints >= 200) updatedTier = 'SILVER'
-    else updatedTier = 'BRONZE'
-
-    const updatedSession: UserSession = {
-      ...session,
-      points: updatedPoints,
-      tier: updatedTier,
-    }
-
-    const newTx: Transaction = {
-      id: `tx-${Date.now()}`,
-      amount: -pointsCost,
-      description: `Výmena bodov za ${discountValue}% zľavový kód (${code})`,
-      date: new Date().toISOString().split('T')[0],
-    }
-
-    const updatedTx = [newTx, ...transactions]
-
-    localStorage.setItem('gm_user_session', JSON.stringify(updatedSession))
-    localStorage.setItem('gm_loyalty_transactions', JSON.stringify(updatedTx))
-    
-    setSession(updatedSession)
-    setTransactions(updatedTx)
-    setRedeemedCode(code)
-
-    toast({
-      title: t('profile.redeemedTitle'),
-      description: `Získali ste zľavový kód: ${code}`,
-      variant: 'success',
-    })
-  }
-
-  // Apply redeemed code to cart
-  const handleApplyCouponToCart = async (code: string) => {
-    setIsApplyingCoupon(code)
-    try {
-      const response = await fetch('/api/cart/discount', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ discountCode: code }),
-      })
-
-      if (response.ok) {
-        toast({
-          title: t('profile.codeApplied'),
-          description: `Zľava ${code} bola pridaná do vášho košíka.`,
-          variant: 'success',
-        })
-        setRedeemedCode(null)
-      } else if (response.status === 404) {
-        toast({
-          title: t('profile.emptyCartTitle'),
-          description: t('profile.emptyCartDesc'),
-          variant: 'error',
-        })
-      } else {
-        throw new Error(t('profile.redeemFail'))
-      }
-    } catch {
-      toast({
-        title: 'Chyba',
-        description: t('profile.redeemAutoFail'),
-        variant: 'error',
-      })
-    } finally {
-      setIsApplyingCoupon(null)
-    }
+    router.push('/prihlasenie')
+    router.refresh()
   }
 
   if (isLoading) {
@@ -165,35 +90,31 @@ export default function ProfilePage() {
     )
   }
 
-  if (!session) return null
+  if (!customer) return null
 
-  // Progress to next tier
-  const nextTierInfo = {
-    BRONZE: { next: 'SILVER', required: 200, color: 'text-gray-400 bg-gray-100' },
-    SILVER: { next: 'GOLD', required: 500, color: 'text-amber-500 bg-amber-50' },
-    GOLD: { next: null, required: 0, color: 'text-yellow-600 bg-yellow-50' },
-  }[session.tier]
-
-  const progressPct = nextTierInfo.required > 0 
-    ? Math.min(100, Math.round((session.points / nextTierInfo.required) * 100))
-    : 100
+  const initials = customer.name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
 
   return (
     <div className="py-8 lg:py-12 bg-gray-50/50 min-h-screen">
       <Container>
-        {/* Profile Header */}
         <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="h-12 w-12 rounded-full bg-(--color-primary) text-white flex items-center justify-center font-bold text-lg">
-              {session.name.split(' ').map((n) => n[0]).join('')}
+              {initials || <User className="h-5 w-5" />}
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-(--color-text)">{session.name}</h1>
-              <p className="text-xs text-(--color-text-muted)">{session.email}</p>
+              <h1 className="text-2xl font-bold text-(--color-text)">{customer.name}</h1>
+              <p className="text-xs text-(--color-text-muted)">{customer.email}</p>
             </div>
           </div>
           <button
-            onClick={handleLogout}
+            type="button"
+            onClick={() => void handleLogout()}
             className="flex items-center justify-center gap-1.5 px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 text-xs font-bold transition-all w-fit cursor-pointer"
           >
             <LogOut className="h-4 w-4" />
@@ -202,182 +123,79 @@ export default function ProfilePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Left Column: Loyalty Card and Info */}
           <div className="lg:col-span-1 space-y-6">
-            
-            {/* Loyalty Portal Status Card */}
-            <div className="bg-white border border-(--color-border) rounded-2xl p-6 shadow-sm space-y-5 relative overflow-hidden">
-              <div className="absolute top-0 right-0 h-24 w-24 bg-(--color-primary-light)/20 rounded-bl-full pointer-events-none" />
-              <div className="flex items-center gap-3">
-                <Award className="h-6 w-6 text-(--color-primary)" />
-                <h3 className="font-bold text-base text-(--color-text)">{t('profile.loyalty')}</h3>
-              </div>
-
-              <div className="space-y-1">
-                <div className="text-3xl font-black text-(--color-text)">
-                  {session.points}{' '}
-                  <span className="text-xs text-(--color-text-muted) font-extrabold uppercase tracking-wide">{t('profile.points')}</span>
-                </div>
-                <div className="flex items-center gap-1.5 pt-1">
-                  <span className={cn(
-                    "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full",
-                    session.tier === 'GOLD' && "bg-yellow-100 text-yellow-800 border border-yellow-200",
-                    session.tier === 'SILVER' && "bg-slate-100 text-slate-800 border border-slate-200",
-                    session.tier === 'BRONZE' && "bg-amber-100 text-amber-800 border border-amber-200"
-                  )}>
-                    {session.tier === 'GOLD' ? 'Zlatý tier' : session.tier === 'SILVER' ? 'Strieborný tier' : 'Bronzový tier'}
-                  </span>
-                </div>
-              </div>
-
-              {/* Progress Bar */}
-              {nextTierInfo.next && (
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs text-(--color-text-muted) font-semibold">
-                    <span>Pokrok k úrovni {nextTierInfo.next}</span>
-                    <span>{session.points} / {nextTierInfo.required} b.</span>
-                  </div>
-                  <div className="h-2 bg-gray-100 border border-(--color-border) rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-(--color-primary) rounded-full transition-all duration-500"
-                      style={{ width: `${progressPct}%` }}
-                    />
-                  </div>
-                  <p className="text-[10px] text-(--color-text-light)">
-                    Získajte ešte <span className="font-bold text-(--color-text)">{nextTierInfo.required - session.points}</span> bodov pre odomknutie lepších zliav!
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Address Card */}
             <div className="bg-white border border-(--color-border) rounded-2xl p-5 shadow-sm space-y-4">
               <h3 className="font-bold text-sm text-(--color-text) flex items-center gap-2 border-b border-(--color-border) pb-2">
                 <MapPin className="h-4 w-4 text-(--color-text-light)" />
                 {t('profile.address')}
               </h3>
-              {session.addresses.map((addr, idx) => (
-                <div key={idx} className="text-sm text-(--color-text-muted) leading-relaxed">
-                  <p className="font-semibold text-(--color-text)">Predvolená adresa</p>
-                  <p>{addr.street}</p>
-                  <p>{addr.zip} {addr.city}</p>
-                  <p>{addr.country}</p>
-                </div>
-              ))}
+              {customer.addresses.length === 0 ? (
+                <p className="text-sm text-(--color-text-muted)">{t('profile.noAddress')}</p>
+              ) : (
+                customer.addresses.map((addr, idx) => (
+                  <div key={`${addr.street}-${idx}`} className="text-sm text-(--color-text-muted) leading-relaxed">
+                    <p className="font-semibold text-(--color-text)">
+                      {idx === 0 ? t('profile.billingAddress') : t('profile.shippingAddress')}
+                    </p>
+                    <p>{addr.street}</p>
+                    <p>
+                      {addr.zip} {addr.city}
+                    </p>
+                    <p>{addr.country}</p>
+                  </div>
+                ))
+              )}
             </div>
 
+            <div className="bg-white border border-(--color-border) rounded-2xl p-5 shadow-sm space-y-3">
+              <h3 className="font-bold text-sm text-(--color-text)">{t('profile.loyalty')}</h3>
+              <p className="text-xs text-(--color-text-muted) leading-relaxed">{t('profile.loyaltyComingSoon')}</p>
+              <Link href="/produkty" className="btn btn-secondary w-full text-center text-sm font-semibold py-2 rounded-lg inline-block">
+                {t('profile.continueShopping')}
+              </Link>
+            </div>
           </div>
 
-          {/* Right Column: Rewards Center and Transactions */}
           <div className="lg:col-span-2 space-y-6">
-            
-            {/* Rewards Center */}
-            <div className="bg-white border border-(--color-border) rounded-2xl p-6 shadow-sm space-y-5">
+            <div className="bg-white border border-(--color-border) rounded-2xl p-6 shadow-sm space-y-4">
               <h3 className="font-bold text-base text-(--color-text) flex items-center gap-2 border-b border-(--color-border) pb-3">
-                <Gift className="h-5 w-5 text-(--color-primary)" />
-                Katalóg odmien
+                <Package className="h-5 w-5 text-(--color-primary)" />
+                {t('profile.orders')}
               </h3>
 
-              {redeemedCode && (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="space-y-1 text-center sm:text-left">
-                    <p className="text-xs font-bold text-green-800 uppercase tracking-wide">Váš zľavový kód</p>
-                    <p className="text-2xl font-black text-green-900 tracking-wider font-mono">{redeemedCode}</p>
-                  </div>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    isLoading={isApplyingCoupon === redeemedCode}
-                    onClick={() => handleApplyCouponToCart(redeemedCode)}
-                    className="flex items-center gap-1"
-                  >
-                    <Check className="h-4 w-4" />
-                    Automaticky uplatniť v košíku
-                  </Button>
-                </div>
+              {orders.length === 0 ? (
+                <p className="text-sm text-(--color-text-muted) py-6 text-center">{t('profile.noOrders')}</p>
+              ) : (
+                <ul className="space-y-3">
+                  {orders.map((order) => (
+                    <li
+                      key={order.id}
+                      className="flex flex-wrap items-center justify-between gap-2 border border-(--color-border) rounded-xl px-4 py-3 text-sm"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Receipt className="h-4 w-4 text-(--color-text-light)" />
+                        <div>
+                          <p className="font-semibold text-(--color-text)">
+                            {t('profile.orderNumber', { n: order.number })}
+                          </p>
+                          <p className="text-xs text-(--color-text-muted)">
+                            {order.dateCreated
+                              ? new Date(order.dateCreated).toLocaleDateString()
+                              : '—'}{' '}
+                            · {order.status}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="font-bold text-(--color-text)">
+                        {order.total} {order.currency}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Reward 1 */}
-                <div className="border border-(--color-border) rounded-xl p-4 space-y-4 flex flex-col justify-between">
-                  <div className="space-y-1">
-                    <div className="text-xs text-(--color-primary) font-bold bg-(--color-primary-light) px-2 py-0.5 rounded-full w-fit">
-                      Zľava 10%
-                    </div>
-                    <h4 className="font-bold text-sm text-(--color-text)">Uplatniť 10% kupón v košíku</h4>
-                    <p className="text-xs text-(--color-text-muted)">
-                      Získajte 10% zľavu na celý nákup. Kód sa dá uplatniť priamo v nákupnom košíku.
-                    </p>
-                  </div>
-                  <div className="pt-2 flex justify-between items-center">
-                    <span className="text-sm font-bold text-(--color-text)">100 bodov</span>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      disabled={session.points < 100}
-                      onClick={() => handleRedeem(100, 10, 'ZLAVA10')}
-                    >
-                      Uplatniť body
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Reward 2 */}
-                <div className="border border-(--color-border) rounded-xl p-4 space-y-4 flex flex-col justify-between">
-                  <div className="space-y-1">
-                    <div className="text-xs text-blue-800 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full w-fit font-bold">
-                      Doprava zadarmo
-                    </div>
-                    <h4 className="font-bold text-sm text-(--color-text)">Bezplatné doručenie</h4>
-                    <p className="text-xs text-(--color-text-muted)">
-                      Uplatnite si body pre bezplatnú dopravu na akúkoľvek objednávku bez minimálneho limitu.
-                    </p>
-                  </div>
-                  <div className="pt-2 flex justify-between items-center">
-                    <span className="text-sm font-bold text-(--color-text)">50 bodov</span>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      disabled={session.points < 50}
-                      onClick={() => handleRedeem(50, 0, 'DOPRAVAFREE')}
-                    >
-                      Uplatniť body
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              <p className="text-[11px] text-(--color-text-light) pt-2">{t('profile.ordersCmsHint')}</p>
             </div>
-
-            {/* Transactions History */}
-            <div className="bg-white border border-(--color-border) rounded-2xl p-6 shadow-sm space-y-4">
-              <h3 className="font-bold text-sm text-(--color-text) flex items-center gap-2 border-b border-(--color-border) pb-2">
-                <History className="h-4.5 w-4.5 text-(--color-text-light)" />
-                História vernostných transakcií
-              </h3>
-              
-              <div className="space-y-3">
-                {transactions.length === 0 ? (
-                  <p className="text-xs text-(--color-text-muted) py-4 text-center">Zatiaľ nemáte žiadne transakcie.</p>
-                ) : (
-                  transactions.map((tx) => (
-                    <div key={tx.id} className="flex justify-between items-center text-xs py-2 border-b border-(--color-border) last:border-0">
-                      <div className="space-y-0.5">
-                        <p className="font-semibold text-(--color-text)">{tx.description}</p>
-                        <p className="text-(--color-text-light) text-[10px]">{tx.date}</p>
-                      </div>
-                      <span className={cn(
-                        "font-bold text-sm",
-                        tx.amount > 0 ? "text-(--color-primary)" : "text-(--color-error)"
-                      )}>
-                        {tx.amount > 0 ? `+${tx.amount}` : tx.amount} b
-                      </span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
           </div>
         </div>
       </Container>
