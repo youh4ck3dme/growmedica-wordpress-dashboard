@@ -1,14 +1,17 @@
 # GrowMedica — Development Guide
 
-**Aktualizované:** 14. júl 2026  
+**Aktualizované:** 29. júl 2026  
 **Doména:** https://growmedica.cz  
-**CMS:** https://cms.growmedica.cz
+**CMS:** https://cms.growmedica.cz  
+**AI backlog:** [../../README.md § AI AGENT](../../README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29)
 
 ---
 
 ## ⛔ UI/UX FREEZE
 
-Storefront UI je **uzamknutý**. Ďalší vývoj je len backend, integrácia, dashboard logika a testy.
+Storefront UI je **uzamknutý**. Ďalší vývoj je primárne backend, integrácia, dashboard logika a testy.
+
+**Schválené výnimky (2026-07):** homepage Finder merge + Pro Max layout fix (`26bcf3f`). Ďalšie UI len s explicitným schválením. P0 auth/analytics môže meniť JSX v auth stránkach — minimal diff.
 
 ### Čo sa NESMIE meniť
 

@@ -1,7 +1,10 @@
 # GrowMedica — operácie, endpointy, env
 
 **Toto je hlavný prevádzkový súbor.**  
+**AI backlog:** [../README.md § AI AGENT](../README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29)  
 Stav / backlog: [../STATUS.md](../STATUS.md) · vývoj: [../storefront/docs/DEVELOPMENT.md](../storefront/docs/DEVELOPMENT.md)
+
+> **Poznámka 2026-07-29:** `/prihlasenie` a `/profil` sú stále **MOCK** (localStorage). Checkout ide na CMS. Analytics (GTM/GA4) ešte nie sú zapojené.
 
 ---
 
@@ -48,7 +51,8 @@ Prehliadač
 | `/obchodne-podmienky`, `/ochrana-osobnych-udajov`, `/reklamacny-poriadok` | Legal |
 | `/o-nas`, `/faq`, `/blog`, `/velkoobchod` | Obsah |
 | `/dashboard` | Admin (secret + agent) |
-| `/prihlasenie`, `/profil` | Účet (UI) |
+| `/prihlasenie`, `/profil` | Účet — ⚠️ **MOCK** (P0: reálna Woo auth) |
+| `/oblubene` | Wishlist — localStorage only |
 
 **CMS (Woo) stránky:** `/kosik`, `/kontrola-objednavky`, `/moj-ucet`, VOP slugy na cms.
 

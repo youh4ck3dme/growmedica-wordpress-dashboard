@@ -1,8 +1,11 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-19  
+**Aktualizované:** 2026-07-29  
 **Branch:** `main`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
+**Last deploy:** `26bcf3f` (homepage full-bleed Pro Max + Finder merge)
+
+> **AI agent:** najprv [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29) — kanónický backlog.
 
 **Prevádzka / endpointy / env:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)  
 **Firebase Auth CLI:** [docs/FIREBASE_CLI.md](./docs/FIREBASE_CLI.md)  
@@ -20,30 +23,38 @@
 | Cookie košík, checkout cms | ✅ multi-SKU `gm_cart` (Code Snippet active) |
 | Firma, VOP, GDPR, IBAN, e-maily, SMTP | ✅ |
 | BACS + COD, doprava SK s cenami, free od 50 € | ✅ |
-| **Krajiny CZ / AT / HU / PL** (sell + ship, EUR) | ✅ 2026-07-19 · [WOO_KRAJINY report](./reports/WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md) · smoke 61/0 |
-| Test order REST (BACS → cancel) | ✅ order #1263 cancelled |
-| ISR revalidate | ✅ snippet + CMS option + Vercel secret + prod redeploy |
-| Dokumentácia STATUS / OPERATIONS / MERCHANT_KEYS | ✅ |
-| Git clean + secrets mimo gitu | ✅ |
-| Security hardening (XSS, live-write AND, CORS, CI) | ✅ 2026-07-17 |
-| Fake telefón skrytý (kým nedáš reálne číslo) | ✅ |
-| Duplicitná DPD plugin metóda bez ceny vypnutá | ✅ |
-| Audit skladu (qty 50 ≈ fiktívne) | ✅ [reports/STOCK_AUDIT.md](./reports/STOCK_AUDIT.md) |
-| **SuperFaktúra WooCommerce 1.53.2** | ✅ active + BACS/COD defaults · CMS firma/IBAN overené · skripty smoke ✅ · **API key ešte majiteľ** · [verify](./reports/SUPERFAKTURA_GO_LIVE_VERIFY.md) |
-| DPH interim (neplatca) | ✅ `calc_taxes: no` / `taxesEnabled: false` zámerne · VOP · IČ DPH prázdne |
-| CMS snippets redeploy | ✅ checkout seed + CORS + ISR |
-| Production smoke www | ✅ `/api/products` Woo gid |
-| Facets vendor/type/effect | ✅ controlled taxonomy + URL query sync |
-| Canonical listing pages | ✅ `buildPageMetadata(..., pathname)` |
-| Mega-menu empty leaves + logo mark / banners | ✅ |
-| Health bundle fotky + Woo produkty (balíčky) | ✅ časť skladu s shotmi (35+ slugov) |
-| Vendor audit 460 | ✅ [reports/VENDOR_AUDIT.md](./reports/VENDOR_AUDIT.md) |
-| **Shopify fully cleaned (runtime + scripts + CLI)** | ✅ catalog/cart/nav Woo-only · `src/lib/shopify` deleted |
-| **`/dashboard` plne na WordPress/Woo** | ✅ 2026-07-19 · panely + agent tools (orders, inventory, copy, SEO, prices) · prod smoke `list_orders` OK · docs: [DASHBOARD_PANELS](./storefront/docs/DASHBOARD_PANELS.md) · [DASHBOARD_AGENT](./storefront/docs/DASHBOARD_AGENT.md) |
+| **Krajiny CZ / AT / HU / PL** (sell + ship, EUR) | ✅ 2026-07-19 · [WOO_KRAJINY report](./reports/WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md) |
+| ISR revalidate | ✅ |
+| Security hardening | ✅ |
+| SuperFaktúra WooCommerce 1.53.2 | ✅ plugin · **API key ešte majiteľ** |
+| DPH interim (neplatca) | ✅ |
+| Facets / mega-menu / bundles / vendor audit | ✅ |
+| **Shopify runtime odstránený** | ✅ |
+| **`/dashboard` Woo-only** | ✅ panely + agent tools |
+| Homepage reorder + Finder merge + Pro Max layout | ✅ 2026-07-28 · `26bcf3f` |
+| i18n CS/SK/EN/DE (shop UI + finder) | ✅ |
+| AI pharmacist drawer + Supplement Finder | ✅ |
+| Mobile iPhone layout regression tests | ✅ |
 
-**Shop ide predávať cez bankový prevod a dobierku** bez Stripe/Packeta. Shopify runtime v storefronte **nie je**.
+**Shop ide predávať cez bankový prevod a dobierku** bez Stripe/Packeta.
 
-> **mu-plugins na disk (SSH):** ekvivalent beží ako **Code Snippets** na cms. Fyzické PHP súbory v `wp-content/mu-plugins/` sú voliteľné, ak máš SSH.
+---
+
+## Agent backlog (storefront) — 2026-07-29 audit
+
+| P | Úloha | Závažnosť | Súbory / poznámka |
+|---|--------|-----------|-------------------|
+| P0 | **Reálna auth** (prihlásenie + profil) | Kritické | `src/app/prihlasenie/page.tsx`, `src/app/profil/page.tsx` — dnes MOCK |
+| P0 | **Analytics** GTM/GA4/Pixel + consent | Vysoké | Cookie banner existuje, trackuje nič |
+| P1 | Meta title `/prihlasenie`, `/profil`, `/oblubene` | Nízke→P1 | `metadata` export |
+| P1 | Wishlist sync vs localStorage-only | Stredné | `WishlistButton`, `/oblubene` |
+| P1 | Dead CSS `.why-growmedica__*` | Nízke | `globals.css` |
+| P2 | E-mail notifikácie Woo branding | Stredné | CMS |
+| P2 | Product reviews Woo napojenie | Stredné | overiť |
+| P2 | Search UX `/vyhladavanie` | Stredné | overiť relevantnosť |
+| P3 | Theme switcher / blog / B2B form / Upstash | Nice | |
+
+Detail tabuliek: [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29).
 
 ---
 
@@ -56,25 +67,26 @@
 |---|--------|---------------------|
 | 1 | **Manuálny nákup v prehliadači** (1× + 2× SKU BACS) | potvrdenie UX + e-mail v tvojej schránke |
 | 2 | **Reálne telefónne číslo** | neexistuje v dátach — daj ho a doplníme |
-| 3 | **Stripe** API keys (test/live) — debetná/kreditná karta | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#2-stripe-debetná--kreditná-karta) |
+| 3 | **Stripe** API keys (test/live) | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#2-stripe-debetná--kreditná-karta) |
 | 4 | **GoPay** merchant | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#3-gopay) |
 | 5 | **Packeta** API + odosielateľ | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#4-packeta-zásielkovňa) |
 | 6 | **DPD** API zmluva | merchant účet → [MERCHANT_KEYS](./docs/MERCHANT_KEYS.md#5-dpd) |
 | 7 | **Reálny sklad** (CSV/qty) | 397 produktov má falošných 50 ks |
 | 8 | **Plné VOP** právnik | právny text |
 | 9 | **IČ DPH / DPH 20 %** | účtovné rozhodnutie |
-| 10 | **SuperFaktúra** — registrácia + API (body **2a–2j** v majitel.md) | [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) · [SUPERFAKTURA_SETUP](./docs/SUPERFAKTURA_SETUP.md) |
-| 11 | ~~Zrušiť Shopify / dashboard Shopify~~ | ✅ runtime + `/dashboard` agent 2026-07-19 (admin = WP + natívny dashboard) |
+| 10 | **SuperFaktúra** — registrácia + API (body **2a–2j**) | [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) |
+| 11 | **GTM / GA4 / Pixel IDs** | merchant účty — agent zapojí po dodaní ID |
 
 ---
 
 ## Odporúčané poradie pre teba
 
 1. Otvor www → 1 produkt → košík → cms checkout → BACS → skontroluj e-mail.  
-2. **SuperFaktúra** — body **2a–2j** v [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) → „API vložené, otestuj“.  
-3. **Stripe test** (karty) → potom Packeta/DPD.  
-4. Pošli **telefón** (ak máš).  
-5. Daj **sklad** (Excel sku/qty) — agent vie bulk update.
+2. **SuperFaktúra** — body **2a–2j** v [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry).  
+3. Pošli **GTM/GA4/Pixel** ID (ak máš) — agent zapojí analytics.  
+4. **Stripe test** (karty) → potom Packeta/DPD.  
+5. Pošli **telefón** (ak máš).  
+6. Daj **sklad** (Excel sku/qty).
 
 ---
 
@@ -84,9 +96,10 @@
 www.growmedica.cz (Next/Vercel, Woo only)
    ├─ storefront + /dashboard (agent + panely)
    └─ Woo REST ──► cms.growmedica.cz (WP + WooCommerce)
+         └─ checkout /kontrola-objednavky (platba + doprava)
 ```
 
-Shopify runtime **odstránený**. Dashboard link v UI ide na WordPress admin (`cms…/wp-admin`), nie Legacy Nexus.
+Shopify runtime **odstránený**. Auth/profil storefrontu je zatiaľ **MOCK** (pozri P0).
 
 ---
 
@@ -96,7 +109,6 @@ Shopify runtime **odstránený**. Dashboard link v UI ide na WordPress admin (`c
 cd storefront
 PREVIEW_URL=https://www.growmedica.cz yarn production:smoke
 curl -s 'https://www.growmedica.cz/api/products?limit=1' | head -c 200
-# Dashboard (vyžaduje secret):
 curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
   https://www.growmedica.cz/api/dashboard/health
 ```
@@ -104,11 +116,10 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
 | Check | OK |
 |-------|-----|
 | `/api/products` | `gid://woocommerce/...` |
-| `/kontakt` | IČO 56 455 143, bez fake telefónu |
+| Homepage Finder `#supplement-finder` | ✅ live |
+| Pro Max full-bleed (bez `main{zoom}`) | ✅ `26bcf3f` |
 | cms checkout | doprava + BACS/COD · CZ/AT/HU/PL |
-| Woo order API | smoke ✅ |
-| `/dashboard` agent `list_orders` | ✅ Woo live (2026-07-19) |
-| `/api/dashboard/health` (auth) | `cms_provider: wordpress`, `admin: wordpress` |
+| `/dashboard` agent `list_orders` | ✅ Woo live |
 
 ---
 
@@ -116,12 +127,11 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
 
 | Súbor | |
 |-------|--|
+| [README.md](./README.md) | **AI AGENT backlog (hore)** + quick start |
 | [docs/OPERATIONS.md](./docs/OPERATIONS.md) | endpointy, env, prevádzka |
 | [TODO.md](./TODO.md) | checklist |
 | [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) | deploy |
 | [docs/vzorfirma.md](./docs/vzorfirma.md) | firma |
-| [reports/STOCK_AUDIT.md](./reports/STOCK_AUDIT.md) | sklad |
 | [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md) | čo dorobiť (súhrn) |
-| [storefront/docs/DASHBOARD_PANELS.md](./storefront/docs/DASHBOARD_PANELS.md) | natívne panely |
 | [storefront/docs/DASHBOARD_AGENT.md](./storefront/docs/DASHBOARD_AGENT.md) | AI agent tools (Woo) |
-| [reports/WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md](./reports/WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md) | multi-krajiny |
+| [AGENTS.md](./AGENTS.md) | Cursor Cloud pravidlá |

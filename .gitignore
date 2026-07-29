@@ -21,6 +21,8 @@ docs/video_*.mp4
 # Cursor / local IDE artifacts
 canvases/
 .cursor/plans/
+*.code-workspace
+docs/*.code-workspace
 
 # Legacy admin assets (not tracked; storefront is Next.js in storefront/)
 /js/

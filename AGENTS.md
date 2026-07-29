@@ -2,14 +2,23 @@
 
 ## Cursor Cloud specific instructions
 
+### 0) Pred každou úlohou — backlog
+
+1. Prečítaj **[README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29)** (kanónický backlog).  
+2. Potom [STATUS.md](./STATUS.md) · [TODO.md](./TODO.md) · [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md).  
+3. Po dokončení úlohy **aktualizuj** README AI sekciu + STATUS + TODO (zaškrtni hotové).
+
+**Aktuálne P0:** reálna auth (`/prihlasenie`, `/profil`) · analytics (GTM/GA4) + consent.
+
 ### ⛔ UI/UX FREEZE (kritické)
 
 Storefront UI sa **nikde nemení**. Pri každom tasku:
 
-- **NEUPRAVUJ** `src/components/**`, layout JSX v `src/app/**`, design tokeny v `globals.css`
-- **UPRAVUJ** len `src/lib/**`, `src/app/api/**`, `wordpress/mu-plugins/**`, testy, env skripty
+- **NEUPRAVUJ** `src/components/**`, layout JSX v `src/app/**`, design tokeny v `globals.css` bez explicitného schválenia
+- **UPRAVUJ** len `src/lib/**`, `src/app/api/**`, `wordpress/mu-plugins/**`, testy, env skripty, docs
 - i18n: len `src/lib/i18n/locales/*.json` (preklady), nie komponenty
 - Tailwind údržba: canonical triedy alebo presun do existujúcich CSS tried — bez zmeny vzhľadu
+- **Výnimka (schválená):** P0 auth/analytics/meta môže vyžadovať JSX v `prihlasenie` / `profil` / layout scripts — minimal diff, žiadny redesign
 
 Referencia: [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) · [storefront/UI_UX_DESIGN_SYSTEM.md](./storefront/UI_UX_DESIGN_SYSTEM.md)
 
@@ -18,8 +27,8 @@ Referencia: [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) �
 - Aplikácia je Next.js 15 / React 19 storefront v `storefront/` (GrowMedica, SK e-commerce).
 - Package manager: **Yarn 1** (`storefront/yarn.lock`). Node 22. Všetky príkazy z `storefront/`.
 - WordPress mu-plugins: `wordpress/mu-plugins/` (CORS allowlist, ISR revalidate header-only, **checkout seed `gm_cart`**)
-- Default `CMS_PROVIDER` = **wordpress** (live). Shopify len explicitne.
-- Hlavný stav: [STATUS.md](./STATUS.md) · [TODO.md](./TODO.md)
+- Default `CMS_PROVIDER` = **wordpress** (live). Shopify runtime **odstránený**.
+- Hlavný stav: [README.md](./README.md) (AI AGENT) · [STATUS.md](./STATUS.md) · [TODO.md](./TODO.md)
 
 ### Local env (required to run `yarn dev` / `yarn build`)
 
@@ -90,9 +99,8 @@ Nikdy necommituj merchant secrets.
 
 ### Ďalší vývoj (priorita)
 
-1. Live = Woo na www (`CMS_PROVIDER=wordpress`). Zostáva: E2E nákup, SuperFaktúra majiteľ **2a–2j**, Stripe/GoPay, Packeta/DPD, sklad. Detail: [STATUS.md](./STATUS.md) · [majitel.md](./majitel.md) · [docs/MERCHANT_KEYS.md](./docs/MERCHANT_KEYS.md)
-2. Dashboard Agent tools — rozšírenie `src/lib/dashboard-agent/tools.ts`
-3. ISR webhooks — `wordpress/mu-plugins/growmedica-revalidate.php`
-4. Import katalógu — `yarn import:categories` + `yarn import:products`
-
-**Bez UI zmien.** Pozri [TODO.md](./TODO.md).
+1. **P0 storefront:** reálna auth + analytics — [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29)
+2. Majiteľ: E2E nákup, SuperFaktúra **2a–2j**, Stripe/GoPay, Packeta/DPD, sklad, GTM IDs — [STATUS.md](./STATUS.md) · [majitel.md](./majitel.md)
+3. P1: meta titles, wishlist, dead CSS `.why-growmedica__*`
+4. Dashboard Agent tools — `src/lib/dashboard-agent/tools.ts`
+5. Bez redesignu UI. Pozri [TODO.md](./TODO.md).
