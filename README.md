@@ -8,7 +8,88 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 | CMS admin | https://cms.growmedica.cz/wp-admin |
 
 > **⛔ UI/UX FREEZE** — nemeniť layout/dizajn storefrontu bez zadania.  
-> **Stav a úlohy:** **[STATUS.md](./STATUS.md)** · [TODO.md](./TODO.md)
+> **Stav a úlohy:** **[STATUS.md](./STATUS.md)** · [TODO.md](./TODO.md) · [AGENTS.md](./AGENTS.md)
+
+---
+
+## 🤖 AI AGENT — ČÍTAJ PRVÉ (aktualizované 2026-07-29)
+
+Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek prácou si prečítaj túto sekciu + [STATUS.md](./STATUS.md) + [AGENTS.md](./AGENTS.md).
+
+**Produkcia:** commit `26bcf3f` na `main` · Vercel Production live · CI zelené.  
+**Shop predáva** cez BACS + COD. Shopify runtime **nie je**.
+
+### Hotové (funguje na produkcii)
+
+| # | Oblasť | Stav |
+|---|--------|------|
+| 1 | Homepage layout | ✅ Hero → Finder → Trust → Kategórie → Featured → Balíčky · full-bleed aj Pro Max |
+| 2 | Supplement Finder (AI) | ✅ Spojený s „Prečo GrowMedica“ · 3 kroky · chipy · mobile stacked form |
+| 3 | Hero slider | ✅ 4 slidy · i18n · slide 1 CTA → `/#supplement-finder` |
+| 4 | Kategórie | ✅ Sync mega menu / footer / WP · SEO slug aliasy |
+| 5 | Trust / IntentCompass | ✅ Trust badges na home · IntentCompass na non-home |
+| 6 | i18n CS / SK / EN / DE | ✅ Finder, hero, trust, produkty, kontakt, legal, auth UI |
+| 7 | Farmaceutický chatbot | ✅ Drawer · jazyk · product cards / warning / bundle |
+| 8 | Košík | ✅ BFF cookie · `cart-client.ts` · add / sticky / bundle |
+| 9 | SEO | ✅ ld+json · sitemap · robots |
+| 10 | Balíčky | ✅ `/balicky` + BundleShowcase |
+| 11 | Legal + content stránky | ✅ VOP, GDPR, FAQ, blog, veľkoobchod, kontakt — 200 OK |
+| 12 | PWA + cookie consent | ✅ SW · offline · banner · consent-gated FAB |
+| 13 | Dashboard + AI agent | ✅ Woo tools (orders, inventory, products) |
+| 14 | CI/CD | ✅ GH Actions + Vercel auto-deploy na `main` |
+| 15 | TypeScript / Woo cutover | ✅ tsc clean · Woo-only catalog |
+
+### Nedokončené / nefunguje (treba opraviť)
+
+| # | Problém | Závažnosť | Detail |
+|---|---------|-----------|--------|
+| 1 | **Prihlásenie je MOCK** | **Kritické** | `prihlasenie/page.tsx` = `setTimeout` + fake user „Jozef Novák“. Žiadna reálna auth. |
+| 2 | **Profil je MOCK** | **Kritické** | Body, transakcie, kupóny = localStorage fake. Žiadne Woo účty. |
+| 3 | Obľúbené (wishlist) | Stredné | UI `/oblubene` + `WishlistButton` = len localStorage, bez sync s účtom. |
+| 4 | **Žiadna analytics** | **Vysoké** | Žiadny GTM / GA4 / Pixel / Hotjar / Clarity. Consent banner trackuje nič. |
+| 5 | Meta title podstránok | Nízke | `/prihlasenie`, `/profil`, `/oblubene` → generic „GrowMedica.cz“. |
+| 6 | Checkout = CMS redirect | Stredné (info) | Košík Next → `cms.growmedica.cz/kontrola-objednavky`. Funguje, UX skok medzi doménami. |
+| 7 | Platobná brána | Info | Platba v Woo (BACS+COD). Stripe/GoPay/Comgate ešte nie. |
+| 8 | Faktúry / SuperFaktúra | Info | Plugin na CMS ✅ · **API key ešte majiteľ** ([majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry)). |
+| 9 | Dead CSS WhyGrowMedica | Nízke | `globals.css` stále má `.why-growmedica__*` (~200 riadkov), komponent zmazaný. |
+| 10 | Untracked workspace file | Nízke | `docs/*.code-workspace` → `.gitignore`. |
+
+### Prioritný zoznam pre AI (rob v tomto poradí)
+
+#### P0 — kritické (pred ostrým customer launch)
+
+1. **Reálna autentifikácia** — napojiť `/prihlasenie` na Woo/WP (JWT / Application Password / NextAuth + Woo). Profil musí ťahať reálne Woo customer dáta.  
+2. **Analytics** — GTM / GA4 / Pixel. Cookie consent banner existuje → prepojiť s consent + tag managerom.
+
+#### P1 — vysoké
+
+3. **Meta title** pre `/prihlasenie`, `/profil`, `/oblubene` (`metadata` export).  
+4. **Wishlist** — rozhodnúť: localStorage-only (guest) **alebo** sync s Woo user meta.  
+5. **Dead CSS cleanup** — odstrániť `.why-growmedica__*` z `globals.css`.
+
+#### P2 — stredné
+
+6. Overiť **Woo e-mail notifikácie** (branding).  
+7. Overiť **product reviews** napojenie na Woo.  
+8. Overiť **search UX** `/vyhladavanie` (relevantnosť Woo API).
+
+#### P3 — nice-to-have
+
+9. Theme switcher noor/classic (user-facing?) — rozhodnúť.  
+10. Blog obsah (WP posts).  
+11. Veľkoobchod — B2B formulár / registrácia.  
+12. Upstash Redis (`UPSTASH_REDIS_REST_TOKEN` prázdny) — rate-limit / cache.  
+13. Workspace file v `.gitignore`.
+
+### Pravidlá pre AI pri práci na backlogu
+
+- Pred UI zmenami: **UI/UX FREEZE** — [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md). Auth/analytics/meta = výnimka so schválením, ak mení JSX.  
+- Secrets **nikdy** do gitu.  
+- Po hotovej úlohe: aktualizuj túto sekciu + [STATUS.md](./STATUS.md) + [TODO.md](./TODO.md) + [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md).  
+- Commit → push → PR/merge na `main` (Vercel Production auto-deploy).  
+- Detail prevádzky: [docs/OPERATIONS.md](./docs/OPERATIONS.md).
+
+---
 
 ## Stav (skrátka)
 
@@ -19,11 +100,13 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 | WordPress/WooCommerce integrácia | ✅ `CMS_PROVIDER=wordpress` |
 | Unified catalog provider | ✅ `src/lib/catalog/` |
 | Košík + checkout BFF | ✅ WooCommerce session |
-| Dashboard → WP admin iframe | ✅ `/dashboard` |
+| Dashboard → WP admin + Woo agent | ✅ `/dashboard` |
 | ISR webhooks | ✅ mu-plugin + `/api/revalidate` |
 | Playwright Woo testy | ✅ `yarn test:woo:integrity` |
 | SEO taxonomy + redirects | ✅ `/kategorie`, freeze 1.1.0 |
-| Shopify integrácia | 🟡 Legacy rollback (`CMS_PROVIDER=shopify`) |
+| Auth / profil / wishlist | 🔴 MOCK — pozri AI AGENT sekciu vyššie |
+| Analytics (GTM/GA4) | 🔴 chýba |
+| Shopify integrácia | 🗑️ Runtime odstránený (legacy docs only) |
 
 | | |
 |--|--|
@@ -43,6 +126,7 @@ cd storefront
 yarn install
 cp .env.example .env.local   # mock hodnoty stačia na dev
 yarn dev                     # http://localhost:5555
+# alebo: yarn clean:dev      # free porty + čistý .next
 ```
 
 ### Produkčný WordPress režim (env)
@@ -85,14 +169,6 @@ docker compose up -d
 
 Pozri [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md).
 
-### Shopify režim (legacy rollback)
-
-```bash
-CMS_PROVIDER=shopify
-SHOPIFY_STORE_DOMAIN=growmedica.myshopify.com
-# + Storefront token alebo TOKENLESS=1
-```
-
 ## Testy a smoke
 
 ```bash
@@ -110,18 +186,21 @@ Testy: `storefront/tests/` · [tests/README.md](./storefront/tests/README.md) ·
 
 ```
 growmedica-wordpress-dashboard/
-├── STATUS.md                 # ← čo je live a čo robiť
+├── README.md                 # ← AI AGENT backlog (hore) + quick start
+├── STATUS.md                 # ← živý stav + majiteľ / agent úlohy
 ├── TODO.md
+├── AGENTS.md                 # pravidlá pre AI (Cursor Cloud)
 ├── PRODUCTION_CHECKLIST.md
 ├── docs/MERCHANT_KEYS.md     # ← Packeta / karta / SuperFaktúra / GoPay (ty)
 ├── docs/SUPERFAKTURA_SETUP.md
+├── docs/OPERATIONS.md        # endpointy, env, prevádzka
 ├── docs/vzorfirma.md         # firma / banka
 ├── reports/                  # aktuálne reporty (+ seo-taxonomy/)
-│   └── archive/              # historické plány
+│   └── CO_DOROBIT.md         # súhrn čo dorobiť
 ├── storefront/               # Next.js app
 │   ├── src/lib/catalog/      # unified CMS
 │   ├── src/lib/wordpress/    # Woo client + cart
-│   └── src/lib/shopify/      # rollback / import
+│   └── docs/                 # DEVELOPMENT, WOO_CART, I18N, DASHBOARD_*
 ├── wordpress/mu-plugins/     # CORS + revalidate + checkout seed
 └── scripts/                  # CMS setup
 ```
@@ -140,9 +219,10 @@ growmedica-wordpress-dashboard/
 | [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) | Vývoj + freeze |
 | [storefront/docs/WOO_CART.md](./storefront/docs/WOO_CART.md) | Košík |
 | [storefront/docs/I18N.md](./storefront/docs/I18N.md) | CS/SK/EN/DE |
-| [storefront/docs/poznamky.md](./storefront/docs/poznamky.md) | Shopify Admin / Nexus (legacy) |
+| [storefront/docs/DASHBOARD_AGENT.md](./storefront/docs/DASHBOARD_AGENT.md) | Dashboard AI agent (Woo) |
 | [WORDPRESS_SETUP.md](./WORDPRESS_SETUP.md) | Lokálny WP |
 | [AGENTS.md](./AGENTS.md) | Pravidlá pre AI |
+| [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md) | Čo dorobiť (súhrn) |
 | [reports/seo-taxonomy/FINAL_STATUS.md](./reports/seo-taxonomy/FINAL_STATUS.md) | SEO taxonomy status |
 
 ## Zakázané

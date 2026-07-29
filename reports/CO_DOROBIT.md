@@ -1,10 +1,13 @@
 # Čo dorobiť — GrowMedica
 
 **Kanónický súhrn nedokončených vecí.**  
-**Aktualizované:** 2026-07-19  
+**Aktualizované:** 2026-07-29  
+
+> **AI agent:** plný backlog je v [../README.md § AI AGENT](../README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29).
 
 | Súvisiace | |
 |-----------|--|
+| AI Agent backlog | [../README.md](../README.md) (hore) |
 | Ľudský checklist (majiteľ) | [../majitel.md](../majitel.md) |
 | Technický stav | [../STATUS.md](../STATUS.md) · [../TODO.md](../TODO.md) |
 | Merchant API | [../docs/MERCHANT_KEYS.md](../docs/MERCHANT_KEYS.md) |
@@ -29,6 +32,20 @@
 | Krajiny CZ / AT / HU / PL (sell + ship, EUR) | ✅ 2026-07-19 · [WOO_KRAJINY…](./WOO_KRAJINY_CZ_AT_HU_PL_REPORT.md) |
 | **`/dashboard` + AI agent na WooCommerce** (nie Shopify) | ✅ 2026-07-19 · panely, `list_orders`, inventory, apply copy/SEO, bulk prices · prod smoke OK |
 | Shopify runtime v storefronte | ✅ odstránený |
+| Homepage Finder merge + Pro Max full-bleed | ✅ 2026-07-28 (`26bcf3f`) |
+| i18n CS/SK/EN/DE shop + AI finder | ✅ |
+
+---
+
+## P0 — storefront customer launch (agent)
+
+| # | Čo | Kto | Blokuje | Detail |
+|---|-----|-----|---------|--------|
+| A1 | **Reálna auth** `/prihlasenie` + `/profil` | agent | fake login „Jozef Novák“ | README § AI AGENT |
+| A2 | **Analytics** GTM/GA4/Pixel + consent | agent (+ majiteľ IDs) | žiadne meranie | Cookie banner existuje |
+| A3 | Meta title prihlásenie/profil/obľúbené | agent | SEO title fallback | `metadata` export |
+| A4 | Wishlist rozhodnutie + implementácia | agent | localStorage-only | README § AI AGENT |
+| A5 | Dead CSS `.why-growmedica__*` | agent | dead code | `globals.css` |
 
 ---
 
@@ -74,23 +91,24 @@ Bez Stripe/GoPay ide predaj **BACS + COD**. Bez SF API shop funguje, len **bez a
 
 ## Agent — technický backlog (nie majiteľ)
 
-- Behavior E2E facets (Playwright)
-- Stabilita `yarn test:integrity` na CI
-- Performance `/produkty` (Lighthouse)
-- Voliteľné: Upstash Redis pre dashboard audit
+**P0:** auth, analytics (pozri tabuľku vyššie)  
+**P1:** meta titles, wishlist, dead CSS  
+**P2:** Woo e-maily branding, reviews, search UX, facets E2E, Lighthouse `/produkty`  
+**P3:** theme switcher, blog/B2B form, Upstash Redis  
 
-Detail: [../TODO.md](../TODO.md)
+Detail: [../TODO.md](../TODO.md) · [../README.md § AI AGENT](../README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29)
 
 ---
 
 ## Odporúčané poradie
 
 ```text
-1) Manuálny BACS nákup na www
-2) SuperFaktúra: profil firmy + API → Woo → Test → „API vložené, otestuj“
-3) Agent: smoke + BACS proforma/faktúra → majiteľ 2k
-4) Stripe test → Packeta/DPD
-5) Telefón / sklad / Shopify merchant off
+1) Agent: reálna auth + analytics (po GTM IDs od majiteľa)
+2) Manuálny BACS nákup na www
+3) SuperFaktúra: profil firmy + API → Woo → Test → „API vložené, otestuj“
+4) Agent: smoke + BACS proforma/faktúra → majiteľ 2k
+5) Stripe test → Packeta/DPD
+6) Telefón / sklad / Shopify merchant off
 ```
 
 **Ľudsky celý checklist:** [../majitel.md](../majitel.md)
