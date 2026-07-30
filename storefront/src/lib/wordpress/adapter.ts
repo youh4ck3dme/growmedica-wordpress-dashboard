@@ -234,7 +234,8 @@ export function wooProductToProduct(
             price: listItem.priceRange.minVariantPrice,
             compareAtPrice: listItem.compareAtPriceRange.minVariantPrice,
             sku: product.sku || null,
-            quantityAvailable: product.stock_quantity,
+            // Never expose exact warehouse qty on the public storefront.
+            quantityAvailable: null,
             image: listItem.featuredImage,
           },
         },

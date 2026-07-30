@@ -103,19 +103,12 @@ export default function VariantSelector({ product, onVariantChange }: VariantSel
         </div>
       ))}
 
-      {/* Variant info */}
-      {selectedVariant && (
+      {/* Variant info — stock count intentionally hidden (only availability badges elsewhere) */}
+      {selectedVariant?.sku ? (
         <div className="text-xs text-(--color-text-muted) pt-1">
-          {selectedVariant.sku && <span>SKU: {selectedVariant.sku}</span>}
-          {selectedVariant.quantityAvailable != null &&
-            selectedVariant.quantityAvailable > 0 &&
-            selectedVariant.quantityAvailable <= 10 && (
-              <span className="ml-3 text-(--color-warning) font-medium">
-                Zostatok: {selectedVariant.quantityAvailable} ks
-              </span>
-            )}
+          <span>SKU: {selectedVariant.sku}</span>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
