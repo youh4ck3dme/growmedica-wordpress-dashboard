@@ -71,6 +71,7 @@ export function WishlistButton({
   if (variant === 'icon') {
     return (
       <button
+        id="wishlist-btn"
         onClick={toggleWishlist}
         aria-label={isLiked ? t('wishlist.remove') : t('wishlist.add')}
         className={cn(
@@ -90,15 +91,17 @@ export function WishlistButton({
 
   return (
     <button
+      id="wishlist-btn"
       onClick={toggleWishlist}
+      aria-label={isLiked ? t('wishlist.remove') : t('wishlist.add')}
       className={cn(
-        "btn btn-secondary flex items-center justify-center gap-2 py-2.5",
+        "btn btn-secondary flex w-full min-w-0 items-center justify-center gap-2 py-2.5 whitespace-normal text-center leading-tight sm:w-auto sm:whitespace-nowrap",
         isLiked && "text-(--color-error) border-red-200 hover:bg-red-50/50",
         className
       )}
     >
       <IconHeart size={16} filled={isLiked} className={cn(isLiked && 'text-(--color-error)')} />
-      <span>{isLiked ? t('wishlist.inList') : t('wishlist.add')}</span>
+      <span className="min-w-0 wrap-break-word">{isLiked ? t('wishlist.inList') : t('wishlist.add')}</span>
     </button>
   )
 }

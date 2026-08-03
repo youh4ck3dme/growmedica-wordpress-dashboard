@@ -94,6 +94,33 @@ const TOOL_PARAMETERS: Record<AgentToolName, Record<string, unknown>> = {
     },
     required: ['order_id'],
   },
+  inventory_alerts: {
+    type: 'object',
+    properties: {
+      threshold: { type: 'number', description: 'Low-stock quantity threshold (default 5)' },
+      limit: { type: 'number', description: 'Max products to scan (default 100)' },
+    },
+  },
+  order_anomalies: {
+    type: 'object',
+    properties: {
+      stale_hours: { type: 'number', description: 'Flag pending/on-hold orders older than this (default 48)' },
+      limit: { type: 'number', description: 'Max recent orders to scan (default 50)' },
+    },
+  },
+  content_health_check: {
+    type: 'object',
+    properties: {
+      limit: { type: 'number', description: 'Max products to scan (default 50)' },
+    },
+  },
+  generate_ops_report: {
+    type: 'object',
+    properties: {
+      period: { type: 'string', enum: ['daily', 'weekly'], description: 'Report window (default daily)' },
+      threshold: { type: 'number', description: 'Low-stock threshold passed to inventory_alerts' },
+    },
+  },
 }
 
 const TOOL_DEFINITIONS: Array<{ name: AgentToolName; description: string }> = [
@@ -112,6 +139,10 @@ const TOOL_DEFINITIONS: Array<{ name: AgentToolName; description: string }> = [
   { name: 'update_inventory', description: 'Update WooCommerce inventory quantity for a product (confirm=true)' },
   { name: 'list_orders', description: 'List recent WooCommerce orders' },
   { name: 'get_order', description: 'Get WooCommerce order detail by ID or order number' },
+  { name: 'inventory_alerts', description: 'Read-only: flag out-of-stock and low-stock products' },
+  { name: 'order_anomalies', description: 'Read-only: flag stuck pending/on-hold orders and failed payments' },
+  { name: 'content_health_check', description: 'Read-only: find products missing images, short description, or SEO meta' },
+  { name: 'generate_ops_report', description: 'Mistral-generated daily/weekly ops summary from inventory, orders, and content health' },
 ]
 
 export const MISTRAL_TOOL_SCHEMAS = TOOL_DEFINITIONS.map((tool) => ({

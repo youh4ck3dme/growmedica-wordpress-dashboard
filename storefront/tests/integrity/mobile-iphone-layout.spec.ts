@@ -2,8 +2,16 @@
  * Mock integrity — layout na iPhone viewportoach (bez WordPressu, bez live API).
  * Beží s Playwright webServerom + SHOPIFY/WOO mock.
  */
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 import { IPHONE_17_ONLY, IPHONE_VIEWPORTS } from '../helpers/iphone-viewports'
+
+async function getHorizontalOverflow(page: Page) {
+  return page.evaluate(() => {
+    const doc = document.documentElement
+    const body = document.body
+    return Math.max(doc.scrollWidth, body.scrollWidth) - doc.clientWidth
+  })
+}
 
 // Plný set by spomalil mock suite — default iPhone 17 family + SE + Pro Max.
 const VIEWPORTS =
@@ -64,6 +72,42 @@ for (const vp of VIEWPORTS) {
       }
       // Must not be wildly broken (e.g. 2x viewport)
       expect(overflow).toBeLessThanOrEqual(vp.width)
+    })
+
+    test('produkt detail CTA (kosik + oblubene) bez overflow', async ({ page }) => {
+      await page.goto('/produkty', { waitUntil: 'domcontentloaded' })
+      await expect(page.locator('a[href^="/produkty/"]').first()).toBeVisible({ timeout: 20_000 })
+
+      await page.locator('a[href^="/produkty/"]').first().click()
+      await expect(page.locator('#add-to-cart-btn')).toBeVisible({ timeout: 20_000 })
+
+      const wishlistButton = page.locator('#wishlist-btn').first()
+      await expect(wishlistButton).toBeVisible({ timeout: 20_000 })
+
+      const overflowBefore = await getHorizontalOverflow(page)
+      expect(overflowBefore).toBeLessThanOrEqual(2)
+
+      const layoutBefore = await page.evaluate(() => {
+        const doc = document.documentElement
+        const cartButton = document.querySelector('#add-to-cart-btn')
+        const wishlistButton = document.querySelector('#wishlist-btn')
+
+        const cartRect = cartButton?.getBoundingClientRect()
+        const wishlistRect = wishlistButton?.getBoundingClientRect()
+
+        return {
+          vw: doc.clientWidth,
+          cartRightOverflow: cartRect ? cartRect.right - doc.clientWidth : 999,
+          wishlistRightOverflow: wishlistRect ? wishlistRect.right - doc.clientWidth : 999,
+        }
+      })
+
+      expect(layoutBefore.cartRightOverflow).toBeLessThanOrEqual(1)
+      expect(layoutBefore.wishlistRightOverflow).toBeLessThanOrEqual(1)
+
+      await wishlistButton.click()
+      const overflowAfter = await getHorizontalOverflow(page)
+      expect(overflowAfter).toBeLessThanOrEqual(2)
     })
   })
 }

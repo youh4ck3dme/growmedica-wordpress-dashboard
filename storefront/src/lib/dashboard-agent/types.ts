@@ -30,6 +30,10 @@ export type AgentToolName =
   | 'update_inventory'
   | 'list_orders'
   | 'get_order'
+  | 'inventory_alerts'
+  | 'order_anomalies'
+  | 'content_health_check'
+  | 'generate_ops_report'
 
 /** Tools that can mutate catalog/inventory when confirm + DASHBOARD_ALLOW_LIVE_WRITES allow it. */
 export const AGENT_WRITE_TOOLS = [

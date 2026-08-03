@@ -75,6 +75,11 @@ const nextConfig: NextConfig = {
         port: '8080',
         pathname: '/wp-content/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
     // Next 15+ warns / Next 16 requires explicit allowlist for Image `quality`.

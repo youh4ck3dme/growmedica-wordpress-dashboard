@@ -28,7 +28,7 @@ export default function ProductPurchasePanel({ product }: ProductPurchasePanelPr
       <div id="product-buy-box" className="space-y-6">
         <Price price={price} compareAtPrice={compareAt} size="lg" />
         <VariantSelector product={product} onVariantChange={setSelectedVariant} />
-        <div className="flex gap-3 items-start">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
           <div className="flex-1">
             <AddToCartButton
               variants={product.variants.edges.map((e) => e.node)}
@@ -40,7 +40,7 @@ export default function ProductPurchasePanel({ product }: ProductPurchasePanelPr
             productHandle={product.handle}
             productTitle={product.title}
             variant="full"
-            className="shrink-0 h-[48px]"
+            className="h-[48px] w-full min-w-0 sm:w-auto sm:shrink-0"
           />
         </div>
         <ul className="space-y-2">

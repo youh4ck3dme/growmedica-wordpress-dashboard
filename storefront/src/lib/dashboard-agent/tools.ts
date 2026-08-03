@@ -66,6 +66,10 @@ const seoSchema = z.object({
   meta_description: z.string(),
 })
 
+const reportSchema = z.object({
+  summary: z.string(),
+})
+
 export const AGENT_TOOL_DEFINITIONS = [
   { name: 'list_products', description: 'List catalog products with optional search and limit' },
   { name: 'get_product', description: 'Get a single product by slug/handle' },
@@ -82,6 +86,10 @@ export const AGENT_TOOL_DEFINITIONS = [
   { name: 'update_inventory', description: 'Update WooCommerce inventory quantity for a product (confirm=true)' },
   { name: 'list_orders', description: 'List recent WooCommerce orders' },
   { name: 'get_order', description: 'Get WooCommerce order detail by ID or order number' },
+  { name: 'inventory_alerts', description: 'Read-only: flag out-of-stock and low-stock products' },
+  { name: 'order_anomalies', description: 'Read-only: flag stuck pending/on-hold orders and failed payments' },
+  { name: 'content_health_check', description: 'Read-only: find products missing images, short description, or SEO meta' },
+  { name: 'generate_ops_report', description: 'Mistral-generated daily/weekly ops summary from inventory, orders, and content health' },
 ] as const
 
 function isMockWriteMode(): boolean {
@@ -725,6 +733,217 @@ Popis: ${product.description.slice(0, 400)}`
         }
       }
 
+      case 'inventory_alerts': {
+        const threshold = Math.max(Number(args.threshold ?? 5) || 5, 0)
+        const limit = Math.min(Math.max(Number(args.limit ?? 100) || 100, 1), 100)
+
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: { alerts: [], checked: 0, threshold, note: 'WOO_MOCK_MODE — no live stock data' },
+            status: 'ok',
+          }
+        }
+
+        const products = await wooFetch<WooProduct[]>({
+          path: '/products',
+          params: { per_page: limit, status: 'publish' },
+          cache: 'no-store',
+          revalidate: false,
+        })
+
+        const alerts = products
+          .filter(
+            (p) =>
+              p.stock_status !== 'instock' ||
+              (p.stock_quantity !== null && p.stock_quantity <= threshold),
+          )
+          .map((p) => ({
+            handle: p.slug,
+            title: decodeHtmlEntities(p.name),
+            stock_status: p.stock_status,
+            stock_quantity: p.stock_quantity,
+            severity: p.stock_status === 'outofstock' ? 'critical' : 'low_stock',
+          }))
+
+        return {
+          tool,
+          args,
+          result: { alerts, checked: products.length, threshold, admin: WP_PRODUCTS_ADMIN },
+          status: 'ok',
+        }
+      }
+
+      case 'order_anomalies': {
+        const staleHours = Math.max(Number(args.stale_hours ?? 48) || 48, 1)
+        const limit = Math.min(Math.max(Number(args.limit ?? 50) || 50, 1), 100)
+
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: {
+              stale_orders: [],
+              failed_count: 0,
+              checked: 0,
+              stale_threshold_hours: staleHours,
+              note: 'WOO_MOCK_MODE — no live orders',
+            },
+            status: 'ok',
+          }
+        }
+
+        const raw = await wooFetch<WooOrderLite[]>({
+          path: '/orders',
+          params: { per_page: limit, orderby: 'date', order: 'desc', status: 'any' },
+          cache: 'no-store',
+          revalidate: false,
+        })
+
+        const now = Date.now()
+        const staleOrders: Array<{
+          id: string
+          status: string
+          hours_open: number
+          total: string
+        }> = []
+        let failedCount = 0
+
+        for (const order of raw) {
+          if (order.status === 'failed') failedCount++
+          if (order.status === 'pending' || order.status === 'on-hold') {
+            const created = new Date(order.date_created).getTime()
+            const hoursOpen = (now - created) / (60 * 60 * 1000)
+            if (Number.isFinite(hoursOpen) && hoursOpen >= staleHours) {
+              staleOrders.push({
+                id: `#${order.number || order.id}`,
+                status: order.status,
+                hours_open: Math.round(hoursOpen),
+                total: `${order.total} ${order.currency || 'EUR'}`,
+              })
+            }
+          }
+        }
+
+        return {
+          tool,
+          args,
+          result: {
+            stale_orders: staleOrders,
+            failed_count: failedCount,
+            checked: raw.length,
+            stale_threshold_hours: staleHours,
+            admin: WP_ORDERS_ADMIN,
+          },
+          status: 'ok',
+        }
+      }
+
+      case 'content_health_check': {
+        const limit = Math.min(Math.max(Number(args.limit ?? 50) || 50, 1), 100)
+
+        if (isWooMockMode()) {
+          return {
+            tool,
+            args,
+            result: { issues: [], checked: 0, note: 'WOO_MOCK_MODE — no live catalog data' },
+            status: 'ok',
+          }
+        }
+
+        const products = await wooFetch<WooProduct[]>({
+          path: '/products',
+          params: { per_page: limit, status: 'publish' },
+          cache: 'no-store',
+          revalidate: false,
+        })
+
+        const seoKeys = new Set(['rank_math_title', '_yoast_wpseo_title'])
+        const hasSeoMeta = (p: WooProduct) =>
+          (p.meta_data ?? []).some(
+            (m) => seoKeys.has(m.key) && String(m.value ?? '').trim().length > 0,
+          )
+
+        const issues = products
+          .map((p) => {
+            const problems: string[] = []
+            if (!p.images?.length) problems.push('missing_image')
+            if (!p.short_description?.trim()) problems.push('missing_short_description')
+            if (!hasSeoMeta(p)) problems.push('missing_seo_meta')
+            return problems.length
+              ? { handle: p.slug, title: decodeHtmlEntities(p.name), issues: problems }
+              : null
+          })
+          .filter((x): x is { handle: string; title: string; issues: string[] } => x !== null)
+
+        return {
+          tool,
+          args,
+          result: {
+            issues,
+            checked: products.length,
+            fixable_with: ['apply_product_copy (confirm=true)', 'apply_product_seo (confirm=true)'],
+            admin: WP_PRODUCTS_ADMIN,
+          },
+          status: 'ok',
+        }
+      }
+
+      case 'generate_ops_report': {
+        const period = args.period === 'weekly' ? 'weekly' : 'daily'
+        const threshold = Number(args.threshold ?? 5)
+
+        const [inventory, orders, content] = await Promise.all([
+          executeAgentTool('inventory_alerts', { threshold }, ip),
+          executeAgentTool('order_anomalies', { stale_hours: period === 'weekly' ? 168 : 48 }, ip),
+          executeAgentTool('content_health_check', {}, ip),
+        ])
+
+        const asArray = (value: unknown): unknown[] => (Array.isArray(value) ? value : [])
+        const asRecord = (value: unknown): Record<string, unknown> =>
+          value && typeof value === 'object' ? (value as Record<string, unknown>) : {}
+
+        const inventoryResult = asRecord(inventory.result)
+        const ordersResult = asRecord(orders.result)
+        const contentResult = asRecord(content.result)
+
+        const stats = {
+          inventory_alerts: asArray(inventoryResult.alerts).length,
+          stale_orders: asArray(ordersResult.stale_orders).length,
+          failed_orders: Number(ordersResult.failed_count ?? 0),
+          content_issues: asArray(contentResult.issues).length,
+        }
+
+        const prompt = `Si prevádzkový AI asistent GrowMedica eshopu. Napíš krátky ${
+          period === 'weekly' ? 'týždenný' : 'denný'
+        } report v slovenčine (max 5 viet, vecne, bez marketingových fráz) na základe dát:
+Sklad — kritické/nízke zásoby: ${stats.inventory_alerts}
+Objednávky zaseknuté nad limit: ${stats.stale_orders}
+Zlyhané platby: ${stats.failed_orders}
+Produkty s chýbajúcim obsahom/SEO: ${stats.content_issues}
+Vráť JSON: {"summary":"..."}`
+
+        const generated =
+          process.env.MISTRAL_MOCK_MODE === '1'
+            ? {
+                summary: `Mock report (${period}): ${stats.inventory_alerts} sklad. alertov, ${stats.stale_orders} zaseknutých objednávok, ${stats.failed_orders} zlyhaných platieb, ${stats.content_issues} obsahových problémov.`,
+              }
+            : await callMistral(prompt, reportSchema, { ip, userInput: period, temperature: 0.3 })
+
+        return {
+          tool,
+          args,
+          result: {
+            period,
+            generated_at: new Date().toISOString(),
+            summary: generated.summary,
+            stats,
+          },
+          status: 'ok',
+        }
+      }
+
       default:
         throw new Error(`Unknown tool: ${tool}`)
     }
@@ -748,6 +967,22 @@ export function inferToolsFromCommand(command: string): Array<{ tool: AgentToolN
 
   if (/export|csv|stiahnu/.test(lower)) {
     return [{ tool: 'export_catalog_csv', args: {} }]
+  }
+
+  if (/(denný|denny|týždenný|tyzdenny|týždňový)\s*report|ops report|prevádzkov\w*\s*report/.test(lower)) {
+    return [{ tool: 'generate_ops_report', args: { period: /týžd|tyzd/.test(lower) ? 'weekly' : 'daily' } }]
+  }
+
+  if (/sklad\w*\s*(alert|varovan)|nízk\w*\s*zásob|nizk\w*\s*zasob|do(š|s)l\w*\s*sklad/.test(lower)) {
+    return [{ tool: 'inventory_alerts', args: {} }]
+  }
+
+  if (/zaseknut|stuck|anomáli|anomali|zlyhan\w*\s*platb/.test(lower)) {
+    return [{ tool: 'order_anomalies', args: {} }]
+  }
+
+  if (/chýbajúc\w*\s*(obsah|obrázok|popis|seo)|content health|obsahov\w*\s*audit/.test(lower)) {
+    return [{ tool: 'content_health_check', args: {} }]
   }
 
   if (/súhrn|summary|prehľad katalógu|prehlad katalogu/.test(lower)) {
