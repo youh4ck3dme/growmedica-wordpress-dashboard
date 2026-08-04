@@ -56,9 +56,13 @@
     "bundles:images:dry": "node scripts/assign-bundle-images.mjs --prod --dry-run",
     "bundles:images:force": "node scripts/assign-bundle-images.mjs --prod --force"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@mistralai/mistralai": "^2.2.5",
     "@serwist/next": "^9.5.11",
+    "@swc/helpers": "0.5.15",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.17.0",
     "next": "^15.3.4",
