@@ -161,6 +161,46 @@ export function resolveWooProductType(product: WooProduct): string {
   )
 }
 
+const NEW_PRODUCT_WINDOW_DAYS = 30
+
+/** Product counts as "Novinka" when created within the last 30 days. */
+function resolveIsNew(product: WooProduct): boolean {
+  if (!product.date_created) return false
+  const created = Date.parse(product.date_created)
+  if (Number.isNaN(created)) return false
+  const ageMs = Date.now() - created
+  return ageMs >= 0 && ageMs <= NEW_PRODUCT_WINDOW_DAYS * 24 * 60 * 60 * 1000
+}
+
+/** Manual merchandising tag \u2014 avoids depending on the Woo Admin sales-report API. */
+function resolveIsBestseller(product: WooProduct): boolean {
+  return product.tags.some((tag) => tag.slug === 'bestseller' || tag.name.toLowerCase() === 'bestseller')
+}
+
+function resolveRating(product: WooProduct): { average: number; count: number } | undefined {
+  const count = product.rating_count ?? 0
+  if (count <= 0) return undefined
+  const average = parseFloat(product.average_rating ?? '0')
+  if (!Number.isFinite(average) || average <= 0) return undefined
+  return { average, count }
+}
+
+/**
+ * Maps arbitrary Woo product attributes (e.g. pa_certifikacia, pa_vekova-skupina) into a
+ * generic label->options facet map. No hardcoded slugs — any attribute assigned in the CMS
+ * automatically surfaces as a storefront facet once products carry values for it.
+ */
+function resolveAttributesFacets(product: WooProduct): Record<string, string[]> | undefined {
+  if (!product.attributes?.length) return undefined
+  const facets: Record<string, string[]> = {}
+  for (const attribute of product.attributes) {
+    const label = decodeHtmlEntities(attribute.name).trim()
+    const values = attribute.options.map((option) => decodeHtmlEntities(option).trim()).filter(Boolean)
+    if (label && values.length > 0) facets[label] = values
+  }
+  return Object.keys(facets).length > 0 ? facets : undefined
+}
+
 export function wooProductToListItem(
   product: WooProduct,
   locale?: string | null,
@@ -201,6 +241,10 @@ export function wooProductToListItem(
         },
       ],
     },
+    rating: resolveRating(product),
+    isNew: resolveIsNew(product),
+    isBestseller: resolveIsBestseller(product),
+    attributesFacets: resolveAttributesFacets(product),
   }
 }
 

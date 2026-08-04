@@ -1,5 +1,8 @@
 # AGENTS.md
 
+> ✅ **TOTO JE JEDINÝ / HLAVNÝ GROWMEDICA PROJEKT — CANONICAL** (potvrdené 2026-08-03)
+> Cesta: `/Users/erikbabcan/Growmedica-front+DASHBOARD/growmedica-wordpress-dashboard`. Ostatné kópie (`growmedica-wordpress-dashboard-OLD-DO-NOT-USE`, `growmedica-nextjs-storefront`) sú DUPLICITNÉ/ZASTARANÉ — nikdy v nich neimplementuj zmeny.
+
 ## Cursor Cloud specific instructions
 
 ### 0) Pred každou úlohou — backlog
@@ -34,7 +37,7 @@ Referencia: [storefront/docs/DEVELOPMENT.md](./storefront/docs/DEVELOPMENT.md) �
 
 `src/lib/env.ts` validuje env pri importe. Pre lokálny vývoj používaj **mock režim**:
 
-```
+```bash
 CMS_PROVIDER=wordpress
 WOO_MOCK_MODE=1
 WOO_CONSUMER_KEY=ck_mock

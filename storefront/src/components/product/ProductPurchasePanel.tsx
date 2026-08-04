@@ -40,7 +40,7 @@ export default function ProductPurchasePanel({ product }: ProductPurchasePanelPr
             productHandle={product.handle}
             productTitle={product.title}
             variant="full"
-            className="h-[48px] w-full min-w-0 sm:w-auto sm:shrink-0"
+            className="h-12 w-full min-w-0 sm:w-auto sm:shrink-0"
           />
         </div>
         <ul className="space-y-2">

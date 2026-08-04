@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { m, AnimatePresence } from 'framer-motion'
-import { Filter, X, Search, ChevronDown, Check, SlidersHorizontal } from 'lucide-react'
+import { Filter, X, Search, ChevronDown, Check, SlidersHorizontal, Star } from 'lucide-react'
 import type { ProductListItem } from '@/lib/catalog/types'
 import { ProductCard } from './ProductCard'
 import { Button } from '@/components/ui/Button'
@@ -19,6 +19,8 @@ import { cn } from '@/lib/utils'
 interface FilterableProductListProps {
   initialProducts: ProductListItem[]
   initialQuery?: string
+  /** Sibling subcategories of the current category page — omitted on /produkty. */
+  siblingCategories?: { name: string; href: string; count: number }[]
 }
 
 const SORT_OPTIONS = [
@@ -28,7 +30,10 @@ const SORT_OPTIONS = [
   { key: 'TITLE', label: 'Abecedne A–Z' },
 ]
 
-export function FilterableProductList({ initialProducts, initialQuery = '' }: FilterableProductListProps) {
+/** "X★ a viac" facet thresholds, matching the native Woo 1–5 review scale. */
+const RATING_THRESHOLDS = [4, 3] as const
+
+export function FilterableProductList({ initialProducts, initialQuery = '', siblingCategories = [] }: FilterableProductListProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -61,6 +66,12 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
   )
   const [selectedTypes, setSelectedTypes] = useState<Set<string>>(() => new Set(urlState.types))
   const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set(urlState.effects))
+  const [selectedMinRating, setSelectedMinRating] = useState<number | null>(() => urlState.minRating ?? null)
+  const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, Set<string>>>(() => {
+    const init: Record<string, Set<string>> = {}
+    for (const [label, values] of Object.entries(urlState.attributes ?? {})) init[label] = new Set(values)
+    return init
+  })
   const [sortBy, setSortBy] = useState(() => urlState.sort || 'BEST_SELLING')
   const [priceRange, setPriceRange] = useState<[number, number]>(() => [
     urlState.priceMin ?? priceLimits.min,
@@ -76,6 +87,10 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     setSelectedVendors(new Set(next.vendors))
     setSelectedTypes(new Set(next.types))
     setSelectedTags(new Set(next.effects))
+    setSelectedMinRating(next.minRating ?? null)
+    const nextAttributes: Record<string, Set<string>> = {}
+    for (const [label, values] of Object.entries(next.attributes ?? {})) nextAttributes[label] = new Set(values)
+    setSelectedAttributeValues(nextAttributes)
     setSortBy(next.sort || 'BEST_SELLING')
     setPriceRange([
       next.priceMin ?? priceLimits.min,
@@ -98,6 +113,10 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
         sort: sortBy,
         priceMin: priceRange[0],
         priceMax: priceRange[1],
+        minRating: selectedMinRating,
+        attributes: Object.fromEntries(
+          Object.entries(selectedAttributeValues).map(([label, values]) => [label, [...values]]),
+        ),
       },
       { priceLimits },
     )
@@ -111,6 +130,8 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     selectedVendors,
     selectedTypes,
     selectedTags,
+    selectedMinRating,
+    selectedAttributeValues,
     sortBy,
     priceRange,
     priceLimits,
@@ -145,6 +166,22 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
       tags: Array.from(tags).sort(),
     }
   }, [effectLabelsByProductId, initialProducts])
+
+  /** Dynamic Woo attribute facets — any attribute with values automatically becomes a sidebar section. */
+  const attributeFacetGroups = useMemo(() => {
+    const groups = new Map<string, Set<string>>()
+    for (const p of initialProducts) {
+      if (!p.attributesFacets) continue
+      for (const [label, values] of Object.entries(p.attributesFacets)) {
+        const set = groups.get(label) ?? new Set<string>()
+        for (const value of values) set.add(value)
+        groups.set(label, set)
+      }
+    }
+    return Array.from(groups.entries())
+      .map(([label, values]) => ({ label, values: Array.from(values).sort((a, b) => a.localeCompare(b, 'sk')) }))
+      .sort((a, b) => a.label.localeCompare(b.label, 'sk'))
+  }, [initialProducts])
 
   // Apply filters and sorting
   const filteredProducts = useMemo(() => {
@@ -187,6 +224,22 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
       )
     }
 
+    // 6. Rating threshold filter ("X★ a viac")
+    if (selectedMinRating != null) {
+      result = result.filter((p) => (p.rating?.average ?? 0) >= selectedMinRating)
+    }
+
+    // 7. Dynamic Woo attribute facets (AND across attributes, OR within the same attribute)
+    const activeAttributeEntries = Object.entries(selectedAttributeValues).filter(([, values]) => values.size > 0)
+    if (activeAttributeEntries.length > 0) {
+      result = result.filter((p) =>
+        activeAttributeEntries.every(([label, values]) => {
+          const productValues = p.attributesFacets?.[label]
+          return productValues ? productValues.some((value) => values.has(value)) : false
+        }),
+      )
+    }
+
     // Sort result
     if (sortBy === 'PRICE_ASC') {
       result.sort((a, b) => parseFloat(a.priceRange.minVariantPrice.amount) - parseFloat(b.priceRange.minVariantPrice.amount))
@@ -205,6 +258,8 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     selectedVendors,
     selectedTypes,
     selectedTags,
+    selectedMinRating,
+    selectedAttributeValues,
     sortBy,
   ])
 
@@ -236,10 +291,28 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     })
   }
 
+  const toggleMinRating = (threshold: number) => {
+    setSelectedMinRating((prev) => (prev === threshold ? null : threshold))
+  }
+
+  const toggleAttributeValue = (label: string, value: string) => {
+    setSelectedAttributeValues((prev) => {
+      const next = { ...prev }
+      const current = new Set(next[label] ?? [])
+      if (current.has(value)) current.delete(value)
+      else current.add(value)
+      if (current.size === 0) delete next[label]
+      else next[label] = current
+      return next
+    })
+  }
+
   const clearAllFilters = () => {
     setSelectedVendors(new Set())
     setSelectedTypes(new Set())
     setSelectedTags(new Set())
+    setSelectedMinRating(null)
+    setSelectedAttributeValues({})
     setPriceRange([priceLimits.min, priceLimits.max])
     setSearchQuery('')
   }
@@ -248,6 +321,8 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     selectedVendors.size > 0 ||
     selectedTypes.size > 0 ||
     selectedTags.size > 0 ||
+    selectedMinRating != null ||
+    Object.values(selectedAttributeValues).some((values) => values.size > 0) ||
     priceRange[0] !== priceLimits.min ||
     priceRange[1] !== priceLimits.max ||
     searchQuery !== ''
@@ -265,11 +340,45 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
     return initialProducts.filter((p) => effectLabelsByProductId.get(p.id)?.includes(tag)).length
   }
 
+  const getRatingCount = (threshold: number) => {
+    return initialProducts.filter((p) => (p.rating?.average ?? 0) >= threshold).length
+  }
+
+  const hasAnyRating = useMemo(
+    () => initialProducts.some((p) => (p.rating?.count ?? 0) > 0),
+    [initialProducts],
+  )
+
+  const getAttributeValueCount = (label: string, value: string) =>
+    initialProducts.filter((p) => p.attributesFacets?.[label]?.includes(value)).length
+
   // Filter form JSX
   const filterControlsJsx = (
     <div className="space-y-6">
+      {/* Kategórie (sibling subcategories) */}
+      {siblingCategories.length > 0 && (
+        <div>
+          <h4 className="text-xs font-semibold text-(--color-text) uppercase tracking-wider mb-2">Kategórie</h4>
+          <ul className="space-y-1.5">
+            {siblingCategories.map((sibling) => (
+              <li key={sibling.href}>
+                <a
+                  href={sibling.href}
+                  className="flex items-center justify-between text-sm text-gray-700 hover:text-(--color-primary) transition-colors py-0.5"
+                >
+                  <span>{sibling.name}</span>
+                  <span className="text-xs text-(--color-text-light) bg-gray-100 px-1.5 py-0.5 rounded-full">
+                    {sibling.count}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Search Input */}
-      <div>
+      <div className={siblingCategories.length > 0 ? 'border-t border-(--color-border) pt-4' : ''}>
         <h4 className="text-xs font-semibold text-(--color-text) uppercase tracking-wider mb-2">Hľadať v produktoch</h4>
         <div className="relative">
           <input
@@ -349,6 +458,97 @@ export function FilterableProductList({ initialProducts, initialQuery = '' }: Fi
           </div>
         </div>
       )}
+
+      {/* Rating (Hodnotenie) */}
+      {hasAnyRating && (
+        <div className="border-t border-(--color-border) pt-4">
+          <h4 className="text-xs font-semibold text-(--color-text) uppercase tracking-wider mb-3">Hodnotenie</h4>
+          <div className="space-y-2">
+            {RATING_THRESHOLDS.map((threshold) => {
+              const active = selectedMinRating === threshold
+              const count = getRatingCount(threshold)
+              if (count === 0) return null
+              return (
+                <label
+                  key={threshold}
+                  className="flex items-center justify-between text-sm cursor-pointer group py-0.5"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      onClick={() => toggleMinRating(threshold)}
+                      className={cn(
+                        "h-4 w-4 rounded border flex items-center justify-center transition-all",
+                        active
+                          ? "border-(--color-primary) bg-(--color-primary) text-white"
+                          : "border-gray-300 bg-white group-hover:border-(--color-primary)"
+                      )}
+                    >
+                      {active && <Check className="h-3 w-3 stroke-3" />}
+                    </div>
+                    <span className="flex items-center gap-0.5" aria-hidden="true">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={
+                            i < threshold
+                              ? 'h-3.5 w-3.5 fill-(--color-accent-gold) text-(--color-accent-gold)'
+                              : 'h-3.5 w-3.5 text-(--color-border)'
+                          }
+                        />
+                      ))}
+                    </span>
+                    <span className={cn("text-gray-700 transition-colors", active && "text-(--color-primary) font-semibold")}>
+                      a viac
+                    </span>
+                  </div>
+                  <span className="text-xs text-(--color-text-light) bg-gray-100 px-1.5 py-0.5 rounded-full">
+                    {count}
+                  </span>
+                </label>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Dynamic Woo attribute facets (Certifikácia, Veková skupina, Hmotnosť, Špecifické potreby, ...) */}
+      {attributeFacetGroups.map((group) => (
+        <div key={group.label} className="border-t border-(--color-border) pt-4">
+          <h4 className="text-xs font-semibold text-(--color-text) uppercase tracking-wider mb-3">{group.label}</h4>
+          <div className="space-y-2">
+            {group.values.map((value) => {
+              const active = selectedAttributeValues[group.label]?.has(value) ?? false
+              const count = getAttributeValueCount(group.label, value)
+              return (
+                <label
+                  key={value}
+                  className="flex items-center justify-between text-sm cursor-pointer group py-0.5"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      onClick={() => toggleAttributeValue(group.label, value)}
+                      className={cn(
+                        "h-4 w-4 rounded border flex items-center justify-center transition-all",
+                        active
+                          ? "border-(--color-primary) bg-(--color-primary) text-white"
+                          : "border-gray-300 bg-white group-hover:border-(--color-primary)"
+                      )}
+                    >
+                      {active && <Check className="h-3 w-3 stroke-3" />}
+                    </div>
+                    <span className={cn("text-gray-700 transition-colors", active && "text-(--color-primary) font-semibold")}>
+                      {value}
+                    </span>
+                  </div>
+                  <span className="text-xs text-(--color-text-light) bg-gray-100 px-1.5 py-0.5 rounded-full">
+                    {count}
+                  </span>
+                </label>
+              )
+            })}
+          </div>
+        </div>
+      ))}
 
       {/* Vendors (Výrobca) */}
       {facets.vendors.length > 0 && (

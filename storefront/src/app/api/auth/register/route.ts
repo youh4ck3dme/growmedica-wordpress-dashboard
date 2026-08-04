@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server'
 import { cmsRegister } from '@/lib/auth/cms-auth'
 import {
+  CUSTOMER_LOGGED_IN_COOKIE,
   CUSTOMER_SESSION_COOKIE,
   customerSessionCookieOptions,
   encodeCustomerSession,
+  loggedInFlagCookieOptions,
 } from '@/lib/auth/session'
 
 export const runtime = 'nodejs'
@@ -49,5 +51,6 @@ export async function POST(request: Request) {
     },
   })
   response.cookies.set(CUSTOMER_SESSION_COOKIE, token, customerSessionCookieOptions())
+  response.cookies.set(CUSTOMER_LOGGED_IN_COOKIE, '1', loggedInFlagCookieOptions())
   return response
 }

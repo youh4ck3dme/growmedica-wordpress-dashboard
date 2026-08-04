@@ -244,6 +244,7 @@
   .badge-gold    { background: #FEF3C7; color: var(--color-accent-gold); }
   .badge-sale    { background: var(--color-accent-gold); color: white; }
   .badge-new     { background: var(--color-primary); color: white; }
+  .badge-bestseller { background: var(--color-accent-blue); color: white; }
 
   .skeleton {
     background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
@@ -981,15 +982,25 @@
     position: sticky;
     top: 0;
     z-index: 30;
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     border-bottom: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     transition:
-      background-color var(--transition-base),
       border-color var(--transition-base),
       box-shadow var(--transition-base);
+  }
+
+  /* Safari/iOS renders position:sticky + backdrop-filter directly on the same box
+     unreliably (header flickers/disappears during momentum scroll). Isolating the
+     blur on a ::before keeps the sticky box itself compositionally simple. */
+  .glass-navbar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    transition: background-color var(--transition-base);
   }
 
   .glass-navbar--scrolled {
@@ -1916,8 +1927,6 @@
   }
 
   [data-storefront-theme="noor"] .site-header {
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
     box-shadow: none !important;
   }
@@ -1927,11 +1936,13 @@
     --glass-border: var(--color-border);
     --glass-shadow: none;
     --glass-shadow-scrolled: none;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
     box-shadow: none !important;
+  }
+
+  [data-storefront-theme="noor"] .glass-navbar::before {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   [data-storefront-theme="noor"] {
@@ -2685,6 +2696,25 @@
     margin: 0.25rem 0 0;
     font-size: 0.8125rem;
     opacity: 0.88;
+  }
+
+  .noor-toast__action {
+    display: inline-block;
+    margin: 0.5rem 0 0;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 9999px;
+    background: transparent;
+    color: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+
+  .noor-toast__action:hover {
+    background: rgba(255, 255, 255, 0.15);
   }
 
   .noor-toast__close {

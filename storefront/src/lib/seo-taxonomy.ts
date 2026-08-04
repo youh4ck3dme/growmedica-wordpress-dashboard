@@ -2,7 +2,7 @@ import taxonomy from '../../../reports/seo-taxonomy/growmedica-seo-menu-tree.jso
 import type { CollectionListOptions, CollectionView, NavCollectionItem } from '@/lib/catalog/nav-types'
 import type { ProductListItem } from '@/lib/catalog/types'
 import { getWooCategories } from '@/lib/wordpress/categories'
-import { getWooProducts } from '@/lib/wordpress/products'
+import { getWooProducts, getWooProductsAccumulated } from '@/lib/wordpress/products'
 import type { WooCategory } from '@/lib/wordpress/types'
 import skMenuData from '@/lib/navigation/growmedica-sk-menu.json'
 import type { Locale } from '@/lib/i18n/types'
@@ -246,6 +246,73 @@ export async function getSeoTaxonomyCollectionView(
     totalOnPage: products.length,
     imageUrl,
   }
+}
+
+/**
+ * Bulk-fetch variant of getSeoTaxonomyCollectionView — pulls every product in
+ * the category (not just one page) so the client-side FilterableProductList
+ * sidebar can filter/sort over the full set, mirroring the /produkty pattern.
+ */
+export async function getSeoTaxonomyCollectionViewAll(
+  path: string,
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<{
+  handle: string
+  title: string
+  description: string | null
+  products: ProductListItem[]
+  imageUrl: string | null
+} | null> {
+  const category = getFrozenCategoryByPath(path)
+  if (!category) return null
+  const wooMap = await buildWooCategoryMap()
+  const wooCategory = wooMap.get(category.categoryId)
+  const seo = getFrozenCategorySeo(category.categoryId, locale)
+  const title = getFrozenCategoryLabel(category, locale)
+  const imageUrl =
+    resolveWooCategoryImageUrl(category, wooMap) ??
+    (await resolveCategoryImageUrlBySlug(path, category.labels.sk))
+
+  if (!wooCategory) {
+    return {
+      handle: category.localizedPaths.sk,
+      title,
+      description: seo?.metaDescription ?? null,
+      products: [],
+      imageUrl,
+    }
+  }
+
+  // Woo term ID — not slug — (WP auto-suffixes duplicate term slugs).
+  const categoryKey = String(wooCategory.id)
+  const result = await getWooProductsAccumulated({ category: categoryKey, pages: 'all' })
+
+  return {
+    handle: category.localizedPaths.sk,
+    title,
+    description: seo?.metaDescription ?? null,
+    products: result.edges.map(({ node }) => node),
+    imageUrl,
+  }
+}
+
+/** Sibling subcategories (same parent) with their descendant product counts, for the sidebar "Kategórie" facet. */
+export async function getFrozenCategorySiblingsWithCounts(
+  category: FrozenCategory,
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<{ name: string; href: string; count: number }[]> {
+  const wooMap = await buildWooCategoryMap()
+  const siblings = categories.filter(
+    (candidate) => candidate.parentId === category.parentId && candidate.categoryId !== category.categoryId,
+  )
+  return siblings
+    .map((sibling) => ({
+      name: getFrozenCategoryLabel(sibling, locale),
+      href: `/kategorie/${sibling.localizedPaths.sk}`,
+      count: descendantCount(sibling.categoryId, wooMap),
+    }))
+    .filter((sibling) => sibling.count > 0)
+    .sort((a, b) => b.count - a.count)
 }
 
 export async function getSeoTaxonomyFeaturedProducts(path: string, count = 3): Promise<ProductListItem[]> {

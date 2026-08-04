@@ -7,6 +7,10 @@ interface ToastPayload {
   title: string
   description?: string
   variant?: 'default' | 'success' | 'error'
+  action?: {
+    label: string
+    onClick: () => void
+  }
 }
 
 export function useThemeToast() {

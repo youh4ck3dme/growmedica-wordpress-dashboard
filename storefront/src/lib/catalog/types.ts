@@ -113,6 +113,14 @@ export interface ProductListItem {
       node: Pick<ProductVariant, 'id' | 'title' | 'availableForSale' | 'selectedOptions' | 'price' | 'compareAtPrice'>
     }>
   }
+  /** Native Woo review aggregate, omitted when the product has no reviews */
+  rating?: { average: number; count: number }
+  /** Published within the last 30 days */
+  isNew?: boolean
+  /** Tagged "bestseller" in Woo (manual merchandising tag, no sales-API dependency) */
+  isBestseller?: boolean
+  /** Woo product attributes (e.g. Certifikácia, Veková skupina), keyed by attribute label */
+  attributesFacets?: Record<string, string[]>
 }
 
 // ─── Collection ──────────────────────────────────────────────────────────────

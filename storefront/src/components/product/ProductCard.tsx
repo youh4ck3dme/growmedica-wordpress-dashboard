@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { Star } from 'lucide-react'
 import type { ProductListItem } from '@/lib/catalog/types'
 import {
   getSizedImageUrl,
@@ -71,6 +72,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             {hasDiscount && product.availableForSale && (
               <span className="badge badge-sale">{t('product.saleBadge', { pct: discountPct })}</span>
             )}
+            {product.isBestseller && (
+              <span className="badge badge-bestseller">{t('product.bestsellerBadge')}</span>
+            )}
+            {product.isNew && (
+              <span className="badge badge-new">{t('product.newBadge')}</span>
+            )}
           </div>
         </Link>
         <div className="absolute top-2 right-2 z-10">
@@ -97,6 +104,27 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             {product.title}
           </Link>
         </h3>
+
+        {product.rating && (
+          <div
+            className="flex items-center gap-1"
+            aria-label={t('product.ratingAria', { rating: product.rating.average.toFixed(1), count: product.rating.count })}
+          >
+            <div className="flex items-center" aria-hidden="true">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={
+                    i < Math.round(product.rating!.average)
+                      ? 'h-3.5 w-3.5 fill-(--color-accent-gold) text-(--color-accent-gold)'
+                      : 'h-3.5 w-3.5 text-(--color-border)'
+                  }
+                />
+              ))}
+            </div>
+            <span className="text-xs text-(--color-text-muted)">({product.rating.count})</span>
+          </div>
+        )}
 
         <p className="product-card__stock text-xs font-semibold">
           {product.availableForSale ? t('product.inStock') : t('product.outOfStock')}

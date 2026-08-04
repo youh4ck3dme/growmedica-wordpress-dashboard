@@ -3,16 +3,15 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import CollectionHero from '@/components/collection/CollectionHero'
-import CollectionToolbar from '@/components/collection/CollectionToolbar'
-import { ProductGrid } from '@/components/product/ProductGrid'
+import { FilterableProductList } from '@/components/product/FilterableProductList'
 import { Container } from '@/components/ui/Container'
-import type { CollectionListOptions } from '@/lib/catalog/nav'
 import {
   getFrozenCategoryAncestors,
   getFrozenCategoryByPath,
   getFrozenCategoryLabel,
   getFrozenCategorySeo,
-  getSeoTaxonomyCollectionView,
+  getFrozenCategorySiblingsWithCounts,
+  getSeoTaxonomyCollectionViewAll,
 } from '@/lib/seo-taxonomy'
 import { buildLocaleAlternates, resolvePageRobots } from '@/lib/seo'
 import { getRequestLocale } from '@/lib/i18n/server'
@@ -23,20 +22,6 @@ export const revalidate = 3600
 
 type PageProps = {
   params: Promise<{ path: string[] }>
-  searchParams: Promise<{ page?: string; sort?: string; vendor?: string; stock?: string }>
-}
-
-function parseOptions(search: Awaited<PageProps['searchParams']>): CollectionListOptions {
-  const sort = search.sort
-  return {
-    page: Math.max(1, Number.parseInt(search.page ?? '1', 10) || 1),
-    sort:
-      sort === 'price-asc' || sort === 'price-desc' || sort === 'title'
-        ? sort
-        : 'recommended',
-    vendor: search.vendor || undefined,
-    inStockOnly: search.stock === '1',
-  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -63,16 +48,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function SeoCategoryPage({ params, searchParams }: PageProps) {
+export default async function SeoCategoryPage({ params }: PageProps) {
   const path = (await params).path.join('/')
   const locale = await getRequestLocale()
   const category = getFrozenCategoryByPath(path)
   if (!category) notFound()
-  const search = await searchParams
-  const options = parseOptions(search)
-  const view = await getSeoTaxonomyCollectionView(path, options, locale)
+  const view = await getSeoTaxonomyCollectionViewAll(path, locale)
   if (!view) notFound()
   const ancestors = getFrozenCategoryAncestors(category)
+  const siblingCategories = await getFrozenCategorySiblingsWithCounts(category, locale)
 
   return (
     <div className="py-8 lg:py-12">
@@ -100,19 +84,12 @@ export default async function SeoCategoryPage({ params, searchParams }: PageProp
           handle={view.handle}
           title={view.title}
           description={view.description}
-          productCount={view.totalOnPage}
+          productCount={view.products.length}
           imageUrl={view.imageUrl}
         />
-        <Suspense fallback={null}>
-          <CollectionToolbar vendors={view.availableVendors} totalOnPage={view.totalOnPage} />
+        <Suspense fallback={<p className="text-sm text-(--color-text-muted)">Načítavam filtre…</p>}>
+          <FilterableProductList initialProducts={view.products} siblingCategories={siblingCategories} />
         </Suspense>
-        <ProductGrid
-          products={view.products}
-          emptyTitle={t('empty.category.title', locale)}
-          emptyDescription={t('empty.category.description', locale)}
-          emptyAction={t('empty.category.action', locale)}
-          listAriaLabel={t('aria.categoryProductsNamed', locale, { title: view.title })}
-        />
       </Container>
     </div>
   )

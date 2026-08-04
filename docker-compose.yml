@@ -48,6 +48,7 @@ services:
     volumes:
       - woo_wp:/var/www/html
       - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./wordpress/theme/growmedica-theme:/var/www/html/wp-content/themes/growmedica-theme
 
 volumes:
   woo_db:

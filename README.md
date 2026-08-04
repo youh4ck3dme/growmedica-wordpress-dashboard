@@ -1,11 +1,19 @@
 # GrowMedica — Next.js + WooCommerce
 
+> ✅ **TOTO JE JEDINÝ / HLAVNÝ GROWMEDICA PROJEKT — CANONICAL** (potvrdené 2026-08-03)
+> Cesta: `/Users/erikbabcan/Growmedica-front+DASHBOARD/growmedica-wordpress-dashboard`
+> Ak na `localhost:5555` vidíš produkty typu „... Mock produkt N“, si v ZLOM projekte — skontroluj `lsof -nP -iTCP:5555 -sTCP:LISTEN` a spusti `yarn dev` znova odtiaľto.
+> Iné kópie v tomto workspace sú DUPLICITNÉ/ZASTARANÉ (majú `yarn dev` guard, nespustia sa bez `ALLOW_LEGACY_DEV=1`):
+>
+> - `growmedica-wordpress-dashboard-OLD-DO-NOT-USE` (top-level duplicate checkout)
+> - `growmedica-nextjs-storefront` (starý Shopify-mock projekt)
+
 Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 
 | | URL |
-|--|-----|
-| E-shop | https://www.growmedica.cz |
-| CMS admin | https://cms.growmedica.cz/wp-admin |
+| -- | ----- |
+| E-shop | <https://www.growmedica.cz> |
+| CMS admin | <https://cms.growmedica.cz/wp-admin> |
 
 > **⛔ UI/UX FREEZE** — nemeniť layout/dizajn storefrontu bez zadania.  
 > **Stav a úlohy:** **[STATUS.md](./STATUS.md)** · [TODO.md](./TODO.md) · [AGENTS.md](./AGENTS.md)
@@ -22,7 +30,7 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 ### Hotové (funguje na produkcii)
 
 | # | Oblasť | Stav |
-|---|--------|------|
+| --- | -------- | ------ |
 | 1 | Homepage layout | ✅ Hero → Finder → Trust → Kategórie → Featured → Balíčky · full-bleed aj Pro Max |
 | 2 | Supplement Finder (AI) | ✅ Spojený s „Prečo GrowMedica“ · 3 kroky · chipy · mobile stacked form |
 | 3 | Hero slider | ✅ 4 slidy · i18n · slide 1 CTA → `/#supplement-finder` |
@@ -42,7 +50,7 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 ### Nedokončené / nefunguje (treba opraviť)
 
 | # | Problém | Závažnosť | Detail |
-|---|---------|-----------|--------|
+| --- | --------- | ----------- | -------- |
 | 1 | ~~Prihlásenie MOCK~~ | ✅ | Woo auth BFF — [storefront/docs/AUTH.md](./storefront/docs/AUTH.md) |
 | 2 | ~~Profil MOCK~~ | ✅ | Reálne adresy + Woo objednávky |
 | 3 | Obľúbené (wishlist) | Stredné | UI `/oblubene` + `WishlistButton` = len localStorage, bez sync s účtom. |
@@ -63,23 +71,23 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 
 #### P1 — vysoké
 
-3. ~~Meta title~~ ✅  
-4. **Wishlist** — stále localStorage-only (sync s Woo TBD).  
-5. ~~Dead CSS~~ ✅
+1. ~~Meta title~~ ✅  
+2. **Wishlist** — stále localStorage-only (sync s Woo TBD).  
+3. ~~Dead CSS~~ ✅
 
 #### P2 — stredné
 
-6. Overiť **Woo e-mail notifikácie** (branding).  
-7. Overiť **product reviews** napojenie na Woo.  
-8. Overiť **search UX** `/vyhladavanie` (relevantnosť Woo API).
+1. Overiť **Woo e-mail notifikácie** (branding).  
+2. Overiť **product reviews** napojenie na Woo.  
+3. Overiť **search UX** `/vyhladavanie` (relevantnosť Woo API).
 
 #### P3 — nice-to-have
 
-9. Theme switcher noor/classic (user-facing?) — rozhodnúť.  
-10. Blog obsah (WP posts).  
-11. Veľkoobchod — B2B formulár / registrácia.  
-12. Upstash Redis (`UPSTASH_REDIS_REST_TOKEN` prázdny) — rate-limit / cache.  
-13. Workspace file v `.gitignore`.
+1. Theme switcher noor/classic (user-facing?) — rozhodnúť.  
+2. Blog obsah (WP posts).  
+3. Veľkoobchod — B2B formulár / registrácia.  
+4. Upstash Redis (`UPSTASH_REDIS_REST_TOKEN` prázdny) — rate-limit / cache.  
+5. Workspace file v `.gitignore`.
 
 ### Pravidlá pre AI pri práci na backlogu
 
@@ -94,7 +102,7 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 ## Stav (skrátka)
 
 | Oblasť | Stav |
-|---|---|
+| --- | --- |
 | Storefront UI (Next.js 15, PWA, AI) | ✅ |
 | Geo-lokalizácia UI (CS / SK / EN / DE) | ✅ |
 | WordPress/WooCommerce integrácia | ✅ `CMS_PROVIDER=wordpress` |
@@ -109,7 +117,7 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 | Shopify integrácia | 🗑️ Runtime odstránený (legacy docs only) |
 
 | | |
-|--|--|
+| -- | -- |
 | Katalóg | ✅ Woo (`CMS_PROVIDER=wordpress`) |
 | Košík | ✅ cookie BFF → cms checkout |
 | Platby | ✅ BACS + COD · ⬜ Stripe/GoPay (karty) |
@@ -149,7 +157,7 @@ Secrets **nikdy do gitu** — len `.env.local` / `wordpress-production.local.env
 UI texty sa prekladajú podľa geo / cookie / `Accept-Language`. URL slugy (`/produkty`, `/kolekcie`) sa nemenia.
 
 | Priorita | Zdroj |
-|----------|--------|
+| ---------- | -------- |
 | 1 | `?lang=cs\|sk\|en\|de` (nastaví cookie, redirect) |
 | 2 | Cookie `growmedica_locale` (30 dní) |
 | 3 | `x-vercel-ip-country` (CZ→cs, SK→sk, DE/AT/CH→de, ostatné→en) |
@@ -184,7 +192,7 @@ Testy: `storefront/tests/` · [tests/README.md](./storefront/tests/README.md) ·
 
 ## Štruktúra
 
-```
+```text
 growmedica-wordpress-dashboard/
 ├── README.md                 # ← AI AGENT backlog (hore) + quick start
 ├── STATUS.md                 # ← živý stav + majiteľ / agent úlohy
@@ -208,7 +216,7 @@ growmedica-wordpress-dashboard/
 ## Dokumentácia
 
 | Dokument | |
-|----------|--|
+| ---------- | -- |
 | [STATUS.md](./STATUS.md) | **Hlavný stav + backlog** |
 | **[majitel.md](./majitel.md)** | **Pre majiteľa: čo dodať, kde získať, kam vložiť** |
 | [docs/OPERATIONS.md](./docs/OPERATIONS.md) | **Endpointy, env, prevádzka** |

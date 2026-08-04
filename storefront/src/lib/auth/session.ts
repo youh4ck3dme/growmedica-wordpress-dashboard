@@ -1,8 +1,12 @@
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { cookies } from 'next/headers'
+import { CUSTOMER_SESSION_COOKIE, CUSTOMER_SESSION_MAX_AGE_SEC } from '@/lib/auth/constants'
 
-export const CUSTOMER_SESSION_COOKIE = 'gm_customer_session'
-export const CUSTOMER_SESSION_MAX_AGE_SEC = 60 * 60 * 24 * 30 // 30 days
+export {
+  CUSTOMER_SESSION_COOKIE,
+  CUSTOMER_SESSION_MAX_AGE_SEC,
+  CUSTOMER_LOGGED_IN_COOKIE,
+} from '@/lib/auth/constants'
 
 export type CustomerSession = {
   customerId: number
@@ -84,6 +88,16 @@ export async function readCustomerSessionFromCookies(): Promise<CustomerSession 
 export function customerSessionCookieOptions(maxAge = CUSTOMER_SESSION_MAX_AGE_SEC) {
   return {
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    path: '/',
+    maxAge,
+  }
+}
+
+export function loggedInFlagCookieOptions(maxAge = CUSTOMER_SESSION_MAX_AGE_SEC) {
+  return {
+    httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax' as const,
     path: '/',

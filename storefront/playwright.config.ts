@@ -155,5 +155,14 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
       },
     },
+    {
+      // Real installed Google Chrome ("Chrome for Testing"), not bundled Chromium.
+      // retries: hover-triggered mega-menu assertions are prone to transient
+      // timing flakiness under parallel dev-server load; local logic itself is stable.
+      name: 'category-links-chrome',
+      testMatch: /integrity\/category-navigation\.spec\.ts/,
+      retries: 2,
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    },
   ],
 });

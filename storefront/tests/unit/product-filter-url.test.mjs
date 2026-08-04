@@ -67,4 +67,64 @@ describe('product filter URL', () => {
     assert.equal(productFilterSearchParamsEqual(a, b), true)
     assert.equal(productFilterSearchParamsEqual(a, c), false)
   })
+
+  it('round-trips minRating facet', () => {
+    const built = buildProductFilterSearchParams(
+      {
+        q: '',
+        vendors: [],
+        types: [],
+        effects: [],
+        sort: 'BEST_SELLING',
+        priceMin: 0,
+        priceMax: 100,
+        minRating: 4,
+      },
+      { priceLimits: { min: 0, max: 100 } },
+    )
+    assert.equal(built.toString(), 'rating=4')
+    const parsed = parseProductFilterSearchParams(built)
+    assert.equal(parsed.minRating, 4)
+  })
+
+  it('round-trips dynamic attribute facets', () => {
+    const built = buildProductFilterSearchParams(
+      {
+        q: '',
+        vendors: [],
+        types: [],
+        effects: [],
+        sort: 'BEST_SELLING',
+        priceMin: 0,
+        priceMax: 100,
+        attributes: {
+          Certifikácia: ['Bio', 'Vegan'],
+          'Veková skupina': ['Deti'],
+        },
+      },
+      { priceLimits: { min: 0, max: 100 } },
+    )
+    const parsed = parseProductFilterSearchParams(built)
+    assert.deepEqual(parsed.attributes, {
+      Certifikácia: ['Bio', 'Vegan'],
+      'Veková skupina': ['Deti'],
+    })
+  })
+
+  it('omits empty attribute groups', () => {
+    const built = buildProductFilterSearchParams(
+      {
+        q: '',
+        vendors: [],
+        types: [],
+        effects: [],
+        sort: 'BEST_SELLING',
+        priceMin: 0,
+        priceMax: 100,
+        attributes: {},
+      },
+      { priceLimits: { min: 0, max: 100 } },
+    )
+    assert.equal(built.toString(), '')
+  })
 })

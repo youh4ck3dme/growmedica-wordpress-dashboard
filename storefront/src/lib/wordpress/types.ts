@@ -58,6 +58,11 @@ export interface WooProduct {
   /** Optional Brands for WooCommerce extension */
   brands?: Array<{ id: number; name: string; slug: string }>
   date_modified_gmt: string
+  /** Native WooCommerce review aggregate — string "0"–"5", may be absent on older payloads */
+  average_rating?: string
+  rating_count?: number
+  /** Used to derive the "Novinka" badge */
+  date_created?: string
 }
 
 export interface WooPaginated<T> {

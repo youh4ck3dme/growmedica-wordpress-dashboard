@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { IconHeart } from '@/components/icons/storefront'
 import { cn } from '@/lib/utils'
 import { useThemeToast } from '@/components/ui/ThemeToast'
 import { useT } from '@/components/i18n/LocaleProvider'
+import { isLoggedIn } from '@/lib/auth/client-session'
 
 interface WishlistButtonProps {
   productHandle: string
@@ -20,6 +22,7 @@ export function WishlistButton({
   className,
 }: WishlistButtonProps) {
   const t = useT()
+  const router = useRouter()
   const [isLiked, setIsLiked] = useState(false)
   const { toast } = useThemeToast()
 
@@ -36,6 +39,19 @@ export function WishlistButton({
   const toggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+
+    if (!isLoggedIn()) {
+      toast({
+        title: t('wishlist.loginRequiredTitle'),
+        description: t('wishlist.loginRequiredDescription'),
+        variant: 'default',
+        action: {
+          label: t('wishlist.loginAction'),
+          onClick: () => router.push('/prihlasenie'),
+        },
+      })
+      return
+    }
 
     try {
       const stored = localStorage.getItem('gm_wishlist')

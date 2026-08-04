@@ -151,16 +151,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
               <ProductPurchasePanel product={p} />
 
-              {p.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 pt-2 border-t border-(--color-border)">
-                  {p.tags.map((tag) => (
-                    <span key={tag} className="badge badge-muted text-xs">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
               <ProductFitBox handle={p.handle} productTitle={p.title} />
             </div>
           </div>

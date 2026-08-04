@@ -1,6 +1,9 @@
 # GrowMedica — monorepo (Claude Code)
 
-**Prod:** https://www.growmedica.cz · **CMS:** https://cms.growmedica.cz  
+> ✅ **TOTO JE JEDINÝ / HLAVNÝ GROWMEDICA PROJEKT — CANONICAL** (potvrdené 2026-08-03)
+> Cesta: `/Users/erikbabcan/Growmedica-front+DASHBOARD/growmedica-wordpress-dashboard`. Ostatné kópie (`growmedica-wordpress-dashboard-OLD-DO-NOT-USE`, `growmedica-nextjs-storefront`) sú DUPLICITNÉ/ZASTARANÉ.
+
+**Prod:** <https://www.growmedica.cz> · **CMS:** <https://cms.growmedica.cz>  
 **Owner profile:** `~/.claude/CLAUDE.md` (globálne pravidlá)
 
 Tento repozitár = WordPress/WooCommerce CMS + Next.js storefront.
@@ -8,7 +11,7 @@ Tento repozitár = WordPress/WooCommerce CMS + Next.js storefront.
 ## Čítaj najprv
 
 | Súbor | Prečo |
-|-------|--------|
+| ------- | -------- |
 | [AGENTS.md](./AGENTS.md) | Hard rules pre agentov (UI freeze, mock env, commands) |
 | [STATUS.md](./STATUS.md) | Čo je hotové / čo len majiteľ |
 | [TODO.md](./TODO.md) | Otvorené tasky |
@@ -18,7 +21,7 @@ Tento repozitár = WordPress/WooCommerce CMS + Next.js storefront.
 
 ## Layout
 
-```
+```text
 growmedica-wordpress-dashboard/
 ├── storefront/          # Next.js 15 app — SEM robíš FE/API prácu
 │   ├── src/app/         # routes
@@ -58,7 +61,7 @@ Mock env (lokál bez live Woo) — pozri [AGENTS.md](./AGENTS.md) sekciu *Local 
 
 ## Locale / market
 
-- Primárny trh: **CZ** (www.growmedica.cz), predaj/ship aj SK/AT/HU/PL
+- Primárny trh: **CZ** (`www.growmedica.cz`), predaj/ship aj SK/AT/HU/PL
 - Mena: **EUR**
 - i18n: SK / EN / DE v `storefront/src/lib/i18n/locales/`
 - Dátumy v UI: lokálne formáty, nie US

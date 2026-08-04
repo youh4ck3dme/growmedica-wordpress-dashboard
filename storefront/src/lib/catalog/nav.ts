@@ -1,6 +1,7 @@
 import {
   getWooNavCollectionItems,
   getWooCollectionViewByHandle,
+  getWooCollectionViewAllByHandle,
   getWooCategoryFeaturedProducts,
 } from '@/lib/wordpress/collection-nav'
 import { shouldIncludeMegaMenuCollection } from './nav-types'
@@ -18,6 +19,11 @@ export async function getCollectionViewByHandle(
   options?: import('./nav-types').CollectionListOptions,
 ) {
   return getWooCollectionViewByHandle(handle, options)
+}
+
+/** Bulk-fetch variant (all products in the category) for the FilterableProductList sidebar pattern. */
+export async function getCollectionViewAllByHandle(handle: string) {
+  return getWooCollectionViewAllByHandle(handle)
 }
 
 export async function getCategoryFeaturedProducts(handle: string, count = 3) {

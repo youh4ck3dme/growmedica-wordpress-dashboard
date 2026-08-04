@@ -3,12 +3,11 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { Container } from '@/components/ui/Container'
-import { ProductGrid } from '@/components/product/ProductGrid'
+import { FilterableProductList } from '@/components/product/FilterableProductList'
 import CollectionHero from '@/components/collection/CollectionHero'
-import CollectionToolbar from '@/components/collection/CollectionToolbar'
 import {
   getCollectionViewByHandle,
-  type CollectionListOptions,
+  getCollectionViewAllByHandle,
 } from '@/lib/catalog/nav'
 import { getCollectionMetadata } from '@/lib/seo'
 import { getRequestLocale } from '@/lib/i18n/server'
@@ -20,48 +19,6 @@ export const revalidate = 3600
 
 interface CollectionPageProps {
   params: Promise<{ handle: string }>
-  searchParams: Promise<{
-    page?: string
-    sort?: string
-    vendor?: string
-    stock?: string
-  }>
-}
-
-function parseListOptions(searchParams: {
-  page?: string
-  sort?: string
-  vendor?: string
-  stock?: string
-}): CollectionListOptions {
-  const sort = searchParams.sort
-  const validSort =
-    sort === 'price-asc' || sort === 'price-desc' || sort === 'title'
-      ? sort
-      : 'recommended'
-
-  return {
-    page: Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1),
-    sort: validSort,
-    vendor: searchParams.vendor || undefined,
-    inStockOnly: searchParams.stock === '1',
-  }
-}
-
-function buildPageHref(
-  handle: string,
-  page: number,
-  searchParams: { sort?: string; vendor?: string; stock?: string },
-): string {
-  const params = new URLSearchParams()
-  if (page > 1) params.set('page', String(page))
-  if (searchParams.sort && searchParams.sort !== 'recommended') {
-    params.set('sort', searchParams.sort)
-  }
-  if (searchParams.vendor) params.set('vendor', searchParams.vendor)
-  if (searchParams.stock === '1') params.set('stock', '1')
-  const qs = params.toString()
-  return qs ? `/kolekcie/${handle}?${qs}` : `/kolekcie/${handle}`
 }
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
@@ -81,24 +38,20 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
   })
 }
 
-export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
+export default async function CollectionPage({ params }: CollectionPageProps) {
   const locale = await getRequestLocale()
   const { handle } = await params
-  const rawSearch = await searchParams
-  const listOptions = parseListOptions(rawSearch)
 
-  let view: Awaited<ReturnType<typeof getCollectionViewByHandle>> = null
+  let view: Awaited<ReturnType<typeof getCollectionViewAllByHandle>> = null
 
   try {
-    view = await getCollectionViewByHandle(handle, listOptions)
+    view = await getCollectionViewAllByHandle(handle)
   } catch {
     notFound()
   }
 
   if (!view) notFound()
 
-  const page = listOptions.page ?? 1
-  const productCount = view.totalOnPage
   const wooCategory = isWordPressCms() ? await getWooCategoryBySlug(handle) : null
   const imageUrl = wooCategory?.image?.src ?? null
 
@@ -119,54 +72,13 @@ export default async function CollectionPage({ params, searchParams }: Collectio
           handle={view.handle}
           title={view.title}
           description={view.description}
-          productCount={productCount}
+          productCount={view.products.length}
           imageUrl={imageUrl}
         />
 
-        <Suspense fallback={null}>
-          <CollectionToolbar vendors={view.availableVendors} totalOnPage={view.totalOnPage} />
+        <Suspense fallback={<p className="text-sm text-(--color-text-muted)">Načítavam filtre…</p>}>
+          <FilterableProductList initialProducts={view.products} />
         </Suspense>
-
-        <ProductGrid
-          products={view.products}
-          emptyTitle={t('empty.collection.title', locale)}
-          emptyDescription={t('empty.collection.description', locale)}
-          emptyAction={t('empty.products.action', locale)}
-          listAriaLabel={t('aria.productList', locale)}
-        />
-
-        {(view.hasPreviousPage || view.hasNextPage) && (
-          <nav
-            className="mt-10 flex items-center justify-center gap-4"
-            aria-label={t('aria.collectionPagination', locale)}
-          >
-            {view.hasPreviousPage ? (
-              <Link
-                href={buildPageHref(view.handle, page - 1, rawSearch)}
-                className="btn btn-secondary"
-              >
-                {t('common.previous', locale)}
-              </Link>
-            ) : (
-              <span className="btn btn-secondary opacity-40 pointer-events-none" aria-hidden="true">
-                {t('common.previous', locale)}
-              </span>
-            )}
-            <span className="text-sm text-(--color-text-muted)">{t('common.page', locale, { page: String(view.page) })}</span>
-            {view.hasNextPage ? (
-              <Link
-                href={buildPageHref(view.handle, page + 1, rawSearch)}
-                className="btn btn-secondary"
-              >
-                {t('common.next', locale)}
-              </Link>
-            ) : (
-              <span className="btn btn-secondary opacity-40 pointer-events-none" aria-hidden="true">
-                {t('common.next', locale)}
-              </span>
-            )}
-          </nav>
-        )}
       </Container>
     </div>
   )

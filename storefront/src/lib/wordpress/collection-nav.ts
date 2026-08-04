@@ -16,7 +16,7 @@ import type {
   NavCollectionItem,
 } from '@/lib/catalog/nav-types'
 import { getWooCategories } from './categories'
-import { getWooProducts } from './products'
+import { getWooProducts, getWooProductsAccumulated } from './products'
 import { isWooMockMode, getMockWooCategories, getMockWooProducts } from './mock'
 import { getSeoTaxonomyFeaturedProducts } from '@/lib/seo-taxonomy'
 import { getSkMenuNavItems } from '@/lib/navigation/sk-menu-nav'
@@ -147,6 +147,35 @@ export async function getWooCollectionViewByHandle(
     page,
     hasNextPage: result.pageInfo.hasNextPage,
     hasPreviousPage: page > 1,
+    totalOnPage: products.length,
+  }
+}
+
+/**
+ * Bulk-fetch variant of getWooCollectionViewByHandle — pulls every product in
+ * the category so the client-side FilterableProductList sidebar can filter
+ * over the full set, mirroring the /produkty and SEO-taxonomy category pattern.
+ */
+export async function getWooCollectionViewAllByHandle(
+  handle: string,
+): Promise<CollectionView | null> {
+  const slug = normalizeCategorySlug(handle)
+  if (!slug || slug === 'ostatne') return null
+
+  const def = getCategoryDefinition(slug)
+  const result = await getWooProductsAccumulated({ category: slug, pages: 'all' })
+  const products = result.edges.map((e) => e.node)
+
+  return {
+    handle: slug,
+    title: def.title,
+    description: def.description ?? null,
+    products,
+    availableVendors: extractVendors(products),
+    source: 'catalog',
+    page: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
     totalOnPage: products.length,
   }
 }

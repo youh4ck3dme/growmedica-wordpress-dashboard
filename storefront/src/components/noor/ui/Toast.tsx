@@ -17,6 +17,10 @@ export interface ToastItem {
   title: string
   description?: string
   variant?: ToastVariant
+  action?: {
+    label: string
+    onClick: () => void
+  }
 }
 
 interface ToastContextValue {
@@ -69,6 +73,18 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <p className="noor-toast__title">{item.title}</p>
               {item.description ? (
                 <p className="noor-toast__description">{item.description}</p>
+              ) : null}
+              {item.action ? (
+                <button
+                  type="button"
+                  className="noor-toast__action"
+                  onClick={() => {
+                    item.action?.onClick()
+                    dismiss(item.id)
+                  }}
+                >
+                  {item.action.label}
+                </button>
               ) : null}
             </div>
             <button
