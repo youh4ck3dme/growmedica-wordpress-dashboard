@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process'
+import path from 'node:path'
 import type { NextConfig } from 'next'
 import withSerwistInit from '@serwist/next'
 import { getLegacyRedirectEntries } from './src/lib/category-map'
@@ -52,6 +53,8 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || '.next',
   poweredByHeader: false,
   compress: true,
+  // Limit file-tracing to storefront/ so Vercel upload excludes the monorepo parent.
+  outputFileTracingRoot: path.join(__dirname, './'),
   // N indicator only exists in `next dev` (localhost). Never in production builds.
   // Keep it on localhost but away from the assistant FAB (bottom-left).
   devIndicators: {
