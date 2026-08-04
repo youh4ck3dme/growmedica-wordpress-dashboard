@@ -2,14 +2,14 @@
 
 **Kanónický repo:** [youh4ck3dme/growmedica-wordpress-dashboard](https://github.com/youh4ck3dme/growmedica-wordpress-dashboard)  
 **Mirror:** [you640/growmedica-nextjs-2026](https://github.com/you640/growmedica-nextjs-2026)  
-**PR sync + CI fix:** [#15](https://github.com/youh4ck3dme/growmedica-wordpress-dashboard/pull/15)
+**PR sync + CI fix:** [#15 merged](https://github.com/youh4ck3dme/growmedica-wordpress-dashboard/pull/15) → `582b5e3`
 
 ## Sync stav
 
 | Zdroj | HEAD | Sync |
 |-------|------|------|
-| Cloud workspace / `origin/main` | `9442696` | baseline |
-| `you640/main` | `871b21f` | +3 commity (PR #15) |
+| Cloud workspace / `origin/main` | `582b5e3` | ✅ synced (PR #15 merged) |
+| `you640/main` | `871b21f` | syncnuté do canonical cez PR #15 |
 | Mac lokál | neoverené | spusti `git status` + `git log origin/main..HEAD` |
 
 ### Commity len na you640 (pred PR #15)
@@ -22,8 +22,7 @@
 
 | Check | Stav |
 |-------|------|
-| Canonical CI (youh4ck3dme) | červené od 2026-07-29 (unit testy `.ts` import) |
-| Fix v PR #15 | `node --experimental-strip-types` + `.nvmrc` 22.23.1 |
+| Canonical CI (youh4ck3dme) | ✅ fix merged v PR #15 (`--experimental-strip-types`) |
 | Lokálny smoke (PR branch) | `type-check` ✅ · `test:unit` 69/69 ✅ · `test:woo:integrity` 14/14 ✅ |
 
 **Príčina zlyhania:** unit testy importujú `.ts` súbory; Node 22.14 bez `--experimental-strip-types` padá s `ERR_UNKNOWN_FILE_EXTENSION`.

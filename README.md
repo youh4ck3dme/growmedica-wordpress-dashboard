@@ -24,8 +24,8 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 
 Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek prácou si prečítaj túto sekciu + [STATUS.md](./STATUS.md) + [AGENTS.md](./AGENTS.md).
 
-**Produkcia:** canonical `main` @ `9442696` · Vercel Production live · CI opravené v [PR #15](https://github.com/youh4ck3dme/growmedica-wordpress-dashboard/pull/15)  
-**Mirror:** `you640/growmedica-nextjs-2026` mal +3 commity (sync v PR #15)  
+**Produkcia:** canonical `main` @ `582b5e3` (PR #15 merged) · Vercel Production live · CI fix merged  
+**Mirror:** `you640/growmedica-nextjs-2026` — syncnuté cez PR #15; zatvoriť stale PR #1–#3 **ručne**  
 **Shop predáva** cez BACS + COD. Shopify runtime **nie je**.
 
 ### Hotové (funguje na produkcii)
