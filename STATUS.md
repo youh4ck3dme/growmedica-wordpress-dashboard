@@ -1,9 +1,10 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-07-29 (auth + analytics wiring)  
-**Branch:** `main`  
+**Aktualizované:** 2026-08-04 (deploy audit + you640 sync PR #15)  
+**Branch:** `main` (canonical) · mirror: `you640/growmedica-nextjs-2026`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
-**Last deploy:** `26bcf3f` (homepage full-bleed Pro Max + Finder merge)
+**Last deploy (canonical `main`):** `9442696` · **pending PR #15:** Vercel `@swc/helpers` fix + CI  
+**CI:** 🔧 opravené v PR #15 (`--experimental-strip-types` pre unit testy); predtým červené od 2026-07-29
 
 > **AI agent:** najprv [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29) — kanónický backlog.
 
@@ -29,6 +30,9 @@
 | SuperFaktúra WooCommerce 1.53.2 | ✅ plugin · **API key ešte majiteľ** |
 | DPH interim (neplatca) | ✅ |
 | Facets / mega-menu / bundles / vendor audit | ✅ |
+| **Category UX overhaul** (departments, sidebar facets, badges) | ✅ 2026-08-04 · `94221fe` |
+| **Hide public stock quantities** | ✅ `8cde378` |
+| **Woo customer auth** `/prihlasenie` + `/profil` | ✅ 2026-07-29 · PR #14 |
 | **Shopify runtime odstránený** | ✅ |
 | **`/dashboard` Woo-only** | ✅ panely + agent tools |
 | Homepage reorder + Finder merge + Pro Max layout | ✅ 2026-07-28 · `26bcf3f` |
@@ -99,7 +103,7 @@ www.growmedica.cz (Next/Vercel, Woo only)
          └─ checkout /kontrola-objednavky (platba + doprava)
 ```
 
-Shopify runtime **odstránený**. Auth/profil storefrontu je zatiaľ **MOCK** (pozri P0).
+Shopify runtime **odstránený**. Auth/profil = **Woo BFF** (nie MOCK) · [AUTH.md](./storefront/docs/AUTH.md).
 
 ---
 
@@ -117,6 +121,8 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
 |-------|-----|
 | `/api/products` | `gid://woocommerce/...` |
 | Homepage Finder `#supplement-finder` | ✅ live |
+| Category departments / mega-menu UX | ✅ live (smoke `department` in HTML) |
+| Woo auth `/prihlasenie` | ✅ WooCommerce BFF (nie MOCK) |
 | Pro Max full-bleed (bez `main{zoom}`) | ✅ `26bcf3f` |
 | cms checkout | doprava + BACS/COD · CZ/AT/HU/PL |
 | `/dashboard` agent `list_orders` | ✅ Woo live |

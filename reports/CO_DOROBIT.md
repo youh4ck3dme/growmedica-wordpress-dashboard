@@ -1,7 +1,7 @@
 # Čo dorobiť — GrowMedica
 
 **Kanónický súhrn nedokončených vecí.**  
-**Aktualizované:** 2026-07-29  
+**Aktualizované:** 2026-08-04  
 
 > **AI agent:** plný backlog je v [../README.md § AI AGENT](../README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29).
 
@@ -41,9 +41,9 @@
 
 | # | Čo | Kto | Blokuje | Detail |
 |---|-----|-----|---------|--------|
-| A1 | **Reálna auth** `/prihlasenie` + `/profil` | agent | fake login „Jozef Novák“ | README § AI AGENT |
-| A2 | **Analytics** GTM/GA4/Pixel + consent | agent (+ majiteľ IDs) | žiadne meranie | Cookie banner existuje |
-| A3 | Meta title prihlásenie/profil/obľúbené | agent | SEO title fallback | `metadata` export |
+| A1 | **Reálna auth** `/prihlasenie` + `/profil` | ✅ agent | Woo BFF · [AUTH.md](../storefront/docs/AUTH.md) |
+| A2 | **Analytics** GTM/GA4/Pixel + consent | ✅ wiring | majiteľ IDs → Vercel |
+| A3 | Meta title prihlásenie/profil/obľúbené | ✅ agent | `metadata` export |
 | A4 | Wishlist rozhodnutie + implementácia | agent | localStorage-only | README § AI AGENT |
 | A5 | Dead CSS `.why-growmedica__*` | agent | dead code | `globals.css` |
 
