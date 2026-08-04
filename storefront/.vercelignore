@@ -1,10 +1,24 @@
+# dependencies — multiple patterns for reliability across Vercel CLI versions
 node_modules
+/node_modules
+**/node_modules
+
+# build output
 .next
+/.next
+
+# test artifacts
 playwright-report
 test-results
+
+# git
 .git
 
-# Parent monorepo dirs — not needed for storefront build
+# large public assets not needed at upload time
+public/sw*
+public/swe-worker*
+
+# parent monorepo dirs
 ../wordpress-data
 ../wordpress
 ../docs
