@@ -1,0 +1,32 @@
+# VS Code workspace specific files
+# These files are user-specific and should not be committed
+
+# User workspace state
+*.code-workspace
+workspace.code-workspace
+
+# User settings override (if you have local overrides)
+*.json
+!settings.json
+!extensions.json
+!launch.json
+!tasks.json
+
+# Local history
+history/
+
+# Debug breakpoints
+*.launch
+
+# Extension profiles
+profiles/
+
+# User data
+user/
+
+# Cache
+.cache/
+
+# Local state
+state.vscdb
+state.json

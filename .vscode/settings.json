@@ -1,4 +1,199 @@
 {
+  // ============================================================================
+  // NEXT.JS / REACT / TYPESCRIPT
+  // ============================================================================
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  
+  // Next.js specific
+  "nextjs.server.runtime": "nodejs",
+  "nextjs.server.logLevel": "info",
+  
+  // TypeScript
+  "typescript.check.mode": "strict",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.paths": true,
+  "typescript.preferences.importsNotUsedAsValues": "remove",
+  
+  // ============================================================================
+  // ESLINT / PRETTIER / FORMATTING
+  // ============================================================================
   "eslint.useFlatConfig": false,
-  "tailwindCSS.lint.suggestCanonicalClasses": "ignore"
+  "eslint.validate": ["typescript", "typescriptreact", "javascript", "javascriptreact"],
+  "eslint.run": "onType",
+  "eslint.workingDirectories": ["storefront"],
+  
+  // Prettier
+  "prettier.documentSelectors": ["**/*.{ts,tsx,css,json,md}"],
+  
+  // Format on save
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  
+  // ============================================================================
+  // EDITOR
+  // ============================================================================
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.wordWrap": "off",
+  "editor.rulers": [80, 120],
+  
+  // Auto imports
+  "typescript.suggest.autoImports": true,
+  "javascript.suggest.autoImports": true,
+  
+  // ============================================================================
+  // FILE EXCLUSIONS
+  // ============================================================================
+  "files.exclude": {
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/.pnp": true,
+    "**/.pnp.js": true,
+    "**/next-env.d.ts": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/coverage": true,
+    "**/.yarn": true,
+    "**/.cache": true,
+    "**/.parcel-cache": true,
+    "**/playwright-report": true
+  },
+  
+  "search.exclude": {
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.yarn": true
+  },
+  
+  // ============================================================================
+  // YARN / NPM
+  // ============================================================================
+  "npm.packageManager": "yarn",
+  "npm.autoDetect": "on",
+  
+  // ============================================================================
+  // PLAYWRIGHT / TESTING
+  // ============================================================================
+  "playwright.testBrowser": "chromium",
+  "playwright.useTraceViewer": true,
+  
+  // ============================================================================
+  // TAILWIND CSS
+  // ============================================================================
+  "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html"
+  },
+  
+  // ============================================================================
+  // DEBUG CONSOLE
+  // ============================================================================
+  "debug.console.fontSize": 12,
+  
+  // ============================================================================
+  // GIT
+  // ============================================================================
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  
+  // ============================================================================
+  // TERMINAL - Environment variables for local development
+  // ============================================================================
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.env.osx": {
+    "CMS_PROVIDER": "wordpress",
+    "WOO_MOCK_MODE": "1",
+    "WOO_CONSUMER_KEY": "ck_mock",
+    "WOO_CONSUMER_SECRET": "cs_mock",
+    "WORDPRESS_BASE_URL": "http://localhost:8080",
+    "WORDPRESS_REVALIDATION_SECRET": "mock-revalidation-secret-123456",
+    "SHOPIFY_MOCK_MODE": "1",
+    "SHOPIFY_STORE_DOMAIN": "mock-store.myshopify.com",
+    "SHOPIFY_STOREFRONT_ACCESS_TOKEN": "mock-storefront-token",
+    "SHOPIFY_REVALIDATION_SECRET": "mock-revalidation-secret-123456",
+    "SHOPIFY_API_VERSION": "2026-07",
+    "NEXT_PUBLIC_SITE_URL": "http://localhost:5555",
+    "NEXT_PUBLIC_DASHBOARD_URL": "http://localhost:8080/wp-admin",
+    "NEXT_PUBLIC_DASHBOARD_MODE": "hybrid",
+    "DASHBOARD_AGENT_SECRET": "local-dashboard-agent-secret-min-16-chars",
+    "MISTRAL_MOCK_MODE": "1",
+    "MISTRAL_API_KEY": "mock-mistral-api-key",
+    "MISTRAL_MODEL": "mistral-large-latest"
+  },
+  
+  // ============================================================================
+  // MARKDOWNLINT
+  // ============================================================================
+  "markdownlint.config": {
+    "MD013": false,
+    "MD033": false
+  },
+  
+  // ============================================================================
+  // EXTENSIONS
+  // ============================================================================
+  "extensions.autoCheck": true,
+  "extensions.autoUpdate": true,
+  
+  // ============================================================================
+  // PROBLEMS PANEL
+  // ============================================================================
+  "problems.decorations.enabled": true,
+  "problems.autoReveal": "onProblem",
+  
+  // ============================================================================
+  // WINDOW / WORKBENCH
+  // ============================================================================
+  "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${appName}",
+  "workbench.iconTheme": "default",
+  "workbench.colorTheme": "Default Dark+",
+  
+  // ============================================================================
+  // EDITOR - Additional settings
+  // ============================================================================
+  "editor.minimap.enabled": true,
+  "editor.renderWhitespace": "none",
+  "editor.renderControlCharacters": false,
+  
+  // ============================================================================
+  // FILES
+  // ============================================================================
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  
+  // ============================================================================
+  // EM MET
+  // ============================================================================
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+  
+  // ============================================================================
+  // JAVASCRIPT / TYPESCRIPT - Additional
+  // ============================================================================
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  
+  // ============================================================================
+  // NPM SCRIPTS - Favorites
+  // ============================================================================
+  "npm.scripts": {
+    "favorites": [
+      "dev",
+      "build",
+      "lint",
+      "type-check",
+      "test:integrity",
+      "diagnostic"
+    ]
+  }
 }

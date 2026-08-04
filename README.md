@@ -20,11 +20,12 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 
 ---
 
-## 🤖 AI AGENT — ČÍTAJ PRVÉ (aktualizované 2026-07-29)
+## 🤖 AI AGENT — ČÍTAJ PRVÉ (aktualizované 2026-08-04)
 
 Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek prácou si prečítaj túto sekciu + [STATUS.md](./STATUS.md) + [AGENTS.md](./AGENTS.md).
 
-**Produkcia:** commit `26bcf3f` na `main` · Vercel Production live · CI zelené.  
+**Produkcia:** canonical `main` @ `9442696` · Vercel Production live · CI opravené v [PR #15](https://github.com/youh4ck3dme/growmedica-wordpress-dashboard/pull/15)  
+**Mirror:** `you640/growmedica-nextjs-2026` mal +3 commity (sync v PR #15)  
 **Shop predáva** cez BACS + COD. Shopify runtime **nie je**.
 
 ### Hotové (funguje na produkcii)
@@ -34,7 +35,7 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 | 1 | Homepage layout | ✅ Hero → Finder → Trust → Kategórie → Featured → Balíčky · full-bleed aj Pro Max |
 | 2 | Supplement Finder (AI) | ✅ Spojený s „Prečo GrowMedica“ · 3 kroky · chipy · mobile stacked form |
 | 3 | Hero slider | ✅ 4 slidy · i18n · slide 1 CTA → `/#supplement-finder` |
-| 4 | Kategórie | ✅ Sync mega menu / footer / WP · SEO slug aliasy |
+| 4 | Kategórie | ✅ Departments mega-menu · sidebar facets · badges · `94221fe` |
 | 5 | Trust / IntentCompass | ✅ Trust badges na home · IntentCompass na non-home |
 | 6 | i18n CS / SK / EN / DE | ✅ Finder, hero, trust, produkty, kontakt, legal, auth UI |
 | 7 | Farmaceutický chatbot | ✅ Drawer · jazyk · product cards / warning / bundle |
@@ -44,7 +45,7 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 | 11 | Legal + content stránky | ✅ VOP, GDPR, FAQ, blog, veľkoobchod, kontakt — 200 OK |
 | 12 | PWA + cookie consent | ✅ SW · offline · banner · consent-gated FAB |
 | 13 | Dashboard + AI agent | ✅ Woo tools (orders, inventory, products) |
-| 14 | CI/CD | ✅ GH Actions + Vercel auto-deploy na `main` |
+| 14 | CI/CD | ✅ GH Actions + Vercel auto-deploy · CI fix PR #15 |
 | 15 | TypeScript / Woo cutover | ✅ tsc clean · Woo-only catalog |
 
 ### Nedokončené / nefunguje (treba opraviť)

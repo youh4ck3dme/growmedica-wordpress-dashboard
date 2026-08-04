@@ -1,0 +1,121 @@
+{
+  "recommendations": [
+    // ========================================================================
+    // CORE DEVELOPMENT
+    // ========================================================================
+    
+    // TypeScript
+    "vscode.typescript-next",
+    
+    // ESLint
+    "dbaeumer.vscode-eslint",
+    
+    // Prettier
+    "esbenp.prettier-vscode",
+    
+    // ========================================================================
+    // NEXT.JS / REACT
+    // ========================================================================
+    
+    // Next.js official extension
+    "ms-vscode.nextjs",
+    
+    // React tools
+    "facebook.react",
+    
+    // ========================================================================
+    // STYLING
+    // ========================================================================
+    
+    // Tailwind CSS IntelliSense
+    "bradlc.vscode-tailwindcss",
+    
+    // PostCSS Language Support
+    "csstools.postcss",
+    
+    // ========================================================================
+    // TESTING
+    // ========================================================================
+    
+    // Playwright Test for VS Code
+    "ms-playwright.playwright",
+    
+    // ========================================================================
+    // YARN / PACKAGE MANAGEMENT
+    // ========================================================================
+    
+    // Yarn
+    "gamunu.vscode-yarn",
+    
+    // ========================================================================
+    // MARKDOWN
+    // ========================================================================
+    
+    // Markdown Lint
+    "DavidAnson.vscode-markdownlint",
+    
+    // Markdown Preview Enhanced
+    "shd101wyy.markdown-preview-enhanced",
+    
+    // ========================================================================
+    // GIT / VERSION CONTROL
+    // ========================================================================
+    
+    // GitLens
+    "eamodio.gitlens",
+    
+    // Git Graph
+    "mhutchie.git-graph",
+    
+    // ========================================================================
+    // UTILITIES
+    // ========================================================================
+    
+    // Auto Rename Tag
+    "formulahendry.auto-rename-tag",
+    
+    // ES7+ React/Redux/React-Native snippets
+    "dsznajder.es7-react-js-snippets",
+    
+    // Auto Close Tag
+    "formulahendry.auto-close-tag",
+    
+    // Auto Import Suggestions
+    "steoates.autoimport",
+    
+    // Path Intellisense
+    "christian-kohler.path-intellisense",
+    
+    // ========================================================================
+    // DEBUGGING
+    // ========================================================================
+    
+    // Debugger for Chrome
+    "msjsdiag.debugger-for-chrome",
+    
+    // ========================================================================
+    // CODE QUALITY
+    // ========================================================================
+    
+    // SonarLint
+    "SonarSource.sonarlint-vscode",
+    
+    // TODO Highlight
+    "wayou.vscode-todo-highlight",
+    
+    // ========================================================================
+    // THEMES (Optional)
+    // ========================================================================
+    
+    // GitHub Theme
+    "GitHub.github-vscode-theme",
+    
+    // Material Icon Theme
+    "PKief.material-icon-theme"
+  ],
+  
+  "unwantedRecommendations": [
+    // Remove if you don't want these
+    "eg2.vscode-npm-script"
+  ]
+}

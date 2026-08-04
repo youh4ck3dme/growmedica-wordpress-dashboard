@@ -1,6 +1,6 @@
 # GrowMedica — TODO
 
-**Aktualizované:** 2026-07-29  
+**Aktualizované:** 2026-08-04  
 **AI backlog (kanón):** [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29)  
 **Súhrn čo dorobiť:** [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md)  
 **Hlavný stav:** [STATUS.md](./STATUS.md) · **Prevádzka:** [docs/OPERATIONS.md](./docs/OPERATIONS.md)  
@@ -18,6 +18,10 @@
 - [x] `/dashboard` Woo-only — panely + agent tools  
 - [x] Shopify runtime cleanup  
 - [x] Homepage: Finder merge + reorder + Pro Max full-bleed (`26bcf3f`, 2026-07-28)  
+- [x] Woo customer auth + analytics wiring (PR #14, 2026-07-29)  
+- [x] Category UX overhaul — departments, facets, badges (`94221fe`, 2026-08-04)  
+- [x] Vercel monorepo upload fix + `@swc/helpers` pin (PR #15 pending merge)  
+- [x] CI unit-test fix (`--experimental-strip-types`)  
 - [x] i18n CS/SK/EN/DE shop UI + AI finder/chat  
 
 ## Otvorené — agent (technické, podľa priority)

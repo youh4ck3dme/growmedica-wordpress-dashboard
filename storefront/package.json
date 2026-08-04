@@ -41,7 +41,7 @@
     "vercel:wordpress-env": "bash scripts/set-wordpress-vercel-env.sh",
     "test:ui": "playwright test --ui",
     "woo:smoke": "bash scripts/woo-smoke-test.sh",
-    "test:unit": "node --test tests/unit/*.test.mjs",
+    "test:unit": "node --experimental-strip-types --test tests/unit/*.test.mjs",
     "test:wordpress:local": "playwright test tests/integrity/wordpress-local.spec.ts --project=integrity",
     "test:quick": "yarn type-check && yarn test:unit && bash scripts/quick-diagnostic.sh",
     "test:all": "bash scripts/run-all-tests.sh",
@@ -56,9 +56,13 @@
     "bundles:images:dry": "node scripts/assign-bundle-images.mjs --prod --dry-run",
     "bundles:images:force": "node scripts/assign-bundle-images.mjs --prod --force"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@mistralai/mistralai": "^2.2.5",
     "@serwist/next": "^9.5.11",
+    "@swc/helpers": "0.5.15",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.17.0",
     "next": "^15.3.4",
