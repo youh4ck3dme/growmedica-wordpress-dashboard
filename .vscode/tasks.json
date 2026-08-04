@@ -1,0 +1,288 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ========================================================================
+    // DEVELOPMENT
+    // ========================================================================
+    {
+      "label": "Dev: Start Next.js Server",
+      "type": "npm",
+      "script": "dev",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront",
+      "problemMatcher": ["$eslint-stylish"],
+      "isBackground": true,
+      "options": {
+        "env": {
+          "NODE_ENV": "development",
+          "CMS_PROVIDER": "wordpress",
+          "WOO_MOCK_MODE": "1"
+        }
+      }
+    },
+    
+    // ========================================================================
+    // BUILD
+    // ========================================================================
+    {
+      "label": "Build: Next.js Production",
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "cwd": "${workspaceFolder}/storefront",
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    
+    // ========================================================================
+    // LINT & FORMAT
+    // ========================================================================
+    {
+      "label": "Lint: ESLint",
+      "type": "npm",
+      "script": "lint",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront",
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    
+    {
+      "label": "Type Check: TypeScript",
+      "type": "npm",
+      "script": "type-check",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront",
+      "problemMatcher": ["$tsc"]
+    },
+    
+    {
+      "label": "Format: Prettier",
+      "type": "npm",
+      "script": "format",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront"
+    },
+    
+    // ========================================================================
+    // TESTS
+    // ========================================================================
+    {
+      "label": "Test: Full Integrity",
+      "type": "npm",
+      "script": "test:integrity",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront",
+      "problemMatcher": ["$playwright"]
+    },
+    
+    {
+      "label": "Test: WordPress Integrity",
+      "type": "npm",
+      "script": "test:woo:integrity",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront",
+      "problemMatcher": ["$playwright"]
+    },
+    
+    {
+      "label": "Test: Dashboard Agent",
+      "type": "npm",
+      "script": "test:dashboard-agent",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront",
+      "problemMatcher": ["$playwright"]
+    },
+    
+    {
+      "label": "Test: i18n",
+      "type": "npm",
+      "script": "test:i18n",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront",
+      "problemMatcher": ["$playwright"]
+    },
+    
+    {
+      "label": "Test: Unit",
+      "type": "npm",
+      "script": "test:unit",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront"
+    },
+    
+    {
+      "label": "Test: Quick Diagnostic",
+      "type": "npm",
+      "script": "diagnostic",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront"
+    },
+    
+    {
+      "label": "Test: All (Local)",
+      "type": "npm",
+      "script": "test:all:local",
+      "group": "test",
+      "cwd": "${workspaceFolder}/storefront"
+    },
+    
+    // ========================================================================
+    // YARN COMMANDS
+    // ========================================================================
+    {
+      "label": "Yarn: Install Dependencies",
+      "type": "shell",
+      "command": "yarn install",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    
+    {
+      "label": "Yarn: Update Dependencies",
+      "type": "shell",
+      "command": "yarn upgrade",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    
+    // ========================================================================
+    // CLEANUP
+    // ========================================================================
+    {
+      "label": "Clean: Dev Artifacts",
+      "type": "npm",
+      "script": "clean:dev",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront"
+    },
+    
+    // ========================================================================
+    // ENVIRONMENT SETUP
+    // ========================================================================
+    {
+      "label": "Setup: Environment Variables",
+      "type": "shell",
+      "command": "bash scripts/setup-env.sh",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    
+    {
+      "label": "Pull: Environment from Vercel",
+      "type": "shell",
+      "command": "bash scripts/pull-env-from-vercel.sh",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    
+    // ========================================================================
+    // IMPORT SCRIPTS
+    // ========================================================================
+    {
+      "label": "Import: WooCommerce Categories",
+      "type": "npm",
+      "script": "import:categories",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront"
+    },
+    
+    {
+      "label": "Import: WooCommerce Products",
+      "type": "npm",
+      "script": "import:products",
+      "group": "none",
+      "cwd": "${workspaceFolder}/storefront"
+    },
+    
+    // ========================================================================
+    // COMPOSITE TASKS
+    // ========================================================================
+    {
+      "label": "Full Build & Test",
+      "dependsOn": [
+        "Lint: ESLint",
+        "Type Check: TypeScript",
+        "Test: Full Integrity",
+        "Test: Dashboard Agent",
+        "Test: i18n"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    
+    {
+      "label": "Quick Validation",
+      "dependsOn": [
+        "Lint: ESLint",
+        "Type Check: TypeScript",
+        "Test: Quick Diagnostic"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always"
+      }
+    }
+  ],
+  
+  "problemMatchers": [
+    {
+      "name": "eslint-stylish",
+      "owner": "eslint",
+      "fileLocation": ["relative", "${cwd}"],
+      "pattern": [
+        {
+          "regexp": "^.*/(.*):\s*line\s+(\d+),\s*col\s+(\d+),\s*(message\s*(.*))$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 5
+        },
+        {
+          "regexp": "^\s*(.*):\s*line\s+(\d+),\s*col\s+(\d+),\s*(message\s*(.*))$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 5
+        }
+      ]
+    },
+    {
+      "name": "tsc",
+      "owner": "typescript",
+      "fileLocation": ["relative", "${cwd}"],
+      "pattern": {
+        "regexp": "^.*(.*):(\d+):(\d+)\s*-\s*(.*)$",
+        "file": 1,
+        "line": 2,
+        "column": 3,
+        "message": 4
+      }
+    },
+    {
+      "name": "playwright",
+      "owner": "playwright",
+      "fileLocation": "absolute",
+      "pattern": {
+        "regexp": "^(.*):(\d+):(\d+):\s*(.*)$",
+        "file": 1,
+        "line": 2,
+        "column": 3,
+        "message": 4
+      }
+    }
+  ]
+}

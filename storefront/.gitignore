@@ -73,3 +73,4 @@ IMPORT_SHOPIFY_TO_WOO_REPORT.json
 # Local secrets
 .env.local
 .dashboard-secret.local.txt
+.env*

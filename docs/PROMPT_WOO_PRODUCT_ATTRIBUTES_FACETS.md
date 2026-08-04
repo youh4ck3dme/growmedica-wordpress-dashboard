@@ -1,8 +1,8 @@
 # Prompt — nové WooCommerce product attributes pre facety (certifikáty / veková skupina / hmotnosť / špecifické potreby)
 
 **Účel:** skopíruj blok nižšie agentovi (Cursor / WP admin) na CMS strane, aby sa doplnili chýbajúce WooCommerce product attributes potrebné pre zvyšok Fázy 3 storefront filtrov (sidebar facety na `/produkty`, `/kategorie/*`, `/kolekcie/*`).
-**CMS:** https://cms.growmedica.cz/wp-admin
-**E-shop:** https://www.growmedica.cz
+**CMS:** <https://cms.growmedica.cz/wp-admin>
+**E-shop:** <https://www.growmedica.cz>
 **Dátum:** 2026-08-04
 **Kontext:** storefront strana (rating facet + ProductCard Bestseller/Novinka badge) je už implementovaná a nasadená (`Growmedica-front+DASHBOARD/growmedica-wordpress-dashboard/storefront`). Tento dokument rieši len chýbajúci krok — nové Woo product attributes — bez ktorých nemôže storefront zobraziť zvyšné facety.
 

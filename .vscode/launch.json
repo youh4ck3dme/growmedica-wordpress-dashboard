@@ -1,0 +1,159 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    // ========================================================================
+    // NEXT.JS DEVELOPMENT SERVER
+    // ========================================================================
+    {
+      "name": "Next.js: Development",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"],
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    
+    // ========================================================================
+    // NEXT.JS PRODUCTION SERVER
+    // ========================================================================
+    {
+      "name": "Next.js: Production",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["start"],
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    
+    // ========================================================================
+    // NEXT.JS BUILD
+    // ========================================================================
+    {
+      "name": "Next.js: Build",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["build"],
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    
+    // ========================================================================
+    // NEXT.JS LINT
+    // ========================================================================
+    {
+      "name": "Next.js: Lint",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["lint"],
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    
+    // ========================================================================
+    // NEXT.JS TYPE CHECK
+    // ========================================================================
+    {
+      "name": "Next.js: Type Check",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["type-check"],
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    
+    // ========================================================================
+    // PLAYWRIGHT TESTS
+    // ========================================================================
+    {
+      "name": "Playwright: Run Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["test:integrity"],
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    
+    {
+      "name": "Playwright: Debug Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["test:integrity", "--debug"],
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    
+    // ========================================================================
+    // DIAGNOSTIC
+    // ========================================================================
+    {
+      "name": "Diagnostic: Quick Check",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["diagnostic"],
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    
+    // ========================================================================
+    // CUSTOM: NODE DEBUG
+    // ========================================================================
+    {
+      "name": "Node: Current File",
+      "type": "node",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}/storefront",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    
+    // ========================================================================
+    // CHROME DEBUGGING
+    // ========================================================================
+    {
+      "name": "Chrome: Attach",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "url": "http://localhost:5555",
+      "webRoot": "${workspaceFolder}/storefront"
+    },
+    
+    {
+      "name": "Chrome: Launch",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5555",
+      "webRoot": "${workspaceFolder}/storefront"
+    }
+  ],
+  
+  "compounds": [
+    {
+      "name": "Full Development Setup",
+      "configurations": ["Next.js: Development", "Chrome: Launch"]
+    },
+    {
+      "name": "Build & Test",
+      "configurations": ["Next.js: Build", "Playwright: Run Tests"]
+    }
+  ]
+}
