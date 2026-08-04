@@ -3,3 +3,13 @@ node_modules
 playwright-report
 test-results
 .git
+
+# Parent monorepo dirs — not needed for storefront build
+../wordpress-data
+../wordpress
+../docs
+../reports
+../scripts
+../canvases
+../.tools
+../.cursor
