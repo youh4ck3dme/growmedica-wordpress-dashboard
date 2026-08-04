@@ -3,8 +3,7 @@
 **Aktualizované:** 2026-08-04 (deploy audit + you640 sync PR #15)  
 **Branch:** `main` (canonical) · mirror: `you640/growmedica-nextjs-2026`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
-**Last deploy (canonical `main`):** `9442696` · **pending PR #15:** Vercel `@swc/helpers` fix + CI  
-**CI:** 🔧 opravené v PR #15 (`--experimental-strip-types` pre unit testy); predtým červené od 2026-07-29
+**Last deploy (canonical `main`):** `582b5e3` (PR #15 merged 2026-08-04) · Vercel redeploy pending confirmation
 
 > **AI agent:** najprv [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29) — kanónický backlog.
 
