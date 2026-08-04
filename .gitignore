@@ -57,5 +57,10 @@ docs/Prihlasovacie*
 .env.local
 .dashboard-secret.local.txt
 
+# Local API key dumps (WooCommerce REST keys etc. — never commit)
+klucerestapi.md
+*kluce*.md
+*.secret.md
+
 # Local Vercel env dump (secrets)
 docs/VERCEL_PRODUCTION_ENV_VALUES.txt
