@@ -2,8 +2,11 @@
 
 **Pre koho:** majiteľ firmy / prevádzkovateľ e-shopu (nie developer).  
 **Jazyk:** jednoduché body — *čo*, *kde získaš*, *kam vložiť* / *komu poslať*.  
-**Dátum:** 2026-07-19  
+**Dátum:** 2026-07-19 (incident CMS: 2026-08-07)  
 **Súhrn čo dorobiť:** [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md)
+
+> **🔴 URGENT (2026-08-07):** E-shop **nepredáva** — `cms.growmedica.cz` hlási chybu databázy.  
+> Postup: [reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md) (WebSupport panel → MySQL → SSH `wp db check`).
 
 | Odkaz | |
 |-------|--|
