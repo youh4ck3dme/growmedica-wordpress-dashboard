@@ -1,9 +1,13 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-08-04 (deploy audit + you640 sync PR #15)  
+**Aktualizované:** 2026-08-07 (CMS DB výpadok — produkčný smoke ❌)  
 **Branch:** `main` (canonical) · mirror: `you640/growmedica-nextjs-2026`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
-**Last deploy (canonical `main`):** `582b5e3` (PR #15 merged 2026-08-04) · Vercel redeploy pending confirmation
+**Last deploy (canonical `main`):** `e230bcb` · **CMS 🔴 DB connection error**
+
+> **🔴 INCIDENT (2026-08-07):** `cms.growmedica.cz` — WordPress „Chyba pri nadväzovaní spojenia s databázou“ (HTTP 500).  
+> `/api/products` na www → 500. Checkout, auth, Woo REST nefungujú.  
+> Runbook: **[reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md)** · oprava = **majiteľ / WebSupport** (SSH + MySQL panel).
 
 > **AI agent:** najprv [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29) — kanónický backlog.
 
@@ -106,7 +110,7 @@ Shopify runtime **odstránený**. Auth/profil = **Woo BFF** (nie MOCK) · [AUTH.
 
 ---
 
-## Produkčný smoke
+## Produkčný smoke (2026-08-07)
 
 ```bash
 cd storefront
@@ -116,15 +120,22 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
   https://www.growmedica.cz/api/dashboard/health
 ```
 
-| Check | OK |
-|-------|-----|
-| `/api/products` | `gid://woocommerce/...` |
-| Homepage Finder `#supplement-finder` | ✅ live |
-| Category departments / mega-menu UX | ✅ live (smoke `department` in HTML) |
-| Woo auth `/prihlasenie` | ✅ WooCommerce BFF (nie MOCK) |
-| Pro Max full-bleed (bez `main{zoom}`) | ✅ `26bcf3f` |
-| cms checkout | doprava + BACS/COD · CZ/AT/HU/PL |
-| `/dashboard` agent `list_orders` | ✅ Woo live |
+**Posledný beh:** ❌ `production:smoke` zlyhal — `/api/products` HTTP 500 (`Failed to fetch products`).  
+**Príčina:** CMS MySQL nedostupné (viď incident report).
+
+| Check | 2026-08-07 |
+|-------|------------|
+| `/api/products` | ❌ HTTP 500 (CMS DB down) |
+| `cms.growmedica.cz` Woo REST | ❌ HTTP 500 |
+| `cms…/kontrola-objednavky` | ❌ HTTP 500 |
+| Homepage `/` | ✅ HTTP 200 (cache/static) |
+| `/kosik`, `/prihlasenie` | ✅ HTTP 200 (UI; checkout/auth nefunguje) |
+| `/api/dashboard/health` | ✅ `{"ok":true}` |
+| Homepage Finder `#supplement-finder` | ✅ (cached) |
+| Woo auth BFF | ❌ blocked by CMS |
+| cms checkout + gm_cart | ❌ blocked by CMS |
+| `/dashboard` agent `list_orders` | ❌ blocked by CMS |
+| `smoke-woo-countries` | ⏸️ preskočené (chýba `wordpress-production.local.env`) |
 
 ---
 
