@@ -234,6 +234,7 @@ curl -s 'https://www.growmedica.cz/api/products?limit=1' | head -c 200
 | Checkout 404 | cms stránky Woo (pokladňa) |
 | E-mail nejde | FluentSMTP / snippet na cms, nie Vercel |
 | Staré dáta na stránke | revalidate / ISR secret |
+| Obrázky produktov 402 / `_next/image` | Vercel Image Optimization quota — default `unoptimized` v `next.config.ts`; CMS URL priamo. Pro: `NEXT_IMAGE_OPTIMIZATION=1` |
 
 Diagnostika: [../storefront/docs/DIAGNOSTICS.md](../storefront/docs/DIAGNOSTICS.md)
 

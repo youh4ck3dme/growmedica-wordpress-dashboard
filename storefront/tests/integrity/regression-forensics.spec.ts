@@ -54,6 +54,12 @@ test.describe('Forensic regression guards', () => {
     expect(card).not.toContain('cdn.shopify.com')
   })
 
+  test('next.config bypasses Vercel Image Optimization by default (402 guard)', () => {
+    const config = read('next.config.ts')
+    expect(config).toContain('NEXT_IMAGE_OPTIMIZATION')
+    expect(config).toContain('unoptimized:')
+  })
+
   test('ISR revalidate uses header secret (not query in production)', () => {
     const route = read('src/app/api/revalidate/route.ts')
     expect(route).toContain('x-revalidation-secret')
