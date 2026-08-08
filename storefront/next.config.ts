@@ -61,6 +61,10 @@ const nextConfig: NextConfig = {
     position: 'bottom-right',
   },
   images: {
+    // Woo catalog (~500 products × gallery sizes) exhausts Vercel Hobby Image Optimization
+    // quota → /_next/image returns 402. CMS images load fine directly from cms.growmedica.cz.
+    // Set NEXT_IMAGE_OPTIMIZATION=1 on Vercel Pro when quota allows.
+    unoptimized: process.env.NEXT_IMAGE_OPTIMIZATION !== '1',
     remotePatterns: [
       {
         protocol: 'https',

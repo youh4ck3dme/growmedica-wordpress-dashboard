@@ -41,6 +41,15 @@ const serwist = new Serwist({
       handler: new NetworkOnly(),
     },
     {
+      matcher: ({ url }) => url.pathname.startsWith('/_next/image'),
+      handler: new NetworkOnly(),
+    },
+    {
+      matcher: ({ url }) =>
+        url.hostname === 'cms.growmedica.cz' && url.pathname.startsWith('/wp-content/uploads/'),
+      handler: new NetworkOnly(),
+    },
+    {
       matcher: ({ request, sameOrigin, url }) =>
         sameOrigin && request.mode === 'navigate' && !isDashboardPath(url.pathname),
       handler: new NetworkFirst({
