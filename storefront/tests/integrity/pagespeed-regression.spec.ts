@@ -10,13 +10,14 @@ test.describe('PageSpeed regression guards', () => {
     expect(content).toContain('export default async function HomePage()')
   })
 
-  test('product cards avoid raw Shopify CDN urls', async () => {
+  test('product cards use next/image and Woo-safe image helper', async () => {
     const cardPath = path.join(process.cwd(), 'src/components/product/ProductCard.tsx')
     expect(fs.existsSync(cardPath)).toBe(true)
     const content = fs.readFileSync(cardPath, 'utf8')
-    // Make sure next/image is used instead of raw img tags for Shopify CDN
     expect(content).toContain("import Image from 'next/image'")
-    expect(content).toContain('getShopifySizedImageUrl')
+    expect(content).toContain('getSizedImageUrl')
+    expect(content).not.toContain('getShopifySizedImageUrl')
+    expect(content).not.toContain('cdn.shopify.com')
   })
 
   test('announcement bar reserves layout space when enabled', async () => {

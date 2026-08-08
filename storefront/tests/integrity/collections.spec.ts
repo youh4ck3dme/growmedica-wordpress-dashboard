@@ -41,14 +41,14 @@ test.describe('Collections — catalog navigation', () => {
     expect(fs.existsSync(pagePath)).toBe(true)
     const content = fs.readFileSync(pagePath, 'utf8')
     expect(content).toContain('CollectionHero')
-    expect(content).toContain('ProductGrid')
+    expect(content).toContain('FilterableProductList')
   })
 
   test('/kolekcie/regeneracia zobrazí produkty', async () => {
     const pagePath = path.join(process.cwd(), 'src/app/kolekcie/[handle]/page.tsx')
     const content = fs.readFileSync(pagePath, 'utf8')
     expect(content).toContain('CollectionHero')
-    expect(content).toContain('ProductGrid')
+    expect(content).toContain('FilterableProductList')
   })
 
   test('/kolekcie/frontpage vracia 404', async () => {

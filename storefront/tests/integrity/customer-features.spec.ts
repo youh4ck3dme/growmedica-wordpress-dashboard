@@ -80,20 +80,19 @@ test.describe('Customer Experience Features - Static Integrity Tests', () => {
     expect(reviewsContent).toContain("handleSubmit")
   })
 
-  test('4. Zákaznícka zóna a Vernostný program', () => {
-    // Verify login page structure
+  test('4. Zákaznícka zóna — Woo BFF auth (nie localStorage session)', () => {
     expect(existsSync(LOGIN_PAGE_PATH)).toBe(true)
     const loginContent = readFileSync(LOGIN_PAGE_PATH, 'utf8')
-    expect(loginContent).toContain('Prihlásenie')
-    expect(loginContent).toContain("localStorage.setItem('gm_user_session'")
+    expect(loginContent).toContain('/api/auth/login')
+    expect(loginContent).toContain('/api/auth/register')
+    expect(loginContent).toContain("new Event('auth-updated')")
+    expect(loginContent).not.toContain("localStorage.setItem('gm_user_session'")
 
-    // Verify profile page structure and rewards redemption
     expect(existsSync(PROFILE_PAGE_PATH)).toBe(true)
     const profileContent = readFileSync(PROFILE_PAGE_PATH, 'utf8')
-    expect(profileContent).toContain("localStorage.getItem('gm_user_session')")
-    expect(profileContent).toContain("handleRedeem")
-    expect(profileContent).toContain("handleApplyCouponToCart")
-    expect(profileContent).toContain("ZLAVA10")
-    expect(profileContent).toContain("DOPRAVAFREE")
+    expect(profileContent).toContain('/api/auth/me')
+    expect(profileContent).toContain('/api/auth/logout')
+    expect(profileContent).toContain('handleLogout')
+    expect(profileContent).not.toContain("localStorage.getItem('gm_user_session')")
   })
 })
