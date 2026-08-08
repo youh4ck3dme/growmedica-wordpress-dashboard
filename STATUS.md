@@ -1,9 +1,13 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-08-08 (live catalog visibility audit)  
+**Aktualizované:** 2026-08-08 (CMS DB incident recovery + live catalog visibility; katalóg ✅ po Vercel env redeploy)  
 **Branch:** `main` (canonical) · mirror: `you640/growmedica-nextjs-2026`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
-**Last deploy (canonical `main`):** `582b5e3` (PR #15 merged 2026-08-04) · Vercel redeploy pending confirmation
+**Vercel team:** `h4ck3d` / `growmedica-wordpress-dashboard`  
+**Last deploy:** CMS ✅ · www katalóg ✅ (`production:smoke` passed 2026-08-08)
+
+> **INCIDENT (2026-08-07/08) — vyriešené:** CMS DB `1045 Access denied` (wp-config password mismatch). Obnovovací pipeline: `python3 scripts/cms-db-recover-from-runtime.py` (Runtime Secrets: `DB_*`).  
+> Runbook: **[reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md)** · katalóg audit: **[reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md)**
 
 > **AI agent:** najprv [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29) — kanónický backlog.
 
@@ -79,7 +83,7 @@ Detail tabuliek: [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-ak
 | 9 | **IČ DPH / DPH 20 %** | účtovné rozhodnutie |
 | 10 | **SuperFaktúra** — registrácia + API (body **2a–2j**) | [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) |
 | 11 | **GTM / GA4 / Pixel IDs** | merchant účty — agent zapojí po dodaní ID |
-| 12 | **Vercel Woo env** (`WOO_CONSUMER_KEY`, `WOO_CONSUMER_SECRET`, `WORDPRESS_BASE_URL`) | www `/api/products` → 500; CMS má 496 publish produktov · [report](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) |
+| 12 | ~~**Vercel Woo env**~~ | ✅ 2026-08-08 — `WOO_*` + `WORDPRESS_BASE_URL` na `h4ck3d/growmedica-wordpress-dashboard`, redeploy OK · [report](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) |
 
 ---
 
@@ -112,20 +116,26 @@ Shopify runtime **odstránený**. Auth/profil = **Woo BFF** (nie MOCK) · [AUTH.
 ```bash
 cd storefront
 PREVIEW_URL=https://www.growmedica.cz yarn production:smoke
-curl -s 'https://www.growmedica.cz/api/products?limit=1' | head -c 200
+curl -s 'https://www.growmedica.cz/api/products?limit=3' | head -c 200
 curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
   https://www.growmedica.cz/api/dashboard/health
 ```
 
-| Check | OK |
-|-------|-----|
-| `/api/products` | ❌ **HTTP 500** (2026-08-08) — Vercel `WOO_*` / `WORDPRESS_BASE_URL` handoff · [report](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) |
+**Posledný beh (2026-08-08):** ✅ `production:smoke` passed po Vercel env upsert + redeploy (`h4ck3d`).
+
+| Check | Stav |
+|-------|------|
+| `/api/products` | ✅ HTTP 200 (496 publish na CMS) |
+| PDP `/produkty/beauty-and-care-pack` | ✅ HTTP 200 |
+| `cms.growmedica.cz` / wp-json | ✅ HTTP 200 |
 | Homepage Finder `#supplement-finder` | ✅ live |
-| Category departments / mega-menu UX | ✅ live (smoke `department` in HTML) |
+| Category departments / mega-menu UX | ✅ live |
 | Woo auth `/prihlasenie` | ✅ WooCommerce BFF (nie MOCK) |
-| Pro Max full-bleed (bez `main{zoom}`) | ✅ `26bcf3f` |
-| cms checkout | doprava + BACS/COD · CZ/AT/HU/PL |
+| cms checkout + gm_cart | ✅ (CMS DB obnovené) |
 | `/dashboard` agent `list_orders` | ✅ Woo live |
+| ISR `/api/revalidate` (zlý secret) | ✅ 401 (endpoint OK; secret alignment voliteľné) |
+| mu-plugins checkout/auth/revalidate | ✅ na CMS |
+| Obnovovací skript `cms-db-recover-from-runtime.py` | ✅ pripravený (vyžaduje Runtime Secrets v agent VM) |
 
 ---
 

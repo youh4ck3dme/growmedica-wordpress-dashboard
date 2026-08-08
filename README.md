@@ -20,13 +20,18 @@ Headless e-shop: **Next.js 15** (Vercel) + **WordPress/WooCommerce** CMS.
 
 ---
 
-## 🤖 AI AGENT — ČÍTAJ PRVÉ (aktualizované 2026-08-04)
+## 🤖 AI AGENT — ČÍTAJ PRVÉ (aktualizované 2026-08-07)
 
 Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek prácou si prečítaj túto sekciu + [STATUS.md](./STATUS.md) + [AGENTS.md](./AGENTS.md).
 
-**Produkcia:** canonical `main` @ `582b5e3` (PR #15 merged) · Vercel Production live · CI fix merged  
-**Mirror:** `you640/growmedica-nextjs-2026` — syncnuté cez PR #15; zatvoriť stale PR #1–#3 **ručne**  
-**Shop predáva** cez BACS + COD. Shopify runtime **nie je**.
+**🔴 INCIDENT:** `cms.growmedica.cz` — **Chyba pri nadväzovaní spojenia s databázou** (HTTP 500).  
+Katalóg API, checkout, auth a Woo REST **nefungujú**. Runbook: [reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md).  
+**Oprava:** Runtime Secrets → `python3 scripts/cms-db-recover-from-runtime.py` · [incident report](./reports/CMS_DB_INCIDENT_2026-08-07.md).  
+Tento cloud beh: **`DB_*` secrets nie sú v `process.env`** (linked environment chýba) — reštart agenta s Cloud Environment, kde sú secrets nastavené.
+
+**Produkcia:** canonical `main` @ `e230bcb` · Vercel www beží · **CMS DB down**  
+**Mirror:** `you640/growmedica-nextjs-2026`  
+**Shop predáva** cez BACS + COD — **⏸️ pozastavené počas CMS výpadku**. Shopify runtime **nie je**.
 
 ### Hotové (funguje na produkcii)
 
@@ -52,6 +57,7 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 
 | # | Problém | Závažnosť | Detail |
 | --- | --------- | ----------- | -------- |
+| 0 | **CMS databáza down** | 🔴 **P0 kritické** | `cms.growmedica.cz` HTTP 500 · [incident report](./reports/CMS_DB_INCIDENT_2026-08-07.md) · WebSupport MySQL |
 | 1 | ~~Prihlásenie MOCK~~ | ✅ | Woo auth BFF — [storefront/docs/AUTH.md](./storefront/docs/AUTH.md) |
 | 2 | ~~Profil MOCK~~ | ✅ | Reálne adresy + Woo objednávky |
 | 3 | Obľúbené (wishlist) | Stredné | UI `/oblubene` + `WishlistButton` = len localStorage, bez sync s účtom. |
@@ -67,6 +73,7 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 
 #### P0 — kritické
 
+0. **Obnoviť CMS MySQL** — WebSupport panel + SSH (`scripts/setup-cms-production.sh`) → potom `yarn production:smoke`  
 1. ~~Reálna autentifikácia~~ ✅ — [storefront/docs/AUTH.md](./storefront/docs/AUTH.md)  
 2. Analytics — wiring ✅; **majiteľ musí dodať** `NEXT_PUBLIC_GTM_ID` / GA4 / Pixel na Vercel.
 

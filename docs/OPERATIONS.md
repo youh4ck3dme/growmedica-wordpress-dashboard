@@ -229,6 +229,7 @@ curl -s 'https://www.growmedica.cz/api/products?limit=1' | head -c 200
 | Problém | Kam |
 |---------|-----|
 | Katalóg prázdny / 500 | Vercel logs + `WOO_*` env + cms up |
+| CMS DB connection error | [reports/CMS_DB_INCIDENT_2026-08-07.md](../reports/CMS_DB_INCIDENT_2026-08-07.md) · `python3 scripts/cms-db-recover-from-runtime.py` |
 | Košík prázdny medzi requestami | cookie cart, `/api/cart` |
 | Checkout 404 | cms stránky Woo (pokladňa) |
 | E-mail nejde | FluentSMTP / snippet na cms, nie Vercel |
