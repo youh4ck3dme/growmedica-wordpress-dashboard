@@ -1,13 +1,13 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-08-07 (CMS DB výpadok — produkčný smoke ❌)  
+**Aktualizované:** 2026-08-08 (CMS DB incident — runtime secrets pipeline pripravený)  
 **Branch:** `main` (canonical) · mirror: `you640/growmedica-nextjs-2026`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
-**Last deploy (canonical `main`):** `e230bcb` · **CMS 🔴 DB connection error**
+**Last deploy (canonical `main`):** `e230bcb` · **CMS 🔴 DB connection error (wp-config password mismatch)**
 
-> **🔴 INCIDENT (2026-08-07):** `cms.growmedica.cz` — WordPress „Chyba pri nadväzovaní spojenia s databázou“ (HTTP 500).  
-> `/api/products` na www → 500. Checkout, auth, Woo REST nefungujú.  
-> Runbook: **[reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md)** · oprava = **majiteľ / WebSupport** (SSH + MySQL panel).
+> **🔴 INCIDENT (2026-08-08):** SSH diagnóza: `Access denied for user '5GckMhNYkGYDr2JK'` — `wp-config.php` DB heslo ≠ WebSupport MySQL.  
+> **Obnova:** `python3 scripts/cms-db-recover-from-runtime.py` (vyžaduje Runtime Secrets v `process.env`: `DB_HOSTNAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE`).  
+> Runbook: **[reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md)**
 
 > **AI agent:** najprv [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29) — kanónický backlog.
 
@@ -123,8 +123,11 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
 **Posledný beh:** ❌ `production:smoke` zlyhal — `/api/products` HTTP 500 (`Failed to fetch products`).  
 **Príčina:** CMS MySQL nedostupné (viď incident report).
 
-| Check | 2026-08-07 |
+| Check | 2026-08-08 |
 |-------|------------|
+| Runtime secrets v agent VM | ❌ `DB_*` MISSING (`environment: null`) |
+| SSH root cause | ✅ `1045 Access denied` — wp-config password mismatch |
+| mu-plugins checkout/auth/homepage | ✅ nahraté na CMS (SFTP) |
 | `/api/products` | ❌ HTTP 500 (CMS DB down) |
 | `cms.growmedica.cz` Woo REST | ❌ HTTP 500 |
 | `cms…/kontrola-objednavky` | ❌ HTTP 500 |

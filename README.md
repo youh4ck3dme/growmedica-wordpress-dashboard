@@ -26,7 +26,8 @@ Toto je **kanónický backlog** pre každého AI agenta. Pred akoukoľvek práco
 
 **🔴 INCIDENT:** `cms.growmedica.cz` — **Chyba pri nadväzovaní spojenia s databázou** (HTTP 500).  
 Katalóg API, checkout, auth a Woo REST **nefungujú**. Runbook: [reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md).  
-**Oprava:** majiteľ / WebSupport (MySQL panel + SSH) — agent nemá `wordpress-production.local.env`.
+**Oprava:** Runtime Secrets → `python3 scripts/cms-db-recover-from-runtime.py` · [incident report](./reports/CMS_DB_INCIDENT_2026-08-07.md).  
+Tento cloud beh: **`DB_*` secrets nie sú v `process.env`** (linked environment chýba) — reštart agenta s Cloud Environment, kde sú secrets nastavené.
 
 **Produkcia:** canonical `main` @ `e230bcb` · Vercel www beží · **CMS DB down**  
 **Mirror:** `you640/growmedica-nextjs-2026`  

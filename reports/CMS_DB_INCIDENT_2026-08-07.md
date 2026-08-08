@@ -1,7 +1,8 @@
 # CMS databázový výpadok — incident report
 
 **Dátum diagnostiky:** 2026-08-07 (UTC)  
-**Stav:** 🔴 **AKTÍVNY** — predaj a katalóg API nefungujú  
+**Stav:** 🔴 **AKTÍVNY** (2026-08-08) — runtime secrets pripravené, sync čaká na injekciu do agenta  
+**Posledný test:** `test-cms-connection-full.sh` — CMS HTTP 500, production smoke ❌
 **Hosting:** WebSupport (`shell.r1.websupport.sk`, WP path `growmedica.cz/sub/cms`)
 
 ---
@@ -46,7 +47,22 @@ WordPress na `https://cms.growmedica.cz` vracia HTTP **500** s titulkom **„Chy
 | **Server** | `openresty` (WebSupport reverse proxy) |
 | **Pravdepodobné dôvody** | MySQL služba down · expirovaná DB kvóta · zmenené DB heslo v paneli · nesprávny `DB_HOST` · max connections · disk full |
 
-Agent **nemá** prístup k `wordpress-production.local.env` ani `WEBSUPPORT_SSH_PASS` v tomto prostredí → **oprava vyžaduje majiteľa / WebSupport support**.
+Agent **nemá** prístup k `wordpress-production.local.env` v cloud VM, pokiaľ nie sú **Runtime Secrets** injikované do `process.env` (tento beh: `environment: null`, DB_* = MISSING).
+
+**Root cause (SSH 2026-08-08):** `Access denied for user '5GckMhNYkGYDr2JK'` — heslo v `wp-config.php` nesedí s WebSupport MySQL panelom.
+
+**Obnova (keď sú runtime secrets v process.env):**
+
+```bash
+python3 scripts/cms-db-recover-from-runtime.py
+# alebo:
+./scripts/bootstrap-runtime-secrets-env.sh
+export WEBSUPPORT_SSH_PASS=…  # ak je v runtime secrets
+./scripts/sync-wp-config-db-from-env.sh
+./scripts/test-cms-connection-full.sh
+```
+
+Mu-plugins na CMS doplnené cez SFTP (2026-08-08): `growmedica-checkout-seed.php`, `growmedica-customer-auth.php`, `growmedica-clean-homepage.php`.
 
 ---
 
