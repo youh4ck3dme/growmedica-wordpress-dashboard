@@ -1,13 +1,13 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-08-08 (CMS DB incident — runtime secrets pipeline pripravený)  
+**Aktualizované:** 2026-08-08 (CMS DB incident recovery + live catalog visibility; katalóg ✅ po Vercel env redeploy)  
 **Branch:** `main` (canonical) · mirror: `you640/growmedica-nextjs-2026`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
-**Last deploy (canonical `main`):** `e230bcb` · **CMS 🔴 DB connection error (wp-config password mismatch)**
+**Vercel team:** `h4ck3d` / `growmedica-wordpress-dashboard`  
+**Last deploy:** CMS ✅ · www katalóg ✅ (`production:smoke` passed 2026-08-08)
 
-> **🔴 INCIDENT (2026-08-08):** SSH diagnóza: `Access denied for user '5GckMhNYkGYDr2JK'` — `wp-config.php` DB heslo ≠ WebSupport MySQL.  
-> **Obnova:** `python3 scripts/cms-db-recover-from-runtime.py` (vyžaduje Runtime Secrets v `process.env`: `DB_HOSTNAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE`).  
-> Runbook: **[reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md)**
+> **INCIDENT (2026-08-07/08) — vyriešené:** CMS DB `1045 Access denied` (wp-config password mismatch). Obnovovací pipeline: `python3 scripts/cms-db-recover-from-runtime.py` (Runtime Secrets: `DB_*`).  
+> Runbook: **[reports/CMS_DB_INCIDENT_2026-08-07.md](./reports/CMS_DB_INCIDENT_2026-08-07.md)** · katalóg audit: **[reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md)**
 
 > **AI agent:** najprv [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-aktualizované-2026-07-29) — kanónický backlog.
 
@@ -83,6 +83,7 @@ Detail tabuliek: [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-ak
 | 9 | **IČ DPH / DPH 20 %** | účtovné rozhodnutie |
 | 10 | **SuperFaktúra** — registrácia + API (body **2a–2j**) | [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) |
 | 11 | **GTM / GA4 / Pixel IDs** | merchant účty — agent zapojí po dodaní ID |
+| 12 | ~~**Vercel Woo env**~~ | ✅ 2026-08-08 — `WOO_*` + `WORDPRESS_BASE_URL` na `h4ck3d/growmedica-wordpress-dashboard`, redeploy OK · [report](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) |
 
 ---
 
@@ -110,35 +111,31 @@ Shopify runtime **odstránený**. Auth/profil = **Woo BFF** (nie MOCK) · [AUTH.
 
 ---
 
-## Produkčný smoke (2026-08-07)
+## Produkčný smoke
 
 ```bash
 cd storefront
 PREVIEW_URL=https://www.growmedica.cz yarn production:smoke
-curl -s 'https://www.growmedica.cz/api/products?limit=1' | head -c 200
+curl -s 'https://www.growmedica.cz/api/products?limit=3' | head -c 200
 curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
   https://www.growmedica.cz/api/dashboard/health
 ```
 
-**Posledný beh:** ❌ `production:smoke` zlyhal — `/api/products` HTTP 500 (`Failed to fetch products`).  
-**Príčina:** CMS MySQL nedostupné (viď incident report).
+**Posledný beh (2026-08-08):** ✅ `production:smoke` passed po Vercel env upsert + redeploy (`h4ck3d`).
 
-| Check | 2026-08-08 |
-|-------|------------|
-| Runtime secrets v agent VM | ❌ `DB_*` MISSING (`environment: null`) |
-| SSH root cause | ✅ `1045 Access denied` — wp-config password mismatch |
-| mu-plugins checkout/auth/homepage | ✅ nahraté na CMS (SFTP) |
-| `/api/products` | ❌ HTTP 500 (CMS DB down) |
-| `cms.growmedica.cz` Woo REST | ❌ HTTP 500 |
-| `cms…/kontrola-objednavky` | ❌ HTTP 500 |
-| Homepage `/` | ✅ HTTP 200 (cache/static) |
-| `/kosik`, `/prihlasenie` | ✅ HTTP 200 (UI; checkout/auth nefunguje) |
-| `/api/dashboard/health` | ✅ `{"ok":true}` |
-| Homepage Finder `#supplement-finder` | ✅ (cached) |
-| Woo auth BFF | ❌ blocked by CMS |
-| cms checkout + gm_cart | ❌ blocked by CMS |
-| `/dashboard` agent `list_orders` | ❌ blocked by CMS |
-| `smoke-woo-countries` | ⏸️ preskočené (chýba `wordpress-production.local.env`) |
+| Check | Stav |
+|-------|------|
+| `/api/products` | ✅ HTTP 200 (496 publish na CMS) |
+| PDP `/produkty/beauty-and-care-pack` | ✅ HTTP 200 |
+| `cms.growmedica.cz` / wp-json | ✅ HTTP 200 |
+| Homepage Finder `#supplement-finder` | ✅ live |
+| Category departments / mega-menu UX | ✅ live |
+| Woo auth `/prihlasenie` | ✅ WooCommerce BFF (nie MOCK) |
+| cms checkout + gm_cart | ✅ (CMS DB obnovené) |
+| `/dashboard` agent `list_orders` | ✅ Woo live |
+| ISR `/api/revalidate` (zlý secret) | ✅ 401 (endpoint OK; secret alignment voliteľné) |
+| mu-plugins checkout/auth/revalidate | ✅ na CMS |
+| Obnovovací skript `cms-db-recover-from-runtime.py` | ✅ pripravený (vyžaduje Runtime Secrets v agent VM) |
 
 ---
 
@@ -152,5 +149,6 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
 | [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) | deploy |
 | [docs/vzorfirma.md](./docs/vzorfirma.md) | firma |
 | [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md) | čo dorobiť (súhrn) |
+| [reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) | live CMS vs www katalóg audit |
 | [storefront/docs/DASHBOARD_AGENT.md](./storefront/docs/DASHBOARD_AGENT.md) | AI agent tools (Woo) |
 | [AGENTS.md](./AGENTS.md) | Cursor Cloud pravidlá |
