@@ -56,6 +56,9 @@ jobs:
       - name: Type-check
         run: yarn type-check
 
+      - name: Lint
+        run: yarn lint
+
       - name: Unit tests
         run: yarn test:unit
 
@@ -67,3 +70,9 @@ jobs:
 
       - name: Integrity — unit-ish SEO/cart
         run: yarn test:unit-integrity
+
+      - name: i18n middleware guards
+        run: yarn test:i18n
+
+      - name: Production build (mock env)
+        run: yarn build

@@ -26,7 +26,8 @@ test.describe('Dashboard route — smoke', () => {
     expect(existsSync(MIDDLEWARE_PATH)).toBe(true)
     const middlewareContent = readFileSync(MIDDLEWARE_PATH, 'utf8')
     expect(middlewareContent).toContain("requestHeaders.set(DASHBOARD_ROUTE_HEADER, '1')")
-    expect(middlewareContent).toContain("'/dashboard/:path*'")
+    expect(middlewareContent).toContain("pathname === '/dashboard'")
+    expect(middlewareContent).toContain("pathname.startsWith('/dashboard/')")
 
     expect(existsSync(ROOT_LAYOUT_PATH)).toBe(true)
     const rootLayoutContent = readFileSync(ROOT_LAYOUT_PATH, 'utf8')
@@ -35,15 +36,15 @@ test.describe('Dashboard route — smoke', () => {
     )
     expect(rootLayoutContent).toContain('if (isDashboardRoute) {')
 
-    const isDashboardRouteBranch = rootLayoutContent.match(/if\s*\(isDashboardRoute\)\s*\{([\s\S]*?)\}/)
-    expect(isDashboardRouteBranch).toBeTruthy()
-    if (isDashboardRouteBranch) {
-      const branchContent = isDashboardRouteBranch[1]
-      expect(branchContent).not.toContain('<HeaderShell')
-      expect(branchContent).not.toContain('<Footer')
-      expect(branchContent).not.toContain('<AnnouncementBar')
-      expect(branchContent).not.toContain('<TrustStrip')
-    }
+    const dashboardEarlyReturn = rootLayoutContent.match(
+      /if \(isDashboardRoute\) \{[\s\S]*?<LocaleProvider locale=\{locale\}>\{children\}<\/LocaleProvider>[\s\S]*?\n  \}/,
+    )
+    expect(dashboardEarlyReturn).toBeTruthy()
+    const branchContent = dashboardEarlyReturn![0]
+    expect(branchContent).not.toContain('<HeaderShell')
+    expect(branchContent).not.toContain('<Footer')
+    expect(branchContent).not.toContain('<AnnouncementBar')
+    expect(branchContent).not.toContain('<TrustStrip')
   })
 
   test('robots.txt disallows /dashboard', () => {

@@ -56,15 +56,14 @@ test.describe('AI Integration — Premium Frontend & Animations', () => {
     const finderPath = path.join(process.cwd(), 'src/components/ai/SupplementFinder.tsx')
     expect(fs.existsSync(finderPath)).toBe(true)
     const content = fs.readFileSync(finderPath, 'utf8')
-    
-    // Check heading
-    expect(content).toContain('Nájdite vhodný doplnok')
-    
-    // Check input/form elements
-    expect(content).toContain('Popíšte svoje potreby')
-    expect(content).toContain('Nájsť doplnky')
-    
-    // Check rainbow/snake border classes
+
+    // i18n keys (nie hardcoded SK copy)
+    expect(content).toContain("t('finder.title')")
+    expect(content).toContain("t('finder.placeholder')")
+    expect(content).toContain("t('finder.submit')")
+    expect(content).toContain('id="supplement-finder"')
+
+    // Rainbow/snake border animation
     expect(content).toContain('spin-gradient')
     expect(content).toContain('animate-spin-gradient')
     expect(content).toContain('6s linear infinite normal')
@@ -75,10 +74,10 @@ test.describe('AI Integration — Premium Frontend & Animations', () => {
     const fitBoxPath = path.join(process.cwd(), 'src/components/ai/ProductFitBox.tsx')
     expect(fs.existsSync(fitBoxPath)).toBe(true)
     const content = fs.readFileSync(fitBoxPath, 'utf8')
-    
-    // Check title and context inputs
-    expect(content).toContain('Hodí sa vám produkt')
-    expect(content).toContain('Popíšte svoje ciele alebo obavy')
-    expect(content).toContain('Overiť vhodnosť pre mňa')
+
+    expect(content).toContain("t('fit.title'")
+    expect(content).toContain("t('fit.placeholder')")
+    expect(content).toContain("t('fit.submit')")
+    expect(content).toContain('/api/ai/product-fit')
   })
 })

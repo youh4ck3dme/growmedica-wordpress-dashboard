@@ -86,10 +86,16 @@ test.describe('Woo cart API (mock)', () => {
 
   test('pridanie do košíka aktualizuje badge v hlavičke', async () => {
     const btnPath = path.join(process.cwd(), 'src/components/product/AddToCartButton.tsx')
+    const cartClientPath = path.join(process.cwd(), 'src/lib/catalog/cart-client.ts')
     expect(fs.existsSync(btnPath)).toBe(true)
-    const content = fs.readFileSync(btnPath, 'utf8')
-    expect(content).toContain('id="add-to-cart-btn"')
-    expect(content).toContain('handleAddToCart')
-    expect(content).toContain("window.dispatchEvent(new CustomEvent('cart-count-updated'")
+    expect(fs.existsSync(cartClientPath)).toBe(true)
+
+    const btnContent = fs.readFileSync(btnPath, 'utf8')
+    expect(btnContent).toContain('id="add-to-cart-btn"')
+    expect(btnContent).toContain('handleAddToCart')
+    expect(btnContent).toContain('dispatchCartCountUpdated')
+
+    const cartClientContent = fs.readFileSync(cartClientPath, 'utf8')
+    expect(cartClientContent).toContain("new CustomEvent('cart-count-updated'")
   })
 })

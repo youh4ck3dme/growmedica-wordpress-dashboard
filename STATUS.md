@@ -1,6 +1,6 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-08-08 (CMS DB incident recovery + live catalog visibility; katalóg ✅ po Vercel env redeploy)  
+**Aktualizované:** 2026-08-08 (integrity suite 298/298 + CI rozšírené o lint/i18n/build)  
 **Branch:** `main` (canonical) · mirror: `you640/growmedica-nextjs-2026`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 **Vercel team:** `h4ck3d` / `growmedica-wordpress-dashboard`  
@@ -42,6 +42,8 @@
 | i18n CS/SK/EN/DE (shop UI + finder) | ✅ |
 | AI pharmacist drawer + Supplement Finder | ✅ |
 | Mobile iPhone layout regression tests | ✅ |
+| **Integrity suite (mock)** | ✅ 298 passed · `yarn test:integrity` |
+| **CI** (type-check, lint, unit, woo-integrity, unit-integrity, i18n, build) | ✅ |
 
 **Shop ide predávať cez bankový prevod a dobierku** bez Stripe/Packeta.
 
@@ -150,5 +152,6 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
 | [docs/vzorfirma.md](./docs/vzorfirma.md) | firma |
 | [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md) | čo dorobiť (súhrn) |
 | [reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) | live CMS vs www katalóg audit |
+| [reports/INTEGRITY_FORENSICS_2026-08-08.md](./reports/INTEGRITY_FORENSICS_2026-08-08.md) | test drift + regression guards |
 | [storefront/docs/DASHBOARD_AGENT.md](./storefront/docs/DASHBOARD_AGENT.md) | AI agent tools (Woo) |
 | [AGENTS.md](./AGENTS.md) | Cursor Cloud pravidlá |

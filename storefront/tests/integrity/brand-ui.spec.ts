@@ -52,18 +52,23 @@ test.describe('Brand UI — homepage copy & structure', () => {
     const sliderPath = path.join(process.cwd(), 'src/components/sections/HeroSlider.tsx')
     const content = fs.readFileSync(sliderPath, 'utf8')
     expect(content).toContain('id="hero-heading"')
-    expect(content).toContain("t('hero.title')")
-    expect(content).toContain("t('hero.subtitle')")
+    expect(content).toContain('copyKey')
+    expect(content).toContain('t(`hero.slides.${key}.title`)')
+    expect(content).toContain('t(`hero.slides.${key}.subtitle`)')
     expect(content).toContain('id="hero-cta-primary"')
-    expect(content).toContain("t('hero.cta')")
+    expect(content).toContain('t(`hero.slides.${key}.cta`)')
   })
 
   test('USP panel obsahuje všetky 4 value props', () => {
     const badgesPath = path.join(process.cwd(), 'src/components/sections/TrustBadges.tsx')
     const content = fs.readFileSync(badgesPath, 'utf8')
     expect(content).toContain('className="usp-bar')
+    expect(content).toContain('trust.badge1.title')
+    expect(content).toContain('trust.badge2.title')
+    expect(content).toContain('trust.badge3.title')
+    expect(content).toContain('trust.badge4.title')
     for (const label of BRAND_COPY.valueProps) {
-      expect(content).toContain(label)
+      expect(content).not.toContain(`'${label}'`)
     }
   })
 
