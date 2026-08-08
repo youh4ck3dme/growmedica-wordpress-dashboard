@@ -1,6 +1,6 @@
 # GrowMedica — stav a čo treba urobiť
 
-**Aktualizované:** 2026-08-04 (deploy audit + you640 sync PR #15)  
+**Aktualizované:** 2026-08-08 (live catalog visibility audit)  
 **Branch:** `main` (canonical) · mirror: `you640/growmedica-nextjs-2026`  
 **Produkcia:** https://www.growmedica.cz · CMS: https://cms.growmedica.cz  
 **Last deploy (canonical `main`):** `582b5e3` (PR #15 merged 2026-08-04) · Vercel redeploy pending confirmation
@@ -79,6 +79,7 @@ Detail tabuliek: [README.md § AI AGENT](./README.md#-ai-agent--čítaj-prvé-ak
 | 9 | **IČ DPH / DPH 20 %** | účtovné rozhodnutie |
 | 10 | **SuperFaktúra** — registrácia + API (body **2a–2j**) | [majitel.md §2](./majitel.md#2-superfaktúra--automatické-faktúry) |
 | 11 | **GTM / GA4 / Pixel IDs** | merchant účty — agent zapojí po dodaní ID |
+| 12 | **Vercel Woo env** (`WOO_CONSUMER_KEY`, `WOO_CONSUMER_SECRET`, `WORDPRESS_BASE_URL`) | www `/api/products` → 500; CMS má 496 publish produktov · [report](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) |
 
 ---
 
@@ -118,7 +119,7 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
 
 | Check | OK |
 |-------|-----|
-| `/api/products` | `gid://woocommerce/...` |
+| `/api/products` | ❌ **HTTP 500** (2026-08-08) — Vercel `WOO_*` / `WORDPRESS_BASE_URL` handoff · [report](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) |
 | Homepage Finder `#supplement-finder` | ✅ live |
 | Category departments / mega-menu UX | ✅ live (smoke `department` in HTML) |
 | Woo auth `/prihlasenie` | ✅ WooCommerce BFF (nie MOCK) |
@@ -138,5 +139,6 @@ curl -s -H "x-dashboard-agent-secret: $DASHBOARD_AGENT_SECRET" \
 | [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) | deploy |
 | [docs/vzorfirma.md](./docs/vzorfirma.md) | firma |
 | [reports/CO_DOROBIT.md](./reports/CO_DOROBIT.md) | čo dorobiť (súhrn) |
+| [reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md](./reports/LIVE_CATALOG_VISIBILITY_2026-08-08.md) | live CMS vs www katalóg audit |
 | [storefront/docs/DASHBOARD_AGENT.md](./storefront/docs/DASHBOARD_AGENT.md) | AI agent tools (Woo) |
 | [AGENTS.md](./AGENTS.md) | Cursor Cloud pravidlá |
